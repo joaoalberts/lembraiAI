@@ -1,0 +1,14 @@
+.chip {
+  appearance: none; border: 0; cursor: pointer; flex: none;
+  display: inline-flex; align-items: center; justify-content: center; gap: 33du;
+  height: 68du; border-radius: 999px; padding: 0;
+  background: var(--chip-off); box-shadow: inset 0 0 0 1du rgba(20, 50, 35, .07);
+  color: var(--forest-900); font-family: var(--font-sans); font-size: 17.9du; font-weight: 700; line-height: 1; padding-top: 3du;
+  transition: background-color .15s ease, transform .12s ease; -webkit-tap-highlight-color: transparent;
+}
+.chip:hover { background: #ECEDE7; }
+.chip:active { transform: scale(.97); }
+.chip:focus-visible { outline: 3du solid var(--forest-700); outline-offset: 3du; }
+.count { font-weight: 600; color: #395D56; }
+.active, .active:hover { background: var(--forest-900); box-shadow: none; color: #fff; }
+.active .count { color: #fff; }

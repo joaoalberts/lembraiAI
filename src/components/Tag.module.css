@@ -1,0 +1,11 @@
+.tag {
+  display: inline-flex; align-items: center; height: 36du; padding: 0 17du 0 13du; gap: 12du;
+  border-radius: 999px; background: var(--tag-bg); color: var(--tag-fg);
+  font-size: 16.8du; font-weight: 700; line-height: 1; padding-top: 1du; white-space: nowrap;
+}
+.green  { --tag-bg: var(--cat-green-tag);  --tag-fg: var(--cat-green-fg);  --tag-icon: var(--cat-green-fg); }
+/* ref/5.png: o texto da tag laranja é escuro; o ícone é laranja */
+.orange { --tag-bg: var(--cat-orange-tag); --tag-fg: #183029;               --tag-icon: var(--cat-orange-fg); }
+.blue   { --tag-bg: var(--cat-blue-tag);   --tag-fg: var(--cat-blue-fg);    --tag-icon: var(--cat-blue-fg); }
+.purple { --tag-bg: var(--cat-purple-tag); --tag-fg: var(--cat-purple-fg);  --tag-icon: var(--cat-purple-fg); }
+.pink   { --tag-bg: var(--cat-pink-tag);   --tag-fg: var(--cat-pink-fg);    --tag-icon: var(--cat-pink-fg); }

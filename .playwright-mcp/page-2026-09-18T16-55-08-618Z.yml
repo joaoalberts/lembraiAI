@@ -1,0 +1,27 @@
+- main [ref=e186]:
+  - button "Fechar" [ref=e187] [cursor=pointer]
+  - heading "Lembrete criado com sucesso!" [level=1] [ref=e191]
+  - paragraph [ref=e192]: Você será avisado na hora certa. Pode ficar tranquilo.
+  - generic [ref=e193]:
+    - heading "Pagar a conta de luz" [level=2] [ref=e200]
+    - generic [ref=e201]: Ativo
+    - generic [ref=e207]: Data
+    - generic [ref=e208]: Ter, 16 de set de 2026
+    - generic [ref=e213]: Horário
+    - generic [ref=e214]: 09:00
+    - separator [ref=e215]
+    - generic [ref=e220]: Local
+    - generic [ref=e221]: Av. Vieira de Moraes, 320 – Fortaleza, CE
+    - generic [ref=e222]: Raio de 270 metros
+    - separator [ref=e223]
+    - generic [ref=e230]: Repetir
+    - generic [ref=e231]: Nunca
+  - button "Editar" [ref=e232] [cursor=pointer]
+  - button "Duplicar" [ref=e237] [cursor=pointer]
+  - button "Excluir" [ref=e242] [cursor=pointer]
+  - button "Compartilhar" [ref=e247] [cursor=pointer]
+  - complementary [ref=e252]:
+    - strong [ref=e256]: Dica inteligente
+    - paragraph [ref=e257]: Crie lembretes recorrentes para não esquecer das suas tarefas importantes.
+  - button "Ver todos os lembretes" [ref=e261] [cursor=pointer]
+  - button "Criar outro lembrete" [ref=e265] [cursor=pointer]

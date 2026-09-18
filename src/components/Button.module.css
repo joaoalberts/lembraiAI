@@ -1,0 +1,55 @@
+.btn, .glass, .action, .link {
+  appearance: none; border: 0; padding: 0; margin: 0; background: none; cursor: pointer;
+  display: inline-flex; align-items: center; justify-content: center;
+  font-family: var(--font-sans); text-align: center; white-space: nowrap;
+  -webkit-tap-highlight-color: transparent;
+  transition: background-color .15s ease, transform .12s ease, box-shadow .15s ease, opacity .15s ease;
+}
+.btn:focus-visible, .glass:focus-visible, .action:focus-visible, .link:focus-visible {
+  outline: 3du solid var(--focus-ring); outline-offset: 3du;
+}
+.btn:disabled { opacity: .45; cursor: not-allowed; box-shadow: none; }
+
+/* ── CTA ── */
+.btn { position: relative; border-radius: 999px; color: #fff; font-weight: 700; }
+.orange { background: var(--btn-primary-bg); box-shadow: var(--shadow-cta); }
+.orange:hover:not(:disabled) { background: var(--btn-primary-bg-hover); }
+.orange:active:not(:disabled) { background: var(--btn-primary-bg-active); transform: scale(.98); box-shadow: 0 4du 12du rgba(254, 83, 42, .25); }
+.dark { background: var(--action-secondary); }
+.dark:hover:not(:disabled) { background: var(--btn-dark-bg-hover); }
+.dark:active:not(:disabled) { background: var(--btn-dark-bg-active); transform: scale(.98); }
+
+.hero    { width: 751du; height: 118du; font-size: 31du; gap: 42du; padding-top: 5du; }
+.form    { width: 791du; height: 117du; font-size: 28du; }
+.compact { box-shadow: none !important; width: 252du; height: 72du;  font-size: 21.2du; gap: 15du; }
+.success { width: 772du; height: 109du; font-size: 27.4du; gap: 20du; }
+.serif   { font-family: var(--font-serif); }
+.circle {
+  position: absolute; right: 20du; top: 50%; transform: translateY(-50%);
+  width: 80du; height: 80du; border-radius: 50%;
+  display: grid; place-items: center; background: rgba(255, 255, 255, .13);
+}
+
+/* ── Vidro (sobre escuro) ── */
+.glass {
+  color: #fff; background: var(--glass-bg); border: 2du solid var(--glass-border);
+  backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+}
+.glass:hover { background: rgba(255, 255, 255, .10); }
+.glass:active { background: rgba(255, 255, 255, .16); transform: scale(.97); }
+.glassCircle { border-radius: 50%; }
+.glassPill { border-radius: 999px; gap: 14du; font-size: 22du; font-weight: 600; }
+
+/* ── Ação translúcida (sucesso) ── */
+.action {
+  width: 154du; height: 123du; border-radius: 32du; flex-direction: column; justify-content: flex-start;
+  padding-top: 24du; gap: 17du; background: var(--frost);
+  font-size: 19.5du; font-weight: 500; line-height: 24du; color: #1A2C23;
+}
+.action:hover { background: #D9DECF; }
+.action:active { background: #CFD5C4; transform: scale(.98); }
+
+/* ── Link ── */
+.link { font-size: 24.6du; font-weight: 500; color: var(--ink-600); line-height: 32du; }
+.link:hover { color: var(--ink-900); }
+.link:active { opacity: .6; }

@@ -1,0 +1,21 @@
+.hdrBg { position: absolute; left: 0; top: 0; width: 851du; height: 345du; object-fit: fill; }
+.brand { left: 37du; top: 82du; }
+.title { font-family: var(--font-serif); font-size: 56.7du; font-weight: 700; color: #F9F9F7; line-height: 1.1; }
+.subtitle { font-size: 26.8du; color: #E6EDE5; }
+
+.sheet { position: absolute; left: 0; right: 0; top: 296du; bottom: 0; border-radius: 38du 38du 0 0; background: #EFF0EA; }
+
+.scroll {
+  position: absolute; left: 0; right: 0; top: 385du; height: 1283du;
+  overflow-y: auto; overscroll-behavior: contain; scrollbar-width: none;
+  padding: 34du 38du 0 37du;
+}
+.scroll::-webkit-scrollbar { display: none; }
+
+.head { display: flex; justify-content: space-between; align-items: center; height: 44du; padding: 0 2du 0 3du; }
+.head h2 { font-family: var(--font-serif); font-size: 36.2du; font-weight: 700; color: #070E1B; line-height: 1; }
+.head span { font-size: 22.7du; color: #396052; }
+.cards { display: flex; flex-direction: column; gap: 16.5du; margin-top: 10du; }
+.section:first-child .cards { margin-top: 16du; }
+.section + .section { margin-top: 29.5du; }
+.tip { position: relative; margin-top: 22du; }

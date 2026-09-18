@@ -1,0 +1,13 @@
+.frame {
+  position: relative; flex: none;
+  width: var(--frame-w);
+  height: calc(var(--frame-w) * 1848 / 851);
+  overflow: hidden;
+  background: var(--bg-page);
+  font-family: var(--font-sans);
+  font-size: 25du;
+  line-height: 1.4;
+  color: var(--text-primary);
+  box-shadow: 0 24px 70px rgba(0, 0, 0, .5);
+}
+.screen { position: absolute; inset: 0; overflow: hidden; }

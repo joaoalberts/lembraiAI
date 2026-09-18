@@ -1,0 +1,95 @@
+- main [ref=e955]:
+  - generic [ref=e961]:
+    - generic [ref=e962]: Lembrete Geo
+    - generic [ref=e963]: Sua rotina, mais leve.
+  - button "Buscar" [ref=e964] [cursor=pointer]
+  - button "Mais opções" [ref=e968] [cursor=pointer]
+  - heading "Meus lembretes" [level=1] [ref=e973]
+  - paragraph [ref=e974]: 6 lembretes ativos
+  - button "Novo lembrete" [ref=e975] [cursor=pointer]
+  - button "Todos 7" [pressed] [ref=e979] [cursor=pointer]:
+    - generic [ref=e980]: Todos
+    - generic [ref=e981]: "7"
+  - button "Hoje 4" [ref=e982] [cursor=pointer]:
+    - generic [ref=e983]: Hoje
+    - generic [ref=e984]: "4"
+  - button "Esta semana 3" [ref=e985] [cursor=pointer]:
+    - generic [ref=e986]: Esta semana
+    - generic [ref=e987]: "3"
+  - button "Locais 4" [ref=e988] [cursor=pointer]:
+    - generic [ref=e989]: Locais
+    - generic [ref=e990]: "4"
+  - generic [ref=e991]:
+    - generic [ref=e992]:
+      - generic [ref=e993]:
+        - heading "Hoje" [level=2] [ref=e994]
+        - generic [ref=e995]: Ter, 16 de set de 2026
+      - generic [ref=e996]:
+        - article [ref=e997]:
+          - heading "Comprar água no mercado" [level=3] [ref=e1005]
+          - generic [ref=e1010]: Supermercado Frangolândia
+          - generic [ref=e1016]: Raio de 150 metros
+          - generic [ref=e1017]: Por local
+          - button "Mais opções" [ref=e1022] [cursor=pointer]
+          - generic [ref=e1027]: 09:00
+          - 'switch "Ativar lembrete: Comprar água no mercado" [ref=e1029] [cursor=pointer]'
+        - article [ref=e1031]:
+          - heading "Academia" [level=3] [ref=e1040]
+          - generic [ref=e1045]: Smart Fit – Iguatemi
+          - generic [ref=e1051]: Raio de 100 metros
+          - generic [ref=e1052]: Por local
+          - button "Mais opções" [ref=e1057] [cursor=pointer]
+          - generic [ref=e1062]: 18:00
+          - 'switch "Ativar lembrete: Academia" [checked] [ref=e1064] [cursor=pointer]'
+        - article [ref=e1066]:
+          - heading "Pagar a conta de luz" [level=3] [ref=e1074]
+          - generic [ref=e1079]: Av. Vieira de Moraes, 320 – Fortaleza, CE
+          - generic [ref=e1085]: Raio de 270 metros
+          - generic [ref=e1086]: Por local
+          - button "Mais opções" [ref=e1091] [cursor=pointer]
+          - generic [ref=e1096]: 09:00
+          - 'switch "Ativar lembrete: Pagar a conta de luz" [checked] [ref=e1098] [cursor=pointer]'
+        - article [ref=e1100]:
+          - heading "Pagar a conta de luz" [level=3] [ref=e1108]
+          - generic [ref=e1113]: Av. Vieira de Moraes, 320 – Fortaleza, CE
+          - generic [ref=e1119]: Raio de 270 metros
+          - generic [ref=e1120]: Por local
+          - button "Mais opções" [ref=e1125] [cursor=pointer]
+          - generic [ref=e1130]: 09:00
+          - 'switch "Ativar lembrete: Pagar a conta de luz" [checked] [ref=e1132] [cursor=pointer]'
+    - generic [ref=e1134]:
+      - generic [ref=e1135]:
+        - heading "Amanhã" [level=2] [ref=e1136]
+        - generic [ref=e1137]: Qua, 17 de set de 2026
+      - article [ref=e1139]:
+        - heading "Tomar vitamina" [level=3] [ref=e1145]
+        - generic [ref=e1149]: Qua, 17 de set de 2026
+        - generic [ref=e1150]: Por horário
+        - button "Mais opções" [ref=e1155] [cursor=pointer]
+        - generic [ref=e1160]: 08:00
+        - 'switch "Ativar lembrete: Tomar vitamina" [checked] [ref=e1162] [cursor=pointer]'
+    - generic [ref=e1164]:
+      - heading "Esta semana" [level=2] [ref=e1166]
+      - generic [ref=e1167]:
+        - article [ref=e1168]:
+          - heading "Reunião com fornecedor" [level=3] [ref=e1176]
+          - generic [ref=e1180]: Sex, 19 de set de 2026
+          - generic [ref=e1181]: Por horário
+          - button "Mais opções" [ref=e1186] [cursor=pointer]
+          - generic [ref=e1191]: 14:00
+          - 'switch "Ativar lembrete: Reunião com fornecedor" [checked] [ref=e1193] [cursor=pointer]'
+        - article [ref=e1195]:
+          - heading "Passaporte – verificar validade" [level=3] [ref=e1200]
+          - generic [ref=e1204]: Sáb, 20 de set de 2026
+          - generic [ref=e1205]: Por horário
+          - button "Mais opções" [ref=e1210] [cursor=pointer]
+          - generic [ref=e1215]: 10:00
+          - 'switch "Ativar lembrete: Passaporte – verificar validade" [checked] [ref=e1217] [cursor=pointer]'
+    - complementary [ref=e1219]:
+      - strong [ref=e1223]: Dica para você
+      - paragraph [ref=e1224]: Ative lembretes por local para nunca mais esquecer das suas tarefas fora de casa.
+  - navigation "Navegação principal" [ref=e1228]:
+    - button "Início" [ref=e1229] [cursor=pointer]
+    - button "Lembretes" [ref=e1234] [cursor=pointer]
+    - button "Mapa" [ref=e1237] [cursor=pointer]
+    - button "Configurações" [ref=e1242] [cursor=pointer]

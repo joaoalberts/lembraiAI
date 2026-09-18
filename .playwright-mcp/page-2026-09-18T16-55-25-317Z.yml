@@ -1,0 +1,67 @@
+- main [ref=e266]:
+  - generic [ref=e272]:
+    - generic [ref=e273]: Lembrete Geo
+    - generic [ref=e274]: Sua rotina, mais leve.
+  - button "Buscar" [ref=e275] [cursor=pointer]
+  - button "Mais opções" [ref=e279] [cursor=pointer]
+  - heading "Meus lembretes" [level=1] [ref=e284]
+  - paragraph [ref=e285]: 7 lembretes ativos
+  - button "Novo lembrete" [ref=e286] [cursor=pointer]
+  - button "Todos 7" [ref=e290] [cursor=pointer]:
+    - generic [ref=e291]: Todos
+    - generic [ref=e292]: "7"
+  - button "Hoje 4" [ref=e293] [cursor=pointer]:
+    - generic [ref=e294]: Hoje
+    - generic [ref=e295]: "4"
+  - button "Esta semana 3" [ref=e296] [cursor=pointer]:
+    - generic [ref=e297]: Esta semana
+    - generic [ref=e298]: "3"
+  - button "Locais 4" [active] [pressed] [ref=e299] [cursor=pointer]:
+    - generic [ref=e300]: Locais
+    - generic [ref=e301]: "4"
+  - generic [ref=e302]:
+    - generic [ref=e303]:
+      - generic [ref=e304]:
+        - heading "Hoje" [level=2] [ref=e305]
+        - generic [ref=e306]: Ter, 16 de set de 2026
+      - generic [ref=e307]:
+        - article [ref=e308]:
+          - heading "Comprar água no mercado" [level=3] [ref=e316]
+          - generic [ref=e321]: Supermercado Frangolândia
+          - generic [ref=e327]: Raio de 150 metros
+          - generic [ref=e328]: Por local
+          - button "Mais opções" [ref=e333] [cursor=pointer]
+          - generic [ref=e338]: 09:00
+          - 'switch "Ativar lembrete: Comprar água no mercado" [checked] [ref=e340] [cursor=pointer]'
+        - article [ref=e342]:
+          - heading "Academia" [level=3] [ref=e351]
+          - generic [ref=e356]: Smart Fit – Iguatemi
+          - generic [ref=e362]: Raio de 100 metros
+          - generic [ref=e363]: Por local
+          - button "Mais opções" [ref=e368] [cursor=pointer]
+          - generic [ref=e373]: 18:00
+          - 'switch "Ativar lembrete: Academia" [checked] [ref=e375] [cursor=pointer]'
+        - article [ref=e377]:
+          - heading "Pagar a conta de luz" [level=3] [ref=e385]
+          - generic [ref=e390]: Av. Vieira de Moraes, 320 – Fortaleza, CE
+          - generic [ref=e396]: Raio de 270 metros
+          - generic [ref=e397]: Por local
+          - button "Mais opções" [ref=e402] [cursor=pointer]
+          - generic [ref=e407]: 09:00
+          - 'switch "Ativar lembrete: Pagar a conta de luz" [checked] [ref=e409] [cursor=pointer]'
+        - article [ref=e411]:
+          - heading "Pagar a conta de luz" [level=3] [ref=e419]
+          - generic [ref=e424]: Av. Vieira de Moraes, 320 – Fortaleza, CE
+          - generic [ref=e430]: Raio de 270 metros
+          - generic [ref=e431]: Por local
+          - button "Mais opções" [ref=e436] [cursor=pointer]
+          - generic [ref=e441]: 09:00
+          - 'switch "Ativar lembrete: Pagar a conta de luz" [checked] [ref=e443] [cursor=pointer]'
+    - complementary [ref=e530]:
+      - strong [ref=e534]: Dica para você
+      - paragraph [ref=e535]: Ative lembretes por local para nunca mais esquecer das suas tarefas fora de casa.
+  - navigation "Navegação principal" [ref=e539]:
+    - button "Início" [ref=e540] [cursor=pointer]
+    - button "Lembretes" [ref=e545] [cursor=pointer]
+    - button "Mapa" [ref=e548] [cursor=pointer]
+    - button "Configurações" [ref=e553] [cursor=pointer]

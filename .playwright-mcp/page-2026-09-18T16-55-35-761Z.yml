@@ -1,0 +1,27 @@
+- main [ref=e677]:
+  - button "Fechar" [ref=e678] [cursor=pointer]
+  - heading "Lembrete criado com sucesso!" [level=1] [ref=e682]
+  - paragraph [ref=e683]: Você será avisado na hora certa. Pode ficar tranquilo.
+  - generic [ref=e684]:
+    - heading "Comprar água no mercado" [level=2] [ref=e691]
+    - generic [ref=e692]: Ativo
+    - generic [ref=e698]: Data
+    - generic [ref=e699]: Ter, 16 de set de 2026
+    - generic [ref=e704]: Horário
+    - generic [ref=e705]: 09:00
+    - separator [ref=e706]
+    - generic [ref=e711]: Local
+    - generic [ref=e712]: Av. Vieira de Moraes, 320 – Fortaleza, CE
+    - generic [ref=e713]: Raio de 150 metros
+    - separator [ref=e714]
+    - generic [ref=e721]: Repetir
+    - generic [ref=e722]: Nunca
+  - button "Editar" [ref=e723] [cursor=pointer]
+  - button "Duplicar" [ref=e728] [cursor=pointer]
+  - button "Excluir" [ref=e733] [cursor=pointer]
+  - button "Compartilhar" [ref=e738] [cursor=pointer]
+  - complementary [ref=e743]:
+    - strong [ref=e747]: Dica inteligente
+    - paragraph [ref=e748]: Crie lembretes recorrentes para não esquecer das suas tarefas importantes.
+  - button "Ver todos os lembretes" [ref=e752] [cursor=pointer]
+  - button "Criar outro lembrete" [ref=e756] [cursor=pointer]

@@ -1,0 +1,9 @@
+.slider { position: relative; width: 724du; height: 60du; touch-action: none; cursor: pointer; outline: none; }
+.slider:focus-visible .thumb { box-shadow: 0 0 0 4du rgba(24, 92, 75, .25), 0 2du 6du rgba(0, 0, 0, .25); }
+.track, .fill { position: absolute; left: 0; top: 24.5du; height: 11du; border-radius: 999px; }
+.track { right: 0; background: var(--track-off); }
+.fill { width: var(--pct); background: var(--control-on); }
+.thumb {
+  position: absolute; top: 8.5du; left: var(--pct); width: 43du; height: 43du; margin-left: -21.5du;
+  border-radius: 50%; background: #FFFEFF; box-shadow: 0 2du 6du rgba(0, 0, 0, .25);
+}

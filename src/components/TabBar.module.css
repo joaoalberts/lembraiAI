@@ -1,0 +1,15 @@
+.bar {
+  position: absolute; left: 0; right: 0; bottom: 0; height: 180du;
+  background: #F8F8F4; box-shadow: 0 -1du 0 rgba(20, 40, 30, .05), 0 -6du 18du rgba(20, 40, 30, .03);
+}
+.tab {
+  appearance: none; border: 0; background: none; cursor: pointer; padding: 0;
+  position: absolute; top: 30du; width: 200du; margin-left: -100du; height: 100du;
+  display: flex; flex-direction: column; align-items: center; gap: 12du;
+  color: var(--tab-inactive); font-family: var(--font-sans); font-size: 17.8du; font-weight: 400; line-height: 20du;
+  -webkit-tap-highlight-color: transparent; transition: opacity .12s ease;
+}
+.tab:active { opacity: .6; }
+.tab:focus-visible { outline: 3du solid var(--forest-700); outline-offset: -3du; border-radius: 16du; }
+.active { color: #134B36; font-weight: 700; }
+.active span { color: var(--ink-brand); }

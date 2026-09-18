@@ -1,0 +1,44 @@
+- main [ref=e66]:
+  - button "Voltar" [ref=e67] [cursor=pointer]
+  - heading "Novo lembrete" [level=1] [ref=e70]
+  - paragraph [ref=e71]: Na hora certa. No lugar certo.
+  - generic [ref=e72]:
+    - generic [ref=e77]: Descrição
+    - textbox "Descrição" [ref=e78]:
+      - /placeholder: "Ex.: Comprar água no mercado"
+    - paragraph [ref=e79]: Escreva de forma curta e direta.
+  - radiogroup "Tipo de lembrete":
+    - radio "Por data e horário Lembre em um dia e hora." [checked] [ref=e80] [cursor=pointer]:
+      - generic [ref=e84]: Por data e horário
+      - generic [ref=e85]: Lembre em um dia e hora.
+    - radio "Por local Lembre ao chegar." [ref=e89] [cursor=pointer]:
+      - generic [ref=e94]: Por local
+      - generic [ref=e95]: Lembre ao chegar.
+  - generic [ref=e97]:
+    - generic [ref=e101]: Data
+    - generic [ref=e106]: Horário
+    - generic [ref=e107] [cursor=pointer]:
+      - generic [ref=e111]: Ter, 16 de set de 2026
+      - textbox "Data do lembrete" [ref=e115]: 2026-09-16
+    - generic [ref=e116] [cursor=pointer]:
+      - generic [ref=e121]: 09:00
+      - textbox "Horário do lembrete" [ref=e125]: 09:00
+    - button "Repetir Nunca" [ref=e126] [cursor=pointer]:
+      - generic [ref=e133]: Repetir
+      - generic [ref=e134]: Nunca
+  - generic [ref=e138]:
+    - paragraph [ref=e143]: Local (opcional)
+    - switch "Definir um local (opcional)" [checked] [ref=e145] [cursor=pointer]
+    - textbox [ref=e151]:
+      - /placeholder: Buscar endereço, lugar ou toque no mapa
+    - generic [ref=e153]:
+      - button "Centralizar no mapa" [ref=e158] [cursor=pointer]
+      - generic [ref=e161]:
+        - button "Aproximar" [ref=e162] [cursor=pointer]
+        - button "Afastar" [ref=e164] [cursor=pointer]
+      - button "Usar minha localização" [ref=e166] [cursor=pointer]
+    - paragraph [ref=e171]: Raio de notificação
+    - paragraph [ref=e172]: 150 m
+    - slider "Raio de notificação em metros" [ref=e173] [cursor=pointer]
+    - paragraph [ref=e177]: Você será avisado ao entrar no raio selecionado.
+  - button "Criar lembrete" [ref=e178] [cursor=pointer]

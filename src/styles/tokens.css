@@ -1,0 +1,62 @@
+/* Tokens do Design System (DESIGN_SYSTEM.md §12). Unidade `du` = 1 px da imagem de referência (851 px). */
+:root {
+  /* ── Frame proporcional ── */
+  --frame-max: 430px;
+  --frame-w: min(100vw, calc(100dvh * 851 / 1848), var(--frame-max));
+  --u: calc(var(--frame-w) / 851);
+
+  /* ── Primitivas ── */
+  --forest-950: #0D2A1B; --forest-900: #12432F; --forest-800: #254233;
+  --forest-700: #185C4B; --forest-600: #216955; --forest-pin: #054C39;
+  --mint-50: #E7F4EB;   --mint-100: #DBF1E5;   --mint-200: #C6E4D5; --mint-tint: #DDE8DD;
+  --mint-300: #94F9CD;  --mint-400: #7FEAC6;   --status-green: #029554;
+  --orange-500: #FE532A;
+  --white: #FFFFFF; --cream-100: #FAF9F6; --cream-200: #F5F2ED; --chip-off: #F3F4EF;
+  --border-subtle: #E7E8EA; --divider: #E8E7E6; --border-strong: #B9B8BB;
+  --track-off: #D6D5D5; --frost: #E3E7DC; --home-indicator: #B7B3AE;
+  --ink-900: #0A0A0A; --ink-brand: #0A3924; --ink-600: #767880; --ink-400: #85858F;
+  --text-accent: #086952; --tab-inactive: #777C8A;
+  --on-dark-100: #FDFAF6; --on-dark-200: #CCD8D0; --on-dark-300: #B1C3B8; --on-dark-400: #A7B9B0;
+
+  /* ── Semânticas ── */
+  --bg-page: var(--cream-200); --bg-card: var(--cream-100); --bg-field: var(--white);
+  --action-primary: var(--orange-500); --action-secondary: var(--forest-800);
+  --selected-border: var(--forest-700); --control-on: var(--forest-600);
+  --text-primary: var(--ink-900); --text-secondary: var(--ink-600); --text-placeholder: var(--ink-400);
+  --glass-bg: rgba(255, 255, 255, .05); --glass-border: rgba(255, 255, 255, .20);
+  --halo-fill: rgba(45, 170, 120, .21); --halo-line: rgba(45, 170, 120, .32);
+  --stage-bg: var(--forest-950);
+
+  /* categorias (variante B = ref/5.png) */
+  --cat-green-bar: #39C391;  --cat-green-bg: #DBF1E4;  --cat-green-tag: #DAF4E6;  --cat-green-fg: #18714E;
+  --cat-orange-bar: #FD6C34; --cat-orange-bg: #FDE6D6; --cat-orange-tag: #FDE5D7; --cat-orange-fg: #F86327;
+  --cat-blue-bar: #51A6F6;   --cat-blue-bg: #D5E8F9;   --cat-blue-tag: #D6E9F9;   --cat-blue-fg: #2C91EA;
+  --cat-purple-bar: #B287E8; --cat-purple-bg: #EADFFB; --cat-purple-tag: #ECE4FB; --cat-purple-fg: #9265D8;
+  --cat-pink-bar: #F980B3;   --cat-pink-bg: #FCE3E9;   --cat-pink-tag: #FCE6EC;   --cat-pink-fg: #ED6E9E;
+
+  /* ── Tipografia ── */
+  --font-sans: 'Nunito Sans Variable', 'Nunito Sans', system-ui, sans-serif;
+  --font-serif: 'Source Serif 4 Variable', 'Source Serif 4', Georgia, serif;
+
+  /* ── Sombras ── */
+  --shadow-card: 0 1du 3du rgba(20, 40, 30, .05), 0 4du 12du rgba(20, 40, 30, .04);
+  --shadow-float: 0 1du 4du rgba(0, 0, 0, .16);
+  --shadow-cta: 0 10du 40du rgba(254, 83, 42, .42);
+
+  /* ── Componente ── */
+  --btn-primary-bg: var(--action-primary);
+  --btn-primary-bg-hover: #EF4E28;
+  --btn-primary-bg-active: #DF4925;
+  --btn-dark-bg-hover: #1F382B;
+  --btn-dark-bg-active: #1B3025;
+  --focus-ring: var(--mint-400);
+}
+
+/* verificação: ?ref no URL remove o limite de 430 px e renderiza o frame em 851 px (1 du = 1 px) */
+:root[data-ref] { --frame-max: 851px; }
+
+/* glifos de ícone das categorias (tom escuro da própria matiz, medido em ref/5.png) */
+:root {
+  --cat-green-ink: #011F1A; --cat-orange-ink: #0A0A0A; --cat-blue-ink: #024381;
+  --cat-purple-ink: #0A0A14; --cat-pink-ink: #0A0A14;
+}

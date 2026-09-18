@@ -1,0 +1,18 @@
+.brand { position: absolute; display: flex; align-items: center; }
+.tile {
+  display: grid; place-items: center; flex: none; border-radius: 28du;
+  background: linear-gradient(160deg, #84FADA, #78E4C4);
+}
+.text { display: flex; flex-direction: column; }
+.name { color: #FBFBFB; white-space: nowrap; }
+.tag { white-space: nowrap; }
+
+.onboarding { height: 72du; gap: 21du; }
+.onboarding .tile { width: 71du; height: 72du; }
+.onboarding .name { font-size: 27.8du; font-weight: 700; line-height: 32du; }
+.onboarding .tag { margin-top: 5du; font-size: 19.6du; line-height: 26du; color: var(--on-dark-200); }
+
+.list { height: 75du; gap: 21du; }
+.list .tile { width: 74du; height: 75du; }
+.list .name { font-family: var(--font-serif); font-size: 24.8du; font-weight: 600; line-height: 30du; }
+.list .tag { margin-top: 6du; font-size: 17.4du; line-height: 22du; color: #ABBDB1; }

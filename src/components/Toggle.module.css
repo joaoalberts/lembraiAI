@@ -1,0 +1,19 @@
+.toggle {
+  appearance: none; border: 0; padding: 0; cursor: pointer; flex: none; position: relative;
+  border-radius: 999px; background: var(--track-off);
+  transition: background-color .18s ease; -webkit-tap-highlight-color: transparent;
+}
+.toggle:focus-visible { outline: 3du solid var(--forest-700); outline-offset: 3du; }
+.toggle:disabled { opacity: .5; cursor: not-allowed; }
+.thumb {
+  position: absolute; border-radius: 50%; background: #FBFBFA; box-shadow: var(--shadow-float);
+  transition: transform .18s ease;
+}
+.sm { width: 69du; height: 42du; }
+.sm .thumb { top: 3du; left: 3du; width: 36du; height: 36du; }
+.sm.on { background: #30AB7B; }
+.sm.on .thumb { transform: translateX(27du); }
+.lg { width: 85du; height: 52du; }
+.lg .thumb { top: 4du; left: 4du; width: 44du; height: 44du; }
+.lg.on { background: #256855; }
+.lg.on .thumb { transform: translateX(33du); }

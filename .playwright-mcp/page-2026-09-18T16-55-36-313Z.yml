@@ -1,0 +1,46 @@
+- main [ref=e757]:
+  - button "Voltar" [ref=e758] [cursor=pointer]
+  - heading "Novo lembrete" [level=1] [ref=e761]
+  - paragraph [ref=e762]: Na hora certa. No lugar certo.
+  - generic [ref=e763]:
+    - generic [ref=e768]: Descrição
+    - textbox "Descrição" [ref=e769]:
+      - /placeholder: "Ex.: Comprar água no mercado"
+      - text: Comprar água no mercado
+    - paragraph [ref=e770]: Escreva de forma curta e direta.
+  - radiogroup "Tipo de lembrete":
+    - radio "Por data e horário Lembre em um dia e hora." [checked] [ref=e771] [cursor=pointer]:
+      - generic [ref=e775]: Por data e horário
+      - generic [ref=e776]: Lembre em um dia e hora.
+    - radio "Por local Lembre ao chegar." [ref=e780] [cursor=pointer]:
+      - generic [ref=e785]: Por local
+      - generic [ref=e786]: Lembre ao chegar.
+  - generic [ref=e788]:
+    - generic [ref=e792]: Data
+    - generic [ref=e797]: Horário
+    - generic [ref=e798] [cursor=pointer]:
+      - generic [ref=e802]: Ter, 16 de set de 2026
+      - textbox "Data do lembrete" [ref=e806]: 2026-09-16
+    - generic [ref=e807] [cursor=pointer]:
+      - generic [ref=e812]: 09:00
+      - textbox "Horário do lembrete" [ref=e816]: 09:00
+    - button "Repetir Nunca" [ref=e817] [cursor=pointer]:
+      - generic [ref=e824]: Repetir
+      - generic [ref=e825]: Nunca
+  - generic [ref=e829]:
+    - paragraph [ref=e834]: Local (opcional)
+    - switch "Definir um local (opcional)" [checked] [ref=e836] [cursor=pointer]
+    - textbox [ref=e842]:
+      - /placeholder: Buscar endereço, lugar ou toque no mapa
+      - text: Av. Vieira de Moraes, 320 – Fortaleza, CE
+    - generic [ref=e844]:
+      - button "Centralizar no mapa" [ref=e849] [cursor=pointer]
+      - generic [ref=e852]:
+        - button "Aproximar" [ref=e853] [cursor=pointer]
+        - button "Afastar" [ref=e855] [cursor=pointer]
+      - button "Usar minha localização" [ref=e857] [cursor=pointer]
+    - paragraph [ref=e862]: Raio de notificação
+    - paragraph [ref=e863]: 150 m
+    - slider "Raio de notificação em metros" [ref=e864] [cursor=pointer]
+    - paragraph [ref=e868]: Você será avisado ao entrar no raio selecionado.
+  - button "Criar lembrete" [ref=e869] [cursor=pointer]

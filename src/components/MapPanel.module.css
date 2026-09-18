@@ -1,0 +1,22 @@
+.map { position: relative; width: 727du; height: 274du; border-radius: 20du; overflow: hidden; background: #E6E1DD; }
+.img { position: absolute; inset: 0; background: url('/assets/map-form.jpg') center / 100% 100% no-repeat; transition: transform .2s ease; }
+.halo {
+  position: absolute; border-radius: 50%; background: var(--halo-fill); box-shadow: inset 0 0 0 2du var(--halo-line);
+  transition: width .12s ease, height .12s ease, left .12s ease, top .12s ease; pointer-events: none;
+}
+.pin { position: absolute; left: 337du; top: 87du; width: 58du; height: 73du; filter: drop-shadow(0 3du 3du rgba(0, 0, 0, .18)); }
+.nav, .zoom, .locate { position: absolute; background: #FDFDFD; box-shadow: var(--shadow-float); }
+.nav, .zoom button, .locate {
+  appearance: none; border: 0; padding: 0; cursor: pointer; display: grid; place-items: center;
+  color: var(--ink-900); font-family: var(--font-sans); -webkit-tap-highlight-color: transparent;
+}
+.nav { left: 657du; top: 20du; width: 57du; height: 59du; border-radius: 16du; }
+.zoom { left: 657du; top: 99du; width: 57du; height: 121du; border-radius: 16du; overflow: hidden; display: grid; grid-template-rows: 1fr 1fr; }
+.zoom button { width: 100%; height: 100%; }
+.zoom button + button { box-shadow: 0 -1du 0 #E2E2E2; }
+.nav:active, .zoom button:active, .locate:active { background: #F0F0F0; }
+.locate {
+  left: 12du; top: 202du; width: 296du; height: 48du; border-radius: 999px;
+  display: flex; align-items: center; justify-content: flex-start; padding-left: 22du; gap: 14du;
+  font-size: 24du; font-weight: 500; line-height: 1; white-space: nowrap;
+}

@@ -1,0 +1,13 @@
+.card {
+  position: relative; width: 776du; border-radius: 24du; overflow: hidden; flex: none;
+  background: #F9F8F5; box-shadow: var(--shadow-card);
+}
+.local { height: 182du; }
+.time  { height: 154du; }
+.bar { position: absolute; left: 0; top: 0; bottom: 0; width: 8du; }
+.title { font-family: var(--font-serif); font-size: 23.3du; font-weight: 700; color: var(--ink-900); }
+.place { font-size: 18du; font-weight: 500; color: var(--ink-900); }
+.meta  { font-size: 18.6du; color: #7B818C; }
+.more  { appearance: none; border: 0; background: none; padding: 0; cursor: pointer; color: #717B88; }
+.hour  { font-size: 22.5du; font-weight: 500; color: var(--ink-900); }
+.thumb { border-radius: 24du; object-fit: cover; }

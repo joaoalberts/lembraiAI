@@ -1,0 +1,27 @@
+- main [ref=e875]:
+  - button "Fechar" [ref=e876] [cursor=pointer]
+  - heading "Lembrete criado com sucesso!" [level=1] [ref=e880]
+  - paragraph [ref=e881]: Você será avisado na hora certa. Pode ficar tranquilo.
+  - generic [ref=e882]:
+    - heading "Lembrete editado" [level=2] [ref=e889]
+    - generic [ref=e890]: Ativo
+    - generic [ref=e896]: Data
+    - generic [ref=e897]: Ter, 16 de set de 2026
+    - generic [ref=e902]: Horário
+    - generic [ref=e903]: 09:00
+    - separator [ref=e904]
+    - generic [ref=e909]: Local
+    - generic [ref=e910]: Av. Vieira de Moraes, 320 – Fortaleza, CE
+    - generic [ref=e911]: Raio de 150 metros
+    - separator [ref=e912]
+    - generic [ref=e919]: Repetir
+    - generic [ref=e920]: Nunca
+  - button "Editar" [ref=e921] [cursor=pointer]
+  - button "Duplicar" [ref=e926] [cursor=pointer]
+  - button "Excluir" [ref=e931] [cursor=pointer]
+  - button "Compartilhar" [ref=e936] [cursor=pointer]
+  - complementary [ref=e941]:
+    - strong [ref=e945]: Dica inteligente
+    - paragraph [ref=e946]: Crie lembretes recorrentes para não esquecer das suas tarefas importantes.
+  - button "Ver todos os lembretes" [ref=e950] [cursor=pointer]
+  - button "Criar outro lembrete" [ref=e954] [cursor=pointer]

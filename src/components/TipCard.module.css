@@ -1,0 +1,16 @@
+.tip { position: absolute; }
+.circle { position: absolute; }
+.title, .text, .chev { position: absolute; }
+.tip .text { white-space: pre-line; }
+
+.list { width: 776du; height: 141du; border-radius: 27du; background: var(--mint-tint); }
+.list .circle { left: 25du; top: 22du; }
+.list .title { left: 151du; top: 40du; font-size: 25.3du; font-weight: 700; color: #09251D; }
+.list .text { left: 151du; top: 92.5du; font-size: 21.4du; line-height: 29du; color: #375C50; }
+.list .chev { left: 736du; top: 71du; }
+
+.success { width: 782du; height: 157du; border-radius: 38du; background: var(--bg-card); box-shadow: inset 0 0 0 1.5du rgba(255, 255, 255, .8); }
+.success .circle { left: 35du; top: 31du; }
+.success .title { left: 157du; top: 47du; font-size: 22.6du; font-weight: 700; color: var(--ink-900); }
+.success .text { left: 157du; top: 97.5du; font-size: 22.3du; line-height: 31du; color: var(--ink-600); }
+.success .chev { left: 729du; top: 79du; }
