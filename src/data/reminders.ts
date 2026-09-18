@@ -27,6 +27,16 @@ export const SECTION_DATES: Record<Section, string | undefined> = {
 };
 export const SECTIONS: Section[] = ['Hoje', 'Amanhã', 'Esta semana'];
 
+/** Opções do seletor "Repetir"; o valor escolhido é o texto exibido no resumo do lembrete. */
+export const REPEAT_OPTIONS: { value: string; desc: string }[] = [
+  { value: 'Nunca', desc: 'Avisa uma única vez' },
+  { value: 'Todos os dias', desc: 'Repete diariamente, no mesmo horário' },
+  { value: 'Dias úteis', desc: 'De segunda a sexta' },
+  { value: 'Toda semana', desc: 'No mesmo dia da semana' },
+  { value: 'Todo mês', desc: 'No mesmo dia do mês' },
+  { value: 'Todo ano', desc: 'Na mesma data, todo ano' },
+];
+
 export const DEFAULT_DATE_ISO = '2026-09-16';
 export const DEFAULT_DATE_LABEL = 'Ter, 16 de set de 2026';
 export const DEFAULT_PLACE = 'Av. Vieira de Moraes, 320 – Fortaleza, CE';

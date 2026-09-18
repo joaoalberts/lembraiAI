@@ -2,16 +2,23 @@
 .title {
   position: absolute; left: 0; right: 0; top: 328du; text-align: center; white-space: pre-line;
   font-family: var(--font-serif); font-weight: 700; font-size: 60.5du; line-height: 64du; color: var(--ink-900);
+  animation: rise .8s cubic-bezier(.2, .8, .2, 1) .6s both;
 }
 .sub {
   position: absolute; left: 0; right: 0; top: 472du; text-align: center; white-space: pre-line;
   font-size: 29du; line-height: 42du; color: var(--ink-600);
+  animation: rise .8s cubic-bezier(.2, .8, .2, 1) .8s both;
 }
+/* título e subtítulo entram em sequência, logo depois do selo */
+@keyframes rise { from { opacity: 0; transform: translateY(22du); } }
+@media (prefers-reduced-motion: reduce) { .title, .sub { animation: none; } }
 .card { position: absolute; border-radius: 38du; background: var(--bg-card); box-shadow: inset 0 0 0 1.5du rgba(255, 255, 255, .8); }
 .cardTitle { max-width: 270du; white-space: normal; font-family: var(--font-serif); font-size: 33.5du; font-weight: 700; line-height: 42du; color: var(--ink-900); }
 .info { box-shadow: inset 0 0 0 2du #E6E5E4; }
 .label { font-size: 19du; color: #84848A; }
 .value { font-size: 25du; font-weight: 500; color: var(--ink-900); }
+/* endereço: na ref/4.png é menor (429 du de largura) e nunca passa da miniatura do mapa (começa em 586); se for maior, corta com … */
+.place { font-size: 23.1du; line-height: 1.45; max-width: 445du; overflow: hidden; text-overflow: ellipsis; }
 .radius { font-size: 23du; color: var(--ink-600); }
 .divider { position: absolute; margin: 0; height: 2du; border: 0; background: var(--divider); }
 .thumb { border-radius: 24du; object-fit: cover; }

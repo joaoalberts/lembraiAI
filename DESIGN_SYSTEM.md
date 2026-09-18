@@ -1,4 +1,4 @@
-# Lembrete Geo — Design System
+# LembreiAi — Design System
 
 > **Versão 0.2 · Fase 1 aprovada · Fase 2 implementada**
 > Extraído de `./ref/1.png … 5.png`.
@@ -10,6 +10,17 @@
 > 4. **Assets recortados das próprias referências** (`tools/build-assets.py`): fundos com a UI removida por inpainting, mapas e miniaturas. Interface 100 % em código.
 > 5. Inconsistências das imagens (dias da semana, pino na tag "Por horário", tag laranja com texto escuro) são **dados de exemplo**: mantidas como estão nas imagens.
 > 6. Comportamentos sem imagem: ações do sucesso funcionais com estado local; abas, busca, ⋯, "Repetir" e slides 2–3 do onboarding **sem ação** até a revisão.
+>
+> **Fase 4 — alterações pedidas depois da aprovação** (não vêm das imagens; valem no lugar do que estiver em contrário abaixo):
+> - **Navegação:** "Pular" e "Criar meu primeiro lembrete" → Novo lembrete · voltar (Novo lembrete) → Onboarding · "Ver todos os lembretes" → lista · "Criar outro lembrete" e o card "Dica inteligente" → Novo lembrete.
+> - **Onboarding (§7.7):** os balões de vidro "Na hora certa" / "No lugar certo" ficam na **arte de fundo** (passam por trás do pino 3D); só o ícone e o texto são código. O título agora é **"Lembre de tudo!"** e o app passou a se chamar **"LembreiAi"** em todo lugar (marca do onboarding e da lista, imagem e título do compartilhamento, aba do navegador, README); o nome vive em `src/lib/brand.ts`. As imagens de `ref/` e as medidas abaixo ainda citam "Lembrete Geo" porque descrevem o que está nelas.
+> - **Novo lembrete:** o topo deixou de ser foto (§10) e virou CSS (névoa pinheiro/menta + anéis de raio). "Repetir" abre uma folha inferior com 6 opções: Nunca, Todos os dias, Dias úteis, Toda semana, Todo mês, Todo ano. A data já nasce em **hoje** (dia da semana calculado; a lista agrupa em Hoje/Amanhã/Esta semana pela data real). O horário abre uma folha com duas rodas roláveis (hora 00–23 e minutos 00–59, com encaixe no item central): cada valor é salvo ao parar de rolar, e a folha fecha sozinha 0,8 s depois que os minutos param; "Pronto", Esc ou o fundo fecham a qualquer momento. As rodas não "dão a volta" (23 → 00). A lista de exemplo (§1, ref/5.png) segue com as datas fixas de 16–20/09.
+> - **Barra de menu (§7.6):** agora navega — Início → onboarding, Lembretes → lista, Mapa → `/mapa`, Configurações → `/config` (essas duas são telas provisórias "Em breve", no padrão da lista, até existir referência). Também aparece no **Novo lembrete** (aba Lembretes ativa): cabeçalho e cartões rolam nas coordenadas da ref/2.png, e o botão "Criar lembrete" fica fixo 16 acima da barra, sobre um degradê.
+> - **Lista — fundo do cabeçalho (§2.4/§10):** a foto de montanhas desfocadas (feita da ref/5.png com o texto apagado) foi trocada por um fundo em código (`ListHeaderBg`): degradê verde profundo, luz menta atrás dos botões, **curvas de nível** de mapa topográfico (SVG gerado por `tools/build-assets.py` → `topo-header.svg`, uma curva "mestra" a cada 4) que somem para a esquerda e para baixo, e grão fino. Vale também para as telas "Em breve".
+> - **Lista — "⋯" dos cartões:** abre uma folha com **Editar** (formulário já preenchido, com título "Editar lembrete" e botão "Salvar alterações"; ao salvar volta para a lista) e **Excluir** (com confirmação). Editar preserva ícone/categoria temáticos, miniatura, status e seção (se a data não mudar). O glifo segue pequeno como na ref/5.png (centro em 741; 34,5 no cartão), mas a área de toque é 88 × 66 du (era 34 × 41). O "⋯" do cabeçalho da lista continua sem ação.
+> - **Lista:** a lupa abre a busca (campo de vidro no lugar da marca; filtra título, local, data e hora, sem acento/maiúscula; os contadores dos chips acompanham).
+> - **Sucesso (topo, §7.7/§10):** o ícone 3D deixou de ser imagem: o fundo foi regenerado sem ele e sem o texto (preenchimento por difusão, sem mancha) e o selo virou código (`SuccessHero`), com entrada animada em uma sequência única — selo com mola, check que se desenha, duas ondas de raio, faíscas, brilho atravessando o selo, título e subtítulo subindo; depois só dois pontos cintilam. `prefers-reduced-motion` mostra o estado final, sem ondas nem faíscas.
+> - **Sucesso (ações):** sem "Duplicar" (3 ações de largura igual, §7.1) · "Excluir" pede confirmação (vermelho de erro `#D43A2A`, o [PROPOSTO] do §8) · "Compartilhar" gera uma imagem JPEG do lembrete e abre o compartilhamento do sistema (sem suporte a arquivos, baixa a imagem). O compartilhamento nativo só existe em HTTPS ou `localhost`.
 
 ---
 

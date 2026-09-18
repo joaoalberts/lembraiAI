@@ -15,8 +15,10 @@
 .zoom button { width: 100%; height: 100%; }
 .zoom button + button { box-shadow: 0 -1du 0 #E2E2E2; }
 .nav:active, .zoom button:active, .locate:active { background: #F0F0F0; }
+/* Pílula "Usar minha localização" (ref/2.png: 296 × 48, texto de 204 de largura). A largura da ref é o mínimo: se o texto
+   renderizar maior, a pílula cresce com ele (padding direito fixo) em vez de o texto vazar para fora do balão. */
 .locate {
-  left: 12du; top: 202du; width: 296du; height: 48du; border-radius: 999px;
-  display: flex; align-items: center; justify-content: flex-start; padding-left: 22du; gap: 14du;
-  font-size: 24du; font-weight: 500; line-height: 1; white-space: nowrap;
+  left: 12du; top: 202du; min-width: 296du; height: 48du; border-radius: 999px;
+  display: flex; align-items: center; justify-content: flex-start; padding: 0 24du 0 20du; gap: 15du;
+  font-size: 18.7du; font-weight: 500; line-height: 1; white-space: nowrap;
 }

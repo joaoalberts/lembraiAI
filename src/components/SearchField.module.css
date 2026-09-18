@@ -1,0 +1,15 @@
+/* Ocupa o lugar da marca no header da lista (tile 37→113, y 82→158) até o botão de busca (x 612). */
+.field {
+  position: absolute; left: 37du; top: 82du; width: 551du; height: 76du;
+  display: flex; align-items: center; gap: 20du; padding: 0 30du 0 28du; border-radius: 999px;
+  color: #fff; background: rgba(255, 255, 255, .10); border: 2du solid var(--glass-border);
+  backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+  transition: background-color .15s ease, border-color .15s ease;
+}
+.field:focus-within { border-color: var(--focus-ring); background: rgba(255, 255, 255, .14); }
+.field input {
+  flex: 1; min-width: 0; height: 100%; padding: 0; border: 0; outline: none; background: none;
+  font-family: var(--font-sans); font-size: 26du; color: inherit; -webkit-appearance: none; appearance: none;
+}
+.field input::placeholder { color: var(--on-dark-300); opacity: 1; }
+.field input::-webkit-search-cancel-button, .field input::-webkit-search-decoration { -webkit-appearance: none; display: none; }

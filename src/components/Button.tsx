@@ -56,7 +56,7 @@ export function SkipLabel({ children }: { children: ReactNode }) {
 
 interface ActionProps { icon: LucideIcon; label: string; onClick?: () => void; className?: string; style?: CSSProperties }
 
-/** Botão de ação translúcido do sucesso (Editar, Duplicar, Excluir, Compartilhar). */
+/** Botão de ação translúcido do sucesso (Editar, Excluir, Compartilhar). */
 export function ActionButton({ icon, label, onClick, className, style }: ActionProps) {
   return (
     <button type="button" onClick={onClick} style={style} className={cx(s.action, className)}>

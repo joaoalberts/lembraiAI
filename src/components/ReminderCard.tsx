@@ -9,7 +9,7 @@ import { Toggle } from './Toggle';
 import s from './ReminderCard.module.css';
 
 /** Item da lista (ref/5.png). Duas variações medidas: com local (miniatura de mapa) e por horário. */
-export function ReminderCard({ r, onToggle }: { r: Reminder; onToggle: () => void }) {
+export function ReminderCard({ r, onToggle, onMore }: { r: Reminder; onToggle: () => void; onMore: () => void }) {
   const Ic = REMINDER_ICONS[r.icon];
   const local = r.kind === 'local';
   const x = local ? 144 : 153; // início da coluna de texto
@@ -38,7 +38,10 @@ export function ReminderCard({ r, onToggle }: { r: Reminder; onToggle: () => voi
 
       <Tag category={r.category} style={box(x, local ? 133 : 104)}>{local ? 'Por local' : 'Por horário'}</Tag>
 
-      <button type="button" aria-label="Mais opções" className={cx('atc', s.more)} style={at(741, 35)}><Icon icon={Ellipsis} size={34} stroke={2.6} /></button>
+      {/* centro do glifo = o da ref/5.png (741, 34.5); a área de toque é bem maior que o desenho (ver .more) */}
+      <button type="button" aria-label={`Mais opções: ${r.title}`} aria-haspopup="dialog" className={cx('atc', s.more)} style={at(741, 34.5)} onClick={onMore}>
+        <Icon icon={Ellipsis} size={40} stroke={2.6} />
+      </button>
       <span className={cx('atc', s.hour)} style={at(local ? 693 : 676, local ? 77 : 42)}>{r.time}</span>
       <div style={box(local ? 659 : 644, local ? 102 : 68)}>
         <Toggle checked={r.active} onChange={onToggle} label={`Ativar lembrete: ${r.title}`} />

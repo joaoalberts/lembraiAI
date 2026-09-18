@@ -1,0 +1,83 @@
+/* Âncora de tamanho zero no centro do selo; os filhos se centram nela com margens negativas (a animação só usa transform). */
+.hero { position: absolute; left: 50%; top: 194du; width: 0; height: 0; pointer-events: none; }
+.hero > i, .badge { position: absolute; left: 0; top: 0; }
+
+/* luz e anéis */
+.glow {
+  width: 620du; height: 620du; margin: -310du 0 0 -310du; border-radius: 50%;
+  background: radial-gradient(circle, rgba(226, 246, 234, .95) 0%, rgba(170, 238, 205, .42) 34%, rgba(170, 238, 205, 0) 66%);
+  animation: glow 1s ease-out both;
+}
+.disc {
+  width: 236du; height: 236du; margin: -118du 0 0 -118du; border-radius: 50%;
+  background: radial-gradient(circle at 50% 36%, rgba(255, 255, 255, .6), rgba(178, 238, 210, .3) 66%, rgba(178, 238, 210, .12));
+  box-shadow: inset 0 0 0 2du rgba(255, 255, 255, .7), 0 0 50du rgba(148, 249, 205, .35);
+  animation: settle .9s cubic-bezier(.2, .8, .2, 1) .05s both;
+}
+.ring {
+  width: 316du; height: 316du; margin: -158du 0 0 -158du; border-radius: 50%; box-shadow: inset 0 0 0 1.5du rgba(255, 255, 255, .45);
+  animation: settle 1s cubic-bezier(.2, .8, .2, 1) .12s both;
+}
+/* ondas de raio: nascem atrás do selo e se abrem até sumir (uma vez cada) */
+.ripple {
+  width: 236du; height: 236du; margin: -118du 0 0 -118du; border-radius: 50%; box-shadow: inset 0 0 0 3du rgba(148, 249, 205, .95);
+  opacity: 0; animation: ripple 1.6s cubic-bezier(.2, .6, .3, 1) .6s both;
+}
+.late { animation-delay: .98s; }
+
+/* selo */
+.badge {
+  width: 142du; height: 142du; margin: -71du 0 0 -71du; border-radius: 40du; overflow: hidden;
+  box-shadow: 0 24du 44du rgba(6, 32, 20, .34), 0 6du 12du rgba(6, 32, 20, .24);
+  animation: pop .75s cubic-bezier(.2, 1.1, .3, 1) .1s both;
+}
+.badge::after {   /* aro de luz na borda */
+  content: ''; position: absolute; inset: 0; border-radius: inherit; pointer-events: none;
+  box-shadow: inset 0 0 0 2du rgba(255, 255, 255, .16), inset 0 3du 0 rgba(255, 255, 255, .24);
+}
+.check { stroke-dasharray: 100; stroke-dashoffset: 0; animation: draw .55s cubic-bezier(.4, 0, .2, 1) .55s backwards; }
+.shine {   /* brilho que atravessa o selo depois do check */
+  position: absolute; top: -20%; bottom: -20%; left: 0; width: 42%; pointer-events: none;
+  background: linear-gradient(100deg, rgba(255, 255, 255, 0), rgba(255, 255, 255, .5), rgba(255, 255, 255, 0));
+  transform: translateX(-180%) skewX(-18deg); animation: shine .9s ease-in-out 1.15s both;
+}
+
+/* faíscas: sobem e somem (uma vez) */
+.spark {
+  width: var(--s); height: var(--s); margin: calc(var(--s) / -2) 0 0 calc(var(--s) / -2); border-radius: 50%;
+  background: var(--c); box-shadow: 0 0 12du var(--c); opacity: 0;
+  animation: burst 1.25s cubic-bezier(.15, .7, .3, 1) var(--delay) both;
+}
+.star { border-radius: 0; box-shadow: none; clip-path: polygon(50% 0, 62% 38%, 100% 50%, 62% 62%, 50% 100%, 38% 62%, 0 50%, 38% 38%); }
+
+/* dois pontos que ficam cintilando (como na ref/4.png) */
+.twinkle {
+  width: 9du; height: 9du; margin: -4.5du 0 0 -4.5du; border-radius: 50%; background: #fff; box-shadow: 0 0 14du 4du rgba(148, 249, 205, .9);
+  animation: fadein .6s ease-out 1.1s both, twinkle 2.8s ease-in-out 1.7s infinite;
+}
+.twinkleB { animation-delay: 1.3s, 2.6s; }
+
+@keyframes glow { from { opacity: 0; transform: scale(.7); } }
+@keyframes settle { from { opacity: 0; transform: scale(.55); } }
+@keyframes pop {
+  0% { opacity: 0; transform: scale(.35) rotate(-10deg); }
+  60% { opacity: 1; transform: scale(1.09) rotate(2deg); }
+  100% { transform: none; }
+}
+@keyframes draw { from { stroke-dashoffset: 100; } }
+@keyframes ripple { 0% { opacity: .85; transform: scale(.7); } 100% { opacity: 0; transform: scale(2.15); } }
+@keyframes burst {
+  0% { opacity: 0; transform: translate(0, 0) scale(.3); }
+  12% { opacity: 1; }
+  62% { opacity: 1; }
+  100% { opacity: 0; transform: translate(var(--dx), var(--dy)) scale(.85); }
+}
+@keyframes shine { to { transform: translateX(460%) skewX(-18deg); } }
+@keyframes fadein { from { opacity: 0; } }
+@keyframes twinkle { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: .35; transform: scale(.7); } }
+
+/* sem movimento: mostra o estado final, sem ondas nem faíscas */
+@media (prefers-reduced-motion: reduce) {
+  .hero *, .hero *::after { animation: none !important; }
+  .ripple, .spark, .shine { display: none; }
+}

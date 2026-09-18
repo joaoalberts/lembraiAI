@@ -1,0 +1,7 @@
+.notice {
+  position: absolute; left: 0; right: 0; top: 600du; display: flex; flex-direction: column; align-items: center;
+  gap: 22du; padding: 0 110du; text-align: center;
+}
+.notice h2 { margin-top: 8du; font-family: var(--font-serif); font-size: 44du; font-weight: 700; line-height: 1.2; color: #070E1B; }
+.notice p { max-width: 560du; font-size: 25du; line-height: 1.45; color: var(--ink-600); }
+.notice button { margin-top: 16du; }

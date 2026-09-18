@@ -1,0 +1,18 @@
+.bg {
+  position: absolute; left: 0; top: 0; width: 851du; height: 345du; overflow: hidden; pointer-events: none;
+  background:
+    radial-gradient(560du 330du at 90% 6%, rgba(127, 234, 198, .28), rgba(127, 234, 198, 0) 70%),   /* luz menta atrás dos botões */
+    radial-gradient(520du 300du at 4% 92%, rgba(33, 105, 85, .6), rgba(33, 105, 85, 0) 72%),         /* pinheiro embaixo à esquerda */
+    linear-gradient(168deg, #2A5B47 0%, #184434 50%, #0E301F 100%);
+}
+/* curvas de nível (tools/build-assets.py → topo-header.svg): um morro atrás dos botões, sumindo para a esquerda e para baixo */
+.bg::before {
+  content: ''; position: absolute; inset: 0; background: url('/assets/topo-header.svg') center / 100% 100% no-repeat;
+  -webkit-mask-image: radial-gradient(ellipse 72% 125% at 90% 0%, #000 18%, rgba(0, 0, 0, .3) 48%, transparent 78%);
+  mask-image: radial-gradient(ellipse 72% 125% at 90% 0%, #000 18%, rgba(0, 0, 0, .3) 48%, transparent 78%);
+}
+/* grão fino: evita "faixas" no degradê e dá textura */
+.bg::after {
+  content: ''; position: absolute; inset: 0; opacity: .09; mix-blend-mode: soft-light;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 .6 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}

@@ -1,4 +1,29 @@
-.topBg { position: absolute; left: 0; top: 0; width: 851du; height: 560du; object-fit: fill; }
+/* Área rolável acima da barra de menu (180): as coordenadas dos filhos são as da ref/2.png. */
+.scroll { position: absolute; inset: 0 0 180du 0; overflow-y: auto; overscroll-behavior: contain; scrollbar-width: none; }
+.scroll::-webkit-scrollbar { display: none; }
+.canvas { position: relative; width: 851du; }
+/* Botão fixo acima da barra; o degradê deixa o conteúdo sumir por trás dele ao rolar. */
+.dock {
+  position: absolute; left: 0; right: 0; bottom: 180du; height: 170du; pointer-events: none;
+  background: linear-gradient(to top, var(--bg-page) 62%, rgba(245, 242, 237, 0));
+}
+.dock > * { pointer-events: auto; }
+
+/* Névoa de pinheiro + menta que se dissolve no creme da página; anéis de raio (geofence) ecoam o halo do mapa. */
+.topBg {
+  position: absolute; left: 0; top: 0; width: 851du; height: 440du; overflow: hidden; pointer-events: none;
+  background:
+    radial-gradient(560du 340du at 100% 0, rgba(33, 105, 85, .58), rgba(33, 105, 85, 0) 72%),
+    radial-gradient(480du 300du at 0 0, rgba(148, 249, 205, .36), rgba(148, 249, 205, 0) 72%),
+    radial-gradient(520du 170du at 46% 26%, rgba(255, 255, 255, .55), rgba(255, 255, 255, 0) 100%),
+    linear-gradient(180deg, #CBE4D6 0%, #E3EEE5 44%, var(--bg-page) 100%);
+}
+.topBg::before {
+  content: ''; position: absolute; right: -250du; top: -330du; width: 800du; height: 800du; border-radius: 50%;
+  background: repeating-radial-gradient(circle, rgba(255, 255, 255, 0) 0 66du, rgba(255, 255, 255, .34) 66du 68du);
+  -webkit-mask-image: radial-gradient(circle, #000 0, rgba(0, 0, 0, 0) 66%);
+  mask-image: radial-gradient(circle, #000 0, rgba(0, 0, 0, 0) 66%);
+}
 .back {
   position: absolute; left: 29du; top: 110du; width: 72du; height: 72du; border-radius: 50%;
   appearance: none; border: 0; padding: 0; display: grid; place-items: center; cursor: pointer;
@@ -31,8 +56,13 @@
   border-radius: 30du; background: var(--bg-field); font-family: var(--font-sans);
   box-shadow: inset 0 0 0 1.5du var(--border-subtle), 0 1du 2du rgba(20, 40, 30, .03);
 }
+.repeat { transition: box-shadow .15s ease, transform .12s ease; -webkit-tap-highlight-color: transparent; }
+.repeat:hover { box-shadow: inset 0 0 0 1.5du #D6D5D5, 0 1du 2du rgba(20, 40, 30, .03); }
+.repeat:active { transform: scale(.995); }
+.repeat:focus-visible { outline: 3du solid var(--forest-700); outline-offset: 3du; }
 .repeatTitle { font-size: 24.1du; font-weight: 700; color: var(--ink-900); }
 .repeatValue { font-size: 23.2du; color: var(--ink-600); }
+.repeatOn { font-weight: 700; color: var(--text-accent); }
 
 .search {
   display: flex; align-items: center; gap: 25du; padding-left: 28du; border-radius: 26du; background: var(--bg-field);

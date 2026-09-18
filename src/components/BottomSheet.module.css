@@ -1,0 +1,17 @@
+.scrim {
+  position: absolute; inset: 0; z-index: 30; background: rgba(13, 42, 27, .46);
+  animation: fade .18s ease-out;
+}
+.sheet {
+  position: absolute; left: 0; right: 0; bottom: 0; z-index: 31; max-height: 82%; overflow-y: auto; outline: none;
+  padding: 22du 40du 70du; border-radius: 38du 38du 0 0; background: var(--bg-card);
+  box-shadow: 0 -10du 40du rgba(13, 42, 27, .18);
+  animation: rise .26s cubic-bezier(.2, .8, .2, 1);
+}
+.grab { display: block; width: 96du; height: 8du; margin: 0 auto 28du; border-radius: 999px; background: var(--home-indicator); }
+.title { font-family: var(--font-serif); font-size: 38du; font-weight: 700; line-height: 1.2; color: var(--ink-900); }
+.subtitle { margin-top: 8du; font-size: 23du; line-height: 1.4; color: var(--ink-600); }
+
+@keyframes fade { from { opacity: 0; } }
+@keyframes rise { from { transform: translateY(100%); } }
+@media (prefers-reduced-motion: reduce) { .scrim, .sheet { animation: none; } }

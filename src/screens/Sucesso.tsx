@@ -1,14 +1,19 @@
-import { CalendarDays, Clock, Copy, MapPin, Pencil, RefreshCw, Share, Trash2, X } from 'lucide-react';
+import { useEffect, useRef, useState } from 'react';
+import { CalendarDays, Clock, MapPin, Pencil, RefreshCw, Share, Trash2, X } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { ActionButton, CtaButton, GlassButton, LinkButton } from '../components/Button';
+import { ConfirmSheet } from '../components/ConfirmSheet';
 import { Screen } from '../components/Frame';
 import { Icon } from '../components/Icon';
 import { IconCircle } from '../components/IconCircle';
 import { REMINDER_ICONS } from '../components/ReminderIcon';
 import { StatusPill } from '../components/StatusPill';
+import { SuccessHero } from '../components/SuccessHero';
 import { TipCard } from '../components/TipCard';
 import { DEFAULT_DATE_LABEL, DEFAULT_PLACE, type Reminder } from '../data/reminders';
+import { APP_NAME } from '../lib/brand';
 import { at, box, cx } from '../lib/du';
+import { reminderImage, shareImageFile } from '../lib/shareImage';
 import { toDraft, useStore } from '../state/store';
 import s from './Sucesso.module.css';
 
@@ -26,7 +31,8 @@ function InfoIcon({ icon, style }: { icon: typeof MapPin; style: React.CSSProper
 /** Tela 4 — Lembrete criado (ref/4.png). Fundo = arte (bg-success.jpg, com o ícone 3D); o resto é código. */
 export function Sucesso() {
   const nav = useNavigate();
-  const { lastCreated, remove, duplicate } = useStore();
+  const { lastCreated, remove } = useStore();
+  const [confirmDelete, setConfirmDelete] = useState(false);
   const r = lastCreated ?? SAMPLE;
   const Ic = REMINDER_ICONS[r.icon];
   const hasPlace = Boolean(r.place);
@@ -34,19 +40,24 @@ export function Sucesso() {
   const real = r.id !== 'sample';
 
   const edit = () => nav('/novo', { state: { draft: toDraft(r), editId: real ? r.id : undefined } });
-  const dup = () => { if (real) duplicate(r.id); nav('/lembretes'); };
   const del = () => { if (real) remove(r.id); nav('/lembretes'); };
+
+  // A imagem é gerada ao abrir a tela: o navegador só libera o compartilhamento dentro do toque do usuário,
+  // então no clique ela já precisa estar pronta.
+  const image = useRef<Promise<File> | null>(null);
+  useEffect(() => { image.current = reminderImage(r); image.current.catch(() => {}); }, [r]);
   const share = async () => {
-    const text = `${r.title} — ${r.dateLabel} às ${r.time}${r.place ? ` · ${r.place}` : ''}`;
-    try {
-      if (navigator.share) await navigator.share({ title: 'Lembrete Geo', text });
-      else await navigator.clipboard.writeText(text);
-    } catch { /* compartilhamento cancelado pelo usuário */ }
+    try { await shareImageFile(await (image.current ?? reminderImage(r))); }
+    catch { // não deu para gerar a imagem: compartilha só o texto
+      const text = `${r.title} — ${r.dateLabel} às ${r.time}${r.place ? ` · ${r.place}` : ''}`;
+      navigator.share?.({ title: APP_NAME, text }).catch(() => {});
+    }
   };
 
   return (
     <Screen>
       <img className={s.bg} src="/assets/bg-success.jpg" alt="" />
+      <SuccessHero />
       <GlassButton label="Fechar" style={box(741, 56, 76, 76)} onClick={() => nav('/lembretes')}><Icon icon={X} size={32} stroke={2.4} /></GlassButton>
 
       <h1 className={s.title}>{'Lembrete criado\ncom sucesso!'}</h1>
@@ -69,7 +80,7 @@ export function Sucesso() {
           <>
             <InfoIcon icon={MapPin} style={box(35, 282)} />
             <span className={cx('at', s.label)} style={at(123, 300)}>Local</span>
-            <span className={cx('at', s.value)} style={at(123, 333)}>{r.place}</span>
+            <span className={cx('at', s.value, s.place)} style={at(123, 333)}>{r.place}</span>
             <span className={cx('at', s.radius)} style={at(123, 364)}>Raio de {r.radius} metros</span>
             <img className={s.thumb} src={r.thumb ?? '/assets/thumb-sucesso.jpg'} alt="" style={box(586, 280, 164, 119)} />
             <hr className={s.divider} style={box(35, 420, 715)} />
@@ -81,16 +92,21 @@ export function Sucesso() {
         <span className={cx('at', s.value)} style={at(123, repeatTop + 52)}>{r.repeat}</span>
       </section>
 
-      <ActionButton icon={Pencil} label="Editar" style={box(57, 1158)} onClick={edit} />
-      <ActionButton icon={Copy} label="Duplicar" style={box(250, 1158)} onClick={dup} />
-      <ActionButton icon={Trash2} label="Excluir" style={box(445, 1158)} onClick={del} />
-      <ActionButton icon={Share} label="Compartilhar" style={box(639, 1158)} onClick={share} />
+      {/* 3 ações (o Duplicar saiu): larguras iguais entre as margens de 57 e 795 do frame, com o mesmo vão de 39 */}
+      <ActionButton icon={Pencil} label="Editar" style={box(57, 1158, 220)} onClick={edit} />
+      <ActionButton icon={Trash2} label="Excluir" style={box(316, 1158, 220)} onClick={() => setConfirmDelete(true)} />
+      <ActionButton icon={Share} label="Compartilhar" style={box(575, 1158, 220)} onClick={share} />
 
-      <TipCard variant="success" title="Dica inteligente" style={box(33, 1315)}
+      <TipCard variant="success" title="Dica inteligente" style={box(33, 1315)} onClick={() => nav('/novo')}
                text={'Crie lembretes recorrentes para não esquecer\ndas suas tarefas importantes.'} />
 
       <CtaButton variant="dark" size="success" arrow="inline" style={box(38, 1513)} onClick={() => nav('/lembretes')}>Ver todos os lembretes</CtaButton>
       <LinkButton style={{ position: 'absolute', left: 0, right: 0, top: `calc(1662 * var(--u))`, textAlign: 'center' }} onClick={() => nav('/novo')}>Criar outro lembrete</LinkButton>
+
+      {confirmDelete && (
+        <ConfirmSheet title="Excluir lembrete?" message={`“${r.title}” será removido e você não receberá mais esse aviso.`}
+                      confirmLabel="Excluir lembrete" onConfirm={del} onClose={() => setConfirmDelete(false)} />
+      )}
     </Screen>
   );
 }

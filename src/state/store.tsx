@@ -1,5 +1,6 @@
 import { createContext, useCallback, useContext, useMemo, useState, type ReactNode } from 'react';
 import { DEFAULT_DATE_ISO, DEFAULT_DATE_LABEL, DEFAULT_PLACE, SEED, type Reminder, type Section } from '../data/reminders';
+import { todayISO } from '../lib/format';
 
 export interface Draft {
   title: string;
@@ -20,15 +21,15 @@ interface Store {
   create: (d: Draft) => Reminder;
   update: (id: string, d: Draft) => Reminder | null;
   remove: (id: string) => void;
-  duplicate: (id: string) => Reminder | null;
 }
 
 const Ctx = createContext<Store | null>(null);
 const uid = () => `n${Date.now().toString(36)}${Math.random().toString(36).slice(2, 5)}`;
 
+/** Seção da lista pela data real de hoje (não pelas datas de exemplo). */
 function sectionOf(iso: string): Section {
-  if (iso === DEFAULT_DATE_ISO) return 'Hoje';
-  if (iso === '2026-09-17') return 'Amanhã';
+  if (iso === todayISO()) return 'Hoje';
+  if (iso === todayISO(1)) return 'Amanhã';
   return 'Esta semana';
 }
 
@@ -61,6 +62,22 @@ function fromDraft(d: Draft, id: string): Reminder {
   };
 }
 
+/**
+ * Editar: parte do lembrete novo (fromDraft), mas mantém o que o formulário não edita — o status, o ícone e a categoria
+ * "temáticos" (haltere, pílula…; o par verde/carrinho ou azul/sino é o padrão do formulário e acompanha o tipo), a
+ * miniatura e a seção quando a data não mudou.
+ */
+function mergeEdit(old: Reminder, fresh: Reminder): Reminder {
+  const padrao = (old.category === 'green' && old.icon === 'cart') || (old.category === 'blue' && old.icon === 'bell');
+  return {
+    ...fresh,
+    active: old.active,
+    ...(padrao ? {} : { category: old.category, icon: old.icon }),
+    section: fresh.dateISO === old.dateISO ? old.section : fresh.section,
+    thumb: fresh.kind === 'local' ? old.thumb ?? fresh.thumb : undefined,
+  };
+}
+
 export function StoreProvider({ children }: { children: ReactNode }) {
   const [reminders, setReminders] = useState<Reminder[]>(SEED);
   const [lastCreated, setLastCreated] = useState<Reminder | null>(null);
@@ -77,27 +94,21 @@ export function StoreProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const update = useCallback((id: string, d: Draft) => {
-    const r = fromDraft(d, id);
-    setReminders((rs) => rs.map((x) => (x.id === id ? { ...r, active: x.active } : x)));
+    const old = reminders.find((x) => x.id === id);
+    const fresh = fromDraft(d, id);
+    const r = old ? mergeEdit(old, fresh) : fresh;
+    setReminders((rs) => rs.map((x) => (x.id === id ? r : x)));
     setLastCreated(r);
     return r;
-  }, []);
+  }, [reminders]);
 
   const remove = useCallback((id: string) => {
     setReminders((rs) => rs.filter((r) => r.id !== id));
     setLastCreated((l) => (l && l.id === id ? null : l));
   }, []);
 
-  const duplicate = useCallback((id: string) => {
-    const src = reminders.find((r) => r.id === id);
-    if (!src) return null;
-    const copy = { ...src, id: uid() };
-    setReminders((rs) => [...rs, copy]);
-    return copy;
-  }, [reminders]);
-
-  const value = useMemo(() => ({ reminders, lastCreated, toggle, create, update, remove, duplicate }),
-    [reminders, lastCreated, toggle, create, update, remove, duplicate]);
+  const value = useMemo(() => ({ reminders, lastCreated, toggle, create, update, remove }),
+    [reminders, lastCreated, toggle, create, update, remove]);
   return <Ctx.Provider value={value}>{children}</Ctx.Provider>;
 }
 

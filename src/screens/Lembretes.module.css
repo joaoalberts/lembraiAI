@@ -1,4 +1,3 @@
-.hdrBg { position: absolute; left: 0; top: 0; width: 851du; height: 345du; object-fit: fill; }
 .brand { left: 37du; top: 82du; }
 .title { font-family: var(--font-serif); font-size: 56.7du; font-weight: 700; color: #F9F9F7; line-height: 1.1; }
 .subtitle { font-size: 26.8du; color: #E6EDE5; }
@@ -19,3 +18,7 @@
 .section:first-child .cards { margin-top: 16du; }
 .section + .section { margin-top: 29.5du; }
 .tip { position: relative; margin-top: 22du; }
+
+.empty { display: flex; flex-direction: column; align-items: center; gap: 12du; padding: 150du 40du 0; text-align: center; }
+.empty h2 { font-family: var(--font-serif); font-size: 32du; font-weight: 700; line-height: 1.25; color: #070E1B; overflow-wrap: anywhere; }
+.empty p { font-size: 24du; line-height: 1.4; color: var(--ink-600); }

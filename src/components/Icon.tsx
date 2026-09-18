@@ -44,12 +44,23 @@ export function LockIcon({ size, hole = '#183826' }: { size: number; hole?: stri
   );
 }
 
-/** Pino sólido do mapa (forest-pin com ponto branco). Medidas do 2.png: 58 × 73 du. */
+/** Sino sólido do chip "Na hora certa" (ref/1.png): corpo cheio com base aberta, botão no topo e badalo separado. */
+export function BellSolid({ style }: { style?: React.CSSProperties }) {
+  return (
+    <svg aria-hidden viewBox="0 0 27 33" preserveAspectRatio="none" fill="currentColor" style={style}>
+      <circle cx="13.5" cy="2.3" r="2.1" />
+      <path d="M13.5 4.2C8.7 4.2 6.3 7.7 6.3 12.3v5.2c0 2.5-1.2 4.5-3.6 6.4-.8.6-.4 2.1.8 2.1h20c1.2 0 1.6-1.5.8-2.1-2.4-1.9-3.6-3.9-3.6-6.4v-5.2c0-4.6-2.4-8.1-7.2-8.1Z" />
+      <path d="M9.9 28.4h7.2a3.6 3.6 0 0 1-7.2 0Z" />
+    </svg>
+  );
+}
+
+/** Pino sólido do mapa (forest-pin com ponto branco). Medidas do 2.png: 58 × 73 du. Cores por CSS: --pin-fill / --pin-dot. */
 export function MapPin({ className, style }: { className?: string; style?: React.CSSProperties }) {
   return (
     <svg aria-hidden viewBox="0 0 58 73" className={className} style={style}>
       <path d="M29 0C13 0 0 12.6 0 28.4 0 49.6 29 73 29 73s29-23.4 29-44.6C58 12.6 45 0 29 0Z" fill="var(--pin-fill, var(--forest-pin))" />
-      <circle cx="29" cy="28" r="10" fill="#fff" />
+      <circle cx="29" cy="28" r="10" fill="var(--pin-dot, #fff)" />
     </svg>
   );
 }

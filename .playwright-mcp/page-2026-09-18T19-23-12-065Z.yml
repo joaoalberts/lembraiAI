@@ -1,0 +1,23 @@
+- main [ref=e4]:
+  - generic [ref=e10]:
+    - generic [ref=e11]: Lembrete Geo
+    - generic [ref=e12]: Sua rotina, mais leve.
+  - button "Pular" [ref=e13] [cursor=pointer]
+  - generic [ref=e17]: Na hora certa
+  - generic [ref=e22]: No lugar certo
+  - heading "Lembre de viver." [level=1] [ref=e27]:
+    - generic [ref=e28]: Lembre
+    - generic [ref=e29]: de viver.
+  - paragraph [ref=e30]: Alertas inteligentes que chegam na hora certa ou quando você estiver no lugar certo.
+  - generic [ref=e31]:
+    - strong [ref=e36]: Por horário
+    - generic [ref=e37]: Nunca mais esqueça
+  - generic [ref=e38]:
+    - strong [ref=e43]: Por localização
+    - generic [ref=e44]: Lembre ao chegar no local
+  - generic [ref=e45]:
+    - strong [ref=e49]: O que acontecer primeiro
+    - generic [ref=e50]: Mais praticidade no seu dia
+  - button "Criar meu primeiro lembrete" [ref=e51] [cursor=pointer]
+  - paragraph [ref=e59]:
+    - generic [ref=e65]: Seus lembretes, sua privacidade.

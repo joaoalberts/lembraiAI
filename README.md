@@ -1,4 +1,4 @@
-# Lembrete Geo
+# LembreiAi
 
 App de lembretes por horário e por local. Implementação fiel às referências em `./ref/` (ver `DESIGN_SYSTEM.md`).
 

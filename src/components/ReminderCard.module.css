@@ -8,6 +8,20 @@
 .title { font-family: var(--font-serif); font-size: 23.3du; font-weight: 700; color: var(--ink-900); }
 .place { font-size: 18du; font-weight: 500; color: var(--ink-900); }
 .meta  { font-size: 18.6du; color: #7B818C; }
-.more  { appearance: none; border: 0; background: none; padding: 0; cursor: pointer; color: #717B88; }
+/* "⋯": glifo pequeno como na ref/5.png, mas com área de toque de 88 × 66 (a borda direita é cortada pelo cartão; 66 = até o
+   topo do toggle). Fica acima da hora, que não é interativa. O halo circular aparece ao passar o mouse, tocar e focar. */
+.more {
+  appearance: none; border: 0; background: none; padding: 0; cursor: pointer; color: #717B88;
+  width: 88du; height: 66du; display: grid; place-items: center; z-index: 2; -webkit-tap-highlight-color: transparent;
+}
+.more::before {
+  content: ''; position: absolute; left: 50%; top: 50%; width: 60du; height: 60du; border-radius: 50%;
+  transform: translate(-50%, -50%); background: transparent; transition: background-color .15s ease, box-shadow .15s ease;
+}
+.more svg { position: relative; }
+.more:hover::before { background: rgba(20, 40, 30, .07); }
+.more:active::before { background: rgba(20, 40, 30, .13); }
+.more:focus-visible { outline: none; }
+.more:focus-visible::before { background: rgba(20, 40, 30, .07); box-shadow: 0 0 0 3du var(--forest-700); }
 .hour  { font-size: 22.5du; font-weight: 500; color: var(--ink-900); }
 .thumb { border-radius: 24du; object-fit: cover; }

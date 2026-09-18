@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Ellipsis, Plus, Search } from 'lucide-react';
+import { Ellipsis, Plus, Search, X } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { AppBrand } from '../components/AppBrand';
 import { CtaButton, GlassButton } from '../components/Button';
@@ -7,12 +7,17 @@ import { FilterChip } from '../components/FilterChip';
 import { Screen } from '../components/Frame';
 import { HomeIndicator } from '../components/HomeIndicator';
 import { Icon } from '../components/Icon';
+import { ListHeaderBg } from '../components/ListHeaderBg';
+import { ConfirmSheet } from '../components/ConfirmSheet';
 import { ReminderCard } from '../components/ReminderCard';
+import { ReminderMenu } from '../components/ReminderMenu';
+import { SearchField } from '../components/SearchField';
 import { TabBar } from '../components/TabBar';
 import { TipCard } from '../components/TipCard';
 import { SECTIONS, SECTION_DATES, type Reminder } from '../data/reminders';
 import { at, box, cx, du } from '../lib/du';
-import { useStore } from '../state/store';
+import { fold } from '../lib/format';
+import { toDraft, useStore } from '../state/store';
 import s from './Lembretes.module.css';
 
 type FilterKey = 'todos' | 'hoje' | 'semana' | 'locais';
@@ -26,19 +31,29 @@ const FILTERS: { key: FilterKey; label: string; left: number; width: number; tes
 /** Tela 3 — Meus lembretes (ref/5.png, versão B). */
 export function Lembretes() {
   const nav = useNavigate();
-  const { reminders, toggle } = useStore();
+  const { reminders, toggle, remove } = useStore();
+  const [menuFor, setMenuFor] = useState<Reminder | null>(null);       // lembrete cujo "⋯" está aberto
+  const [deleting, setDeleting] = useState<Reminder | null>(null);     // aguardando confirmação de exclusão
   const [filter, setFilter] = useState<FilterKey>('todos');
+  const [searching, setSearching] = useState(false);
+  const [query, setQuery] = useState('');
+  const closeSearch = () => { setSearching(false); setQuery(''); };
 
+  // a busca (título, local, data, hora) vale junto com o filtro do chip; os contadores dos chips acompanham a busca
+  const q = fold(query.trim());
+  const matches = q ? reminders.filter((r) => fold([r.title, r.place, r.dateLabel, r.time].filter(Boolean).join(' ')).includes(q)) : reminders;
   const test = FILTERS.find((f) => f.key === filter)!.test;
-  const visible = reminders.filter(test);
+  const visible = matches.filter(test);
   const groups = SECTIONS.map((sec) => ({ sec, items: visible.filter((r) => r.section === sec) })).filter((g) => g.items.length);
   const active = reminders.filter((r) => r.active).length;
 
   return (
     <Screen>
-      <img className={s.hdrBg} src="/assets/bg-list-header.jpg" alt="" />
-      <AppBrand variant="list" className={s.brand} />
-      <GlassButton label="Buscar" style={box(612, 77, 84, 84)}><Icon icon={Search} size={40} stroke={2.2} /></GlassButton>
+      <ListHeaderBg />
+      {searching ? <SearchField value={query} onChange={setQuery} onClose={closeSearch} /> : <AppBrand variant="list" className={s.brand} />}
+      <GlassButton label={searching ? 'Fechar busca' : 'Buscar'} style={box(612, 77, 84, 84)} onClick={searching ? closeSearch : () => setSearching(true)}>
+        <Icon icon={searching ? X : Search} size={searching ? 36 : 40} stroke={searching ? 2.4 : 2.2} />
+      </GlassButton>
       <GlassButton label="Mais opções" style={box(730, 79, 82, 82)}><Icon icon={Ellipsis} size={42} stroke={2.6} /></GlassButton>
 
       <h1 className={cx('at', s.title)} style={at(40, 212)}>Meus lembretes</h1>
@@ -48,7 +63,7 @@ export function Lembretes() {
       <div className={s.sheet} />
 
       {FILTERS.map((f) => (
-        <FilterChip key={f.key} label={f.label} count={reminders.filter(f.test).length} active={filter === f.key}
+        <FilterChip key={f.key} label={f.label} count={matches.filter(f.test).length} active={filter === f.key}
                     width={f.width} style={{ position: 'absolute', left: du(f.left), top: du(317) }}
                     onClick={() => setFilter(f.key)} />
       ))}
@@ -61,16 +76,34 @@ export function Lembretes() {
               {SECTION_DATES[sec] && <span>{SECTION_DATES[sec]}</span>}
             </header>
             <div className={s.cards}>
-              {items.map((r) => <ReminderCard key={r.id} r={r} onToggle={() => toggle(r.id)} />)}
+              {items.map((r) => <ReminderCard key={r.id} r={r} onToggle={() => toggle(r.id)} onMore={() => setMenuFor(r)} />)}
             </div>
           </section>
         ))}
-        <TipCard variant="list" className={s.tip} title="Dica para você"
-                 text={'Ative lembretes por local para nunca mais\nesquecer das suas tarefas fora de casa.'} />
+        {q && !groups.length && (
+          <div className={s.empty}>
+            <h2>Nenhum resultado para “{query.trim()}”</h2>
+            <p>Confira a grafia ou busque por outro nome ou local.</p>
+          </div>
+        )}
+        {!q && (
+          <TipCard variant="list" className={s.tip} title="Dica para você"
+                   text={'Ative lembretes por local para nunca mais\nesquecer das suas tarefas fora de casa.'} />
+        )}
       </div>
 
       <TabBar active="lembretes" />
-      <HomeIndicator variant="list" />
+      <HomeIndicator />
+
+      {menuFor && (
+        <ReminderMenu r={menuFor} onClose={() => setMenuFor(null)}
+                      onEdit={() => nav('/novo', { state: { draft: toDraft(menuFor), editId: menuFor.id, from: '/lembretes' } })}
+                      onDelete={() => { setDeleting(menuFor); setMenuFor(null); }} />
+      )}
+      {deleting && (
+        <ConfirmSheet title="Excluir lembrete?" message={`“${deleting.title}” será removido e você não receberá mais esse aviso.`}
+                      confirmLabel="Excluir lembrete" onConfirm={() => { remove(deleting.id); setDeleting(null); }} onClose={() => setDeleting(null)} />
+      )}
     </Screen>
   );
 }

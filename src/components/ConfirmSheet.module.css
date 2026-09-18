@@ -1,0 +1,14 @@
+.actions { display: flex; flex-direction: column; gap: 16du; margin-top: 34du; }
+.danger, .cancel {
+  appearance: none; border: 0; padding: 0; height: 104du; border-radius: 999px; cursor: pointer;
+  font-family: var(--font-sans); font-size: 27du; font-weight: 700; -webkit-tap-highlight-color: transparent;
+  transition: background-color .15s ease, transform .12s ease;
+}
+.danger:focus-visible, .cancel:focus-visible { outline: 3du solid var(--forest-700); outline-offset: 3du; }
+/* vermelho de erro: [PROPOSTO] no DS §8 (não existe nas imagens) */
+.danger { background: #D43A2A; color: #fff; }
+.danger:hover { background: #C63424; }
+.danger:active { background: #B92F20; transform: scale(.98); }
+.cancel { background: var(--frost); color: var(--ink-900); }
+.cancel:hover { background: #D9DECF; }
+.cancel:active { background: #CFD5C4; transform: scale(.98); }

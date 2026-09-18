@@ -82,6 +82,24 @@ def erase(img, hole, blur=7, grain=None, feather=2):
     return img * (1 - a) + filled * a
 
 
+def smooth_erase(img, hole, s=6, iters=2500, feather=3, grain=0.9):
+    """Apaga `hole` de regiões de névoa/desfoque. Preenche por difusão (equação de Laplace: cada pixel do buraco = média
+    dos vizinhos) num quadro reduzido, então a transição casa com a borda. O pull-push usa a média global e deixa um
+    'disco' mais claro que o entorno quando o buraco é grande."""
+    h, w = hole.shape
+    small = cv2.resize(img, (w // s, h // s), interpolation=cv2.INTER_AREA)
+    hs = cv2.resize(hole.astype(np.uint8), (w // s, h // s), interpolation=cv2.INTER_AREA) > 0     # qualquer cobertura conta
+    hs = cv2.dilate(hs.astype(np.uint8), np.ones((3, 3), np.uint8)) > 0
+    fill = pull_push(small, hs)
+    for _ in range(iters):
+        fill = np.where(hs[..., None], cv2.blur(fill, (3, 3)), small)       # buraco = média dos vizinhos; fora = dado original
+    filled = cv2.resize(fill, (w, h), interpolation=cv2.INTER_CUBIC)
+    filled = filled + np.random.default_rng(7).normal(0, grain, filled.shape).astype(np.float32)
+    a = cv2.GaussianBlur(hole.astype(np.float32), (0, 0), feather)[..., None]
+    a = np.where(hole[..., None], 1.0, a)
+    return img * (1 - a) + filled * a
+
+
 def save(arr, name, q=92):
     Image.fromarray(np.clip(arr, 0, 255).astype(np.uint8)).save(OUT + name, quality=q, optimize=True)
     print("ok", name)
@@ -112,10 +130,11 @@ def text_mask(img, rect, mode, k, thr, dil=3, close=0):
     return m
 
 
-def two_pass(img, text_m, shape_m, blur_text=3.5, blur_shape=8, feather_shape=3):
+def two_pass(img, text_m, shape_m, blur_text=3.5, blur_shape=8, feather_shape=3, grain=None):
     """passada única sobre a união (texto + formas): evita que o fill de um herde cor do outro
-    (ex.: o brilho laranja do CTA contaminando as manchas dos textos vizinhos)"""
-    return erase(img, text_m | shape_m, blur=(blur_text + blur_shape) / 2, feather=feather_shape)
+    (ex.: o brilho laranja do CTA contaminando as manchas dos textos vizinhos).
+    grain=None estima o grão pelo anel ao redor; passe um valor fixo quando o anel pega bordas de glifos."""
+    return erase(img, text_m | shape_m, blur=(blur_text + blur_shape) / 2, feather=feather_shape, grain=grain)
 
 
 # ───────────────────────── 1. Onboarding ─────────────────────────
@@ -128,11 +147,18 @@ def onboarding():
     for r in ((85, 1250, 225, 1385), (335, 1250, 520, 1360), (605, 1250, 800, 1390)):
         t |= text_mask(img, r, "light", 11, 8, 10, 19)                    # títulos/descrições das features
     t |= text_mask(img, (260, 1735, 600, 1768), "light", 11, 8, 9, 15)   # cadeado + privacidade
+    # chips flutuantes: o balão de vidro (que passa POR TRÁS do pino 3D) fica na arte; só o ícone e o
+    # texto saem (viram código). Apagar o balão inteiro deixava filetes do contorno e borrava o pino.
+    g = cv2.cvtColor(img.astype(np.uint8), cv2.COLOR_RGB2GRAY)
+    xx = np.arange(W)[None, :]
+    chips = np.zeros((H, W), bool)
+    for c, ang, x_max in (((207, 326), -9, 294), ((674, 473), 10, W)):   # x_max: não invade o aro do pino
+        inside = Mask().rot_rrect(c, 196, 60, ang, 10).get() & (xx <= x_max)   # miolo do balão, sem a borda
+        chips |= dilate((g > 110) & inside, 7)
+    img = erase(img, chips, blur=4, grain=0.6)   # passada própria; grão fixo: o miolo do balão é liso (a estimativa pelo anel pega as bordas dos glifos)
     m = Mask()
     m.rrect((45, 103, 116, 175), 28)                                  # tile do app
     m.rrect((651, 103, 804, 178), 40)                                 # Pular
-    m.rot_rrect((204, 321), 215, 73, -9, 36)                          # chip "Na hora certa"
-    m.rot_rrect((674, 477), 224, 68, 10, 34)                          # chip "No lugar certo"
     for x0, x1 in ((104, 200), (378, 474), (653, 750)):
         m.rrect((x0, 1135, x1, 1231), 42)                             # caixas de ícone das features
     m.rect((365, 1626, 487, 1642))                                    # pager
@@ -141,47 +167,53 @@ def onboarding():
     save(two_pass(img, t, m.get(dilate=4), blur_shape=9, feather_shape=8), "bg-onboarding.jpg")
 
 
-# ───────────────────────── 2. Formulário (topo) ─────────────────────────
-def form_top():
-    img = load(2)
-    t = np.zeros((H, W), bool)
-    t |= text_mask(img, (292, 110, 560, 164), "dark", 41, 4, 20, 33)      # título
-    t |= text_mask(img, (248, 168, 602, 202), "dark", 13, 5, 9, 17)      # subtítulo
-    m = Mask()
-    m.ellipse((27, 108, 103, 186))                                    # botão voltar (+ sombra)
-    m.rrect((29, 226, 821, 448), 34)                                  # card Descrição
-    m.rect((29, 466, 821, 591))                                       # linha de opções
-    out = two_pass(img, t, dilate(m.get(), 3) if False else m.get(dilate=5), blur_shape=8)
-    # o topo é uma névoa que vai sumindo no creme da página: corta e funde no fim
-    bg_h = 560
-    crop = out[:bg_h].copy(); cream = np.array([0xF6, 0xF2, 0xED], np.float32)
-    ramp = np.clip((np.arange(bg_h) - (bg_h - 90)) / 90.0, 0, 1)[:, None, None]
-    save(crop * (1 - ramp) + cream * ramp, "bg-form-top.jpg")
+# (o topo do formulário não é mais imagem: virou CSS em NovoLembrete.module.css — .topBg)
 
 
 # ───────────────────────── 3. Lista (header, versão B = 5.png) ─────────────────────────
-def list_header():
-    img = load(5)
-    t = np.zeros((H, W), bool)
-    t |= text_mask(img, (126, 86, 332, 152), "light", 21, 7, 9, 15)      # wordmark + tagline
-    t |= text_mask(img, (34, 178, 452, 246), "light", 45, 7, 12, 21)      # Meus lembretes
-    t |= text_mask(img, (34, 246, 272, 284), "light", 13, 7, 9, 15)      # 5 lembretes ativos
-    m = Mask()
-    m.rrect((36, 80, 113, 158), 28)                                   # tile
-    m.ellipse((610, 75, 698, 163)); m.ellipse((728, 78, 816, 165))    # busca / mais
-    m.rrect((558, 186, 816, 266), 40)                                 # botão Novo lembrete
-    m.rrect((-2, 296, W + 2, 600), 38)                                # sheet (vira CSS)
-    out = two_pass(img, t, m.get(dilate=4), blur_shape=8)
-    save(out[:345], "bg-list-header.jpg")
+def topo_header():
+    """Curvas de nível (mapa topográfico) do fundo do cabeçalho da lista: um morro no canto superior direito, atrás dos
+    botões de vidro, e ondulações que se espalham para a esquerda. Saída: public/assets/topo-header.svg (851 × 345).
+    O resto do fundo (degradês, brilho, grão) é CSS (ListHeaderBg). Não depende de ./ref/: é gerado, e determinístico."""
+    Wd, Hd, PAD = 851, 345, 80                       # PAD: o campo se estende além do quadro, senão o contorno "cola" na borda
+    yy, xx = np.mgrid[-PAD:Hd + PAD, -PAD:Wd + PAD].astype(np.float32)
+    f = np.zeros_like(xx)
+    for px, py, sx, sy, a in ((735, 30, 250, 165, 1.0), (500, -10, 190, 120, .55), (845, 250, 160, 130, .5), (60, 330, 210, 120, .4)):
+        f += a * np.exp(-(((xx - px) / sx) ** 2 + ((yy - py) / sy) ** 2) / 2)             # morros
+    f += .05 * np.sin(xx / 71 + yy / 57) + .04 * np.sin(xx / 39 - yy / 47 + 1.3) + .03 * np.sin(yy / 24 + xx / 93 + .6)   # relevo orgânico
+    normal, mestra = [], []
+    for i, lv in enumerate(np.arange(0.08, float(f.max()), 0.07)):
+        cs, _ = cv2.findContours((f > lv).astype(np.uint8), cv2.RETR_LIST, cv2.CHAIN_APPROX_NONE)
+        for c in cs:
+            p = c[:, 0, :].astype(np.float32)
+            if len(p) < 60: continue
+            k = 9                                                                   # média móvel circular: alisa a escada de pixels
+            ker = np.ones(k) / k
+            sx_ = np.convolve(np.r_[p[-k:, 0], p[:, 0], p[:k, 0]], ker, "same")[k:-k]
+            sy_ = np.convolve(np.r_[p[-k:, 1], p[:, 1], p[:k, 1]], ker, "same")[k:-k]
+            pts = np.stack([sx_, sy_], 1)[::6] - PAD
+            if pts[:, 0].max() < -8 or pts[:, 0].min() > Wd + 8 or pts[:, 1].max() < -8 or pts[:, 1].min() > Hd + 8: continue   # fora do quadro
+            d = "M" + "L".join(f"{round(x)} {round(y)}" for x, y in pts) + "Z"      # inteiros: 1 du = 0,5 px no celular, imperceptível
+            (mestra if i % 4 == 0 else normal).append(d)                            # a cada 4 curvas, uma "mestra" (mais marcada)
+    svg = (f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {Wd} {Hd}" fill="none" stroke="#E4FBF0" stroke-linejoin="round" stroke-linecap="round">'
+           f'<path stroke-opacity=".15" stroke-width="1.6" d="{" ".join(normal)}"/>'
+           f'<path stroke-opacity=".3" stroke-width="2.2" d="{" ".join(mestra)}"/></svg>')
+    with open(OUT + "topo-header.svg", "w") as fh: fh.write(svg)
+    print("ok topo-header.svg", f"{len(svg) / 1024:.0f} KB", f"({len(normal)} curvas + {len(mestra)} mestras)")
 
 
 # ───────────────────────── 4. Sucesso ─────────────────────────
 def success():
     img = load(4)
-    t = np.zeros((H, W), bool)
-    t |= text_mask(img, (185, 322, 675, 465), "dark", 61, 4, 24, 41)      # título
-    t |= text_mask(img, (205, 468, 650, 555), "dark", 13, 4, 16, 33)      # subtítulo
-    t |= text_mask(img, (305, 1660, 545, 1698), "dark", 13, 5, 9, 15)    # link
+    # 1) topo: o ícone 3D (+ anéis, pontos e brilho) vira código (SuccessHero) e o texto também. O fundo ali é névoa,
+    #    então preenche por difusão; a dilatação grande leva junto o halo claro que o texto original tinha em volta.
+    #    Um bloco só (ícone + título + subtítulo): máscaras por glifo deixavam lascas do halo entre elas.
+    hero = (Mask().ellipse((240, 10, 610, 380)).rrect((180, 296, 680, 562), 60)
+            .poly([(246, 250), (604, 250), (680, 306), (180, 306)]).get())       # o polígono fecha o vão entre o arco e o retângulo
+    link = text_mask(img, (305, 1660, 545, 1698), "dark", 13, 5, 9, 15)   # "Criar outro lembrete"
+    img = smooth_erase(img, hero, feather=12)
+    # 2) o resto da UI sobre a foto
+    t = link
     m = Mask()
     m.ellipse((739, 54, 820, 136))                                    # fechar
     m.rrect((33, 584, 817, 1128), 38)                                 # card resumo
@@ -189,7 +221,7 @@ def success():
         m.rrect((x0, 1157, x1, 1282), 32)                             # ações
     m.rrect((33, 1315, 816, 1473), 38)                                # dica
     m.rrect((38, 1513, 811, 1623), 62)                                # CTA
-    save(two_pass(img, t, m.get(dilate=3), blur_shape=10), "bg-success.jpg")
+    save(two_pass(img, t, m.get(dilate=3), blur_shape=10, grain=0.9), "bg-success.jpg")
 
 
 # ───────────────────────── 5. Mapas e miniaturas ─────────────────────────
@@ -245,7 +277,7 @@ def form_map():
 
 
 if __name__ == "__main__":
-    onboarding(); form_top(); list_header(); success(); form_map()
+    onboarding(); topo_header(); success(); form_map()
     thumb(5, (522, 501, 658, 639), "thumb-mercado.jpg")
     thumb(5, (522, 700, 658, 838), "thumb-academia.jpg")
     thumb(4, (620, 866, 783, 985), "thumb-sucesso.jpg")

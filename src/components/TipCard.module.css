@@ -3,6 +3,13 @@
 .title, .text, .chev { position: absolute; }
 .tip .text { white-space: pre-line; }
 
+/* com onClick (role=button) */
+.press { cursor: pointer; -webkit-tap-highlight-color: transparent; transition: background-color .15s ease, transform .12s ease; }
+.press:active { transform: scale(.99); }
+.press:focus-visible { outline: 3du solid var(--forest-700); outline-offset: 3du; }
+.success.press:hover { background: #fff; }
+.list.press:hover { background: #D5E1D5; }
+
 .list { width: 776du; height: 141du; border-radius: 27du; background: var(--mint-tint); }
 .list .circle { left: 25du; top: 22du; }
 .list .title { left: 151du; top: 40du; font-size: 25.3du; font-weight: 700; color: #09251D; }
