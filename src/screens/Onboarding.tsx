@@ -21,7 +21,7 @@ export function Onboarding() {
       <img className={s.bg} src="/assets/bg-onboarding.jpg" alt="" />
 
       <AppBrand variant="onboarding" className={s.brand} />
-      <GlassButton shape="pill" label="Pular" style={box(651, 103, 153, 75)} onClick={() => nav('/lembretes')}>
+      <GlassButton shape="pill" label="Pular" style={box(651, 103, 153, 75)} onClick={() => nav('/novo')}>
         <SkipLabel>Pular</SkipLabel>
       </GlassButton>
 

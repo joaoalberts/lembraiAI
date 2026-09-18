@@ -43,7 +43,7 @@ export function NovoLembrete() {
     <Screen>
       <img className={s.topBg} src="/assets/bg-form-top.jpg" alt="" />
 
-      <button type="button" aria-label="Voltar" className={s.back} onClick={() => nav('/lembretes')}>
+      <button type="button" aria-label="Voltar" className={s.back} onClick={() => nav('/')}>
         <Icon icon={ChevronLeft} size={36} stroke={2.4} />
       </button>
       <h1 className={cx('atc', s.title)} style={at(426, 138)}>Novo lembrete</h1>
