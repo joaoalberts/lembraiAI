@@ -380,6 +380,8 @@ export const radius = {
   xs: 4,
   sm: 8,
   md: 12,
+  /** Caixa do campo de texto das telas de conta e da folha "Minha conta" (26 du no app web). */
+  campo: du(26),
   /** Campos e seletores dentro dos cartões do formulário (30 du no app web). */
   field: du(30),
   lg: 16,
@@ -483,6 +485,11 @@ export const size = {
     link: du(32),
     espaco: { acoes: du(30), dica: du(34), cta: du(41), link: du(40), fim: du(154) },
   },
+  /**
+   * Campo de texto das telas de conta e da folha "Minha conta" (medidas do app web em du): altura e recuo da caixa, vão entre o
+   * rótulo e a caixa, distância do campo de cima, o botão do olho da senha e o ícone dele, e a mensagem de erro ou ajuda.
+   */
+  campo: { height: du(92), padding: du(26), gap: du(10), top: du(26), eye: du(76), eyeIcon: du(32), mensagemGap: du(8), mensagemIcon: du(24) },
   /** Sugestões da busca de endereço: altura máxima da lista, recuo das linhas e vão até o campo. */
   suggestions: { maxHeight: du(420), padding: du(6), gap: du(8) },
   /** Lista "Meus lembretes": chips, cabeçalhos de seção e vãos entre cartões e seções (medidas do app web em du). */
@@ -610,6 +617,9 @@ export const shadow = {
   slider: '0px 2px 6px rgba(0, 0, 0, 0.25)',
   /** Lista de sugestões da busca de endereço: anel cinza por dentro e sombra funda por baixo. */
   suggestions: '0px 6px 16px rgba(20, 40, 30, 0.18), inset 0px 0px 0px 1px rgba(231, 232, 234, 1)',
+  /** Campo de texto com erro: o anel de campo vira vermelho (o da caixa) e, com foco, ganha o halo vermelho. */
+  campoErro: 'inset 0px 0px 0px 2px rgba(212, 58, 42, 1), 0px 1px 2px rgba(20, 40, 30, 0.03)',
+  campoErroFoco: 'inset 0px 0px 0px 2px rgba(212, 58, 42, 1), 0px 0px 0px 4px rgba(212, 58, 42, 0.16)',
   /** Cartões da tela de sucesso (resumo e dica): só o anel branco por dentro, sem sombra por fora. */
   cartaoDoSucesso: 'inset 0px 0px 0px 1px rgba(255, 255, 255, 0.8)',
 } as const;

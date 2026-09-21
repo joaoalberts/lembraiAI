@@ -431,6 +431,7 @@ Grade de 4 (o meio-passo de 2 só para ajuste fino).
 | `radius.xs` | `4` | Selos pequenos |
 | `radius.sm` | `8` | Avisos e miniaturas |
 | `radius.md` | `12` | Campos, cartões e controles retangulares |
+| `radius.campo` | `13` | Caixa do campo de texto das telas de conta e da folha "Minha conta" |
 | `radius.field` | `15` | Campos e seletores dentro dos cartões do formulário |
 | `radius.lg` | `16` | Painéis grandes |
 | `radius.form` | `17` | Cartões do formulário de novo lembrete |
@@ -473,6 +474,8 @@ O desenho é quase plano. Toda sombra é o `boxShadow` em texto (aceito pela New
 | `shadow.optionOn` | `inset 0px 0px 0px 2px rgba(24, 92, 75, 1)` | Cartão de modo escolhido (anel verde por dentro) |
 | `shadow.slider` | `0px 2px 6px rgba(0, 0, 0, 0.25)` | Bolinha do controle deslizante |
 | `shadow.suggestions` | `0px 6px 16px rgba(20, 40, 30, 0.18), inset 0px 0px 0px 1px rgba(231, 232, 234, 1)` | Lista de sugestões de endereço (sombra funda e anel cinza) |
+| `shadow.campoErro` | `inset 0px 0px 0px 2px rgba(212, 58, 42, 1), 0px 1px 2px rgba(20, 40, 30, 0.03)` | Campo de texto com erro (anel vermelho por dentro) |
+| `shadow.campoErroFoco` | `inset 0px 0px 0px 2px rgba(212, 58, 42, 1), 0px 0px 0px 4px rgba(212, 58, 42, 0.16)` | Campo de texto com erro e em foco (anel vermelho e halo vermelho) |
 | `shadow.cartaoDoSucesso` | `inset 0px 0px 0px 1px rgba(255, 255, 255, 0.8)` | Cartões de resumo e de dica da tela de sucesso: só o anel branco por dentro |
 <!-- tokens:sombras:fim -->
 
@@ -564,22 +567,24 @@ Regras: uma ação primária por tela. Ação destrutiva sempre pede confirmaç�
 
 ## 10. Campos e formulários
 
-Componente: `src/components/TextField.tsx`.
+Componente: `src/components/TextField.tsx` (campo das telas de conta e da folha "Minha conta"; o campo do formulário de lembrete é o `FormInput`, seção 11.11).
 
-- **Anatomia:** rótulo acima (`textStyles.label`, `colors.text.primary`), campo branco (`colors.bg.field`), borda `borderWidth.hairline` em `colors.border.field`, raio `radius.md`, padding `space.lg` por `space.md`, texto `textStyles.bodyLg`, placeholder `colors.text.placeholder`.
+- **Anatomia:** rótulo acima (`textStyles.micro` em `fontFamily.bold`, `colors.text.primary`), e a caixa branca (`colors.bg.field`) de `size.campo.height` de altura e raio `radius.campo`, com o anel cinza por dentro (`shadow.field`, em vez de borda). O texto usa `textStyles.caption`, recuo `size.campo.padding`, placeholder `colors.text.placeholder`. Cada campo fica a `size.campo.top` do de cima e o vão do rótulo à caixa é `size.campo.gap`.
 
 | Estado | Como fica |
 |---|---|
 | Repouso | como na anatomia |
-| Foco | borda `colors.border.focus` e halo `shadow.focus` |
-| Erro | borda `colors.border.danger`; mensagem abaixo em `textStyles.caption` e `colors.text.danger`; o fundo continua branco |
+| Foco | anel verde-floresta e halo (`shadow.fieldFocus`) |
+| Erro | anel vermelho (`shadow.campoErro`); abaixo, o ícone de alerta (`size.campo.mensagemIcon`) e a mensagem em `textStyles.micro` e `colors.text.danger`, anunciada como alerta; o fundo continua branco |
+| Erro em foco | anel vermelho com halo vermelho (`shadow.campoErroFoco`): o verde do foco não aparece |
 | Desabilitado | fundo `colors.bg.disabled`, texto `colors.text.secondary` |
-| Dica | `textStyles.caption` em `colors.text.secondary`; some quando há erro |
+| Dica | `textStyles.micro` em `colors.text.secondary`; some quando há erro |
 
+- **Senha:** com `secureTextEntry` o campo começa escondido e ganha o botão do olho (`size.campo.eye` de largura, ícone `eye` ou `eye-off` de `size.campo.eyeIcon`, `colors.icon.muted` e `colors.icon.default` com o ponteiro em cima). O botão se chama "Mostrar senha" ou "Ocultar senha" e não entra na ordem de tab (`focusable={false}`).
 - **Rótulo sempre visível.** Placeholder é exemplo ("seu@email.com"), não rótulo.
 - **Teclado certo:** o `TextField` já escolhe `keyboardType`, `autoCapitalize` e `autoComplete` para e-mail, senha e números.
 - **Erro em português, dizendo o que fazer.** Mensagem curta, sem código técnico.
-- **Borda suave é identidade** (1,2:1 sobre o fundo, como nas referências). O foco é o reforço: exceção registrada na seção 16.
+- **Anel suave é identidade** (1,2:1 sobre o fundo, como nas referências). O foco é o reforço: exceção registrada na seção 16.
 - **Interruptor** (`Toggle`): trilho em pílula, desligado `colors.control.off`; ligado `colors.control.onCard` (variante `card`, 35 por 21, no cartão de lembrete) ou `colors.control.onForm` (variante `form`, 43 por 26, nos formulários e nas configurações). Bolinha `colors.control.thumb` com `shadow.float`, que corre em `motion.duration.toggle` (imediata com "reduzir movimento"). Medidas em `size.toggle.*`; o toque ganha folga até 44 por 44. Papel `switch` com o estado ligado, e sempre com o rótulo ao lado e `accessibilityLabel`. O verde do cartão é o da imagem (`#30AB7B`) escurecido 5% para chegar a 3:1 com o cartão (a imagem dá 2,76:1).
 - **Controle segmentado** (`SegmentedControl`; duas opções, ex.: "Por horário" e "Por local"): trilho `colors.control.segmentTrack`, raio `radius.md`; a opção selecionada fica em `colors.control.segmentThumb` com `fontWeight.bold`.
 
@@ -874,6 +879,14 @@ Filosofia: o mínimo. O feedback de toque é instantâneo (troca de cor e escala
 | `size.sucesso.espaco.cta` | `21` | Sucesso: vão entre a dica e o botão escuro |
 | `size.sucesso.espaco.link` | `20` | Sucesso: vão entre o botão escuro e o link |
 | `size.sucesso.espaco.fim` | `78` | Sucesso: folga no fim da rolagem, abaixo do link |
+| `size.campo.height` | `46` | Campo de texto: altura da caixa |
+| `size.campo.padding` | `13` | Campo de texto: recuo do texto dentro da caixa |
+| `size.campo.gap` | `5` | Campo de texto: vão entre o rótulo e a caixa |
+| `size.campo.top` | `13` | Campo de texto: distância do campo de cima |
+| `size.campo.eye` | `38` | Campo de senha: largura do botão do olho |
+| `size.campo.eyeIcon` | `16` | Campo de senha: ícone do olho |
+| `size.campo.mensagemGap` | `4` | Campo de texto: vão entre o ícone e o texto da mensagem de erro |
+| `size.campo.mensagemIcon` | `12` | Campo de texto: ícone de alerta da mensagem de erro |
 | `size.suggestions.maxHeight` | `212` | Sugestões de endereço: altura máxima da lista (o resto rola) |
 | `size.suggestions.padding` | `3` | Sugestões de endereço: recuo da lista |
 | `size.suggestions.gap` | `4` | Sugestões de endereço: vão entre o campo e a lista |
@@ -1150,6 +1163,7 @@ O teste `valores-soltos.test.ts` mantém uma lista de arquivos com valores visua
 | 21/09/2026 | "Compartilhar" envia **texto** (folha do sistema no celular; folha do navegador ou cópia na web) e responde com "Copiado" ou "Indisponível" no lugar do rótulo | O original gera uma imagem JPEG do cartão na web e não avisa nada; a imagem exige captura de tela nativa e fica como tarefa própria. Sem aviso, copiar não pareceria fazer nada |
 | 21/09/2026 | O sombreado do visto é um segundo traço deslocado e mais grosso; as ondas esperam a vez em repouso; o desfoque do botão de fechar não é reproduzido | O SVG nativo não tem `feDropShadow`; o `both` do CSS mostra o primeiro quadro antes do atraso; o desfoque some sobre a foto suave. Nenhum dos três foi comparado em aparelho |
 | 21/09/2026 | O "voltar" das abas segue o histórico (`backBehavior="history"`) | O padrão volta sempre à primeira aba: Salvar na edição caía em Início e o acesso direto a `editar` parecia ter para onde voltar |
+| 21/09/2026 | **Campo de texto das telas de conta refeito** (`TextField`): caixa de 46 com o anel cinza por dentro em vez de borda, olho para mostrar e esconder a senha, ícone de alerta na mensagem de erro; rótulo e mensagem sobem de 11 para o piso de 12 | É o campo das imagens `02` e `05`; a mensagem de erro com ícone e o anel vermelho dão o segundo sinal além da cor |
 
 ## 19. Pendências
 
