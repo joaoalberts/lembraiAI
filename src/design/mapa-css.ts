@@ -5,6 +5,7 @@
  * O Leaflet traz fonte própria (Helvetica no mapa, monoespaçada nos botões de zoom). Aqui ele fala a língua da marca.
  * Na web as fontes já foram carregadas pela página; na WebView do app cai na pilha de reserva do sistema.
  * Botões de zoom: família bold com peso normal (o Leaflet pede `bold` e somaria negrito falso sobre a regular).
+ * Alvo de toque: o bloco `@media (pointer: coarse)` leva os botões a 44 (docs/DESIGN_SYSTEM.md, seção 16.2).
  */
 import { colors, fontFamily, fontSize, shadow, size } from './tokens';
 
@@ -22,4 +23,11 @@ export const CSS_DO_MAPA = `
 .pilula-do-mapa button:active { background: ${colors.map.controlPressed}; }
 .pilula-do-mapa button:disabled { opacity: 0.75; cursor: default; }
 .pilula-do-mapa svg { width: ${size.icon.sm}px; height: ${size.icon.sm}px; }
+/* Em tela de toque (celular e WebView do app) os botões chegam ao alvo de 44; no computador ficam as medidas das imagens de referência. */
+@media (pointer: coarse) {
+  .controle-do-mapa a, .leaflet-control-zoom a { width: ${size.touch}px !important; height: ${size.touch}px !important; }
+  .pilula-do-mapa button { height: ${size.touch}px; }
+  /* o mapa pequeno do formulário não comporta 44 + 88 de botões: a pinça dá o zoom */
+  .mapa-de-escolha .leaflet-control-zoom { display: none !important; }
+}
 `;

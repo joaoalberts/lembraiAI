@@ -244,7 +244,7 @@ export default function LeafletMapDom({ center, markers, onMarkerPress, escolha 
   return (
     <>
       <style>{CSS_DO_MAPA}</style>
-      <div ref={host} style={{ position: 'absolute', top: 0, right: 0, bottom: 0, left: 0 }} />
+      <div ref={host} className={escolhendo ? 'mapa-de-escolha' : undefined} style={{ position: 'absolute', top: 0, right: 0, bottom: 0, left: 0 }} />
     </>
   );
 }
