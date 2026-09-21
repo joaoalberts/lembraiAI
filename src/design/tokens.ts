@@ -114,6 +114,12 @@ export const palette = {
   tabActiveIcon: '#134B36',
   homeIndicator: '#B7B3AE',
   tabBarBg: '#F8F8F4',
+  // Tela de sucesso (imagem 09): círculos e anéis dos cartões de resumo e de dica
+  sucessoCategoria: '#D4EADE',
+  sucessoDica: '#D6ECE0',
+  sucessoDado: '#F7F5F3',
+  sucessoDadoAnel: '#E6E5E4',
+  sucessoSeloAnel: '#DCEBE2',
 } as const;
 
 /** Cores por papel. É isto que as telas e os componentes usam. */
@@ -156,6 +162,8 @@ export const colors = {
     onDarkMint: palette.mintIcon,
     radius: palette.iconRadius,
     tip: palette.tipInk,
+    /** Ícone dos botões de ação sobre o fundo `frost` (Editar, Excluir, Compartilhar). */
+    onFrost: palette.forest900,
   },
   action: {
     primary: palette.orange500,
@@ -221,6 +229,14 @@ export const colors = {
   onboarding: { bg: palette.onboardingBg, pagerOn: palette.pagerOn, pagerOff: 'rgba(255, 255, 255, 0.26)' },
   /** Selo "Ativo" do lembrete. */
   status: { active: palette.statusGreen },
+  /** Tela de sucesso do lembrete (imagem 09): círculo da categoria e da lâmpada, círculo dos dados (Data, Horário, Local, Repetir) com o anel dele, e o anel do selo "Ativo". */
+  sucesso: {
+    categoria: palette.sucessoCategoria,
+    dica: palette.sucessoDica,
+    dado: palette.sucessoDado,
+    dadoAnel: palette.sucessoDadoAnel,
+    seloAnel: palette.sucessoSeloAnel,
+  },
   /** Barra de abas: rótulo e ícone da aba inativa, e o traço "home" do iOS por baixo. */
   tab: { background: palette.tabBarBg, inactive: palette.tabInactive, activeIcon: palette.tabActiveIcon, indicator: palette.homeIndicator },
   /** Vidro sobre o verde escuro dos cabeçalhos: um véu branco quase transparente com borda (o desfoque não aparece sobre um verde quase liso). */
@@ -288,6 +304,9 @@ export const fontSize = {
   wheel: du(46),
   wheelOn: du(56),
   colon: du(52),
+  /** Título ("Lembrete criado com sucesso!", 60,5 du) e subtítulo (29 du) da tela de sucesso, fora da escala das telas comuns. O título fica fora de `textStyles`, como o do Onboarding: a altura de linha do original é 1,03 (`lineHeight.sucessoTitulo`), aceitável porque as duas linhas fixas não têm descendentes. */
+  sucessoTitulo: du(60.5),
+  sucessoSubtitulo: du(29),
 } as const;
 
 export const lineHeight = {
@@ -298,6 +317,8 @@ export const lineHeight = {
   heading: 24,
   title: 26,
   display: 34,
+  sucessoTitulo: du(64),
+  sucessoSubtitulo: du(42),
 } as const;
 
 /** Reserva da web: o texto aparece na fonte do sistema (e não em Times) enquanto a fonte da marca chega. */
@@ -339,6 +360,7 @@ export const textStyles = {
   button: { fontFamily: fontFamily.bold, fontSize: fontSize.bodyLg, lineHeight: lineHeight.body },
   caption: { fontFamily: fontFamily.regular, fontSize: fontSize.caption, lineHeight: lineHeight.caption },
   micro: { fontFamily: fontFamily.regular, fontSize: fontSize.micro, lineHeight: lineHeight.micro },
+  sucessoSubtitulo: { fontFamily: fontFamily.regular, fontSize: fontSize.sucessoSubtitulo, lineHeight: lineHeight.sucessoSubtitulo },
 } as const;
 
 /** Grade de 4 (com o meio-passo de 2). */
@@ -409,6 +431,56 @@ export const size = {
     pagerHeight: du(11),
     pagerGap: du(14),
     brandName: du(37),
+  },
+  /**
+   * Tela de sucesso (imagem 09; medidas do app web em du, canvas de 1848 du): botão de fechar, título e subtítulo, o cartão de
+   * resumo (com a reserva `slot` da altura da variante com local, para as ações não mudarem de lugar), as três ações, a dica, o
+   * botão escuro e o link. Os vãos são a diferença entre as posições medidas.
+   */
+  sucesso: {
+    canvas: du(1848),
+    fechar: du(76),
+    fecharTop: du(56),
+    fecharSide: du(34),
+    fecharIcon: du(32),
+    tituloTop: du(328),
+    tituloBox: du(128),
+    subtituloGap: du(16),
+    subtituloBox: du(84),
+    resumoGap: du(28),
+    side: du(33),
+    resumo: {
+      slot: du(544),
+      padTop: du(33),
+      padLeft: du(35),
+      padRight: du(34),
+      padBottom: du(32),
+      circle: du(102),
+      circleIcon: du(54),
+      circleGap: du(22),
+      seloHeight: du(51),
+      seloLeft: du(21),
+      seloRight: du(23),
+      seloGap: du(12),
+      seloDot: du(17),
+      linhaGap: du(33),
+      dado: du(70),
+      dadoIcon: du(36),
+      dadoGap: du(18),
+      dadoColuna: du(416),
+      divisorAntes: du(25),
+      divisorDepois: du(17),
+      divisor: du(2),
+      thumbWidth: du(164),
+      thumbHeight: du(119),
+      thumbRadius: du(24),
+    },
+    acao: { height: du(123), radius: du(32), gap: du(39), side: du(57), icon: du(40), top: du(24), iconGap: du(17) },
+    dica: { height: du(157), circle: du(91), icon: du(46), arrow: du(32), left: du(35), right: du(37), gap: du(31), textGap: du(6) },
+    cta: du(109),
+    ctaSide: du(38),
+    link: du(32),
+    espaco: { acoes: du(30), dica: du(34), cta: du(41), link: du(30), fim: du(154) },
   },
   /** Sugestões da busca de endereço: altura máxima da lista, recuo das linhas e vão até o campo. */
   suggestions: { maxHeight: du(420), padding: du(6), gap: du(8) },
@@ -535,6 +607,8 @@ export const shadow = {
   slider: '0px 2px 6px rgba(0, 0, 0, 0.25)',
   /** Lista de sugestões da busca de endereço: anel cinza por dentro e sombra funda por baixo. */
   suggestions: '0px 6px 16px rgba(20, 40, 30, 0.18), inset 0px 0px 0px 1px rgba(231, 232, 234, 1)',
+  /** Cartões da tela de sucesso (resumo e dica): só o anel branco por dentro, sem sombra por fora. */
+  cartaoDoSucesso: 'inset 0px 0px 0px 1px rgba(255, 255, 255, 0.8)',
 } as const;
 
 /**

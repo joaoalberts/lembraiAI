@@ -159,6 +159,11 @@ Use `palette.*` só para definir papéis em `colors`. As telas usam os papéis (
 | `palette.tabActiveIcon` | `#134B36` | Ícone da aba ativa |
 | `palette.homeIndicator` | `#B7B3AE` | Traço "home" do iOS sob a barra de abas |
 | `palette.tabBarBg` | `#F8F8F4` | Fundo da barra de abas |
+| `palette.sucessoCategoria` | `#D4EADE` | Círculo atrás do ícone da categoria no cartão de resumo do sucesso |
+| `palette.sucessoDica` | `#D6ECE0` | Círculo atrás da lâmpada da dica do sucesso |
+| `palette.sucessoDado` | `#F7F5F3` | Círculo dos dados do resumo (Data, Horário, Local, Repetir) |
+| `palette.sucessoDadoAnel` | `#E6E5E4` | Anel do círculo dos dados do resumo |
+| `palette.sucessoSeloAnel` | `#DCEBE2` | Anel do selo "Ativo" |
 <!-- tokens:cores-primitivas:fim -->
 
 ### 3.2 Papéis
@@ -199,6 +204,7 @@ Use `palette.*` só para definir papéis em `colors`. As telas usam os papéis (
 | `colors.icon.onDarkMint` | `#6FF0C4` | `palette.mintIcon` | Ícones dos balões do Onboarding |
 | `colors.icon.radius` | `#8B93A0` | `palette.iconRadius` | Ícone do raio no cartão de lembrete por local |
 | `colors.icon.tip` | `#013220` | `palette.tipInk` | Lâmpada do cartão de dica |
+| `colors.icon.onFrost` | `#12432F` | `palette.forest900` | Ícone dos botões de ação sobre o fundo `frost` (Editar, Excluir, Compartilhar) |
 | `colors.action.primary` | `#FE532A` | `palette.orange500` | Fundo do botão primário |
 | `colors.action.primaryHover` | `#EF4E28` | `palette.orangeHover` | Botão primário com o ponteiro em cima (web) |
 | `colors.action.primaryPressed` | `#DF4925` | `palette.orangePressed` | Botão primário pressionado |
@@ -254,6 +260,11 @@ Use `palette.*` só para definir papéis em `colors`. As telas usam os papéis (
 | `colors.onboarding.pagerOn` | `#F8F9F9` | `palette.pagerOn` | Ponto da página ativa do Onboarding |
 | `colors.onboarding.pagerOff` | `rgba(255, 255, 255, 0.26)` | — | Pontos das outras páginas do Onboarding |
 | `colors.status.active` | `#029554` | `palette.statusGreen` | Ponto do selo "Ativo" |
+| `colors.sucesso.categoria` | `#D4EADE` | `palette.sucessoCategoria` | Círculo atrás do ícone da categoria no cartão de resumo |
+| `colors.sucesso.dica` | `#D6ECE0` | `palette.sucessoDica` | Círculo atrás da lâmpada da dica |
+| `colors.sucesso.dado` | `#F7F5F3` | `palette.sucessoDado` | Círculo dos dados do resumo (Data, Horário, Local, Repetir) |
+| `colors.sucesso.dadoAnel` | `#E6E5E4` | `palette.sucessoDadoAnel` | Anel do círculo dos dados do resumo |
+| `colors.sucesso.seloAnel` | `#DCEBE2` | `palette.sucessoSeloAnel` | Anel do selo "Ativo" |
 | `colors.tab.background` | `#F8F8F4` | `palette.tabBarBg` | Fundo da barra de abas |
 | `colors.tab.inactive` | `#777C8A` | `palette.tabInactive` | Rótulo e ícone da aba inativa |
 | `colors.tab.activeIcon` | `#134B36` | `palette.tabActiveIcon` | Ícone da aba ativa |
@@ -342,6 +353,7 @@ Use `...textStyles.estilo` e só troque cor (`colors.text.*`) ou família (`font
 | `textStyles.button` | 16 | 20 | `NunitoSans_700Bold` | Rótulo de botão |
 | `textStyles.caption` | 13 | 18 | `NunitoSans_400Regular` | Dica, metadado e mensagem de campo |
 | `textStyles.micro` | 12 | 16 | `NunitoSans_400Regular` | Legenda mínima |
+| `textStyles.sucessoSubtitulo` | 15 | 21 | `NunitoSans_400Regular` | Subtítulo da tela de sucesso, em duas linhas |
 <!-- tokens:tipografia-estilos:fim -->
 
 ### 4.3 Escala
@@ -360,6 +372,8 @@ Use `...textStyles.estilo` e só troque cor (`colors.text.*`) ou família (`font
 | `fontSize.wheel` | `23` | Número da roda do horário |
 | `fontSize.wheelOn` | `28` | Número escolhido da roda do horário |
 | `fontSize.colon` | `26` | Dois-pontos entre as rodas do horário |
+| `fontSize.sucessoTitulo` | `31` | Título da tela de sucesso, "Lembrete criado com sucesso!" (60,5 du no original; fora de `textStyles`: altura de linha 1,03, sem descendentes nas duas linhas fixas) |
+| `fontSize.sucessoSubtitulo` | `15` | Subtítulo da tela de sucesso (29 du no original) |
 | `lineHeight.micro` | `16` | Altura de linha do tamanho de mesmo nome |
 | `lineHeight.caption` | `18` | Altura de linha do tamanho de mesmo nome |
 | `lineHeight.body` | `20` | Altura de linha do tamanho de mesmo nome |
@@ -367,6 +381,8 @@ Use `...textStyles.estilo` e só troque cor (`colors.text.*`) ou família (`font
 | `lineHeight.heading` | `24` | Altura de linha do tamanho de mesmo nome |
 | `lineHeight.title` | `26` | Altura de linha do tamanho de mesmo nome |
 | `lineHeight.display` | `34` | Altura de linha do tamanho de mesmo nome |
+| `lineHeight.sucessoTitulo` | `32` | Altura de linha do tamanho de mesmo nome |
+| `lineHeight.sucessoSubtitulo` | `21` | Altura de linha do tamanho de mesmo nome |
 | `fontFamily.regular` | `NunitoSans_400Regular` | Nunito Sans 400: texto corrente |
 | `fontFamily.medium` | `NunitoSans_500Medium` | Nunito Sans 500: ênfase leve |
 | `fontFamily.semibold` | `NunitoSans_600SemiBold` | Nunito Sans 600: rótulos e valores |
@@ -457,6 +473,7 @@ O desenho é quase plano. Toda sombra é o `boxShadow` em texto (aceito pela New
 | `shadow.optionOn` | `inset 0px 0px 0px 2px rgba(24, 92, 75, 1)` | Cartão de modo escolhido (anel verde por dentro) |
 | `shadow.slider` | `0px 2px 6px rgba(0, 0, 0, 0.25)` | Bolinha do controle deslizante |
 | `shadow.suggestions` | `0px 6px 16px rgba(20, 40, 30, 0.18), inset 0px 0px 0px 1px rgba(231, 232, 234, 1)` | Lista de sugestões de endereço (sombra funda e anel cinza) |
+| `shadow.cartaoDoSucesso` | `inset 0px 0px 0px 1px rgba(255, 255, 255, 0.8)` | Cartões de resumo e de dica da tela de sucesso: só o anel branco por dentro |
 <!-- tokens:sombras:fim -->
 
 - `shadow.card` nos cartões e painéis; `shadow.float` nos controles flutuantes; `shadow.sheet` nas folhas inferiores; `shadow.tabBar` na barra de abas; `shadow.column` na coluna da web; `shadow.cta` só no botão primário habilitado; `shadow.focus` como halo do campo em foco.
@@ -764,6 +781,64 @@ Filosofia: o mínimo. O feedback de toque é instantâneo (troca de cor e escala
 | `size.onboarding.pagerHeight` | `6` | Onboarding: altura de cada ponto da página |
 | `size.onboarding.pagerGap` | `7` | Onboarding: vão entre os pontos da página |
 | `size.onboarding.brandName` | `19` | Onboarding: tamanho do nome da marca |
+| `size.sucesso.canvas` | `934` | Sucesso: altura do canvas de rolagem (1848 du) |
+| `size.sucesso.fechar` | `38` | Sucesso: botão de vidro de fechar |
+| `size.sucesso.fecharTop` | `28` | Sucesso: distância do botão de fechar até o topo |
+| `size.sucesso.fecharSide` | `17` | Sucesso: distância do botão de fechar até a borda direita |
+| `size.sucesso.fecharIcon` | `16` | Sucesso: o X do botão de fechar |
+| `size.sucesso.tituloTop` | `166` | Sucesso: distância do título até o topo |
+| `size.sucesso.tituloBox` | `65` | Sucesso: altura reservada ao título (duas linhas) |
+| `size.sucesso.subtituloGap` | `8` | Sucesso: vão entre o título e o subtítulo |
+| `size.sucesso.subtituloBox` | `42` | Sucesso: altura reservada ao subtítulo (duas linhas) |
+| `size.sucesso.resumoGap` | `14` | Sucesso: vão entre o subtítulo e o cartão de resumo |
+| `size.sucesso.side` | `17` | Sucesso: recuo dos cartões até as bordas da tela |
+| `size.sucesso.resumo.slot` | `275` | Resumo: altura reservada ao cartão (a da variante com local), para as ações ficarem no mesmo lugar nas duas |
+| `size.sucesso.resumo.padTop` | `17` | Resumo: recuo interno do cartão |
+| `size.sucesso.resumo.padLeft` | `18` | Resumo: recuo interno do cartão |
+| `size.sucesso.resumo.padRight` | `17` | Resumo: recuo interno do cartão |
+| `size.sucesso.resumo.padBottom` | `16` | Resumo: recuo interno do cartão |
+| `size.sucesso.resumo.circle` | `52` | Resumo: círculo do ícone da categoria |
+| `size.sucesso.resumo.circleIcon` | `27` | Resumo: ícone da categoria dentro do círculo |
+| `size.sucesso.resumo.circleGap` | `11` | Resumo: vão entre o círculo da categoria e o título |
+| `size.sucesso.resumo.seloHeight` | `26` | Resumo: altura do selo "Ativo" |
+| `size.sucesso.resumo.seloLeft` | `11` | Resumo: recuo do selo "Ativo" antes do ponto |
+| `size.sucesso.resumo.seloRight` | `12` | Resumo: recuo do selo "Ativo" depois do texto |
+| `size.sucesso.resumo.seloGap` | `6` | Resumo: vão entre o ponto e o texto do selo "Ativo" |
+| `size.sucesso.resumo.seloDot` | `9` | Resumo: ponto verde do selo "Ativo" |
+| `size.sucesso.resumo.linhaGap` | `17` | Resumo: vão entre o cabeçalho e a linha de Data e Horário |
+| `size.sucesso.resumo.dado` | `35` | Resumo: círculo do ícone de cada dado |
+| `size.sucesso.resumo.dadoIcon` | `18` | Resumo: ícone dentro do círculo do dado |
+| `size.sucesso.resumo.dadoGap` | `9` | Resumo: vão entre o círculo do dado e o texto |
+| `size.sucesso.resumo.dadoColuna` | `210` | Resumo: largura da coluna da Data (o Horário começa depois dela) |
+| `size.sucesso.resumo.divisorAntes` | `13` | Resumo: vão entre uma linha e o divisor que vem depois |
+| `size.sucesso.resumo.divisorDepois` | `9` | Resumo: vão entre o divisor e a linha seguinte |
+| `size.sucesso.resumo.divisor` | `1` | Resumo: espessura do divisor |
+| `size.sucesso.resumo.thumbWidth` | `83` | Resumo: largura da miniatura do mapa (lembrete por local) |
+| `size.sucesso.resumo.thumbHeight` | `60` | Resumo: altura da miniatura do mapa |
+| `size.sucesso.resumo.thumbRadius` | `12` | Resumo: raio da miniatura do mapa |
+| `size.sucesso.acao.height` | `62` | Ações (Editar, Excluir, Compartilhar): altura de cada botão |
+| `size.sucesso.acao.radius` | `16` | Ações: raio dos botões |
+| `size.sucesso.acao.gap` | `20` | Ações: vão entre os botões |
+| `size.sucesso.acao.side` | `29` | Ações: recuo da fileira até as bordas da tela |
+| `size.sucesso.acao.icon` | `20` | Ações: ícone de cada botão |
+| `size.sucesso.acao.top` | `12` | Ações: recuo do ícone até o topo do botão |
+| `size.sucesso.acao.iconGap` | `9` | Ações: vão entre o ícone e o rótulo |
+| `size.sucesso.dica.height` | `79` | Dica do sucesso: altura mínima do cartão |
+| `size.sucesso.dica.circle` | `46` | Dica do sucesso: círculo da lâmpada |
+| `size.sucesso.dica.icon` | `23` | Dica do sucesso: lâmpada dentro do círculo |
+| `size.sucesso.dica.arrow` | `16` | Dica do sucesso: seta à direita |
+| `size.sucesso.dica.left` | `18` | Dica do sucesso: recuo do círculo até a borda esquerda |
+| `size.sucesso.dica.right` | `19` | Dica do sucesso: recuo da seta até a borda direita |
+| `size.sucesso.dica.gap` | `16` | Dica do sucesso: vão entre o círculo e o texto |
+| `size.sucesso.dica.textGap` | `3` | Dica do sucesso: vão entre o título e o texto |
+| `size.sucesso.cta` | `55` | Sucesso: altura do botão escuro "Ver todos os lembretes" |
+| `size.sucesso.ctaSide` | `19` | Sucesso: recuo do botão escuro até as bordas |
+| `size.sucesso.link` | `16` | Sucesso: altura do link "Criar outro lembrete" |
+| `size.sucesso.espaco.acoes` | `15` | Sucesso: vão entre o cartão de resumo (reserva) e as ações |
+| `size.sucesso.espaco.dica` | `17` | Sucesso: vão entre as ações e a dica |
+| `size.sucesso.espaco.cta` | `21` | Sucesso: vão entre a dica e o botão escuro |
+| `size.sucesso.espaco.link` | `15` | Sucesso: vão entre o botão escuro e o link |
+| `size.sucesso.espaco.fim` | `78` | Sucesso: folga no fim da rolagem, abaixo do link |
 | `size.suggestions.maxHeight` | `212` | Sugestões de endereço: altura máxima da lista (o resto rola) |
 | `size.suggestions.padding` | `3` | Sugestões de endereço: recuo da lista |
 | `size.suggestions.gap` | `4` | Sugestões de endereço: vão entre o campo e a lista |
