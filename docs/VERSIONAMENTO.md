@@ -38,6 +38,7 @@ git commit -m "feat(design): resumo curto, no imperativo"
 | `ponto-de-recuperacao/01-antes-do-design-system` | o app portado, antes dos tokens e do documento do Design System |
 | `ponto-de-recuperacao/02-design-system-aplicado` | tokens, documento, contraste testado e todos os componentes e telas migrados |
 | `ponto-de-recuperacao/03-antes-do-visual-original` | igual ao 02, antes de fontes, imagens, efeitos e telas do original |
+| `ponto-de-recuperacao/04-visual-original` | depois das 15 telas das referências portadas, com o Design System em dia; ainda sem conferência em aparelho |
 
 ## Como voltar sem perder nada
 
