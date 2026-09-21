@@ -192,6 +192,7 @@ export const colors = {
     pin: palette.forestPin,
     haloFill: 'rgba(45, 170, 120, 0.21)',
     haloLine: 'rgba(45, 170, 120, 0.32)',
+    pinShadow: 'rgba(0, 0, 0, 0.18)',
   },
   /**
    * `bg` = fundo do ícone; `bar` = faixa lateral do cartão; `ink` = glifo; `pin` = marcador forte no mapa;
@@ -304,6 +305,8 @@ export const size = {
   closeButton: 32,
   hitSlop: 6,
   icon: { sm: 16, md: 20, lg: 24, xl: 40 },
+  /** Pino do mapa no formulário (58 × 73 du no original). A ponta fica no meio da base. */
+  mapPin: { width: du(58), height: du(73) },
 } as const;
 
 export const opacity = {

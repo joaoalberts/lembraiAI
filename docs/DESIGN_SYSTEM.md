@@ -219,6 +219,7 @@ Use `palette.*` só para definir papéis em `colors`. As telas usam os papéis (
 | `colors.map.pin` | `#054C39` | `palette.forestPin` | Pino do mapa no formulário de novo lembrete |
 | `colors.map.haloFill` | `rgba(45, 170, 120, 0.21)` | — | Preenchimento do círculo do raio de aviso |
 | `colors.map.haloLine` | `rgba(45, 170, 120, 0.32)` | — | Contorno do círculo do raio de aviso |
+| `colors.map.pinShadow` | `rgba(0, 0, 0, 0.18)` | — | Sombra do pino do mapa no formulário |
 <!-- tokens:cores-semanticas:fim -->
 
 ### 3.3 Categorias de lembrete
@@ -571,6 +572,8 @@ Filosofia: o mínimo. O feedback de toque é instantâneo (troca de cor e escala
 | `size.icon.md` | `20` | Ícones de ação |
 | `size.icon.lg` | `24` | Ícones de aba |
 | `size.icon.xl` | `40` | Ícone do estado vazio |
+| `size.mapPin.width` | `29` | Largura do pino do mapa no formulário |
+| `size.mapPin.height` | `37` | Altura do pino do mapa no formulário (a ponta marca o local) |
 | `layout.columnMax` | `560` | Largura máxima da coluna do app na web; no celular a coluna é a tela toda |
 | `layout.readingMax` | `720` | Largura máxima de texto corrido (política de privacidade) |
 <!-- tokens:tamanhos:fim -->
