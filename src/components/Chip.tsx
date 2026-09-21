@@ -1,4 +1,5 @@
-import { Pressable, StyleSheet, Text } from 'react-native';
+import { Pressable, StyleSheet, Text, type StyleProp, type ViewStyle } from 'react-native';
+import { anelDeFoco, type EstadoDeToque } from '../design/foco';
 import { borderWidth, colors, fontWeight, opacity, radius, size, space, textStyles } from '../design/tokens';
 
 interface ChipProps {
@@ -6,6 +7,11 @@ interface ChipProps {
   selected: boolean;
   onPress: () => void;
   disabled?: boolean;
+}
+
+/** Estilo do chip por estado. Função pura e exportada (o foco de teclado só existe na web). */
+export function estiloDoChip(selected: boolean, estado: EstadoDeToque, disabled: boolean): StyleProp<ViewStyle> {
+  return [styles.chip, selected ? styles.ligado : styles.desligado, estado.pressed ? styles.pressionado : null, estado.focused ? anelDeFoco : null, disabled ? styles.desabilitado : null];
 }
 
 /** Opção de escolha rápida (repetição, raio). Padrão: docs/DESIGN_SYSTEM.md, seção 11.4. */
@@ -17,7 +23,7 @@ export function Chip({ label, selected, onPress, disabled = false }: ChipProps) 
       hitSlop={size.hitSlop}
       accessibilityRole="button"
       accessibilityState={{ selected, disabled }}
-      style={({ pressed }) => [styles.chip, selected ? styles.ligado : styles.desligado, pressed ? styles.pressionado : null, disabled ? styles.desabilitado : null]}
+      style={(estado: EstadoDeToque) => estiloDoChip(selected, estado, disabled)}
     >
       <Text style={[styles.rotulo, selected ? styles.rotuloLigado : null]}>{label}</Text>
     </Pressable>

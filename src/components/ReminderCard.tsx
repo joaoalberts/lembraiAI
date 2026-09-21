@@ -2,6 +2,7 @@ import type { ComponentProps } from 'react';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { CATEGORY_COLORS, repeatLabel, type Reminder } from '../data/reminders';
+import { anelDeFoco, type EstadoDeToque } from '../design/foco';
 import { ICON_NAME, UI_ICON } from '../design/icons';
 import { borderWidth, colors, fontWeight, opacity, radius, shadow, size, space, textStyles } from '../design/tokens';
 import { formatDate } from '../lib/format';
@@ -53,7 +54,7 @@ export function ReminderCard({ reminder: r, nearby = false, onToggle, onDelete }
         <Pressable
           onPress={onDelete}
           hitSlop={size.hitSlop}
-          style={({ pressed }) => [styles.deleteBtn, pressed && styles.deletePressed]}
+          style={(estado: EstadoDeToque) => [styles.deleteBtn, estado.pressed && styles.deletePressed, estado.focused && anelDeFoco]}
           accessibilityRole="button"
           accessibilityLabel={`Excluir lembrete ${r.title}`}
         >

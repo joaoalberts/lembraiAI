@@ -1,7 +1,9 @@
 import '@testing-library/react-native/matchers';
 import { fireEvent, render, screen } from '@testing-library/react-native';
-import { colors, fontWeight, radius, size } from '../../design/tokens';
-import { Chip } from '../Chip';
+import { StyleSheet } from 'react-native';
+import { anelDeFoco } from '../../design/foco';
+import { colors, fontWeight, opacity, radius, size } from '../../design/tokens';
+import { Chip, estiloDoChip } from '../Chip';
 
 const chip = () => screen.getByRole('button');
 
@@ -34,5 +36,20 @@ describe('Chip', () => {
     await render(<Chip label="Nunca" selected={false} onPress={jest.fn()} />);
     expect(chip()).toHaveProp('hitSlop', size.hitSlop);
     expect(size.chip + 2 * size.hitSlop).toBeGreaterThanOrEqual(size.touch);
+  });
+});
+
+describe('estiloDoChip (estados)', () => {
+  const plano = (selecionado: boolean, estado: Parameters<typeof estiloDoChip>[1], desabilitado = false) => StyleSheet.flatten(estiloDoChip(selecionado, estado, desabilitado));
+
+  it('pressionado e desabilitado usam as opacidades do Design System', () => {
+    expect(plano(false, { pressed: true })).toMatchObject({ opacity: opacity.pressed });
+    expect(plano(false, { pressed: false }, true)).toMatchObject({ opacity: opacity.disabled });
+  });
+
+  it('foco de teclado (web): o anel de foco de todos os controles, em selecionado ou não', () => {
+    expect(plano(false, { pressed: false, focused: true })).toMatchObject(anelDeFoco);
+    expect(plano(true, { pressed: false, focused: true })).toMatchObject(anelDeFoco);
+    expect(plano(false, { pressed: false })).not.toHaveProperty('outlineWidth');
   });
 });

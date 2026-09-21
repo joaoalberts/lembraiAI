@@ -89,6 +89,7 @@ const styles = StyleSheet.create({
     fontSize: fontSize.bodyLg,
     color: colors.text.primary,
     backgroundColor: colors.bg.field,
+    outlineWidth: 0, // o foco é a borda verde + o halo; sem isto o navegador soma o anel âmbar dele
   },
   inputFocused: {
     borderColor: colors.border.focus,

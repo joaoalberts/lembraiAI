@@ -7,7 +7,7 @@
 ## 1. Como usar este documento
 
 - **Nunca escreva o valor à mão.** Cor, tamanho, espaço, raio, peso e sombra vêm de `src/design/tokens.ts`. O teste `src/design/__tests__/valores-soltos.test.ts` barra `#hex`, `rgba()`, `fontSize: 16`, `padding: 12` e `fontWeight: '600'` fora dele.
-- **Componente antes de estilo novo.** Antes de escrever um estilo, veja se `Button`, `TextField`, `Toggle`, `Chip`, `Banner`, `ReminderCard` ou `AuthLayout` (em `src/components`) já resolve.
+- **Componente antes de estilo novo.** Antes de escrever um estilo, veja se `Button`, `TextField`, `Toggle`, `Chip`, `SegmentedControl`, `Banner`, `ReminderCard` ou `AuthLayout` (em `src/components`) já resolve.
 - **Mudou uma decisão visual?** (1) altere o token; (2) descreva-o em `src/design/doc.ts`; (3) rode `npm run design:docs`; (4) registre a decisão na seção 18; (5) rode `npm test`.
 - **Ver o resultado sem conta e sem servidor real:** `node scripts/preview-backend-falso.mjs` e um `.env.development.local` apontando para ele (as instruções estão no topo do script). O app abre com lembretes de exemplo; troque o estado da lista com `/__mode/empty`, `/__mode/error` e `/__mode/slow`.
 - **Ponto de recuperação antes deste sistema:** a tag `ponto-de-recuperacao/01-antes-do-design-system` (`git switch -c volta-01 ponto-de-recuperacao/01-antes-do-design-system`).
@@ -371,13 +371,13 @@ Componente: `src/components/TextField.tsx`.
 - **Erro em português, dizendo o que fazer.** Mensagem curta, sem código técnico.
 - **Borda suave é identidade** (1,2:1 sobre o fundo, como nas referências). O foco é o reforço: exceção registrada na seção 16.
 - **Interruptor** (`Toggle`): ligado `colors.control.on`, desligado `colors.control.off`, bolinha `colors.control.thumb`. Sempre com o rótulo ao lado e `accessibilityLabel`.
-- **Controle segmentado** (duas opções, ex.: "Por horário" e "Por local"): trilho `colors.control.segmentTrack`, raio `radius.md`; a opção selecionada fica em `colors.control.segmentThumb` com `fontWeight.bold`.
+- **Controle segmentado** (`SegmentedControl`; duas opções, ex.: "Por horário" e "Por local"): trilho `colors.control.segmentTrack`, raio `radius.md`; a opção selecionada fica em `colors.control.segmentThumb` com `fontWeight.bold`.
 
 ## 11. Cards, modais, menus e navegação
 
 ### 11.1 Cartão de lembrete (`ReminderCard`)
 
-Superfície `colors.bg.card`, raio `radius.md`, sombra `shadow.card`, faixa lateral de `borderWidth.bar` em `colors.category.*.bar`. À esquerda, círculo de `size.iconCircle` com `colors.category.*.bg` e o ícone da categoria (`colors.category.*.ink`, `size.icon.md`). No centro, título (`textStyles.label`, até 2 linhas) e metadado (`textStyles.caption`, `colors.text.secondary`). À direita, o `Toggle` e o botão de excluir (ícone `excluir`, `colors.icon.muted`, área de toque de 44 com `size.hitSlop`).
+Superfície `colors.bg.card`, raio `radius.md`, sombra `shadow.card`, faixa lateral de `borderWidth.bar` em `colors.category.*.bar`. À esquerda, círculo de `size.iconCircle` com `colors.category.*.bg` e o ícone da categoria (`colors.category.*.ink`, `size.icon.md`). No centro, título (`textStyles.bodyLg` em `fontWeight.semibold`, até 2 linhas) e metadado (`textStyles.caption`, `colors.text.secondary`). À direita, o `Toggle` e o botão de excluir (ícone `excluir`, `colors.icon.muted`, área de toque de 44 com `size.hitSlop`).
 
 - **Dentro do raio:** anel `borderWidth.focus` em `colors.border.focus` e a linha "Você está aqui" em `colors.text.accent` com o ícone `aqui`.
 - **Pausado:** `opacity.inactive` no cartão inteiro.
@@ -408,7 +408,7 @@ Véu `colors.overlay`; folha `colors.bg.field` com `radius.sheet` no topo, paddi
 
 ### 11.6 Abas e cabeçalho
 
-- **Barra de abas:** fundo `colors.bg.card`, filete superior `colors.border.divider`. Ativa: `colors.text.brand` com o ícone preenchido; inativa: `colors.icon.muted` com o ícone em contorno. Rótulo `textStyles.micro`.
+- **Barra de abas:** fundo `colors.bg.card`, filete superior `colors.border.divider`, altura `size.tabBar` mais a área segura do sistema. Ativa: `colors.text.brand` com o ícone preenchido; inativa: `colors.icon.muted` com o ícone em contorno. Rótulo em `fontSize.micro` e `fontWeight.medium`, sem altura de linha própria (com ela o React Navigation cortava o pé do texto na web).
 - **Cabeçalho:** fundo `colors.bg.page`, sem sombra, título `textStyles.heading` em `colors.text.primary`.
 
 ### 11.7 Coluna da web
@@ -418,8 +418,8 @@ No navegador o app vive numa coluna de celular centralizada (como o frame do app
 ## 12. Imagens e ilustrações
 
 - **A interface é código, nunca imagem de tela.** Texto, botões e cartões nunca viram PNG.
-- **Ícone do app:** tile menta em degradê (`colors.brand.tile` para `colors.brand.tileEnd`) com o símbolo em `colors.brand.glyph`, 1024 por 1024 (`assets/images/icon.png`). Android adaptativo: `android-icon-foreground/background/monochrome.png`, 1024 por 1024, símbolo dentro dos 66% centrais.
-- **Abertura (splash):** `splash-icon.png` (`imageWidth: 160`) sobre `colors.brand.tile`. **Notificação do Android:** `notification-icon.png` (96 por 96, só silhueta) tingido com `colors.action.primary`. **Web:** `public/favicon.svg`, `public/icons/*` (PWA 192, 512 e maskable) e o manifesto com o fundo `colors.bg.page`.
+- **Ícone do app:** tile menta em degradê (`colors.brand.tile` para `colors.brand.tileEnd`) com o símbolo em `colors.brand.glyph`, 1024 por 1024 (`assets/images/icon.png`). Android adaptativo: `android-icon-foreground/background/monochrome.png`, 1024 por 1024; o símbolo deve ficar dentro dos 66% centrais (regra do Android para o recorte do launcher).
+- **Abertura (splash):** `splash-icon.png` (`imageWidth: 160`) sobre `colors.brand.tile`. **Notificação do Android:** `notification-icon.png` (96 por 96) tingido com `colors.action.primary`. **Web:** `public/favicon.svg`, `public/icons/*` (PWA 192, 512 e maskable) e o manifesto com o fundo `colors.bg.page`.
 - As cores de marca que vivem em JSON e SVG (que não importam tokens) são conferidas por `src/design/__tests__/marca.test.ts`.
 - **Fotos e ilustrações novas:** nunca esticar (`contentFit="cover"` ou `"contain"`); `accessibilityLabel` quando informam, escondidas do leitor de tela quando decorativas; alvo de menos de 200 KB, em WebP ou PNG. O pino 3D e o fundo de folhagem do onboarding (`../lembreiAI/ref/1.png`, recortes de `tools/build-assets.py`) ainda não foram portados (seção 19).
 - **Mapa:** tiles do OpenStreetMap com a atribuição sempre visível (é obrigatória). O halo do raio usa a cor da categoria com transparência.
@@ -568,7 +568,7 @@ Cada par é testado em `src/design/__tests__/acessibilidade.test.ts`. Par novo e
 - **Exceção conhecida: borda de campo suave** (1,2:1) das referências. O foco (7:1) e o rótulo sempre visível compensam.
 - **Alvos de toque de no mínimo 44** (`size.touch`). Controle visualmente menor usa `hitSlop` de `size.hitSlop`.
 - **Todo controle tem papel e nome:** `accessibilityRole`, `accessibilityLabel` e `accessibilityState` (`selected`, `disabled`).
-- **Foco visível** no teclado (web) em todo controle.
+- **Foco visível** no teclado (web) em todo controle: o mesmo anel sólido de `borderWidth.focus` em `colors.border.focus`, afastado `space.hair` (`src/design/foco.ts`), em botão, chip, opção do segmentado, lixeira do cartão e fechar da folha. O campo de texto desenha o foco só pela borda e pelo halo `shadow.focus`, sem o contorno do navegador.
 - **Não depender só da cor:** erro tem texto, categoria tem ícone, interruptor tem posição.
 - **Texto redimensionável:** não travar `allowFontScaling`; layouts quebram linha em vez de cortar.
 - **Idioma** `pt-BR` (`<html lang>` em `app/+html.tsx`).
@@ -579,7 +579,7 @@ Cada par é testado em `src/design/__tests__/acessibilidade.test.ts`. Par novo e
 | Elemento | Padrão | Situação |
 |---|---|---|
 | Tokens e testes (`src/design`) | seções 3 a 7 | aplicado |
-| Botão, campo, chip, interruptor e aviso (componentes) | seções 9 a 11 | aplicado nos componentes; as telas ainda usam estilo próprio em parte (ver `PENDENTES`) |
+| Botão, campo, chip, segmentado, interruptor e aviso (componentes) | seções 9 a 11 | aplicado nos componentes; as telas ainda usam estilo próprio em parte (ver `PENDENTES`) |
 | Cartão de lembrete e ícones | seções 8 e 11.1 | aplicado |
 | Lista de lembretes e novo lembrete (telas) | seções 9 a 11, 15 | aplicado |
 | Abas, cabeçalho e coluna da web | seções 11.6 e 11.7 | aplicado |
@@ -613,6 +613,7 @@ O teste `valores-soltos.test.ts` mantém uma lista de arquivos com valores visua
 | 21/09/2026 | Nome da marca na interface: "LembreiAi" (as telas de entrada e de cadastro escreviam "lembreiAI") | O app web fixou o nome em "LembreiAi" em todo lugar |
 | 21/09/2026 | Telas de conta ganham uma base compartilhada (`AuthLayout`) e os botões empilhados ficam a `space.md` uns dos outros | Quatro telas repetiam o mesmo cabeçalho e o botão principal ficava colado no secundário |
 | 21/09/2026 | Texto das páginas públicas de 15 para 16 e em tinta principal (era o cinza `#2B2D31`) | Leitura confortável e um cinza a menos fora dos tokens |
+| 21/09/2026 | Foco de teclado com um anel só (verde-floresta, 2, afastado 2) e controle segmentado virou componente | A conferência no navegador mostrou o anel âmbar do navegador em chip e segmentado e um contorno duplicado no campo |
 | 21/09/2026 | Sombras por `boxShadow` em texto | Único caminho igual em iOS, Android e web na New Architecture |
 | 21/09/2026 | Fontes da marca não carregadas nesta versão | Exige mexer na abertura do app e na renderização estática da web; passo próprio |
 

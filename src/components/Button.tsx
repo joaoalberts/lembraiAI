@@ -1,4 +1,5 @@
 import { Pressable, StyleSheet, Text, type StyleProp, type TextStyle, type ViewStyle } from 'react-native';
+import { anelDeFoco, type EstadoDeToque } from '../design/foco';
 import { borderWidth, colors, motion, opacity, radius, shadow, size, space, textStyles } from '../design/tokens';
 
 export type ButtonVariant = 'primary' | 'secondary' | 'ghost' | 'danger';
@@ -10,13 +11,6 @@ interface ButtonProps {
   disabled?: boolean;
   style?: ViewStyle;
   labelStyle?: TextStyle;
-}
-
-/** O ponteiro em cima e o foco de teclado só existem na web (react-native-web); no celular chegam `undefined`. */
-export interface Estado {
-  pressed: boolean;
-  hovered?: boolean;
-  focused?: boolean;
 }
 
 interface Visual {
@@ -37,7 +31,7 @@ const VISUAL: Record<ButtonVariant, Visual> = {
 };
 
 /** Estilo do botão por variante e estado. Função pura e exportada: o ponteiro em cima e o foco só existem na web, então os testes chamam esta função em vez de simular o toque. */
-export function estiloDoBotao(variant: ButtonVariant, estado: Estado, disabled: boolean, extra?: ViewStyle): StyleProp<ViewStyle> {
+export function estiloDoBotao(variant: ButtonVariant, estado: EstadoDeToque, disabled: boolean, extra?: ViewStyle): StyleProp<ViewStyle> {
   const v = VISUAL[variant];
   return [
     styles.botao,
@@ -58,7 +52,7 @@ export function Button({ label, onPress, variant = 'primary', disabled = false, 
       disabled={disabled}
       accessibilityRole="button"
       accessibilityState={{ disabled }}
-      style={(estado: Estado) => estiloDoBotao(variant, estado, disabled, style)}
+      style={(estado: EstadoDeToque) => estiloDoBotao(variant, estado, disabled, style)}
     >
       <Text style={[styles.rotulo, { color: VISUAL[variant].rotulo }, labelStyle]}>{label}</Text>
     </Pressable>
@@ -76,6 +70,6 @@ const styles = StyleSheet.create({
   rotulo: { ...textStyles.button, textAlign: 'center' },
   brilho: { boxShadow: shadow.cta },
   pressionado: { transform: [{ scale: motion.pressedScale }] },
-  foco: { outlineWidth: borderWidth.focus, outlineColor: colors.border.focus, outlineStyle: 'solid', outlineOffset: space.hair },
+  foco: anelDeFoco,
   desabilitado: { opacity: opacity.disabled },
 });

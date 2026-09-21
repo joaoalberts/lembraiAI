@@ -48,6 +48,11 @@ describe('TextField', () => {
     expect(campo()).toHaveProp('editable', false);
   });
 
+  it('sem contorno do navegador: o foco é desenhado só pela borda verde e pelo halo (senão o navegador soma um anel âmbar)', async () => {
+    await render(<TextField {...base} label="E-mail" />);
+    expect(campo()).toHaveStyle({ outlineWidth: 0 });
+  });
+
   it('e-mail: teclado de e-mail sem capitalizar (comportamento preservado)', async () => {
     await render(<TextField {...base} keyboardType="email-address" />);
     expect(campo()).toHaveProp('autoCapitalize', 'none');

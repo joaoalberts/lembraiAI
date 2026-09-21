@@ -5,6 +5,7 @@ import { Modal, Pressable, StyleSheet, Text, View } from 'react-native';
 import { CATEGORY_COLORS } from '../../src/data/reminders';
 import { RemindersMap } from '../../src/components/RemindersMap';
 import type { MapMarker } from '../../src/components/map-types';
+import { anelDeFoco, type EstadoDeToque } from '../../src/design/foco';
 import { UI_ICON } from '../../src/design/icons';
 import { colors, layout, radius, shadow, size, space, textStyles } from '../../src/design/tokens';
 import { distance, formatDistance, type LatLng } from '../../src/lib/geo';
@@ -60,7 +61,7 @@ export default function MapaScreen() {
         <View style={styles.overlay}>
           <View style={styles.sheet}>
             <Pressable
-              style={styles.close}
+              style={(estado: EstadoDeToque) => [styles.close, estado.focused && anelDeFoco]}
               onPress={() => setSelecionado(null)}
               hitSlop={size.hitSlop}
               accessibilityRole="button"

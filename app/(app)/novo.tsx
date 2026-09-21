@@ -1,15 +1,16 @@
 import type { ComponentProps } from 'react';
 import { useState } from 'react';
 import Ionicons from '@expo/vector-icons/Ionicons';
-import { ActivityIndicator, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { ActivityIndicator, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { router } from 'expo-router';
 import { Banner } from '../../src/components/Banner';
 import { Button } from '../../src/components/Button';
 import { Chip } from '../../src/components/Chip';
+import { SegmentedControl } from '../../src/components/SegmentedControl';
 import { TextField } from '../../src/components/TextField';
 import { DEFAULT_RADIUS, RADIUS_OPTIONS, REPEAT_OPTIONS, type RepeatKey } from '../../src/data/reminders';
 import { UI_ICON } from '../../src/design/icons';
-import { borderWidth, colors, fontWeight, opacity, radius as raios, size, space, textStyles } from '../../src/design/tokens';
+import { borderWidth, colors, radius as raios, size, space, textStyles } from '../../src/design/tokens';
 import { formatDistance } from '../../src/lib/geo';
 import { todayISO, toDate } from '../../src/lib/format';
 import { useGeo } from '../../src/state/geo';
@@ -18,6 +19,8 @@ import { useReminders } from '../../src/state/reminders';
 type IoniconName = ComponentProps<typeof Ionicons>['name'];
 type Kind = 'time' | 'local';
 interface Coord { lat: number; lng: number; accuracy: number | null }
+
+const TIPOS = [{ key: 'time', label: 'Por horário' }, { key: 'local', label: 'Por local' }] as const;
 
 export default function NovoLembreteScreen() {
   const { create } = useReminders();
@@ -86,20 +89,7 @@ export default function NovoLembreteScreen() {
       <TextField label="Título *" placeholder="O que você quer lembrar?" value={title} onChangeText={setTitle} editable={!busy} />
 
       <Text style={styles.label}>Avisar</Text>
-      <View style={styles.segment}>
-        {([['time', 'Por horário'], ['local', 'Por local']] as const).map(([k, rotulo]) => (
-          <Pressable
-            key={k}
-            style={({ pressed }) => [styles.segmentItem, kind === k && styles.segmentActive, pressed && styles.segmentPressed]}
-            onPress={() => setKind(k)}
-            disabled={busy}
-            accessibilityRole="button"
-            accessibilityState={{ selected: kind === k, disabled: busy }}
-          >
-            <Text style={[styles.segmentText, kind === k && styles.segmentTextActive]}>{rotulo}</Text>
-          </Pressable>
-        ))}
-      </View>
+      <SegmentedControl options={TIPOS} value={kind} onChange={setKind} disabled={busy} />
 
       <TextField label="Data (AAAA-MM-DD)" placeholder="2026-09-20" value={dateISO} onChangeText={setDateISO} editable={!busy} />
       <TextField label="Hora (HH:MM)" placeholder="09:00" value={time} onChangeText={setTime} editable={!busy} />
@@ -163,12 +153,6 @@ const styles = StyleSheet.create({
   label: { ...textStyles.label, color: colors.text.primary, marginBottom: space.sm },
   radiusLabel: { marginTop: space.lg },
   block: { marginTop: space.xs, marginBottom: space.sm },
-  segment: { flexDirection: 'row', backgroundColor: colors.control.segmentTrack, borderRadius: raios.md, padding: space.xs, marginBottom: space.lg },
-  segmentItem: { flex: 1, minHeight: size.touch - 2 * space.xs, alignItems: 'center', justifyContent: 'center', borderRadius: raios.sm },
-  segmentActive: { backgroundColor: colors.control.segmentThumb },
-  segmentPressed: { opacity: opacity.pressed },
-  segmentText: { ...textStyles.body, fontWeight: fontWeight.medium, color: colors.text.secondary },
-  segmentTextActive: { color: colors.text.primary, fontWeight: fontWeight.bold },
   chips: { flexDirection: 'row', flexWrap: 'wrap', gap: space.sm },
   coordCard: {
     backgroundColor: colors.feedback.infoBg,
