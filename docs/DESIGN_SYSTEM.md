@@ -800,6 +800,7 @@ Filosofia: o mínimo. O feedback de toque é instantâneo (troca de cor e escala
 | `size.sucesso.resumo.circle` | `52` | Resumo: círculo do ícone da categoria |
 | `size.sucesso.resumo.circleIcon` | `27` | Resumo: ícone da categoria dentro do círculo |
 | `size.sucesso.resumo.circleGap` | `11` | Resumo: vão entre o círculo da categoria e o título |
+| `size.sucesso.resumo.tituloMax` | `136` | Resumo: largura máxima do título (quebra em duas linhas antes de chegar ao selo, como no original) |
 | `size.sucesso.resumo.seloHeight` | `26` | Resumo: altura do selo "Ativo" |
 | `size.sucesso.resumo.seloLeft` | `11` | Resumo: recuo do selo "Ativo" antes do ponto |
 | `size.sucesso.resumo.seloRight` | `12` | Resumo: recuo do selo "Ativo" depois do texto |

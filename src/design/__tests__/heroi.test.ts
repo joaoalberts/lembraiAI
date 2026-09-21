@@ -1,4 +1,4 @@
-import { CURVAS, ESTRELA, FAISCAS, HEROI, type Janela } from '../heroi';
+import { CURVAS, ESTRELA, FAISCAS, HEROI, separarCor, type Janela } from '../heroi';
 import { palette } from '../tokens';
 
 describe('faíscas do herói', () => {
@@ -102,5 +102,24 @@ describe('desenho do selo', () => {
     expect(HEROI.anel.tamanho).toBeLessThan(HEROI.brilho.tamanho);
     expect(HEROI.onda.tamanho).toBe(HEROI.disco.tamanho);
     expect(HEROI.onda.escalaFinal).toBeGreaterThan(1);
+  });
+});
+
+describe('separarCor', () => {
+  it('separa a cor da opacidade (o SVG guarda as duas em atributos diferentes)', () => {
+    expect(separarCor('rgba(226, 246, 234, 0.95)')).toEqual({ cor: 'rgb(226, 246, 234)', alfa: 0.95 });
+    expect(separarCor('rgba(170,238,205,0)')).toEqual({ cor: 'rgb(170, 238, 205)', alfa: 0 });
+  });
+
+  it('cor sem opacidade é opaca', () => {
+    expect(separarCor('rgb(0, 0, 0)')).toEqual({ cor: 'rgb(0, 0, 0)', alfa: 1 });
+  });
+
+  it('recusa o que não é rgb/rgba em vez de desenhar uma cor errada', () => {
+    expect(() => separarCor('#FFFFFF')).toThrow('cor rgb/rgba esperada');
+  });
+
+  it('todas as paradas do brilho e do disco são rgba válidos', () => {
+    for (const p of [...HEROI.brilho.paradas, ...HEROI.disco.paradas]) expect(() => separarCor(p.cor)).not.toThrow();
   });
 });

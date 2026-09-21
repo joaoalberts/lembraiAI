@@ -1,7 +1,7 @@
 import '@testing-library/react-native/matchers';
 import { fireEvent, render, screen } from '@testing-library/react-native';
 import { StyleSheet, Text } from 'react-native';
-import { colors, gradients, radius, size, space } from '../../design/tokens';
+import { colors, gradients, iconStroke, radius, size, space } from '../../design/tokens';
 import { comAreaSegura } from '../../test-utils/area-segura';
 import { AppBrand } from '../AppBrand';
 import { GlassButton, estiloDoVidro } from '../GlassButton';
@@ -72,6 +72,16 @@ describe('GlassButton', () => {
     const botao = screen.getByRole('button', { name: 'Minha conta' });
     expect(botao).toHaveStyle({ width: size.glassButton, height: size.glassButton, borderRadius: radius.pill, borderColor: colors.glass.border, backgroundColor: colors.glass.fill });
     expect(size.glassButton + 2 * (botao.props.hitSlop as number)).toBeGreaterThanOrEqual(size.touch);
+  });
+
+  it('a versão "fechar" da tela de sucesso é menor e desenha o X com traço mais grosso, com a área de toque completada a 44', async () => {
+    await render(<GlassButton icon="x" label="Fechar" tamanho="fechar" onPress={jest.fn()} />);
+    const botao = screen.getByRole('button', { name: 'Fechar' });
+    expect(botao).toHaveStyle({ width: size.sucesso.fechar, height: size.sucesso.fechar, borderRadius: radius.pill, borderColor: colors.glass.border });
+    expect(size.sucesso.fechar + 2 * (botao.props.hitSlop as number)).toBeGreaterThanOrEqual(size.touch);
+    const desenho = JSON.stringify(screen.getByTestId('icone-x', { includeHiddenElements: true }).children);
+    expect(desenho).toContain(`"width":${size.sucesso.fecharIcon}`);
+    expect(desenho).toContain(`"strokeWidth":${iconStroke.action}`);
   });
 
   it('estados: ponteiro em cima e pressionado clareiam o véu; foco de teclado põe o anel menta', () => {

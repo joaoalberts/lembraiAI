@@ -121,6 +121,7 @@ export const HEROI = {
   /** Pontos que cintilam: aparecem aos poucos e depois pulsam para sempre (opacidade 1 → 0,35 e escala 1 → 0,7, ciclo de 2,8 s). */
   cintilacao: {
     tamanho: dp(9),
+    cor: palette.white,
     brilho: `0px 0px ${px(14)} ${px(4)} rgba(148, 249, 205, 0.9)`,
     ciclo: 2.8,
     opacidadeMinima: 0.35,
@@ -179,3 +180,10 @@ export const FAISCAS: readonly Faisca[] = TABELA.map((f) => ({
 
 /** Pontos da estrela de quatro pontas no quadrado de 100 por 100 (o `clip-path` do CSS). */
 export const ESTRELA = '50,0 62,38 100,50 62,62 50,100 38,62 0,50 38,38';
+
+/** As paradas de degradê do SVG querem a cor e a opacidade separadas: "rgba(226, 246, 234, 0.95)" → { cor: "rgb(226, 246, 234)", alfa: 0.95 }. */
+export function separarCor(rgba: string): { cor: string; alfa: number } {
+  const partes = /^rgba?\((\d+),\s*(\d+),\s*(\d+)(?:,\s*([\d.]+))?\)$/.exec(rgba);
+  if (!partes) throw new Error(`cor rgb/rgba esperada, veio: ${rgba}`);
+  return { cor: `rgb(${partes[1]}, ${partes[2]}, ${partes[3]})`, alfa: partes[4] === undefined ? 1 : Number(partes[4]) };
+}

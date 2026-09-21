@@ -3,17 +3,27 @@ import { anelDeFocoNoEscuro, type EstadoDeToque } from '../design/foco';
 import { borderWidth, colors, fontFamily, iconStroke, motion, radius, size, space, textStyles } from '../design/tokens';
 import { Icon, type IconeNome } from './Icon';
 
+/** `cabecalho` = os botões do cabeçalho verde (busca, conta); `fechar` = o X menor, mais grosso, da tela de sucesso. */
+type TamanhoDoVidro = 'cabecalho' | 'fechar';
+
+const MEDIDAS: Record<TamanhoDoVidro, { lado: number; icone: number; traco: number }> = {
+  cabecalho: { lado: size.glassButton, icone: size.icon.md, traco: iconStroke.ui },
+  fechar: { lado: size.sucesso.fechar, icone: size.sucesso.fecharIcon, traco: iconStroke.action },
+};
+
 interface GlassButtonProps {
   icon: IconeNome;
   /** Nome do botão para o leitor de tela (o ícone sozinho não diz nada). */
   label: string;
   onPress: () => void;
+  tamanho?: TamanhoDoVidro;
 }
 
 /** Estilo por estado. Função pura e exportada: o ponteiro em cima e o foco de teclado só existem na web. */
-export function estiloDoVidro(estado: EstadoDeToque): StyleProp<ViewStyle> {
+export function estiloDoVidro(estado: EstadoDeToque, lado: number = size.glassButton): StyleProp<ViewStyle> {
   return [
     styles.botao,
+    { width: lado, height: lado },
     { backgroundColor: estado.pressed ? colors.glass.fillPressed : estado.hovered ? colors.glass.fillHover : colors.glass.fill },
     estado.pressed ? styles.pressionado : null,
     estado.focused ? anelDeFocoNoEscuro : null,
@@ -25,16 +35,17 @@ export function estiloDoVidro(estado: EstadoDeToque): StyleProp<ViewStyle> {
  * contorno claro; o desfoque do original não aparece sobre um verde quase liso e não é reproduzido.
  * Padrão: docs/DESIGN_SYSTEM.md, seção 9.
  */
-export function GlassButton({ icon, label, onPress }: GlassButtonProps) {
+export function GlassButton({ icon, label, onPress, tamanho = 'cabecalho' }: GlassButtonProps) {
+  const { lado, icone, traco } = MEDIDAS[tamanho];
   return (
     <Pressable
       onPress={onPress}
-      hitSlop={(size.touch - size.glassButton) / 2}
+      hitSlop={(size.touch - lado) / 2}
       accessibilityRole="button"
       accessibilityLabel={label}
-      style={(estado: EstadoDeToque) => estiloDoVidro(estado)}
+      style={(estado: EstadoDeToque) => estiloDoVidro(estado, lado)}
     >
-      <Icon name={icon} size={size.icon.md} color={colors.text.onDark} stroke={iconStroke.ui} />
+      <Icon name={icon} size={icone} color={colors.text.onDark} stroke={traco} />
     </Pressable>
   );
 }

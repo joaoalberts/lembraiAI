@@ -521,6 +521,7 @@ const DESCRICOES: Record<string, string> = {
   'size.sucesso.resumo.circle': 'Resumo: círculo do ícone da categoria',
   'size.sucesso.resumo.circleIcon': 'Resumo: ícone da categoria dentro do círculo',
   'size.sucesso.resumo.circleGap': 'Resumo: vão entre o círculo da categoria e o título',
+  'size.sucesso.resumo.tituloMax': 'Resumo: largura máxima do título (quebra em duas linhas antes de chegar ao selo, como no original)',
   'size.sucesso.resumo.seloHeight': 'Resumo: altura do selo "Ativo"',
   'size.sucesso.resumo.seloLeft': 'Resumo: recuo do selo "Ativo" antes do ponto',
   'size.sucesso.resumo.seloRight': 'Resumo: recuo do selo "Ativo" depois do texto',

@@ -458,6 +458,7 @@ export const size = {
       circle: du(102),
       circleIcon: du(54),
       circleGap: du(22),
+      tituloMax: du(270),
       seloHeight: du(51),
       seloLeft: du(21),
       seloRight: du(23),
