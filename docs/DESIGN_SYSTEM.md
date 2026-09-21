@@ -20,7 +20,8 @@
 
 | Fonte | O que dá |
 |---|---|
-| `../lembreiAI/ref/1.png … 5.png` e `../lembreiAI/DESIGN_SYSTEM.md` | Referências aprovadas e a medição por pixel: paleta, tipografia, raios, sombras e estados. A lista de referência é a **versão B** (`5.png`). |
+| [`referencias/`](referencias/INDICE.md): 15 imagens, e [`referencias/MEDICOES.md`](referencias/MEDICOES.md) | **Fonte de verdade visual:** as páginas do app web em capturas de 430 px (retina), copiadas por inteiro da pasta do João, e a medição de cor contra os tokens. Onde este documento divergir delas, **valem as imagens**. |
+| `../lembreiAI/DESIGN_SYSTEM.md` e `../lembreiAI/ref/` | A medição por pixel do app web e as referências antigas (`2.png`, `4.png` e `5.png`), superadas pelas capturas. |
 | `../lembreiAI/src/styles/tokens.css` | Os valores que o app web de fato usa (nomes de cor iguais: `forest`, `mint`, `orange`, `cream`, `ink`). |
 | O app Expo antes deste sistema (tag de recuperação) | O que já existia e foi preservado: rotas, textos, regras e funções. Nada disso mudou. |
 | Este documento | As decisões novas: acessibilidade, adaptação ao React Native e o que as referências não mostram. |
@@ -32,6 +33,28 @@
 3. **Só claro.** As referências não têm modo escuro (`userInterfaceStyle: light`). Modo escuro pede tokens novos e novo aceite.
 4. **Acessível antes de fiel.** Quando uma referência falha no contraste, o app corrige e o registro de decisões (seção 18) explica. Exceção só por escrito.
 5. **Uma decisão, um lugar.** Componente compartilhado antes de estilo novo; token antes de valor solto.
+
+### 2.3 As telas de referência
+
+Cada tela e cada folha do app tem uma imagem em `referencias/`. O estado do Expo é o de 21/09/2026, conferido por captura de tela e leitura do código. A barra de abas das imagens é **Início, Lembretes, Mapa e Configurações** (o Início abre o onboarding, a rota `/` do app web); "Novo lembrete" abre pelo botão laranja da lista. O Expo hoje tem Lembretes, Novo, Mapa e Config.
+
+| Imagem | Tela | Estado no Expo |
+|---|---|---|
+| [`01`](referencias/01-onboarding.png) | Onboarding | Não existe |
+| [`02`](referencias/02-entrar.png) | Entrar | Existe; falta o fundo de curvas de nível, o cartão creme flutuante, o painel de vidro "Criar conta" e o olho da senha |
+| [`03`](referencias/03-recorte-degrade-do-formulario.png) | Recorte do degradê do formulário | Amostra de cor (usada nas medições) |
+| [`04`](referencias/04-novo-lembrete-por-data-e-horario.png) | Novo lembrete, por data e horário | Existe como formulário simples de campos de texto; faltam cabeçalho em degradê, voltar e conta, cartões de modo, seletores de data e horário e a folha Repetir |
+| [`05`](referencias/05-folha-minha-conta.png) | Folha "Minha conta" | Não existe (Sair fica em Configurações) |
+| [`06`](referencias/06-novo-lembrete-por-local.png) | Novo lembrete, por local | Sem busca nem mapa no formulário (o mapa é uma aba à parte) |
+| [`07`](referencias/07-lista-meus-lembretes.png) | Meus lembretes | Existe; faltam cabeçalho verde, busca, filtros com contagem, miniatura de mapa, "Dica para você" e o menu "..." |
+| [`08`](referencias/08-configuracoes.png) | Configurações | Existe com estrutura mais simples; faltam cabeçalho verde, cartões com ícone e "Até onde vai o monitoramento" |
+| [`09`](referencias/09-sucesso-lembrete-criado.png) | Lembrete criado | Não existe |
+| [`10`](referencias/10-confirmar-exclusao.png) | Confirmar exclusão | Não existe |
+| [`11`](referencias/11-folha-menu-do-lembrete.png) | Menu do lembrete | Não existe (o cartão tem só a lixeira) |
+| [`12`](referencias/12-seletor-de-data.png) | Seletor de data | É o popup do navegador, não um desenho: o Expo precisa de um calendário próprio (decisão pendente) |
+| [`13`](referencias/13-folha-horario.png) | Folha Horário | Não existe (campo de texto HH:MM) |
+| [`14`](referencias/14-folha-repetir.png) | Folha Repetir | Não existe (chips de repetição) |
+| [`15`](referencias/15-novo-lembrete-por-local-repetindo.png) | Novo lembrete, por local, repetindo | Igual à `06`, com Repetir em destaque verde |
 
 ## 3. Paleta de cores
 
@@ -627,12 +650,16 @@ O teste `valores-soltos.test.ts` mantém uma lista de arquivos com valores visua
 | 21/09/2026 | Fontes da marca não carregadas nesta versão (**revogada na linha seguinte**) | Exigia mexer na abertura do app e na renderização estática da web; a doc do Expo depois esclareceu a renderização estática |
 | 21/09/2026 | **Fontes da marca carregadas:** Nunito Sans (400, 500, 600 e 700) e Source Serif 4 (700) em todo o texto; títulos, seções e título do cartão em serifa; o token `fontWeight` deixou de existir | O João apontou a fonte como parte do que veio errado, e o app web usa as duas famílias. Fonte própria ignora `fontWeight` no iOS e no Android, então cada peso é uma família. Doc do Expo: "Expo Font has automatic static optimization" na renderização estática; `useFonts` no servidor devolve `true` |
 | 21/09/2026 | Na web a fonte nunca bloqueia a renderização e leva uma pilha de reserva do sistema; iOS e Android seguram a abertura até as fontes chegarem | O HTML estático das páginas públicas precisa sair com texto; sem a reserva o navegador cairia em Times até a fonte chegar |
+| 21/09/2026 | **As 15 imagens de `referencias/` são a fonte de verdade visual** (cópia integral e conferida por SHA-256 das capturas do João). A paleta foi medida contra elas: 21 de 29 pontos batem com os tokens (ΔE ≤ 1,5); 4 valores existem só no app web e 4 são fundos em degradê (`referencias/MEDICOES.md`) | O João entregou todas as imagens do app e pediu o Design System "em cima" delas. Converter o perfil de cor da tela para sRGB evitou comparar o laranja cru `#EB603C` das capturas com o token `#FE532A` |
+| 21/09/2026 | **Escala:** tamanhos fixos em dp derivados das imagens (`dp = du × 430 / 851`), layout flexível na largura, texto nunca abaixo de 12; a coluna da web volta a 430. **Ainda não aplicada:** entra com cada tela | As capturas são de uma coluna de 430 px. Fixo e com piso de 12 mantém a leitura e o tamanho de fonte do sistema; o app web escalava tudo pela largura e chegava a 9 |
 
 ## 19. Pendências
 
 - **Corte óptico do Source Serif 4:** os pacotes trazem um corte por peso. Comparar os títulos grandes com as referências (o app web fixa `opsz` por estilo); se destoarem, gerar instâncias estáticas com o corte de título.
 - **Peso das fontes na web:** cada arquivo `.ttf` tem 110 KB (Nunito Sans) e 322 KB (Source Serif 4). Um subconjunto latino em `woff2` reduziria, se o carregamento incomodar.
-- **Telas das referências ainda não portadas:** onboarding (`ref/1.png`), sucesso do lembrete (`ref/4.png`), cabeçalho verde da lista com filtros e "Dica para você" (`ref/5.png`), seletores de data e hora (`ref/2.png`; hoje são campos de texto).
+- **Portar as telas e folhas de `referencias/`** (tabela da seção 2.3), na ordem da tarefa `visual-original-no-expo`. A barra de abas passa a ser Início, Lembretes, Mapa e Configurações.
+- **Tokens a criar** junto com cada tela: interruptor de cartão, vidro, botão de perigo, folha, avisos, texto sobre verde e os três degradês (lista e configurações, formulário, contas). Valores exatos em `referencias/MEDICOES.md`.
+- **Calendário próprio:** o original usa o popup do navegador; o app nativo precisa de um seletor de data desenhado no padrão das folhas `13` e `14`.
 - **Leitura com VoiceOver e TalkBack** e **navegação por teclado** na web: verificar em aparelho real.
 - **Modo escuro:** fora de escopo até haver referência.
 - **Layout de tablet nativo:** não desenhado (só existe referência de celular).
