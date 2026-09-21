@@ -101,6 +101,7 @@ export const palette = {
   optionBadge: '#195A48',
   sliderThumb: '#FFFEFF',
   hint: '#717074',
+  wheelItem: '#9EA1A8',
   rowHover: '#F7F8F4',
   rowPressed: '#EEF1EA',
   dangerTint: '#FBE7E4',
@@ -174,6 +175,7 @@ export const colors = {
     chip: palette.chipRing,
     focus: palette.forest700,
     focusOnDark: palette.mint400,
+    selectedBand: palette.mint200,
     danger: palette.red700,
     dangerSoft: palette.red200,
   },
@@ -272,6 +274,10 @@ export const fontSize = {
   display: 28,
   /** Título grande do Onboarding (110 du no app web); fora de `textStyles`: as duas linhas curtas pedem altura de linha 1. */
   hero: du(110),
+  /** Números da roda do horário: o escolhido é maior e em negrito; a colonzinha entre as duas rodas. */
+  wheel: du(46),
+  wheelOn: du(56),
+  colon: du(52),
 } as const;
 
 export const lineHeight = {
@@ -440,7 +446,19 @@ export const size = {
     sliderTrack: du(11),
     sliderThumb: du(43),
     sliderHeight: du(60),
+    /** Linha de escolha das folhas (Repetir): altura mínima, recuos, vão e a marca de escolhida. */
+    row: du(108),
+    rowLeft: du(38),
+    rowRight: du(34),
+    rowGap: du(20),
+    rowBadge: du(40),
+    rowRadio: du(34),
+    rowCheck: du(22),
   },
+  /** Roda do horário (medidas do app web em du): largura da coluna, altura de cada número, faixa da escolha e vãos. */
+  wheel: { width: du(230), item: du(88), gap: du(22), top: du(30), band: { width: du(580), radius: du(28) } },
+  /** Calendário da folha de data: célula do dia, círculo do escolhido e seta de trocar de mês. */
+  calendar: { day: 44, selected: 40, arrow: 40 },
   /** Interruptor do cartão de lembrete (`card`) e o dos formulários e das configurações (`form`): trilho, bolinha e folga da bolinha (21 e 26 de altura). */
   toggle: {
     card: { width: du(69), height: du(42), thumb: du(36), inset: 1.5 },
@@ -520,6 +538,8 @@ export const gradients = {
   ].join(', '),
   /** Tile da marca (o mesmo menta do ícone do app). */
   marcaTile: `linear-gradient(160deg, ${palette.mintBrand}, ${palette.mintBrandEnd})`,
+  /** Esmaecimento das rodas do horário: os números longe do meio somem no fundo da folha (opacidade 1, 0,55 e 0,24 aos 0, 1 e 2 números do meio). */
+  rodaDeHorario: `linear-gradient(to bottom, rgba(250, 249, 246, 0.92) 0%, rgba(250, 249, 246, 0.76) 10%, rgba(250, 249, 246, 0.45) 30%, rgba(250, 249, 246, 0) 40%, rgba(250, 249, 246, 0) 60%, rgba(250, 249, 246, 0.45) 70%, rgba(250, 249, 246, 0.76) 90%, rgba(250, 249, 246, 0.92) 100%)`,
   /** Divisória vertical entre os benefícios do Onboarding: some nas pontas. */
   divisorVertical: `linear-gradient(to bottom, rgba(233, 255, 243, 0), rgba(233, 255, 243, 0.22) 22%, rgba(233, 255, 243, 0.22) 78%, rgba(233, 255, 243, 0))`,
   /** Esmaecimento de baixo para cima atrás do botão fixo do formulário. */
@@ -541,6 +561,8 @@ export const layout = {
   readingMax: 720,
   /** Altura máxima de uma folha inferior, como fração da tela (82% no original). */
   sheetMaxHeight: 0.82,
+  /** Números visíveis de cada roda do horário (o do meio é o escolhido). */
+  wheelRows: 5,
   /** Altura da cena do Onboarding (pino e balões) como fração da largura: 505 por 851 na arte. */
   onboardingSceneRatio: 505 / 851,
 } as const;

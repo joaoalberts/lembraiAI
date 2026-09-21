@@ -146,6 +146,7 @@ Use `palette.*` só para definir papéis em `colors`. As telas usam os papéis (
 | `palette.optionBadge` | `#195A48` | Selo de seleção dos cartões de modo e das linhas escolhidas |
 | `palette.sliderThumb` | `#FFFEFF` | Bolinha do controle deslizante do raio |
 | `palette.hint` | `#717074` | Subtítulo do cabeçalho claro do formulário |
+| `palette.wheelItem` | `#9EA1A8` | Número não escolhido da roda do horário (o app usa `colors.text.secondary` para dar contraste) |
 | `palette.rowHover` | `#F7F8F4` | Linha de menu com o ponteiro em cima (web) |
 | `palette.rowPressed` | `#EEF1EA` | Linha de menu pressionada |
 | `palette.dangerTint` | `#FBE7E4` | Círculo do ícone de excluir e linha de excluir pressionada |
@@ -213,6 +214,7 @@ Use `palette.*` só para definir papéis em `colors`. As telas usam os papéis (
 | `colors.border.chip` | `#DFE1DB` | `palette.chipRing` | Contorno do chip não selecionado |
 | `colors.border.focus` | `#185C4B` | `palette.forest700` | Borda do campo em foco e anel de foco |
 | `colors.border.focusOnDark` | `#7FEAC6` | `palette.mint400` | Anel de foco e borda do campo em foco sobre o verde escuro |
+| `colors.border.selectedBand` | `#C6E4D5` | `palette.mint200` | Contorno da faixa que marca o número escolhido nas rodas do horário |
 | `colors.border.danger` | `#C62828` | `palette.red700` | Borda do campo com erro e do botão de exclusão |
 | `colors.border.dangerSoft` | `#F3B8B8` | `palette.red200` | Borda da zona de perigo |
 | `colors.control.on` | `#216955` | `palette.forest600` | Preenchimento do controle deslizante do raio |
@@ -346,6 +348,9 @@ Use `...textStyles.estilo` e só troque cor (`colors.text.*`) ou família (`font
 | `fontSize.title` | `20` | Títulos de tela e de estados |
 | `fontSize.display` | `28` | Nome do app nas telas de conta |
 | `fontSize.hero` | `56` | Título grande do Onboarding (fora de `textStyles`: as duas linhas curtas pedem altura de linha 1) |
+| `fontSize.wheel` | `23` | Número da roda do horário |
+| `fontSize.wheelOn` | `28` | Número escolhido da roda do horário |
+| `fontSize.colon` | `26` | Dois-pontos entre as rodas do horário |
 | `lineHeight.micro` | `16` | Altura de linha do tamanho de mesmo nome |
 | `lineHeight.caption` | `18` | Altura de linha do tamanho de mesmo nome |
 | `lineHeight.body` | `20` | Altura de linha do tamanho de mesmo nome |
@@ -458,6 +463,7 @@ Os fundos em degradê do original (cabeçalho verde, telas de conta e cabeçalho
 | `gradients.contas` | `radial-gradient(283px 202px at 88% 4%, rgba(127, 234, 198, 0.26), rgba(127, 234, 198, 0) 70%)`<br>`radial-gradient(374px 232px at 50% 100%, rgba(132, 250, 218, 0.15), rgba(132, 250, 218, 0) 70%)`<br>`radial-gradient(263px 192px at 6% 96%, rgba(33, 105, 85, 0.55), rgba(33, 105, 85, 0) 72%)`<br>`linear-gradient(168deg, #2A5B47 0%, #184434 52%, #0E301F 100%)` | Fundo das telas de conta |
 | `gradients.cabecalhoClaro` | `radial-gradient(283px 172px at 100% 0%, rgba(33, 105, 85, 0.58), rgba(33, 105, 85, 0) 72%)`<br>`radial-gradient(243px 152px at 0% 0%, rgba(148, 249, 205, 0.36), rgba(148, 249, 205, 0) 72%)`<br>`radial-gradient(263px 86px at 46% 26%, rgba(255, 255, 255, 0.55), rgba(255, 255, 255, 0) 100%)`<br>`linear-gradient(180deg, #CBE4D6 0%, #E3EEE5 44%, #F5F2ED 100%)` | Cabeçalho claro do formulário de novo lembrete |
 | `gradients.marcaTile` | `linear-gradient(160deg, #84FADA, #78E4C4)` | Tile da marca no cabeçalho: o menta do ícone do app, a 160° |
+| `gradients.rodaDeHorario` | `linear-gradient(to bottom, rgba(250, 249, 246, 0.92) 0%, rgba(250, 249, 246, 0.76) 10%, rgba(250, 249, 246, 0.45) 30%, rgba(250, 249, 246, 0) 40%, rgba(250, 249, 246, 0) 60%, rgba(250, 249, 246, 0.45) 70%, rgba(250, 249, 246, 0.76) 90%, rgba(250, 249, 246, 0.92) 100%)` | Esmaecimento das rodas do horário (números longe do meio somem no fundo da folha) |
 | `gradients.divisorVertical` | `linear-gradient(to bottom, rgba(233, 255, 243, 0), rgba(233, 255, 243, 0.22) 22%, rgba(233, 255, 243, 0.22) 78%, rgba(233, 255, 243, 0))` | Divisória vertical entre os benefícios do Onboarding |
 | `gradients.esmaecerParaPagina` | `linear-gradient(to top, #F5F2ED 62%, rgba(245, 242, 237, 0) 100%)` | Esmaecimento atrás do botão fixo do formulário |
 <!-- tokens:degrades:fim -->
@@ -638,6 +644,12 @@ As peças do formulário (imagens `04`, `06` e `15`), em `src/components`:
 - **Cartão de modo** (`OptionCard`; "Por data e horário" e "Por local"): papel `radio`. Escolhido: fundo branco, anel verde por dentro (`shadow.optionOn`) e o selo de visto (`colors.control.badge`, `size.form.optionBadge`); não escolhido: fundo de cartão e só o anel vazio de opção (`colors.border.strong`). Círculo do ícone `colors.bg.iconCircle`.
 - **Controle deslizante** (`Slider`; o raio de aviso): trilho `colors.control.off`, preenchimento `colors.control.on`, bolinha `colors.control.sliderThumb` com `shadow.slider`, que passa meio raio de cada ponta. Toque, arrasto e, para o leitor de tela, papel `adjustable` com os gestos de aumentar e diminuir. Valor sempre no passo pedido e dentro dos limites.
 
+As folhas do formulário (`Sheet`, seção 11.5):
+
+- **Repetir** (`RepeatSheet`, imagem `14`): título "Repetir", uma lista branca de seis linhas (Nunca, Todos os dias, Dias úteis, Toda semana, Todo mês, Todo ano), cada uma com o título em negrito e a explicação embaixo (`REPEAT_OPTIONS.desc`). A linha escolhida tem o fundo `colors.feedback.successBg` e o selo de visto (`size.form.rowBadge`); as outras, um anel vazio. Papéis `radiogroup` e `radio`. Escolher uma linha aplica e fecha na hora.
+- **Horário** (`TimeSheet`, imagem `13`): duas rodas (horas de 00 a 23 e minutos de 00 a 59) de cinco números visíveis (`layout.wheelRows`), com a faixa da escolha (`colors.feedback.successBg`, contorno `colors.border.selectedBand`) atrás do número do meio, que é maior e em negrito (`fontSize.wheelOn`); os outros esmaecem para o fundo da folha (`gradients.rodaDeHorario`) e usam `colors.text.secondary` (o cinza claro da imagem não chega a 4,5:1). O número vira escolhido depois de `120` ms parado; a hora vai para o campo sem fechar a folha, os minutos fecham sozinha depois de `800` ms se ninguém mexer mais. "Pronto" (`colors.text.accent`, no canto) e o véu fecham a qualquer hora. Cada roda tem papel `adjustable`, com os gestos de aumentar e diminuir.
+- **Data** (`CalendarSheet`): o app web usa o popup do navegador (imagem `12`), que não existe no celular; o app tem calendário próprio, de seis semanas de domingo a sábado (`src/lib/calendario.ts`), com as setas para trocar de mês, o dia escolhido em `colors.control.chipOn`, o de hoje com contorno e o atalho "Hoje". Dias do mês vizinho em `colors.text.placeholder`. Escolher um dia aplica e fecha.
+
 ## 12. Imagens e ilustrações
 
 - **A interface é código, nunca imagem de tela.** Texto, botões e cartões nunca viram PNG.
@@ -791,6 +803,22 @@ Filosofia: o mínimo. O feedback de toque é instantâneo (troca de cor e escala
 | `size.form.sliderTrack` | `6` | Formulário: espessura do trilho do controle deslizante |
 | `size.form.sliderThumb` | `22` | Formulário: bolinha do controle deslizante |
 | `size.form.sliderHeight` | `30` | Formulário: altura da área de toque do controle deslizante |
+| `size.form.row` | `55` | Folha Repetir: altura mínima de cada linha |
+| `size.form.rowLeft` | `19` | Folha Repetir: recuo da esquerda |
+| `size.form.rowRight` | `17` | Folha Repetir: recuo da direita |
+| `size.form.rowGap` | `10` | Folha Repetir: vão entre o texto e a marca |
+| `size.form.rowBadge` | `20` | Folha Repetir: selo da linha escolhida |
+| `size.form.rowRadio` | `17` | Folha Repetir: anel das linhas não escolhidas |
+| `size.form.rowCheck` | `11` | Folha Repetir: visto do selo |
+| `size.wheel.width` | `116` | Roda do horário: largura de cada coluna |
+| `size.wheel.item` | `44` | Roda do horário: altura de cada número |
+| `size.wheel.gap` | `11` | Roda do horário: vão entre as colunas |
+| `size.wheel.top` | `15` | Roda do horário: espaço acima das rodas |
+| `size.wheel.band.width` | `293` | Roda do horário: largura da faixa da escolha |
+| `size.wheel.band.radius` | `14` | Roda do horário: raio da faixa da escolha |
+| `size.calendar.day` | `44` | Calendário: lado da célula de cada dia (toque de 44) |
+| `size.calendar.selected` | `40` | Calendário: círculo do dia escolhido |
+| `size.calendar.arrow` | `40` | Calendário: botão de trocar de mês |
 | `size.toggle.card.width` | `35` | Interruptor (cartão · formulário): largura do trilho |
 | `size.toggle.card.height` | `21` | Interruptor (cartão · formulário): altura do trilho |
 | `size.toggle.card.thumb` | `18` | Interruptor (cartão · formulário): diâmetro da bolinha |
@@ -810,6 +838,7 @@ Filosofia: o mínimo. O feedback de toque é instantâneo (troca de cor e escala
 | `layout.columnMax` | `430` | Largura máxima da coluna do app na web (a das capturas de referência); no celular a coluna é a tela toda |
 | `layout.readingMax` | `720` | Largura máxima de texto corrido (política de privacidade) |
 | `layout.sheetMaxHeight` | `0.82` | Altura máxima de uma folha inferior, como fração da tela |
+| `layout.wheelRows` | `5` | Números visíveis de cada roda do horário |
 | `layout.onboardingSceneRatio` | `0.5934195064629847` | Onboarding: altura da cena (pino e balões) como fração da largura, a proporção da arte (505 por 851) |
 <!-- tokens:tamanhos:fim -->
 

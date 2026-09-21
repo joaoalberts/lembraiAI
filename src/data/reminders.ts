@@ -26,13 +26,13 @@ export interface Reminder {
 export const SECTIONS: Section[] = ['Hoje', 'Amanhã', 'Esta semana'];
 
 /** O banco guarda a CHAVE (`never`, `weekly`…); o rótulo em português vive só na interface. */
-export const REPEAT_OPTIONS: { key: RepeatKey; label: string }[] = [
-  { key: 'never', label: 'Nunca' },
-  { key: 'daily', label: 'Todos os dias' },
-  { key: 'weekdays', label: 'Dias úteis' },
-  { key: 'weekly', label: 'Toda semana' },
-  { key: 'monthly', label: 'Todo mês' },
-  { key: 'yearly', label: 'Todo ano' },
+export const REPEAT_OPTIONS: { key: RepeatKey; label: string; desc: string }[] = [
+  { key: 'never', label: 'Nunca', desc: 'Avisa uma única vez' },
+  { key: 'daily', label: 'Todos os dias', desc: 'Repete diariamente, no mesmo horário' },
+  { key: 'weekdays', label: 'Dias úteis', desc: 'De segunda a sexta' },
+  { key: 'weekly', label: 'Toda semana', desc: 'No mesmo dia da semana' },
+  { key: 'monthly', label: 'Todo mês', desc: 'No mesmo dia do mês' },
+  { key: 'yearly', label: 'Todo ano', desc: 'Na mesma data, todo ano' },
 ];
 
 export const repeatLabel = (k: RepeatKey): string => REPEAT_OPTIONS.find((o) => o.key === k)?.label ?? 'Nunca';
