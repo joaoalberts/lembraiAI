@@ -113,12 +113,12 @@ export default function ConfigScreen() {
 
           {typeof window !== 'undefined' ? (
             <CartaoDeConfig
-              icon={isIOS() ? 'share-2' : 'download'}
+              icon={typeof window !== 'undefined' && isIOS() ? 'share-2' : 'download'}
               titulo="Instalar o app"
               subtitulo={instalado ? 'Instalado na tela de início.' : 'Melhora as notificações e abre em tela cheia.'}
               acao={!instalado && instalavel ? <Button compact variant="secondary" label="Instalar" onPress={() => void instalar()} /> : undefined}
             >
-              {!instalado && !instalavel && isIOS() ? (
+              {!instalado && !instalavel && typeof window !== 'undefined' && isIOS() ? (
                 <Banner variant="info" icon="info">
                   No iPhone: toque em Compartilhar e depois em "Adicionar à Tela de Início". No iOS, as notificações só funcionam com o app instalado assim.
                 </Banner>
