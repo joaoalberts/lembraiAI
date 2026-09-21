@@ -24,12 +24,8 @@ const PENDENTES: string[] = [
   'app/auth/signup.tsx',
   'app/excluir-conta.tsx',
   'app/privacidade.tsx',
-  'src/components/Button.tsx',
   'src/components/LeafletMapDom.tsx',
-  'src/components/ReminderCard.tsx',
   'src/components/RemindersMap.web.tsx',
-  'src/components/TextField.tsx',
-  'src/data/reminders.ts',
 ];
 
 function listar(pasta: string): string[] {

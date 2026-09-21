@@ -1,6 +1,13 @@
-import { StyleSheet, Switch, Text, TouchableOpacity, View } from 'react-native';
-import { CATEGORY_COLORS, ICON_EMOJI, repeatLabel, type Reminder } from '../data/reminders';
+import type { ComponentProps } from 'react';
+import Ionicons from '@expo/vector-icons/Ionicons';
+import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { CATEGORY_COLORS, repeatLabel, type Reminder } from '../data/reminders';
+import { ICON_NAME, UI_ICON } from '../design/icons';
+import { borderWidth, colors, fontWeight, opacity, radius, shadow, size, space, textStyles } from '../design/tokens';
 import { formatDate } from '../lib/format';
+import { Toggle } from './Toggle';
+
+type IoniconName = ComponentProps<typeof Ionicons>['name'];
 
 interface ReminderCardProps {
   reminder: Reminder;
@@ -10,32 +17,48 @@ interface ReminderCardProps {
   onDelete: () => void;
 }
 
+/** Padrão: docs/DESIGN_SYSTEM.md, seção 11.1. */
 export function ReminderCard({ reminder: r, nearby = false, onToggle, onDelete }: ReminderCardProps) {
-  const colors = CATEGORY_COLORS[r.category];
+  const cor = CATEGORY_COLORS[r.category];
   const meta = r.kind === 'local'
     ? `${r.place || 'Local escolhido'} · raio de ${r.radius} m`
     : `${formatDate(r.dateISO)} · ${r.time}${r.repeat !== 'never' ? ` · ${repeatLabel(r.repeat)}` : ''}`;
 
   return (
-    <View style={[styles.card, { backgroundColor: colors.bg }, nearby && styles.nearby, !r.active && styles.inactive]}>
-      <View style={[styles.icon, { backgroundColor: colors.pin }]}>
-        <Text style={styles.iconText}>{ICON_EMOJI[r.icon]}</Text>
+    <View
+      testID="reminder-card"
+      style={[styles.card, { borderLeftColor: cor.bar }, nearby && styles.nearby, !r.active && styles.inactive]}
+    >
+      {/* o ícone é decorativo: o título já diz tudo ao leitor de tela */}
+      <View
+        testID="reminder-icon"
+        style={[styles.icon, { backgroundColor: cor.bg }]}
+        accessibilityElementsHidden
+        importantForAccessibility="no-hide-descendants"
+      >
+        <Ionicons name={ICON_NAME[r.icon] as IoniconName} size={size.icon.md} color={cor.ink} />
       </View>
       <View style={styles.content}>
         <Text style={styles.title} numberOfLines={2}>{r.title}</Text>
         <Text style={styles.meta} numberOfLines={2}>{meta}</Text>
-        {nearby && <Text style={styles.nearbyTag}>📍 Você está aqui</Text>}
+        {nearby && (
+          <View style={styles.nearbyRow}>
+            <Ionicons name={UI_ICON.aqui as IoniconName} size={size.icon.sm} color={colors.text.accent} />
+            <Text style={styles.nearbyTag}>Você está aqui</Text>
+          </View>
+        )}
       </View>
       <View style={styles.actions}>
-        <Switch value={r.active} onValueChange={onToggle} accessibilityLabel={`Ativar lembrete ${r.title}`} />
-        <TouchableOpacity
+        <Toggle value={r.active} onValueChange={onToggle} accessibilityLabel={`Ativar lembrete ${r.title}`} />
+        <Pressable
           onPress={onDelete}
-          style={styles.deleteBtn}
+          hitSlop={size.hitSlop}
+          style={({ pressed }) => [styles.deleteBtn, pressed && styles.deletePressed]}
           accessibilityRole="button"
           accessibilityLabel={`Excluir lembrete ${r.title}`}
         >
-          <Text style={styles.deleteIcon}>✕</Text>
-        </TouchableOpacity>
+          <Ionicons name={UI_ICON.excluir as IoniconName} size={size.icon.md} color={colors.icon.muted} />
+        </Pressable>
       </View>
     </View>
   );
@@ -45,28 +68,29 @@ const styles = StyleSheet.create({
   card: {
     flexDirection: 'row',
     alignItems: 'center',
-    padding: 12,
-    borderRadius: 12,
-    marginBottom: 12,
-    borderWidth: 2,
-    borderColor: 'transparent',
+    padding: space.md,
+    borderRadius: radius.md,
+    marginBottom: space.md,
+    backgroundColor: colors.bg.card,
+    borderLeftWidth: borderWidth.bar,
+    boxShadow: shadow.card,
   },
-  nearby: { borderColor: '#FE532A' },
-  inactive: { opacity: 0.55 },
+  nearby: { outlineWidth: borderWidth.focus, outlineColor: colors.border.focus, outlineStyle: 'solid' },
+  inactive: { opacity: opacity.inactive },
   icon: {
-    width: 44,
-    height: 44,
-    borderRadius: 22,
+    width: size.iconCircle,
+    height: size.iconCircle,
+    borderRadius: radius.pill,
     alignItems: 'center',
     justifyContent: 'center',
-    marginRight: 12,
+    marginRight: space.md,
   },
-  iconText: { fontSize: 22 },
   content: { flex: 1 },
-  title: { fontSize: 16, fontWeight: '600', color: '#0A0A0A', marginBottom: 2 },
-  meta: { fontSize: 13, color: '#4A4C52' },
-  nearbyTag: { fontSize: 12, fontWeight: '600', color: '#FE532A', marginTop: 4 },
-  actions: { alignItems: 'center', marginLeft: 8 },
-  deleteBtn: { padding: 8 },
-  deleteIcon: { fontSize: 16, fontWeight: 'bold', color: '#767880' },
+  title: { ...textStyles.bodyLg, fontWeight: fontWeight.semibold, color: colors.text.primary, marginBottom: space.hair },
+  meta: { ...textStyles.caption, color: colors.text.secondary },
+  nearbyRow: { flexDirection: 'row', alignItems: 'center', gap: space.xs, marginTop: space.xs },
+  nearbyTag: { ...textStyles.caption, fontWeight: fontWeight.semibold, color: colors.text.accent },
+  actions: { alignItems: 'center', marginLeft: space.sm, gap: space.xs },
+  deleteBtn: { padding: space.sm, borderRadius: radius.pill },
+  deletePressed: { backgroundColor: colors.control.chipOff },
 });

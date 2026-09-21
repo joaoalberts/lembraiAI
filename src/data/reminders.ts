@@ -1,3 +1,5 @@
+import { colors } from '../design/tokens';
+
 export type Category = 'green' | 'orange' | 'blue' | 'purple' | 'pink';
 export type IconKey = 'cart' | 'dumbbell' | 'pill' | 'users' | 'plane' | 'pin' | 'bell' | 'briefcase' | 'house' | 'card';
 export type Section = 'Hoje' | 'Amanhã' | 'Esta semana';
@@ -42,24 +44,5 @@ export const DEFAULT_RADIUS = 150;
 /** Coordenada usada só para centrar o mapa antes de a posição chegar (a mesma do app web: Fortaleza). */
 export const FALLBACK_COORD = { lat: -3.7566, lng: -38.4891 };
 
-/** `bg` = fundo do cartão; `pin` = cor forte para marcadores no mapa. */
-export const CATEGORY_COLORS: Record<Category, { bg: string; pin: string }> = {
-  green: { bg: '#DBF1E4', pin: '#2F9E5B' },
-  orange: { bg: '#FDE6D6', pin: '#FE532A' },
-  blue: { bg: '#D5E8F9', pin: '#2F80ED' },
-  purple: { bg: '#EADFFB', pin: '#7C3AED' },
-  pink: { bg: '#FCE0EA', pin: '#E0457B' },
-};
-
-export const ICON_EMOJI: Record<IconKey, string> = {
-  cart: '🛒',
-  dumbbell: '🏋️',
-  pill: '💊',
-  users: '👥',
-  plane: '✈️',
-  pin: '📍',
-  bell: '🔔',
-  briefcase: '💼',
-  house: '🏠',
-  card: '💳',
-};
+/** Cores de cada categoria, dos tokens do Design System: `bg` fundo do ícone, `bar` faixa do cartão, `ink` glifo, `pin` marcador no mapa. */
+export const CATEGORY_COLORS: Record<Category, { bg: string; bar: string; ink: string; pin: string }> = colors.category;

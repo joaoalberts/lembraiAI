@@ -1,5 +1,9 @@
+import '@testing-library/react-native/matchers';
+import Ionicons from '@expo/vector-icons/Ionicons';
 import { fireEvent, render, screen } from '@testing-library/react-native';
 import type { Reminder } from '../../data/reminders';
+import { ICON_NAME, UI_ICON } from '../../design/icons';
+import { borderWidth, colors, opacity, radius, shadow, size } from '../../design/tokens';
 import { ReminderCard } from '../ReminderCard';
 
 const porHorario: Reminder = {
@@ -10,6 +14,9 @@ const porLocal: Reminder = {
   id: '2', title: 'Comprar leite', category: 'green', icon: 'cart', kind: 'local',
   place: 'Mercado da esquina', lat: -3.75, lng: -38.48, radius: 300, dateISO: '2026-09-20', time: '09:00', repeat: 'never', active: true,
 };
+
+/** O Ionicons desenha o ícone como um caractere da fonte: acha-se pelo glifo do nome (o círculo do ícone fica escondido do leitor de tela de propósito). */
+const icone = (nome: string) => screen.queryByText(String.fromCharCode(Number(Ionicons.glyphMap[nome as keyof typeof Ionicons.glyphMap])), { includeHiddenElements: true });
 
 describe('ReminderCard', () => {
   it('por horário: mostra título, data, hora e repetição', async () => {
@@ -23,11 +30,15 @@ describe('ReminderCard', () => {
     expect(screen.getByText('Mercado da esquina · raio de 300 m')).toBeTruthy();
   });
 
-  it('só mostra "Você está aqui" quando está dentro do raio', async () => {
-    await render(<ReminderCard reminder={porLocal} onToggle={jest.fn()} onDelete={jest.fn()} />);
-    expect(screen.queryByText('📍 Você está aqui')).toBeNull();
-    await render(<ReminderCard reminder={porLocal} nearby onToggle={jest.fn()} onDelete={jest.fn()} />);
-    expect(screen.getByText('📍 Você está aqui')).toBeTruthy();
+  it('só mostra "Você está aqui" quando está dentro do raio, com o anel de foco e o ícone de local', async () => {
+    const { rerender } = await render(<ReminderCard reminder={porLocal} onToggle={jest.fn()} onDelete={jest.fn()} />);
+    expect(screen.queryByText('Você está aqui')).toBeNull();
+    expect(screen.getByTestId('reminder-card')).not.toHaveStyle({ outlineWidth: borderWidth.focus });
+
+    await rerender(<ReminderCard reminder={porLocal} nearby onToggle={jest.fn()} onDelete={jest.fn()} />);
+    expect(screen.getByText('Você está aqui')).toHaveStyle({ color: colors.text.accent });
+    expect(screen.getByTestId('reminder-card')).toHaveStyle({ outlineWidth: borderWidth.focus, outlineColor: colors.border.focus });
+    expect(icone(UI_ICON.aqui)).toBeTruthy();
   });
 
   it('o interruptor e o botão de excluir chamam os callbacks', async () => {
@@ -40,5 +51,39 @@ describe('ReminderCard', () => {
 
     await fireEvent.press(screen.getByLabelText('Excluir lembrete Tomar remédio'));
     expect(onDelete).toHaveBeenCalledTimes(1);
+  });
+
+  it('superfície de cartão com sombra e faixa lateral na cor da categoria', async () => {
+    await render(<ReminderCard reminder={porLocal} onToggle={jest.fn()} onDelete={jest.fn()} />);
+    expect(screen.getByTestId('reminder-card')).toHaveStyle({
+      backgroundColor: colors.bg.card, borderRadius: radius.md, boxShadow: shadow.card,
+      borderLeftWidth: borderWidth.bar, borderLeftColor: colors.category.green.bar,
+    });
+  });
+
+  it('círculo do ícone na cor da categoria, com o ícone de contorno dela e o glifo escuro (nunca emoji)', async () => {
+    await render(<ReminderCard reminder={porLocal} onToggle={jest.fn()} onDelete={jest.fn()} />);
+    expect(screen.getByTestId('reminder-icon', { includeHiddenElements: true })).toHaveStyle({ backgroundColor: colors.category.green.bg, width: size.iconCircle, height: size.iconCircle });
+    expect(icone(ICON_NAME.cart)).toHaveStyle({ color: colors.category.green.ink, fontSize: size.icon.md });
+    expect(screen.queryByText('🛒')).toBeNull();
+  });
+
+  it('cada categoria usa as próprias cores', async () => {
+    await render(<ReminderCard reminder={porHorario} onToggle={jest.fn()} onDelete={jest.fn()} />);
+    expect(screen.getByTestId('reminder-card')).toHaveStyle({ borderLeftColor: colors.category.blue.bar });
+    expect(screen.getByTestId('reminder-icon', { includeHiddenElements: true })).toHaveStyle({ backgroundColor: colors.category.blue.bg });
+  });
+
+  it('pausado fica com a opacidade de inativo', async () => {
+    await render(<ReminderCard reminder={{ ...porHorario, active: false }} onToggle={jest.fn()} onDelete={jest.fn()} />);
+    expect(screen.getByTestId('reminder-card')).toHaveStyle({ opacity: opacity.inactive });
+  });
+
+  it('o botão de excluir é um ícone de lixeira com área de toque de 44', async () => {
+    await render(<ReminderCard reminder={porHorario} onToggle={jest.fn()} onDelete={jest.fn()} />);
+    expect(icone(UI_ICON.excluir)).toBeTruthy();
+    const botao = screen.getByLabelText('Excluir lembrete Tomar remédio');
+    expect(botao).toHaveProp('hitSlop', size.hitSlop);
+    expect(screen.queryByText('✕')).toBeNull();
   });
 });

@@ -1,5 +1,6 @@
 import { TextInput, View, Text, StyleSheet, ViewStyle, type TextInputProps } from 'react-native';
 import { useState } from 'react';
+import { borderWidth, colors, fontSize, radius, shadow, space, textStyles } from '../design/tokens';
 
 interface TextFieldProps {
   label?: string;
@@ -20,6 +21,7 @@ interface TextFieldProps {
   style?: ViewStyle;
 }
 
+/** Padrão: docs/DESIGN_SYSTEM.md, seção 10. */
 export function TextField({
   label,
   placeholder,
@@ -44,12 +46,12 @@ export function TextField({
       <TextInput
         style={[
           styles.input,
-          focused && styles.inputFocused,
+          focused && !error && styles.inputFocused,
           error && styles.inputError,
           !editable && styles.inputDisabled,
         ]}
         placeholder={placeholder}
-        placeholderTextColor="#85858F"
+        placeholderTextColor={colors.text.placeholder}
         value={value}
         onChangeText={onChangeText}
         secureTextEntry={secureTextEntry}
@@ -63,7 +65,7 @@ export function TextField({
         onFocus={() => setFocused(true)}
         onBlur={() => setFocused(false)}
       />
-      {!!error && <Text style={styles.errorText}>{error}</Text>}
+      {!!error && <Text style={styles.errorText} accessibilityRole="alert">{error}</Text>}
       {!error && !!hint && <Text style={styles.hintText}>{hint}</Text>}
     </View>
   );
@@ -71,43 +73,42 @@ export function TextField({
 
 const styles = StyleSheet.create({
   container: {
-    marginBottom: 16,
+    marginBottom: space.lg,
   },
   label: {
-    fontSize: 14,
-    fontWeight: '600',
-    color: '#0A0A0A',
-    marginBottom: 8,
+    ...textStyles.label,
+    color: colors.text.primary,
+    marginBottom: space.sm,
   },
   input: {
-    paddingHorizontal: 16,
-    paddingVertical: 12,
-    borderWidth: 1,
-    borderColor: '#E7E8EA',
-    borderRadius: 8,
-    fontSize: 16,
-    color: '#0A0A0A',
-    backgroundColor: '#FFFFFF',
+    paddingHorizontal: space.lg,
+    paddingVertical: space.md,
+    borderWidth: borderWidth.hairline,
+    borderColor: colors.border.field,
+    borderRadius: radius.md,
+    fontSize: fontSize.bodyLg,
+    color: colors.text.primary,
+    backgroundColor: colors.bg.field,
   },
   inputFocused: {
-    borderColor: '#FE532A', // orange-500
+    borderColor: colors.border.focus,
+    boxShadow: shadow.focus,
   },
   inputError: {
-    borderColor: '#FF4444',
-    backgroundColor: '#FFE6E6',
+    borderColor: colors.border.danger,
   },
   inputDisabled: {
-    backgroundColor: '#F5F2ED',
-    color: '#767880',
+    backgroundColor: colors.bg.disabled,
+    color: colors.text.secondary,
   },
   errorText: {
-    color: '#FF4444',
-    fontSize: 12,
-    marginTop: 4,
+    ...textStyles.caption,
+    color: colors.text.danger,
+    marginTop: space.xs,
   },
   hintText: {
-    color: '#767880',
-    fontSize: 12,
-    marginTop: 4,
+    ...textStyles.caption,
+    color: colors.text.secondary,
+    marginTop: space.xs,
   },
 });

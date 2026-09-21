@@ -568,8 +568,8 @@ Cada par é testado em `src/design/__tests__/acessibilidade.test.ts`. Par novo e
 | Elemento | Padrão | Situação |
 |---|---|---|
 | Tokens e testes (`src/design`) | seções 3 a 7 | aplicado |
-| Botão, campo, chip, interruptor, aviso | seções 9 a 11 | pendente |
-| Cartão de lembrete e ícones | seções 8 e 11.1 | pendente |
+| Botão, campo, chip, interruptor e aviso (componentes) | seções 9 a 11 | aplicado nos componentes; as telas ainda usam estilo próprio em parte (ver `PENDENTES`) |
+| Cartão de lembrete e ícones | seções 8 e 11.1 | aplicado |
 | Telas (lista, novo, mapa, configurações, contas, páginas públicas) | todas | pendente |
 | Abas, cabeçalho e coluna da web | seções 11.6 e 11.7 | pendente |
 | Famílias tipográficas da marca | seção 4.1 | pendente (seção 19) |
@@ -593,6 +593,8 @@ O teste `valores-soltos.test.ts` mantém uma lista de arquivos com valores visua
 | 21/09/2026 | Borda de campo suave mantida (1,2:1) | É a identidade das referências; o foco reforça |
 | 21/09/2026 | Piso de 12 para texto, tamanhos fixos em vez de proporcionais à largura | O app web chegou a 6 px por escalar tudo pela largura |
 | 21/09/2026 | Ícones: Ionicons em contorno no lugar de emoji | Emoji muda por sistema e não aceita cor; o Ionicons já era usado nas abas |
+| 21/09/2026 | Botões em pílula de 52 de altura, rótulo 16/700, brilho no primário e estados (ponteiro, pressionado, foco, desabilitado) | Iguais às referências (`2.png`, `4.png`) e aos estados definidos no app web; alvo de toque de pelo menos 44 |
+| 21/09/2026 | Cartão de lembrete: superfície creme com faixa da categoria, círculo com ícone de contorno e sombra suave; chip selecionado em verde-floresta (antes laranja) | Igual à lista de referência (`5.png`); o laranja fica só para a ação |
 | 21/09/2026 | Sombras por `boxShadow` em texto | Único caminho igual em iOS, Android e web na New Architecture |
 | 21/09/2026 | Fontes da marca não carregadas nesta versão | Exige mexer na abertura do app e na renderização estática da web; passo próprio |
 
