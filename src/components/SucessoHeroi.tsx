@@ -51,6 +51,9 @@ function DegradeRadial({ id, lado, cx, cy, r, paradas }: { id: string; lado: num
  * sem ondas, faíscas nem brilho que passa, com o visto inteiro e os dois pontos parados. Enquanto o sistema não responde
  * se a pessoa pediu isso, não desenha nada, para não começar uma animação que ela pediu para não ver.
  */
+/** Quanto o brilho passa do selo em cima e embaixo, em %: a faixa tem `altura` vezes a altura do selo, centralizada nele. */
+export const folgaDoBrilho = (altura: number): `${number}%` => `${Math.round(-((altura - 1) / 2) * 1000) / 10}%`;
+
 export function SucessoHeroi() {
   const reduzir = useMovimentoReduzido();
   if (reduzir === undefined) return null;
@@ -242,6 +245,8 @@ function Heroi({ animar }: { animar: boolean }) {
                 styles.brilhoDoSelo,
                 fundoEmDegrade(selo.brilho.degrade),
                 {
+                  top: folgaDoBrilho(selo.brilho.altura),
+                  bottom: folgaDoBrilho(selo.brilho.altura),
                   width: larguraDoBrilho,
                   transform: [{ translateX: faixa(selo.brilho.janela, selo.brilho.de * larguraDoBrilho, selo.brilho.ate * larguraDoBrilho, selo.brilho.curva) }, { skewX: `${selo.brilho.inclinacao}deg` }],
                 },
@@ -261,5 +266,5 @@ const styles = StyleSheet.create({
   ponto: { borderRadius: radius.pill, backgroundColor: HEROI.cintilacao.cor },
   recorte: { overflow: 'hidden' },
   semToque: { pointerEvents: 'none' },
-  brilhoDoSelo: { position: 'absolute', top: '-20%', bottom: '-20%', left: 0, pointerEvents: 'none' },
+  brilhoDoSelo: { position: 'absolute', left: 0, pointerEvents: 'none' },
 });

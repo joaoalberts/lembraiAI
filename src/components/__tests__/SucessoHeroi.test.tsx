@@ -3,7 +3,7 @@ import { act, render, screen } from '@testing-library/react-native';
 import { AccessibilityInfo, Platform, StyleSheet, Text } from 'react-native';
 import { FAISCAS, HEROI } from '../../design/heroi';
 import { radius } from '../../design/tokens';
-import { SucessoHeroi } from '../SucessoHeroi';
+import { SucessoHeroi, folgaDoBrilho } from '../SucessoHeroi';
 import { Subida } from '../Subida';
 
 const ESCONDIDO = { includeHiddenElements: true } as const;
@@ -65,6 +65,29 @@ describe('SucessoHeroi: animado', () => {
     expect(screen.getAllByTestId(/^heroi-faisca-/, ESCONDIDO)).toHaveLength(14);
     expect(screen.getAllByTestId(/^heroi-onda-/, ESCONDIDO)).toHaveLength(2);
     expect(el('heroi-brilho-do-selo')).toBeTruthy();
+  });
+
+  it('o brilho que passa sobre o selo tem a altura do token: a faixa sobra do selo em cima e embaixo na mesma medida', async () => {
+    await render(<SucessoHeroi />);
+    const folga = folgaDoBrilho(HEROI.selo.brilho.altura);
+    expect(estilo('heroi-brilho-do-selo')).toMatchObject({ top: folga, bottom: folga });
+    expect(folga).toBe('-20%'); // 1,4 vezes a altura do selo, centralizada
+  });
+
+  it('a folga acompanha o token: com outra altura a faixa sobra outro tanto (não é um valor escrito no componente)', async () => {
+    jest.replaceProperty(HEROI.selo.brilho, 'altura', 2 as never);
+    try {
+      await render(<SucessoHeroi />);
+      expect(estilo('heroi-brilho-do-selo')).toMatchObject({ top: '-50%', bottom: '-50%' });
+    } finally {
+      jest.restoreAllMocks();
+    }
+  });
+
+  it('folgaDoBrilho: a sobra de cada lado é metade do que a faixa passa da altura do selo', () => {
+    expect(folgaDoBrilho(1.4)).toBe('-20%');
+    expect(folgaDoBrilho(2)).toBe('-50%');
+    expect(folgaDoBrilho(1)).toBe('0%');
   });
 
   it('o selo "estoura": passa do tamanho final aos 0,55 s e assenta em 1 aos 0,85 s, já sem giro', async () => {

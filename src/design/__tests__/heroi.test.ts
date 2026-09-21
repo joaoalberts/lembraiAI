@@ -1,3 +1,5 @@
+import fs from 'fs';
+import path from 'path';
 import { CURVAS, ESTRELA, FAISCAS, HEROI, separarCor, type Janela } from '../heroi';
 import { palette } from '../tokens';
 
@@ -121,5 +123,56 @@ describe('separarCor', () => {
 
   it('todas as paradas do brilho e do disco são rgba válidos', () => {
     for (const p of [...HEROI.brilho.paradas, ...HEROI.disco.paradas]) expect(() => separarCor(p.cor)).not.toThrow();
+  });
+});
+
+describe('a tabela "Linha do tempo do herói" do documento (11.12) confere com HEROI', () => {
+  const doc = fs.readFileSync(path.join(__dirname, '../../../docs/DESIGN_SYSTEM.md'), 'utf8');
+  const depois = doc.slice(doc.indexOf('Linha do tempo do herói'));
+  const trecho = depois.slice(0, depois.indexOf('\n### '));
+  /** Camada -> células da tabela (Começa, Termina, O que faz). */
+  const linhas = new Map<string, string[]>();
+  for (const linha of trecho.split('\n').filter((l) => l.startsWith('| ') && !l.startsWith('| Camada') && !l.startsWith('|---'))) {
+    const [camada, ...celulas] = linha.split('|').slice(1, -1).map((c) => c.trim());
+    linhas.set(camada, celulas);
+  }
+  const numeros = (celula: string) => [...celula.matchAll(/\d+(?:,\d+)?/g)].map((m) => Number(m[0].replace(',', '.')));
+
+  const JANELAS: [string, readonly [number, number]][] = [
+    ['Brilho', HEROI.brilho.janela],
+    ['Disco', HEROI.disco.janela],
+    ['Selo', HEROI.selo.entrada.janela],
+    ['Anel', HEROI.anel.janela],
+    ['Visto', HEROI.selo.visto.janela],
+    ['Título', HEROI.subida.titulo],
+    ['Subtítulo', HEROI.subida.subtitulo],
+    ['Onda 1', HEROI.onda.janelas[0]],
+    ['Onda 2', HEROI.onda.janelas[1]],
+    ['Brilho do selo', HEROI.selo.brilho.janela],
+  ];
+
+  it('a tabela tem as 12 camadas', () => {
+    expect([...linhas.keys()]).toEqual(['Brilho', 'Disco', 'Selo', 'Anel', 'Visto', 'Título', 'Onda 1', 'Subtítulo', 'Onda 2', 'Faíscas', 'Brilho do selo', 'Pontos']);
+  });
+
+  it.each(JANELAS)('%s: começa e termina onde diz HEROI', (camada, janela) => {
+    const [comeca, termina] = linhas.get(camada)!;
+    expect({ camada, comeca: numeros(comeca), termina: numeros(termina) }).toEqual({ camada, comeca: [janela[0]], termina: [janela[1]] });
+  });
+
+  it('Faíscas: os atrasos vão do menor ao maior e cada uma dura o combinado', () => {
+    const atrasos = FAISCAS.map((f) => f.atraso);
+    const [comeca, termina] = linhas.get('Faíscas')!;
+    const arredonda = (n: number) => Math.round(n * 100) / 100;
+    expect(numeros(comeca)).toEqual([Math.min(...atrasos), Math.max(...atrasos)]);
+    expect(numeros(termina)).toEqual([arredonda(Math.min(...atrasos) + HEROI.faisca.duracao), arredonda(Math.max(...atrasos) + HEROI.faisca.duracao)]);
+    expect(numeros(linhas.get('Faíscas')![2])).toContain(HEROI.faisca.duracao);
+  });
+
+  it('Pontos: aparecem e terminam de aparecer nos tempos dos dois pontos, e pulsam a partir dos tempos e no ciclo combinados', () => {
+    const [comeca, termina, oQueFaz] = linhas.get('Pontos')!;
+    expect(numeros(comeca)).toEqual(HEROI.cintilacao.pontos.map((p) => p.aparece[0]));
+    expect(numeros(termina)).toEqual(HEROI.cintilacao.pontos.map((p) => p.aparece[1]));
+    expect(numeros(oQueFaz)).toEqual(expect.arrayContaining([HEROI.cintilacao.ciclo, ...HEROI.cintilacao.pontos.map((p) => p.comecaEm)]));
   });
 });
