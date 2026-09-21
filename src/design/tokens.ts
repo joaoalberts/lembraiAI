@@ -260,6 +260,7 @@ export const textStyles = {
   display: { fontFamily: fontFamily.serif, fontSize: fontSize.display, lineHeight: lineHeight.display },
   title: { fontFamily: fontFamily.serif, fontSize: fontSize.title, lineHeight: lineHeight.title },
   heading: { fontFamily: fontFamily.serif, fontSize: fontSize.heading, lineHeight: lineHeight.heading },
+  sheetTitle: { fontFamily: fontFamily.serif, fontSize: fontSize.title, lineHeight: lineHeight.heading },
   bodyLg: { fontFamily: fontFamily.regular, fontSize: fontSize.bodyLg, lineHeight: lineHeight.bodyLg },
   body: { fontFamily: fontFamily.regular, fontSize: fontSize.body, lineHeight: lineHeight.body },
   label: { fontFamily: fontFamily.semibold, fontSize: fontSize.body, lineHeight: lineHeight.body },
@@ -310,7 +311,7 @@ export const size = {
   /** Pino do mapa no formulário (58 × 73 du no original). A ponta fica no meio da base. */
   mapPin: { width: du(58), height: du(73) },
   /** Folha inferior: espaços internos, alça e o vão entre a alça e o título (medidas do CSS do app web em du). */
-  sheet: { paddingTop: du(22), paddingHorizontal: du(40), paddingBottom: du(70), handleWidth: du(96), handleHeight: du(8), handleGap: du(28) },
+  sheet: { paddingTop: du(22), paddingHorizontal: du(40), paddingBottom: du(70), handleWidth: du(96), handleHeight: du(8), handleGap: du(28), actionTop: du(50), actionRight: du(34) },
 } as const;
 
 /**

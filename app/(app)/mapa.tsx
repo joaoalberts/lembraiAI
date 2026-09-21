@@ -1,12 +1,10 @@
 import { useEffect, useMemo, useState } from 'react';
-import { Modal, Pressable, StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
 import { CATEGORY_COLORS } from '../../src/data/reminders';
-import { Icon } from '../../src/components/Icon';
 import { RemindersMap } from '../../src/components/RemindersMap';
+import { Sheet } from '../../src/components/Sheet';
 import type { MapMarker } from '../../src/components/map-types';
-import { anelDeFoco, type EstadoDeToque } from '../../src/design/foco';
-import { UI_ICON } from '../../src/design/icons';
-import { colors, layout, radius, shadow, size, space, textStyles } from '../../src/design/tokens';
+import { colors, radius, shadow, space, textStyles } from '../../src/design/tokens';
 import { distance, formatDistance, type LatLng } from '../../src/lib/geo';
 import { useGeo } from '../../src/state/geo';
 import { useGeofences } from '../../src/state/geofences';
@@ -54,32 +52,17 @@ export default function MapaScreen() {
         </View>
       )}
 
-      <Modal visible={selecionado !== null} transparent animationType="slide" onRequestClose={() => setSelecionado(null)}>
-        <View style={styles.overlay}>
-          <View style={styles.sheet}>
-            <Pressable
-              style={(estado: EstadoDeToque) => [styles.close, estado.focused && anelDeFoco]}
-              onPress={() => setSelecionado(null)}
-              hitSlop={size.hitSlop}
-              accessibilityRole="button"
-              accessibilityLabel="Fechar"
-            >
-              <Icon name={UI_ICON.fechar} size={size.icon.md} color={colors.icon.default} />
-            </Pressable>
-            {selecionado && (
-              <>
-                <Text style={styles.sheetTitle}>{selecionado.title}</Text>
-                {selecionado.place ? <Text style={styles.sheetPlace}>{selecionado.place}</Text> : null}
-                <Text style={styles.sheetRow}>Raio de aviso: {selecionado.radius} m</Text>
-                {center && <Text style={styles.sheetRow}>Distância de você: {formatDistance(distance(center, selecionado))}</Text>}
-                <Text style={styles.sheetRow}>
-                  {!selecionado.active ? 'Lembrete pausado' : insideIds.includes(selecionado.id) ? 'Você está dentro do raio' : 'Monitorando'}
-                </Text>
-              </>
-            )}
-          </View>
-        </View>
-      </Modal>
+      <Sheet visible={selecionado !== null} onClose={() => setSelecionado(null)} title={selecionado?.title ?? ''} subtitle={selecionado?.place || undefined}>
+        {selecionado && (
+          <>
+            <Text style={styles.sheetRow}>Raio de aviso: {selecionado.radius} m</Text>
+            {center && <Text style={styles.sheetRow}>Distância de você: {formatDistance(distance(center, selecionado))}</Text>}
+            <Text style={styles.sheetRow}>
+              {!selecionado.active ? 'Lembrete pausado' : insideIds.includes(selecionado.id) ? 'Você está dentro do raio' : 'Monitorando'}
+            </Text>
+          </>
+        )}
+      </Sheet>
     </View>
   );
 }
@@ -88,11 +71,5 @@ const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: colors.bg.page },
   hint: { position: 'absolute', top: space.md, left: space.lg, right: space.lg, backgroundColor: colors.bg.field, borderRadius: radius.md, padding: space.md, boxShadow: shadow.float, pointerEvents: 'none' },
   hintText: { ...textStyles.body, color: colors.text.primary, textAlign: 'center' },
-  overlay: { flex: 1, backgroundColor: colors.overlay, justifyContent: 'flex-end', alignItems: 'center' },
-  // o Modal da web sai da coluna do app: sem o maxWidth o painel viraria uma faixa da largura da janela
-  sheet: { width: '100%', maxWidth: layout.columnMax, backgroundColor: colors.bg.field, borderTopLeftRadius: radius.sheet, borderTopRightRadius: radius.sheet, padding: space.xl, paddingBottom: space.xxl },
-  close: { position: 'absolute', top: space.md, right: space.md, width: size.closeButton, height: size.closeButton, borderRadius: radius.pill, backgroundColor: colors.bg.page, alignItems: 'center', justifyContent: 'center' },
-  sheetTitle: { ...textStyles.title, color: colors.text.primary, marginRight: size.closeButton + space.sm, marginBottom: space.xs },
-  sheetPlace: { ...textStyles.body, color: colors.text.secondary, marginBottom: space.md },
   sheetRow: { ...textStyles.body, color: colors.text.primary, marginTop: space.sm },
 });

@@ -269,8 +269,9 @@ Use `...textStyles.estilo` e só troque cor (`colors.text.*`) ou família (`font
 | Estilo | Tamanho | Altura de linha | Família | Uso |
 |---|---|---|---|---|
 | `textStyles.display` | 28 | 34 | `SourceSerif4_700Bold` | Título grande: nome do app nas telas de conta e títulos das páginas públicas |
-| `textStyles.title` | 20 | 26 | `SourceSerif4_700Bold` | Título de tela, de estado vazio e de folha |
+| `textStyles.title` | 20 | 26 | `SourceSerif4_700Bold` | Título de tela e de estado vazio |
 | `textStyles.heading` | 18 | 24 | `SourceSerif4_700Bold` | Título de seção ("Hoje", "Amanhã") e de cabeçalho |
+| `textStyles.sheetTitle` | 20 | 24 | `SourceSerif4_700Bold` | Título de folha inferior (Excluir lembrete?, Horário, Repetir): o tamanho de título com altura de linha 1,2 |
 | `textStyles.bodyLg` | 16 | 24 | `NunitoSans_400Regular` | Texto de leitura (política de privacidade) e de campos |
 | `textStyles.body` | 14 | 20 | `NunitoSans_400Regular` | Texto corrente |
 | `textStyles.label` | 14 | 20 | `NunitoSans_600SemiBold` | Rótulo de campo e de linha |
@@ -512,7 +513,11 @@ Opção de escolha rápida (repetição, raio). Altura `size.chip` e área de to
 
 ### 11.5 Folha (modal inferior)
 
-Véu `colors.overlay`; folha `colors.bg.field` com `radius.sheet` no topo, padding `space.xl` e `space.xxl` embaixo. Título `textStyles.title`. Botão de fechar de `size.closeButton` (área de toque de 44) em `colors.bg.page`. Na web a folha tem `layout.columnMax` de largura máxima, senão viraria uma faixa da largura da janela.
+Componente `src/components/Sheet.tsx`. Véu `colors.overlay` (verde-escuro a 46%); folha `colors.bg.card` colada no fim da tela, cantos de cima `radius.sheet`, sombra `shadow.sheet`, no máximo `layout.sheetMaxHeight` da altura da tela (o resto rola). Espaços em `size.sheet.*`: a base nunca é menor que a área segura do sistema. Alça decorativa de `size.sheet.handleWidth` por `size.sheet.handleHeight` em `colors.tab.indicator` (não arrasta nem fecha). Título `textStyles.sheetTitle`; subtítulo `textStyles.micro` em `colors.text.secondary`, a `space.xs` do título. A ação do canto (o "Pronto" do horário) fica a `size.sheet.actionTop` do topo e `size.sheet.actionRight` da direita. Na web a folha tem `layout.columnMax` de largura máxima e fica centralizada, senão viraria uma faixa da largura da janela (o `Modal` sai da coluna do app).
+
+- **Entrada:** o véu aparece em `motion.duration.scrim` (ease-out) e a folha sobe de baixo em `motion.duration.sheet`, com a curva `motion.curve`. Com "reduzir movimento" (`src/lib/movimento.ts`) ela já entra pronta. Não há animação de saída (some na hora) nem arrastar para fechar, como no app web.
+- **Fechar:** toque no véu, botão voltar do Android, Esc na web e o gesto de escape do leitor de tela (iOS).
+- **Acessibilidade:** papel `dialog`, modal, título como nome e como cabeçalho; o resto da tela sai da árvore de acessibilidade enquanto a folha está aberta.
 
 ### 11.6 Abas e cabeçalho
 
@@ -592,6 +597,8 @@ Filosofia: o mínimo. O feedback de toque é instantâneo (troca de cor e escala
 | `size.sheet.handleWidth` | `49` | Alça da folha: largura (só enfeite, não arrasta) |
 | `size.sheet.handleHeight` | `4` | Alça da folha: altura |
 | `size.sheet.handleGap` | `14` | Vão entre a alça e o título da folha |
+| `size.sheet.actionTop` | `25` | Ação no canto da folha (o "Pronto" do horário): distância do topo |
+| `size.sheet.actionRight` | `17` | Ação no canto da folha: distância da direita |
 | `layout.columnMax` | `430` | Largura máxima da coluna do app na web (a das capturas de referência); no celular a coluna é a tela toda |
 | `layout.readingMax` | `720` | Largura máxima de texto corrido (política de privacidade) |
 | `layout.sheetMaxHeight` | `0.82` | Altura máxima de uma folha inferior, como fração da tela |
