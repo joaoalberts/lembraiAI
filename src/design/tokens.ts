@@ -98,6 +98,9 @@ export const palette = {
   mintIcon: '#6FF0C4',
   onboardingBg: '#12301F',
   pagerOn: '#F8F9F9',
+  optionBadge: '#195A48',
+  sliderThumb: '#FFFEFF',
+  hint: '#717074',
   rowHover: '#F7F8F4',
   rowPressed: '#EEF1EA',
   dangerTint: '#FBE7E4',
@@ -189,6 +192,8 @@ export const colors = {
     rowPressed: palette.rowPressed,
     dangerRowHover: palette.dangerRowHover,
     dangerRowPressed: palette.dangerTint,
+    badge: palette.optionBadge,
+    sliderThumb: palette.sliderThumb,
     haloHover: 'rgba(20, 40, 30, 0.07)',
     haloPressed: 'rgba(20, 40, 30, 0.13)',
   },
@@ -337,7 +342,11 @@ export const radius = {
   xs: 4,
   sm: 8,
   md: 12,
+  /** Campos e seletores dentro dos cartões do formulário (30 du no app web). */
+  field: du(30),
   lg: 16,
+  /** Cartões do formulário (34 du no app web). */
+  form: du(34),
   /** Cantos altos das folhas (38 du no original). */
   sheet: du(38),
   pill: 999,
@@ -416,6 +425,22 @@ export const size = {
     thumbWidth: du(136),
     thumbHeight: du(138),
   },
+  /** Formulário de novo lembrete (medidas do app web em du): recuo dos cartões, campos, cartões de modo e controle deslizante. */
+  form: {
+    cardPadding: du(33),
+    circle: du(86),
+    field: du(79),
+    fieldIcon: du(32),
+    option: du(120),
+    optionCircle: du(76),
+    optionIcon: du(34),
+    optionBadge: du(38),
+    optionCheck: du(24),
+    optionRadio: du(30),
+    sliderTrack: du(11),
+    sliderThumb: du(43),
+    sliderHeight: du(60),
+  },
   /** Interruptor do cartão de lembrete (`card`) e o dos formulários e das configurações (`form`): trilho, bolinha e folga da bolinha (21 e 26 de altura). */
   toggle: {
     card: { width: du(69), height: du(42), thumb: du(36), inset: 1.5 },
@@ -456,6 +481,16 @@ export const shadow = {
   sheet: '0px -5px 20px rgba(13, 42, 27, 0.18)',
   tabBar: '0px -1px 0px rgba(20, 40, 30, 0.05), 0px -3px 9px rgba(20, 40, 30, 0.03)',
   column: '0px 24px 70px rgba(0, 0, 0, 0.5)',
+  /** Cartão do formulário: anel branco por dentro e a sombra suave de cartão. */
+  formCard: '0px 1px 3px rgba(20, 40, 30, 0.05), 0px 4px 12px rgba(20, 40, 30, 0.04), inset 0px 0px 0px 1px rgba(255, 255, 255, 0.8)',
+  /** Campo branco do formulário: anel cinza por dentro. Com o ponteiro em cima o anel escurece; em foco vira verde com halo. */
+  field: 'inset 0px 0px 0px 1px rgba(231, 232, 234, 1), 0px 1px 2px rgba(20, 40, 30, 0.03)',
+  fieldHover: 'inset 0px 0px 0px 1px rgba(214, 213, 213, 1), 0px 1px 2px rgba(20, 40, 30, 0.03)',
+  fieldFocus: 'inset 0px 0px 0px 2px rgba(24, 92, 75, 1), 0px 0px 0px 4px rgba(24, 92, 75, 0.15)',
+  /** Opção escolhida dos cartões de modo: só o anel verde por dentro. */
+  optionOn: 'inset 0px 0px 0px 2px rgba(24, 92, 75, 1)',
+  /** Bolinha do controle deslizante. */
+  slider: '0px 2px 6px rgba(0, 0, 0, 0.25)',
 } as const;
 
 /**

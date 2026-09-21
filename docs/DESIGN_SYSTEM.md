@@ -143,6 +143,9 @@ Use `palette.*` só para definir papéis em `colors`. As telas usam os papéis (
 | `palette.mintIcon` | `#6FF0C4` | Ícones dos balões do Onboarding |
 | `palette.onboardingBg` | `#12301F` | Fundo do Onboarding enquanto a foto carrega |
 | `palette.pagerOn` | `#F8F9F9` | Ponto da página ativa do Onboarding |
+| `palette.optionBadge` | `#195A48` | Selo de seleção dos cartões de modo e das linhas escolhidas |
+| `palette.sliderThumb` | `#FFFEFF` | Bolinha do controle deslizante do raio |
+| `palette.hint` | `#717074` | Subtítulo do cabeçalho claro do formulário |
 | `palette.rowHover` | `#F7F8F4` | Linha de menu com o ponteiro em cima (web) |
 | `palette.rowPressed` | `#EEF1EA` | Linha de menu pressionada |
 | `palette.dangerTint` | `#FBE7E4` | Círculo do ícone de excluir e linha de excluir pressionada |
@@ -225,6 +228,8 @@ Use `palette.*` só para definir papéis em `colors`. As telas usam os papéis (
 | `colors.control.rowPressed` | `#EEF1EA` | `palette.rowPressed` | Linha de menu pressionada |
 | `colors.control.dangerRowHover` | `#FDF3F1` | `palette.dangerRowHover` | Linha de excluir com o ponteiro em cima (web) |
 | `colors.control.dangerRowPressed` | `#FBE7E4` | `palette.dangerTint` | Linha de excluir pressionada |
+| `colors.control.badge` | `#195A48` | `palette.optionBadge` | Selo de escolhido (o visto) dos cartões de modo e das linhas escolhidas |
+| `colors.control.sliderThumb` | `#FFFEFF` | `palette.sliderThumb` | Bolinha do controle deslizante do raio |
 | `colors.control.haloHover` | `rgba(20, 40, 30, 0.07)` | — | Halo atrás das reticências do cartão com o ponteiro em cima (web) |
 | `colors.control.haloPressed` | `rgba(20, 40, 30, 0.13)` | — | Halo atrás das reticências do cartão pressionado |
 | `colors.feedback.dangerBg` | `#FFE6E6` | `palette.red100` | Fundo do aviso de erro |
@@ -396,7 +401,9 @@ Grade de 4 (o meio-passo de 2 só para ajuste fino).
 | `radius.xs` | `4` | Selos pequenos |
 | `radius.sm` | `8` | Avisos e miniaturas |
 | `radius.md` | `12` | Campos, cartões e controles retangulares |
+| `radius.field` | `15` | Campos e seletores dentro dos cartões do formulário |
 | `radius.lg` | `16` | Painéis grandes |
+| `radius.form` | `17` | Cartões do formulário de novo lembrete |
 | `radius.sheet` | `19` | Topo de folhas e modais |
 | `radius.pill` | `999` | Botões, chips e círculos |
 <!-- tokens:raios:fim -->
@@ -429,6 +436,12 @@ O desenho é quase plano. Toda sombra é o `boxShadow` em texto (aceito pela New
 | `shadow.sheet` | `0px -5px 20px rgba(13, 42, 27, 0.18)` | Folha inferior (sombra para cima) |
 | `shadow.tabBar` | `0px -1px 0px rgba(20, 40, 30, 0.05), 0px -3px 9px rgba(20, 40, 30, 0.03)` | Barra de abas: filete e sombra para cima |
 | `shadow.column` | `0px 24px 70px rgba(0, 0, 0, 0.5)` | Coluna do app sobre o palco escuro, na web (tablet e computador) |
+| `shadow.formCard` | `0px 1px 3px rgba(20, 40, 30, 0.05), 0px 4px 12px rgba(20, 40, 30, 0.04), inset 0px 0px 0px 1px rgba(255, 255, 255, 0.8)` | Cartão do formulário (anel branco por dentro e sombra suave) |
+| `shadow.field` | `inset 0px 0px 0px 1px rgba(231, 232, 234, 1), 0px 1px 2px rgba(20, 40, 30, 0.03)` | Campo branco do formulário (anel cinza por dentro) |
+| `shadow.fieldHover` | `inset 0px 0px 0px 1px rgba(214, 213, 213, 1), 0px 1px 2px rgba(20, 40, 30, 0.03)` | Campo do formulário com o ponteiro em cima (web) |
+| `shadow.fieldFocus` | `inset 0px 0px 0px 2px rgba(24, 92, 75, 1), 0px 0px 0px 4px rgba(24, 92, 75, 0.15)` | Campo do formulário em foco (anel verde e halo) |
+| `shadow.optionOn` | `inset 0px 0px 0px 2px rgba(24, 92, 75, 1)` | Cartão de modo escolhido (anel verde por dentro) |
+| `shadow.slider` | `0px 2px 6px rgba(0, 0, 0, 0.25)` | Bolinha do controle deslizante |
 <!-- tokens:sombras:fim -->
 
 - `shadow.card` nos cartões e painéis; `shadow.float` nos controles flutuantes; `shadow.sheet` nas folhas inferiores; `shadow.tabBar` na barra de abas; `shadow.column` na coluna da web; `shadow.cta` só no botão primário habilitado; `shadow.focus` como halo do campo em foco.
@@ -615,6 +628,16 @@ No navegador o app vive numa coluna de celular centralizada (como o frame do app
 - **Folgas elásticas:** entre os blocos há espaços com peso (113, 107, 32, 47, 43, 56, 96 e 156, como no app web): `flexGrow` pelo peso e base proporcional à largura; em tela alta os blocos se afastam, em tela baixa as folgas encolhem primeiro e depois a cena.
 - **Desvios das imagens:** textos no piso de 12 (a captura tem 9 a 11), o nome da marca em serifa 700 nas listas (a captura usa um peso a menos), sem a sombra do título e sem o halo escuro em volta dos textos pequenos (a arte tem; o CSS não).
 
+### 11.11 Formulário de novo lembrete
+
+As peças do formulário (imagens `04`, `06` e `15`), em `src/components`:
+
+- **Cartão** (`FormCard`): `colors.bg.card`, raio `radius.form`, recuo `size.form.cardPadding`, sombra `shadow.formCard` (anel branco por dentro e sombra suave).
+- **Campo de texto** (`FormInput`, a descrição): branco (`colors.bg.field`), altura `size.form.field`, raio `radius.field`, sombra `shadow.field` (anel cinza por dentro); em foco `shadow.fieldFocus` (anel verde e halo). O rótulo fica fora, no cartão.
+- **Seletor** (`SelectField`; data, horário e repetir): campo branco que abre uma folha. Uma linha com ícone, valor (`fontFamily.medium`) e seta para baixo; ou duas linhas (rótulo em negrito e valor em `colors.text.secondary`, ou em `colors.text.accent` e negrito quando há valor escolhido) com seta para o lado. Ponteiro em cima escurece o anel (`shadow.fieldHover`); pressionado encolhe (`motion.pressedScale`); desabilitado esmaece (`opacity.disabled`) e não responde.
+- **Cartão de modo** (`OptionCard`; "Por data e horário" e "Por local"): papel `radio`. Escolhido: fundo branco, anel verde por dentro (`shadow.optionOn`) e o selo de visto (`colors.control.badge`, `size.form.optionBadge`); não escolhido: fundo de cartão e só o anel vazio de opção (`colors.border.strong`). Círculo do ícone `colors.bg.iconCircle`.
+- **Controle deslizante** (`Slider`; o raio de aviso): trilho `colors.control.off`, preenchimento `colors.control.on`, bolinha `colors.control.sliderThumb` com `shadow.slider`, que passa meio raio de cada ponta. Toque, arrasto e, para o leitor de tela, papel `adjustable` com os gestos de aumentar e diminuir. Valor sempre no passo pedido e dentro dos limites.
+
 ## 12. Imagens e ilustrações
 
 - **A interface é código, nunca imagem de tela.** Texto, botões e cartões nunca viram PNG.
@@ -755,6 +778,19 @@ Filosofia: o mínimo. O feedback de toque é instantâneo (troca de cor e escala
 | `size.card.dotsHeight` | `33` | Botão "mais opções": altura da área de toque |
 | `size.card.thumbWidth` | `69` | Lembrete por local: largura da miniatura do mapa |
 | `size.card.thumbHeight` | `70` | Lembrete por local: altura da miniatura do mapa |
+| `size.form.cardPadding` | `17` | Formulário: recuo interno dos cartões |
+| `size.form.circle` | `43` | Formulário: círculo do ícone do cartão Descrição |
+| `size.form.field` | `40` | Formulário: altura do campo e dos seletores |
+| `size.form.fieldIcon` | `16` | Formulário: ícone dentro do seletor de data e hora |
+| `size.form.option` | `61` | Formulário: altura do cartão de modo |
+| `size.form.optionCircle` | `38` | Formulário: círculo do ícone do cartão de modo |
+| `size.form.optionIcon` | `17` | Formulário: ícone dentro do cartão de modo |
+| `size.form.optionBadge` | `19` | Formulário: selo de escolhido do cartão de modo |
+| `size.form.optionCheck` | `12` | Formulário: visto dentro do selo de escolhido |
+| `size.form.optionRadio` | `15` | Formulário: anel do cartão de modo não escolhido |
+| `size.form.sliderTrack` | `6` | Formulário: espessura do trilho do controle deslizante |
+| `size.form.sliderThumb` | `22` | Formulário: bolinha do controle deslizante |
+| `size.form.sliderHeight` | `30` | Formulário: altura da área de toque do controle deslizante |
 | `size.toggle.card.width` | `35` | Interruptor (cartão · formulário): largura do trilho |
 | `size.toggle.card.height` | `21` | Interruptor (cartão · formulário): altura do trilho |
 | `size.toggle.card.thumb` | `18` | Interruptor (cartão · formulário): diâmetro da bolinha |

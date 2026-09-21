@@ -94,7 +94,7 @@ describe('tipografia', () => {
 describe('sombras e layout', () => {
   it('toda sombra é uma string boxShadow do CSS (x y desfoque [espalhamento] cor), aceita pelo React Native na New Architecture', () => {
     for (const s of Object.values(shadow)) {
-      for (const camada of s.split(/(?<=\)), /)) expect(camada).toMatch(/^(-?\d+px ){2,3}\d+px rgba\(\d+, \d+, \d+, [\d.]+\)$/);
+      for (const camada of s.split(/, (?=inset |-?\d+px)/)) expect(camada).toMatch(/^(inset )?(-?\d+px ){2,3}\d+px rgba\(\d+, \d+, \d+, [\d.]+\)$/);
     }
   });
 
