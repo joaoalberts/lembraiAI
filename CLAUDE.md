@@ -23,7 +23,12 @@ npm run design:docs        # regenera as tabelas de docs/DESIGN_SYSTEM.md a part
 - Mudou uma decisão visual? Token → descrição em `src/design/doc.ts` → `npm run design:docs` → registro na seção 18 do documento → `npm test`.
 - Contraste é testado (`src/design/a11y.ts`). Laranja nunca é cor de texto; cinza de texto é só `colors.text.secondary`/`placeholder`.
 - Ver o app sem conta e sem servidor real: `scripts/preview-backend-falso.mjs` (instruções no topo). Apague o `.env.development.local` depois: ele vence o `.env.local`.
-- Ponto de recuperação anterior ao Design System: tag `ponto-de-recuperacao/01-antes-do-design-system`.
+- Pontos de recuperação (tags `ponto-de-recuperacao/*`): `01-antes-do-design-system`, `02-design-system-aplicado`, `03-antes-do-visual-original`.
+- **A referência visual é o app web `../lembreiAI` (versão do disco, 19/09) e `ref/*.png`.** Fonte, imagens, efeitos e telas ainda estão sendo alinhados a ele (tarefa `visual-original-no-expo`, quadro `Tarefas/` do workspace). Onde este app divergir do original, vale o original.
+
+## Versionamento (leia antes de commitar)
+
+Um commit por mudança, `npm run typecheck && npm test` antes, tag `ponto-de-recuperacao/NN-...` antes de fase grande, nunca `reset --hard`, `checkout` de arquivo nem `clean`, sem push sem pedido. Regras e comandos completos: `docs/VERSIONAMENTO.md`.
 
 ## Fonte da verdade
 
