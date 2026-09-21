@@ -33,6 +33,22 @@ yarn-error.*
 # local env files
 .env*.local
 
+# segredos e credenciais: nunca versionar (o modelo público é o .env.example)
+.env
+.env.*
+!.env.example
+keystore.env
+keystore.properties
+*.keystore
+*.pfx
+credentials.json
+serviceAccountKey*.json
+
+# relatórios e editores
+coverage/
+*.log
+.idea/
+
 # typescript
 *.tsbuildinfo
 
@@ -41,3 +57,6 @@ example
 # generated native folders
 /ios
 /android
+
+# APK gerado localmente (scripts/build-android.sh)
+/dist-android
