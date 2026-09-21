@@ -1,6 +1,9 @@
 import { act } from '@testing-library/react-native';
-import { router } from 'expo-router';
+import fs from 'fs';
+import path from 'path';
+import { Stack, router } from 'expo-router';
 import { renderRouter, screen } from 'expo-router/testing-library';
+import { useEffect, useState } from 'react';
 import { Text } from 'react-native';
 import AppLayout from '../../app/(app)/_layout';
 
@@ -69,5 +72,72 @@ describe('Navegação: a tela de sucesso', () => {
     expect(screen.queryByTestId('barra-de-abas')).toBeNull();
     await ir('/');
     expect(screen.getByTestId('barra-de-abas')).toBeTruthy();
+  });
+});
+
+// Réplica do guard do layout raiz (app/_layout.tsx): telas de conta sem sessão, o app depois dela. O layout `(app)` é o de verdade.
+let comecaEntrado = false;
+let entrarNoApp: () => void = () => {};
+function RaizComGuard() {
+  const [autenticado, setAutenticado] = useState(comecaEntrado);
+  useEffect(() => { entrarNoApp = () => setAutenticado(true); }, []);
+  return (
+    <Stack screenOptions={{ headerShown: false }}>
+      <Stack.Protected guard={autenticado}>
+        <Stack.Screen name="(app)" />
+      </Stack.Protected>
+      <Stack.Protected guard={!autenticado}>
+        <Stack.Screen name="auth" />
+      </Stack.Protected>
+    </Stack>
+  );
+}
+// `auth/_layout` existe no app de verdade: sem ele o `auth/login` viraria uma rota solta e o guard de `auth` não a alcançaria
+const AuthDeTeste = () => <Stack screenOptions={{ headerShown: false }} />;
+const abrirComGuard = async (initialUrl: string) => {
+  const app = renderRouter({ _layout: RaizComGuard, 'auth/_layout': AuthDeTeste, 'auth/login': tela('login'), ...telas }, { initialUrl });
+  await app;
+  return { getPathname: () => app.getPathname() };
+};
+
+describe('Navegação: depois de entrar', () => {
+  afterEach(() => { comecaEntrado = false; });
+
+  it('logo depois de entrar (ou criar a conta) o app abre no formulário de novo lembrete, não na abertura', async () => {
+    const app = await abrirComGuard('/auth/login');
+    expect(app.getPathname()).toBe('/auth/login');
+    await act(async () => { entrarNoApp(); });
+    expect(app.getPathname()).toBe('/novo');
+  });
+
+  it('a barra de abas continua completa: dá para ir à abertura e à lista a partir do novo lembrete', async () => {
+    const app = await abrirComGuard('/auth/login');
+    await act(async () => { entrarNoApp(); });
+    await ir('/inicio');
+    expect(app.getPathname()).toBe('/inicio');
+    await ir('/');
+    expect(app.getPathname()).toBe('/');
+  });
+
+  it('quem abre o app já entrado, pelo endereço da lista, continua na lista (só o ato de entrar leva ao novo)', async () => {
+    comecaEntrado = true;
+    const app = await abrirComGuard('/');
+    expect(app.getPathname()).toBe('/');
+  });
+});
+
+describe('Navegação: a réplica do guard corresponde ao layout raiz de verdade', () => {
+  // A réplica acima não é o `app/_layout.tsx`. Se o guard real mudar (outro nome de grupo, outra condição) e a réplica não, os testes de cima
+  // continuariam verdes provando uma navegação que o app não faz mais. Esta amarra confere a forma que a réplica copia.
+  const raiz = fs.readFileSync(path.join(__dirname, '../../app/_layout.tsx'), 'utf8').replace(/\s+/g, ' ');
+
+  it('o app fica atrás de `autenticado` e as telas de conta atrás do contrário, pelos mesmos nomes de grupo', () => {
+    expect(raiz).toContain('<Stack.Protected guard={autenticado}> <Stack.Screen name="(app)" /> </Stack.Protected>');
+    expect(raiz).toContain('<Stack.Protected guard={!autenticado}> <Stack.Screen name="auth" /> </Stack.Protected>');
+  });
+
+  it('a navegação depois de entrar é do guard: `entrar` e `cadastrar` não navegam à mão (CLAUDE.md: nunca navegar à mão após login)', () => {
+    const auth = fs.readFileSync(path.join(__dirname, '../state/auth.tsx'), 'utf8');
+    expect(auth).not.toMatch(/router\.(replace|push|navigate)|useRouter|<Redirect/);
   });
 });

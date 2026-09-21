@@ -6,10 +6,12 @@ import { colors, textStyles } from '../../src/design/tokens';
 // A barra é a do app (BarraDeAbas): Início, Lembretes, Mapa e Configurações. O formulário `novo` é uma tela sob "Lembretes".
 // `backBehavior="history"`: o voltar leva à aba de onde a pessoa veio (lista → Editar → Salvar volta à lista). O padrão (`firstRoute`) levaria
 // sempre à primeira aba (Início) e faria `canGoBack()` mentir num acesso direto, o que esconde o "sem histórico → lista" do formulário.
+// `initialRouteName="novo"`: depois de entrar o Stack.Protected da raiz cai na rota inicial deste grupo, e o João quer o formulário de novo lembrete (só essa abertura; o endereço manda no resto).
 export default function AppLayout() {
   return (
     <Tabs
       backBehavior="history"
+      initialRouteName="novo"
       tabBar={(props) => <BarraDeAbas {...props} />}
       screenOptions={{
         headerShown: true,
