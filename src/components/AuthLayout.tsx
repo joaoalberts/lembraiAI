@@ -58,6 +58,10 @@ export function AuthLayout({ title, subtitle, children, keyboardShouldPersistTap
       ) : null}
 
       <ScrollView testID="auth-rolagem" keyboardShouldPersistTaps={keyboardShouldPersistTaps} contentContainerStyle={[styles.conteudo, { paddingTop: size.auth.top + descido }]}>
+        {/* as mesmas curvas de nível, viradas e esticadas: o chão que recua até o horizonte. Atrás de tudo (primeiro filho): o cartão, a barra e a nota desenham por cima */}
+        <View testID="auth-horizonte" style={[styles.horizonte, styles.decoracao]}>
+          <Image source={HORIZONTE} contentFit="fill" accessible={false} style={StyleSheet.absoluteFill} />
+        </View>
         <View style={styles.marca} accessible accessibilityLabel="LembreiAi">
           <View testID="auth-marca-tile" style={[styles.tile, fundoEmDegrade(gradients.marcaTile)]}>
             <Icon name="locate-fixed" size={size.auth.marcaIcon} color={colors.brand.glyph} stroke={iconStroke.ui} />
@@ -76,10 +80,6 @@ export function AuthLayout({ title, subtitle, children, keyboardShouldPersistTap
         </View>
 
         <View style={styles.rodape}>
-          {/* as mesmas curvas de nível, viradas e esticadas: o chão que recua até o horizonte. Vem antes da barra e da nota, que desenham por cima */}
-          <View testID="auth-horizonte" style={[styles.horizonte, styles.decoracao]}>
-            <Image source={HORIZONTE} contentFit="fill" accessible={false} style={StyleSheet.absoluteFill} />
-          </View>
           {rodape?.pergunta ? (
             <View testID="auth-barra" style={styles.barra}>
               <Text style={styles.pergunta}>{rodape.pergunta}</Text>
@@ -117,8 +117,8 @@ const styles = StyleSheet.create({
   subtitulo: { ...textStyles.micro, color: colors.text.secondary, marginTop: size.auth.subtituloTop },
   formulario: { marginTop: size.auth.formTop },
   rodape: { flexGrow: 1, justifyContent: 'flex-end', paddingTop: size.auth.rodapeTop },
-  // sangra de ponta a ponta (anula o recuo dos lados) e sobe da base do conteúdo: a faixa só ocupa o meio da altura de 1000 du do original
-  horizonte: { position: 'absolute', left: -size.auth.side, right: -size.auth.side, bottom: size.auth.horizonteBase - size.auth.bottom, height: size.auth.horizonteAltura },
+  // de ponta a ponta (o absoluto ignora o recuo dos lados) e subindo do fim do conteúdo: a faixa só ocupa o meio da altura de 1000 du do original
+  horizonte: { position: 'absolute', left: 0, right: 0, bottom: size.auth.horizonteBase, height: size.auth.horizonteAltura },
   barra: {
     minHeight: size.auth.barra,
     flexDirection: 'row',

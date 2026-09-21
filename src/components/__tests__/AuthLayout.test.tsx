@@ -61,23 +61,23 @@ describe('AuthLayout (base das telas de conta)', () => {
     expect(imagemDe('auth-curvas').props.source[0].testUri).toMatch(/assets\/art\/topo-contas\.webp$/);
   });
 
-  it('o horizonte: as curvas do topo viradas e esticadas embaixo, de ponta a ponta, atrás da barra de vidro e da nota, sem receber toque', async () => {
+  it('o horizonte: as curvas do topo viradas e esticadas embaixo, de ponta a ponta, atrás de tudo (cartão, barra de vidro e nota), sem receber toque', async () => {
     await abrir(<AuthLayout title="Entrar" rodape={{ pergunta: 'Ainda não tem conta?', acao: 'Criar conta', onPress: jest.fn() }}><Text>corpo</Text></AuthLayout>);
     expect(estilo('auth-horizonte')).toMatchObject({
       position: 'absolute',
-      left: -size.auth.side,
-      right: -size.auth.side,
-      bottom: size.auth.horizonteBase - size.auth.bottom,
+      left: 0,
+      right: 0,
+      bottom: size.auth.horizonteBase,
       height: size.auth.horizonteAltura,
       pointerEvents: 'none',
     });
     // é a arte do horizonte (e não a do topo), esticada na faixa e escondida do leitor de tela
     expect(imagemDe('auth-horizonte').props.source[0].testUri).toMatch(/assets\/art\/horizonte-contas\.webp$/);
     expect(imagemDe('auth-horizonte').props).toMatchObject({ contentFit: 'fill', accessible: false });
-    // dentro do rodapé e antes da barra e da nota: o que vem depois desenha por cima
+    // o primeiro filho da rolagem: o que vem depois desenha por cima, o cartão inclusive (por cima dele as curvas riscariam de claro o botão laranja)
     const ids = irmaosDe('auth-horizonte').map((n) => n.props?.testID);
-    expect(ids.indexOf('auth-horizonte')).toBeGreaterThanOrEqual(0);
-    expect(ids.indexOf('auth-horizonte')).toBeLessThan(ids.indexOf('auth-barra'));
+    expect(ids.indexOf('auth-horizonte')).toBe(0);
+    expect(ids.indexOf('auth-horizonte')).toBeLessThan(ids.indexOf('auth-cartao'));
   });
 
   it('as telas de recuperação (só o link de voltar, sem barra) e as sem rodapé têm o mesmo horizonte', async () => {
