@@ -36,6 +36,7 @@ Um commit por mudança, `npm run typecheck && npm test` antes, tag `ponto-de-rec
   `delete_my_account()` para a exclusão de conta).
 - **Modelo e linhas:** `src/lib/reminder-rows.ts` (`toRow`/`fromRow`) e `src/lib/categorize.ts` (cópia do web). Regras de senha/e-mail e tradução de erros do Supabase: `src/lib/validacao.ts` (port do web).
 - **Geofence:** `src/lib/geofence.ts`. Histerese e piso de precisão de 200 m são decisões do usuário, não "otimizar".
+- **Editar e compartilhar (decisão do João, 21/09: entram funcionando):** `update(id, rascunho)` em `src/state/reminders.tsx` (avisos e geofences se refazem sozinhos, porque dependem só da lista) e `src/lib/compartilhar.ts` (folha do sistema no celular; folha do navegador ou cópia na web). O calendário do seletor de data é próprio (`src/lib/calendario.ts`): o original usa o popup do navegador. A busca de endereço é `src/lib/geocodificar.ts` (Nominatim: gratuito, sem chave; uso leve, um pedido por vez).
 
 ## Armadilhas
 
