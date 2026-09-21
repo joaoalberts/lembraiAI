@@ -36,21 +36,21 @@
 
 ### 2.3 As telas de referência
 
-Cada tela e cada folha do app tem uma imagem em `referencias/`. O estado do Expo é o de 21/09/2026, conferido por captura de tela e leitura do código. A barra de abas das imagens é **Início, Lembretes, Mapa e Configurações** (o Início abre o onboarding, a rota `/` do app web); "Novo lembrete" abre pelo botão laranja da lista. O Expo hoje tem Lembretes, Novo, Mapa e Config.
+Cada tela e cada folha do app tem uma imagem em `referencias/`. O estado do Expo é o de 21/09/2026, conferido por captura de tela e leitura do código. A barra de abas das imagens é **Início, Lembretes, Mapa e Configurações** (o Início abre o onboarding, a rota `/` do app web); "Novo lembrete" abre pelo botão laranja da lista. O Expo hoje tem Início, Lembretes, Novo, Mapa e Config (a barra de abas ainda não foi refeita).
 
 | Imagem | Tela | Estado no Expo |
 |---|---|---|
-| [`01`](referencias/01-onboarding.png) | Onboarding | Não existe |
+| [`01`](referencias/01-onboarding.png) | Onboarding | Feito (`Onboarding`, aba Início e primeira tela do visitante); ver 11.10 |
 | [`02`](referencias/02-entrar.png) | Entrar | Existe; falta o fundo de curvas de nível, o cartão creme flutuante, o painel de vidro "Criar conta" e o olho da senha |
 | [`03`](referencias/03-recorte-degrade-do-formulario.png) | Recorte do degradê do formulário | Amostra de cor (usada nas medições) |
 | [`04`](referencias/04-novo-lembrete-por-data-e-horario.png) | Novo lembrete, por data e horário | Existe como formulário simples de campos de texto; faltam cabeçalho em degradê, voltar e conta, cartões de modo, seletores de data e horário e a folha Repetir |
 | [`05`](referencias/05-folha-minha-conta.png) | Folha "Minha conta" | Não existe (Sair fica em Configurações) |
 | [`06`](referencias/06-novo-lembrete-por-local.png) | Novo lembrete, por local | Sem busca nem mapa no formulário (o mapa é uma aba à parte) |
-| [`07`](referencias/07-lista-meus-lembretes.png) | Meus lembretes | Existe; faltam cabeçalho verde, busca, filtros com contagem, miniatura de mapa, "Dica para você" e o menu "..." |
+| [`07`](referencias/07-lista-meus-lembretes.png) | Meus lembretes | Feito (11.9); o menu "⋯" só tem Excluir até o formulário saber editar |
 | [`08`](referencias/08-configuracoes.png) | Configurações | Existe com estrutura mais simples; faltam cabeçalho verde, cartões com ícone e "Até onde vai o monitoramento" |
 | [`09`](referencias/09-sucesso-lembrete-criado.png) | Lembrete criado | Não existe |
-| [`10`](referencias/10-confirmar-exclusao.png) | Confirmar exclusão | Não existe |
-| [`11`](referencias/11-folha-menu-do-lembrete.png) | Menu do lembrete | Não existe (o cartão tem só a lixeira) |
+| [`10`](referencias/10-confirmar-exclusao.png) | Confirmar exclusão | Feito na lista (`ConfirmSheet`); volta na tela de sucesso |
+| [`11`](referencias/11-folha-menu-do-lembrete.png) | Menu do lembrete | Feito (`ReminderMenu`); a linha Editar entra com o formulário |
 | [`12`](referencias/12-seletor-de-data.png) | Seletor de data | É o popup do navegador, não um desenho: o Expo precisa de um calendário próprio (decisão pendente) |
 | [`13`](referencias/13-folha-horario.png) | Folha Horário | Não existe (campo de texto HH:MM) |
 | [`14`](referencias/14-folha-repetir.png) | Folha Repetir | Não existe (chips de repetição) |
@@ -139,6 +139,10 @@ Use `palette.*` só para definir papéis em `colors`. As telas usam os papéis (
 | `palette.tipText` | `#375C50` | Texto do cartão de dica |
 | `palette.iconDots` | `#717B88` | Reticências "mais opções" do cartão de lembrete |
 | `palette.iconRadius` | `#8B93A0` | Ícone do raio no cartão de lembrete por local |
+| `palette.mint300` | `#94F9CD` | Destaque do título do Onboarding ("de tudo!") |
+| `palette.mintIcon` | `#6FF0C4` | Ícones dos balões do Onboarding |
+| `palette.onboardingBg` | `#12301F` | Fundo do Onboarding enquanto a foto carrega |
+| `palette.pagerOn` | `#F8F9F9` | Ponto da página ativa do Onboarding |
 | `palette.rowHover` | `#F7F8F4` | Linha de menu com o ponteiro em cima (web) |
 | `palette.rowPressed` | `#EEF1EA` | Linha de menu pressionada |
 | `palette.dangerTint` | `#FBE7E4` | Círculo do ícone de excluir e linha de excluir pressionada |
@@ -174,6 +178,8 @@ Use `palette.*` só para definir papéis em `colors`. As telas usam os papéis (
 | `colors.text.onFrost` | `#1A2C23` | `palette.frostInk` | Rótulo dos botões translúcidos |
 | `colors.text.onHeader` | `#E6EDE5` | `palette.headerSubtitle` | Subtítulo sobre o cabeçalho verde |
 | `colors.text.chip` | `#12432F` | `palette.forest900` | Rótulo do chip de filtro não selecionado |
+| `colors.text.onDarkAccent` | `#94F9CD` | `palette.mint300` | Destaque do título do Onboarding ("de tudo!") |
+| `colors.text.brandAccent` | `#7FEAC6` | `palette.mint400` | Letras "Ai" do nome da marca no Onboarding |
 | `colors.text.chipCount` | `#395D56` | `palette.chipCount` | Contagem dentro do chip de filtro não selecionado |
 | `colors.text.tip` | `#375C50` | `palette.tipText` | Texto do cartão de dica |
 | `colors.text.danger` | `#C62828` | `palette.red700` | Mensagens e rótulos de erro |
@@ -181,6 +187,7 @@ Use `palette.*` só para definir papéis em `colors`. As telas usam os papéis (
 | `colors.icon.default` | `#0A0A0A` | `palette.ink900` | Ícones sobre fundo claro |
 | `colors.icon.muted` | `#767880` | `palette.ink600` | Ícones secundários e da aba inativa (nunca para texto) |
 | `colors.icon.dots` | `#717B88` | `palette.iconDots` | Reticências "mais opções" do cartão de lembrete |
+| `colors.icon.onDarkMint` | `#6FF0C4` | `palette.mintIcon` | Ícones dos balões do Onboarding |
 | `colors.icon.radius` | `#8B93A0` | `palette.iconRadius` | Ícone do raio no cartão de lembrete por local |
 | `colors.icon.tip` | `#013220` | `palette.tipInk` | Lâmpada do cartão de dica |
 | `colors.action.primary` | `#FE532A` | `palette.orange500` | Fundo do botão primário |
@@ -230,6 +237,9 @@ Use `palette.*` só para definir papéis em `colors`. As telas usam os papéis (
 | `colors.feedback.infoInk` | `#1B4436` | `palette.alertInfoInk` | Texto do aviso informativo |
 | `colors.feedback.tipCircle` | `#C3DFCE` | `palette.tipCircle` | Círculo atrás da lâmpada do cartão de dica |
 | `colors.feedback.dangerCircle` | `#FBE7E4` | `palette.dangerTint` | Círculo atrás do ícone de excluir e de sair |
+| `colors.onboarding.bg` | `#12301F` | `palette.onboardingBg` | Fundo do Onboarding enquanto a foto carrega |
+| `colors.onboarding.pagerOn` | `#F8F9F9` | `palette.pagerOn` | Ponto da página ativa do Onboarding |
+| `colors.onboarding.pagerOff` | `rgba(255, 255, 255, 0.26)` | — | Pontos das outras páginas do Onboarding |
 | `colors.status.active` | `#029554` | `palette.statusGreen` | Ponto do selo "Ativo" |
 | `colors.tab.background` | `#F8F8F4` | `palette.tabBarBg` | Fundo da barra de abas |
 | `colors.tab.inactive` | `#777C8A` | `palette.tabInactive` | Rótulo e ícone da aba inativa |
@@ -240,6 +250,11 @@ Use `palette.*` só para definir papéis em `colors`. As telas usam os papéis (
 | `colors.glass.border` | `rgba(255, 255, 255, 0.2)` | — | Borda do botão de vidro |
 | `colors.glass.field` | `rgba(255, 255, 255, 0.1)` | — | Campo de busca sobre o cabeçalho verde |
 | `colors.glass.fieldFocus` | `rgba(255, 255, 255, 0.14)` | — | Campo de busca em foco |
+| `colors.glass.balloon` | `rgba(10, 36, 26, 0.4)` | — | Balão de vidro do Onboarding ("Na hora certa", "No lugar certo") |
+| `colors.glass.balloonRing` | `rgba(203, 245, 224, 0.34)` | — | Contorno do balão de vidro do Onboarding |
+| `colors.glass.featureFill` | `rgba(255, 255, 255, 0.04)` | — | Fundo do círculo dos benefícios do Onboarding |
+| `colors.glass.featureRing` | `rgba(150, 220, 180, 0.4)` | — | Contorno do círculo dos benefícios do Onboarding |
+| `colors.glass.divider` | `rgba(233, 255, 243, 0.22)` | — | Divisória vertical entre os benefícios do Onboarding |
 | `colors.brand.tile` | `#84FADA` | `palette.mintBrand` | Fundo do ícone do app, da tela de abertura e do favicon |
 | `colors.brand.tileEnd` | `#78E4C4` | `palette.mintBrandEnd` | Fim do degradê do ícone do app |
 | `colors.brand.glyph` | `#043525` | `palette.brandInk` | Símbolo do ícone do app |
@@ -323,6 +338,7 @@ Use `...textStyles.estilo` e só troque cor (`colors.text.*`) ou família (`font
 | `fontSize.heading` | `18` | Títulos de seção |
 | `fontSize.title` | `20` | Títulos de tela e de estados |
 | `fontSize.display` | `28` | Nome do app nas telas de conta |
+| `fontSize.hero` | `56` | Título grande do Onboarding (fora de `textStyles`: as duas linhas curtas pedem altura de linha 1) |
 | `lineHeight.micro` | `16` | Altura de linha do tamanho de mesmo nome |
 | `lineHeight.caption` | `18` | Altura de linha do tamanho de mesmo nome |
 | `lineHeight.body` | `20` | Altura de linha do tamanho de mesmo nome |
@@ -427,6 +443,7 @@ Os fundos em degradê do original (cabeçalho verde, telas de conta e cabeçalho
 | `gradients.contas` | `radial-gradient(283px 202px at 88% 4%, rgba(127, 234, 198, 0.26), rgba(127, 234, 198, 0) 70%)`<br>`radial-gradient(374px 232px at 50% 100%, rgba(132, 250, 218, 0.15), rgba(132, 250, 218, 0) 70%)`<br>`radial-gradient(263px 192px at 6% 96%, rgba(33, 105, 85, 0.55), rgba(33, 105, 85, 0) 72%)`<br>`linear-gradient(168deg, #2A5B47 0%, #184434 52%, #0E301F 100%)` | Fundo das telas de conta |
 | `gradients.cabecalhoClaro` | `radial-gradient(283px 172px at 100% 0%, rgba(33, 105, 85, 0.58), rgba(33, 105, 85, 0) 72%)`<br>`radial-gradient(243px 152px at 0% 0%, rgba(148, 249, 205, 0.36), rgba(148, 249, 205, 0) 72%)`<br>`radial-gradient(263px 86px at 46% 26%, rgba(255, 255, 255, 0.55), rgba(255, 255, 255, 0) 100%)`<br>`linear-gradient(180deg, #CBE4D6 0%, #E3EEE5 44%, #F5F2ED 100%)` | Cabeçalho claro do formulário de novo lembrete |
 | `gradients.marcaTile` | `linear-gradient(160deg, #84FADA, #78E4C4)` | Tile da marca no cabeçalho: o menta do ícone do app, a 160° |
+| `gradients.divisorVertical` | `linear-gradient(to bottom, rgba(233, 255, 243, 0), rgba(233, 255, 243, 0.22) 22%, rgba(233, 255, 243, 0.22) 78%, rgba(233, 255, 243, 0))` | Divisória vertical entre os benefícios do Onboarding |
 | `gradients.esmaecerParaPagina` | `linear-gradient(to top, #F5F2ED 62%, rgba(245, 242, 237, 0) 100%)` | Esmaecimento atrás do botão fixo do formulário |
 <!-- tokens:degrades:fim -->
 
@@ -584,13 +601,25 @@ Tela `app/(app)/index.tsx`, sobre o cabeçalho verde (`GreenHeader`): marca e bo
 
 No navegador o app vive numa coluna de celular centralizada (como o frame do app web): `layout.columnMax` (430, a largura das capturas) de largura máxima, fundo `colors.bg.page`, sombra `shadow.column`, sobre o palco escuro `colors.bg.stage` (o verde mais fundo da marca). No iOS e no Android ocupa a tela toda.
 
+### 11.10 Onboarding
+
+`src/components/Onboarding.tsx`, com duas rotas: `app/(app)/inicio.tsx` (aba Início, com a barra de abas; os dois botões levam a `/novo`) e `app/auth/bem-vindo.tsx` (primeira tela de quem ainda não entrou; os dois botões levam ao login, sem barra de abas, com a base respeitando a área segura). Foto de fundo `bg-onboarding.jpg` (`contentFit="cover"`; o fundo `colors.onboarding.bg` só aparece enquanto ela carrega), e por cima um único fluxo vertical:
+
+- **Topo:** `AppBrand variant="onboarding"` (nome em sans negrito de `size.onboarding.brandName`, com "Ai" em `colors.text.brandAccent`) e o `GlassPill` "Pular" (`size.onboarding.skipWidth` por `skipHeight`, seta `chevron-right`).
+- **Cena** (largura da coluna; altura `layout.onboardingSceneRatio` da largura, no máximo 32% da altura da janela): o pino 3D (`hero-pino.png`), o letreiro manuscrito (`hero-script.png`, com texto alternativo) e dois balões de vidro (`colors.glass.balloon` com contorno `balloonRing`) **inclinados −14° e 14°**, como na captura; o esquerdo passa atrás do pino. O CSS do app web desenha os balões retos e mais acima; a imagem vence.
+- **Título:** "Lembre" em `colors.text.onDark` e "de tudo!" em `colors.text.onDarkAccent`, serifa em `fontSize.hero` com altura de linha igual ao tamanho; abaixo, o subtítulo em `colors.text.onHeader`.
+- **Benefícios:** três colunas (relógio, pino, raio) com círculo `size.onboarding.feature` (`colors.glass.featureFill` e `featureRing`), título em negrito e descrição, separadas por divisórias que somem nas pontas (`gradients.divisorVertical`).
+- **Botão grande:** `Button hero iconEnd="arrow-right"`, laranja, `size.onboarding.heroButton` de altura, sem o brilho (a captura não tem), seta a `space.xl` do rótulo. Depois, o pager (três pontos, o primeiro aceso; enfeite, sem toque) e "Seus lembretes, sua privacidade." com o cadeado desenhado à mão (`LockIcon`).
+- **Folgas elásticas:** entre os blocos há espaços com peso (113, 107, 32, 47, 43, 56, 96 e 156, como no app web): `flexGrow` pelo peso e base proporcional à largura; em tela alta os blocos se afastam, em tela baixa as folgas encolhem primeiro e depois a cena.
+- **Desvios das imagens:** textos no piso de 12 (a captura tem 9 a 11), o nome da marca em serifa 700 nas listas (a captura usa um peso a menos), sem a sombra do título e sem o halo escuro em volta dos textos pequenos (a arte tem; o CSS não).
+
 ## 12. Imagens e ilustrações
 
 - **A interface é código, nunca imagem de tela.** Texto, botões e cartões nunca viram PNG.
 - **Ícone do app:** tile menta em degradê (`colors.brand.tile` para `colors.brand.tileEnd`) com o símbolo em `colors.brand.glyph`, 1024 por 1024 (`assets/images/icon.png`). Android adaptativo: `android-icon-foreground/background/monochrome.png`, 1024 por 1024; o símbolo deve ficar dentro dos 66% centrais (regra do Android para o recorte do launcher).
 - **Abertura (splash):** `splash-icon.png` (`imageWidth: 160`) sobre `colors.brand.tile`. **Notificação do Android:** `notification-icon.png` (96 por 96) tingido com `colors.action.primary`. **Web:** `public/favicon.svg`, `public/icons/*` (PWA 192, 512 e maskable) e o manifesto com o fundo `colors.bg.page`.
 - As cores de marca que vivem em JSON e SVG (que não importam tokens) são conferidas por `src/design/__tests__/marca.test.ts`.
-- **Fotos e ilustrações novas:** nunca esticar (`contentFit="cover"` ou `"contain"`); `accessibilityLabel` quando informam, escondidas do leitor de tela quando decorativas; alvo de menos de 200 KB, em WebP ou PNG. O pino 3D e o fundo de folhagem do onboarding (`../lembreiAI/ref/1.png`, recortes de `tools/build-assets.py`) ainda não foram portados (seção 19).
+- **Fotos e ilustrações novas:** nunca esticar (`contentFit="cover"` ou `"contain"`); `accessibilityLabel` quando informam, escondidas do leitor de tela quando decorativas; alvo de menos de 200 KB, em WebP ou PNG. O pino 3D, o letreiro e o fundo de folhagem do onboarding vêm de `assets/art/` (recortes de `tools/build-assets.py` do app web, cópias idênticas) e entram em `src/components/Onboarding.tsx`.
 - **Mapa:** tiles do OpenStreetMap com a atribuição sempre visível (é obrigatória). O halo do raio usa a cor da categoria com transparência.
 
 ## 13. Animações e transições
@@ -663,6 +692,20 @@ Filosofia: o mínimo. O feedback de toque é instantâneo (troca de cor e escala
 | `size.header.brandGap` | `11` | Vão entre o tile da marca e o nome |
 | `size.header.brandGlyph` | `22` | Lado do símbolo dentro do tile da marca |
 | `size.header.searchHeight` | `38` | Altura do campo de busca |
+| `size.onboarding.side` | `25` | Onboarding: margem dos lados |
+| `size.onboarding.skipWidth` | `82` | Onboarding: largura do botão "Pular" |
+| `size.onboarding.skipHeight` | `42` | Onboarding: altura do botão "Pular" |
+| `size.onboarding.balloonLeft.width` | `150` | Onboarding: balão "Na hora certa", largura |
+| `size.onboarding.balloonLeft.height` | `51` | Onboarding: balão "Na hora certa", altura |
+| `size.onboarding.balloonRight.width` | `150` | Onboarding: balão "No lugar certo", largura |
+| `size.onboarding.balloonRight.height` | `58` | Onboarding: balão "No lugar certo", altura |
+| `size.onboarding.feature` | `53` | Onboarding: círculo do ícone de cada benefício |
+| `size.onboarding.featureIcon` | `25` | Onboarding: ícone dentro do círculo do benefício |
+| `size.onboarding.heroButton` | `55` | Onboarding: altura do botão "Criar meu primeiro lembrete" |
+| `size.onboarding.pagerWidth` | `16` | Onboarding: largura de cada ponto da página |
+| `size.onboarding.pagerHeight` | `6` | Onboarding: altura de cada ponto da página |
+| `size.onboarding.pagerGap` | `7` | Onboarding: vão entre os pontos da página |
+| `size.onboarding.brandName` | `19` | Onboarding: tamanho do nome da marca |
 | `size.list.chipsTop` | `11` | Lista: distância da borda da folha até os chips |
 | `size.list.chipsGap` | `10` | Lista: vão entre os chips |
 | `size.list.listTop` | `17` | Lista: espaço entre os chips e o primeiro título de seção |
@@ -724,6 +767,7 @@ Filosofia: o mínimo. O feedback de toque é instantâneo (troca de cor e escala
 | `layout.columnMax` | `430` | Largura máxima da coluna do app na web (a das capturas de referência); no celular a coluna é a tela toda |
 | `layout.readingMax` | `720` | Largura máxima de texto corrido (política de privacidade) |
 | `layout.sheetMaxHeight` | `0.82` | Altura máxima de uma folha inferior, como fração da tela |
+| `layout.onboardingSceneRatio` | `0.5934195064629847` | Onboarding: altura da cena (pino e balões) como fração da largura, a proporção da arte (505 por 851) |
 <!-- tokens:tamanhos:fim -->
 
 - Texto corrido (política de privacidade) tem no máximo `layout.readingMax` de largura.

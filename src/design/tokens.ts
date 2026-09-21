@@ -94,6 +94,10 @@ export const palette = {
   tipText: '#375C50',
   iconDots: '#717B88',
   iconRadius: '#8B93A0',
+  mint300: '#94F9CD',
+  mintIcon: '#6FF0C4',
+  onboardingBg: '#12301F',
+  pagerOn: '#F8F9F9',
   rowHover: '#F7F8F4',
   rowPressed: '#EEF1EA',
   dangerTint: '#FBE7E4',
@@ -129,6 +133,8 @@ export const colors = {
     onFrost: palette.frostInk,
     onHeader: palette.headerSubtitle,
     chip: palette.forest900,
+    onDarkAccent: palette.mint300,
+    brandAccent: palette.mint400,
     chipCount: palette.chipCount,
     tip: palette.tipText,
     danger: palette.red700,
@@ -138,6 +144,7 @@ export const colors = {
     default: palette.ink900,
     muted: palette.ink600,
     dots: palette.iconDots,
+    onDarkMint: palette.mintIcon,
     radius: palette.iconRadius,
     tip: palette.tipInk,
   },
@@ -197,6 +204,8 @@ export const colors = {
     tipCircle: palette.tipCircle,
     dangerCircle: palette.dangerTint,
   },
+  /** Fundo da abertura enquanto a foto carrega e o ponto da página ativa do Onboarding. */
+  onboarding: { bg: palette.onboardingBg, pagerOn: palette.pagerOn, pagerOff: 'rgba(255, 255, 255, 0.26)' },
   /** Selo "Ativo" do lembrete. */
   status: { active: palette.statusGreen },
   /** Barra de abas: rótulo e ícone da aba inativa, e o traço "home" do iOS por baixo. */
@@ -209,6 +218,11 @@ export const colors = {
     border: 'rgba(255, 255, 255, 0.2)',
     field: 'rgba(255, 255, 255, 0.1)',
     fieldFocus: 'rgba(255, 255, 255, 0.14)',
+    balloon: 'rgba(10, 36, 26, 0.4)',
+    balloonRing: 'rgba(203, 245, 224, 0.34)',
+    featureFill: 'rgba(255, 255, 255, 0.04)',
+    featureRing: 'rgba(150, 220, 180, 0.4)',
+    divider: 'rgba(233, 255, 243, 0.22)',
   },
   /** Identidade do ícone do app (tile em degradê e o símbolo); vale para ícone, tela de abertura e favicon. */
   brand: {
@@ -250,6 +264,8 @@ export const fontSize = {
   heading: 18,
   title: 20,
   display: 28,
+  /** Título grande do Onboarding (110 du no app web); fora de `textStyles`: as duas linhas curtas pedem altura de linha 1. */
+  hero: du(110),
 } as const;
 
 export const lineHeight = {
@@ -349,6 +365,24 @@ export const size = {
   buttonCompact: du(72),
   /** Cabeçalho verde: altura da arte, topo da marca e dos botões, e onde começa a folha clara que sobe sobre ele (medidas do app web em du). */
   header: { height: du(345), contentTop: du(82), sheetTop: du(296), side: du(38), brandTile: du(75), brandGap: du(21), brandGlyph: du(44), searchHeight: du(76) },
+  /**
+   * Onboarding (medidas do app web em du): folga dos lados, botão "Pular", balões de vidro, círculo dos benefícios e o botão
+   * grande. A arte foi medida nas capturas: os balões aparecem inclinados (-14° e 14°) e o esquerdo passa atrás do pino.
+   */
+  onboarding: {
+    side: du(50),
+    skipWidth: du(162),
+    skipHeight: du(84),
+    balloonLeft: { width: du(296), height: du(100) },
+    balloonRight: { width: du(296), height: du(114) },
+    feature: du(105),
+    featureIcon: du(50),
+    heroButton: du(108),
+    pagerWidth: du(32),
+    pagerHeight: du(11),
+    pagerGap: du(14),
+    brandName: du(37),
+  },
   /** Lista "Meus lembretes": chips, cabeçalhos de seção e vãos entre cartões e seções (medidas do app web em du). */
   list: { chipsTop: du(21), chipsGap: du(20), listTop: du(34), sectionHead: du(44), headGap: du(10), firstHeadGap: du(16), cardGap: du(16.5), sectionGap: du(29.5), tipGap: du(22), emptyTop: du(150) },
   /** Linha do menu do lembrete (Editar, Excluir): altura, círculo do ícone, ícone, vãos e a distância da lista até o título. */
@@ -447,6 +481,8 @@ export const gradients = {
   ].join(', '),
   /** Tile da marca (o mesmo menta do ícone do app). */
   marcaTile: `linear-gradient(160deg, ${palette.mintBrand}, ${palette.mintBrandEnd})`,
+  /** Divisória vertical entre os benefícios do Onboarding: some nas pontas. */
+  divisorVertical: `linear-gradient(to bottom, rgba(233, 255, 243, 0), rgba(233, 255, 243, 0.22) 22%, rgba(233, 255, 243, 0.22) 78%, rgba(233, 255, 243, 0))`,
   /** Esmaecimento de baixo para cima atrás do botão fixo do formulário. */
   esmaecerParaPagina: `linear-gradient(to top, ${palette.cream200} 62%, rgba(245, 242, 237, 0) 100%)`,
 } as const;
@@ -466,4 +502,6 @@ export const layout = {
   readingMax: 720,
   /** Altura máxima de uma folha inferior, como fração da tela (82% no original). */
   sheetMaxHeight: 0.82,
+  /** Altura da cena do Onboarding (pino e balões) como fração da largura: 505 por 851 na arte. */
+  onboardingSceneRatio: 505 / 851,
 } as const;

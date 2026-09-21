@@ -17,6 +17,10 @@ interface ButtonProps {
   compact?: boolean;
   /** Ícone à esquerda do rótulo, na mesma cor dele. */
   icon?: IconeNome;
+  /** Ícone à direita do rótulo (a seta do botão grande do Onboarding). */
+  iconEnd?: IconeNome;
+  /** Botão grande de uma tela de abertura: mais alto, sem brilho, com a seta bem afastada do rótulo. */
+  hero?: boolean;
 }
 
 interface Visual {
@@ -39,14 +43,15 @@ const VISUAL: Record<ButtonVariant, Visual> = {
 };
 
 /** Estilo do botão por variante e estado. Função pura e exportada: o ponteiro em cima e o foco só existem na web, então os testes chamam esta função em vez de simular o toque. */
-export function estiloDoBotao(variant: ButtonVariant, estado: EstadoDeToque, disabled: boolean, extra?: ViewStyle, compact = false): StyleProp<ViewStyle> {
+export function estiloDoBotao(variant: ButtonVariant, estado: EstadoDeToque, disabled: boolean, extra?: ViewStyle, compact = false, hero = false): StyleProp<ViewStyle> {
   const v = VISUAL[variant];
   return [
     styles.botao,
     compact ? styles.compacto : null,
+    hero ? styles.grande : null,
     { backgroundColor: estado.pressed ? v.pressionado : estado.hovered ? v.ponteiro : v.repouso },
     v.contorno ? { borderWidth: borderWidth.hairline, borderColor: v.contorno } : null,
-    v.brilho && !disabled && !compact ? styles.brilho : null,
+    v.brilho && !disabled && !compact && !hero ? styles.brilho : null,
     estado.pressed ? styles.pressionado : null,
     estado.focused ? styles.foco : null,
     disabled ? styles.desabilitado : null,
@@ -54,17 +59,18 @@ export function estiloDoBotao(variant: ButtonVariant, estado: EstadoDeToque, dis
   ];
 }
 
-export function Button({ label, onPress, variant = 'primary', disabled = false, style, labelStyle, compact = false, icon }: ButtonProps) {
+export function Button({ label, onPress, variant = 'primary', disabled = false, style, labelStyle, compact = false, icon, iconEnd, hero = false }: ButtonProps) {
   return (
     <Pressable
       onPress={onPress}
       disabled={disabled}
       accessibilityRole="button"
       accessibilityState={{ disabled }}
-      style={(estado: EstadoDeToque) => estiloDoBotao(variant, estado, disabled, style, compact)}
+      style={(estado: EstadoDeToque) => estiloDoBotao(variant, estado, disabled, style, compact, hero)}
     >
       {icon ? <Icon name={icon} size={size.icon.xs} color={VISUAL[variant].rotulo} stroke={iconStroke.action} /> : null}
       <Text style={[styles.rotulo, compact ? styles.rotuloCompacto : null, { color: VISUAL[variant].rotulo }, labelStyle]}>{label}</Text>
+      {iconEnd ? <Icon name={iconEnd} size={size.icon.md} color={VISUAL[variant].rotulo} stroke={iconStroke.ui} /> : null}
     </Pressable>
   );
 }
@@ -80,6 +86,7 @@ const styles = StyleSheet.create({
     gap: space.sm,
   },
   compacto: { minHeight: size.buttonCompact, paddingHorizontal: space.lg },
+  grande: { minHeight: size.onboarding.heroButton, gap: space.xl },
   rotuloCompacto: { fontFamily: fontFamily.bold, fontSize: fontSize.micro, lineHeight: lineHeight.micro },
   rotulo: { ...textStyles.button, textAlign: 'center' },
   brilho: { boxShadow: shadow.cta },

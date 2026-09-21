@@ -1,6 +1,6 @@
-import { Pressable, StyleSheet, type StyleProp, type ViewStyle } from 'react-native';
+import { Pressable, StyleSheet, Text, type StyleProp, type ViewStyle } from 'react-native';
 import { anelDeFocoNoEscuro, type EstadoDeToque } from '../design/foco';
-import { borderWidth, colors, iconStroke, motion, radius, size } from '../design/tokens';
+import { borderWidth, colors, fontFamily, iconStroke, motion, radius, size, space, textStyles } from '../design/tokens';
 import { Icon, type IconeNome } from './Icon';
 
 interface GlassButtonProps {
@@ -39,7 +39,32 @@ export function GlassButton({ icon, label, onPress }: GlassButtonProps) {
   );
 }
 
+interface GlassPillProps {
+  label: string;
+  /** Ícone depois do texto (a seta do "Pular"). */
+  icon: IconeNome;
+  onPress: () => void;
+}
+
+/** O mesmo vidro em pílula, com texto e uma seta (o "Pular" do Onboarding). */
+export function GlassPill({ label, icon, onPress }: GlassPillProps) {
+  return (
+    <Pressable
+      onPress={onPress}
+      hitSlop={(size.touch - size.onboarding.skipHeight) / 2}
+      accessibilityRole="button"
+      accessibilityLabel={label}
+      style={(estado: EstadoDeToque) => [estiloDoVidro(estado), styles.pilula]}
+    >
+      <Text style={styles.texto}>{label}</Text>
+      <Icon name={icon} size={size.icon.sm} color={colors.text.onDark} stroke={iconStroke.action} />
+    </Pressable>
+  );
+}
+
 const styles = StyleSheet.create({
+  pilula: { width: size.onboarding.skipWidth, height: size.onboarding.skipHeight, flexDirection: 'row', gap: space.sm },
+  texto: { ...textStyles.micro, fontFamily: fontFamily.semibold, color: colors.text.onDark },
   botao: {
     width: size.glassButton,
     height: size.glassButton,
