@@ -34,6 +34,7 @@ export const PARES_DE_CONTRASTE: ParDeContraste[] = [
   { fg: 'text.primary', bg: 'bg.field', min: 7, uso: 'Texto digitado nos campos' },
   { fg: 'text.primary', bg: 'feedback.infoBg', min: 4.5, uso: 'Texto em avisos informativos' },
   { fg: 'text.primary', bg: 'feedback.successBg', min: 4.5, uso: 'Texto em avisos de sucesso' },
+  { fg: 'feedback.errorInk', bg: 'feedback.errorBg', min: 7, uso: 'Texto do aviso de erro' },
   { fg: 'icon.default', bg: 'bg.page', min: 4.5, uso: 'Ícones em tinta principal' },
 
   { fg: 'text.secondary', bg: 'bg.page', min: 4.5, uso: 'Subtítulos, dicas e metadados nas telas' },

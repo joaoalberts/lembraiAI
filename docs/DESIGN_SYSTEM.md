@@ -609,7 +609,7 @@ Três variantes, sempre com texto (a cor não é o único sinal):
 
 | Variante | Fundo | Texto | Uso |
 |---|---|---|---|
-| `error` | `colors.feedback.dangerBg` | `colors.text.danger` | Falha ao entrar, salvar, carregar |
+| `error` | `colors.feedback.errorBg` | `colors.feedback.errorInk` | Falha ao entrar, salvar, carregar |
 | `success` | `colors.feedback.successBg` | `colors.text.success` | "Senha redefinida. Entre com a nova senha." |
 | `info` | `colors.feedback.infoBg` e faixa `colors.feedback.infoBar` | `colors.text.primary` | "Você está dentro do raio de 1 lembrete", local definido |
 
@@ -1040,6 +1040,7 @@ Cada par é testado em `src/design/__tests__/acessibilidade.test.ts`. Par novo e
 | `colors.text.primary` | `colors.bg.field` | 19,80:1 | 7:1 | ✓ | Texto digitado nos campos |
 | `colors.text.primary` | `colors.feedback.infoBg` | 15,71:1 | 4,5:1 | ✓ | Texto em avisos informativos |
 | `colors.text.primary` | `colors.feedback.successBg` | 17,48:1 | 4,5:1 | ✓ | Texto em avisos de sucesso |
+| `colors.feedback.errorInk` | `colors.feedback.errorBg` | 7,81:1 | 7:1 | ✓ | Texto do aviso de erro |
 | `colors.icon.default` | `colors.bg.page` | 17,73:1 | 4,5:1 | ✓ | Ícones em tinta principal |
 | `colors.text.secondary` | `colors.bg.page` | 5,89:1 | 4,5:1 | ✓ | Subtítulos, dicas e metadados nas telas |
 | `colors.text.secondary` | `colors.bg.card` | 6,24:1 | 4,5:1 | ✓ | Metadados nos cartões |
@@ -1174,6 +1175,7 @@ O teste `valores-soltos.test.ts` mantém uma lista de arquivos com valores visua
 | 21/09/2026 | O "voltar" das abas segue o histórico (`backBehavior="history"`) | O padrão volta sempre à primeira aba: Salvar na edição caía em Início e o acesso direto a `editar` parecia ter para onde voltar |
 | 21/09/2026 | **Campo de texto das telas de conta refeito** (`TextField`): caixa de 46 com o anel cinza por dentro em vez de borda, olho para mostrar e esconder a senha, ícone de alerta na mensagem de erro; rótulo e mensagem sobem de 11 para o piso de 12 | É o campo das imagens `02` e `05`; a mensagem de erro com ícone e o anel vermelho dão o segundo sinal além da cor |
 | 21/09/2026 | **Folha "Minha conta"** (`ContaSheet`) abre pelo botão de conta da lista e do formulário, no lugar do desvio para Configurações; ícone das linhas centrado no círculo | É o que a imagem `05` mostra. O glifo no alto do círculo na captura é um efeito de CSS que o próprio original não pretendia (a imagem `11` o centraliza) |
+| 21/09/2026 | O aviso de erro (`Banner` `error`) passa de `#FFE6E6`/`#C62828` para `#FDF0EE`/`#8E2418` (`colors.feedback.errorBg` e `errorInk`), em todas as telas | É o vermelho do aviso de erro do original nas telas de conta e nas configurações; o par dá mais contraste que o anterior e está na tabela testada |
 
 ## 19. Pendências
 

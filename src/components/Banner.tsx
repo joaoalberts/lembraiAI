@@ -15,7 +15,7 @@ interface BannerProps {
 
 /** Padrão: docs/DESIGN_SYSTEM.md, seção 11.3. Sempre com texto: a cor não é o único sinal. */
 const VISUAL: Record<BannerVariant, { fundo: string; texto: string }> = {
-  error: { fundo: colors.feedback.dangerBg, texto: colors.text.danger },
+  error: { fundo: colors.feedback.errorBg, texto: colors.feedback.errorInk },
   success: { fundo: colors.feedback.successBg, texto: colors.text.success },
   info: { fundo: colors.feedback.infoBg, texto: colors.text.primary },
 };

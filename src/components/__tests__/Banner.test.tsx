@@ -8,8 +8,8 @@ const aviso = () => screen.getByTestId('banner');
 describe('Banner', () => {
   it('erro: fundo e texto de erro, anunciado como alerta', async () => {
     await render(<Banner variant="error">Não foi possível entrar.</Banner>);
-    expect(aviso()).toHaveStyle({ backgroundColor: colors.feedback.dangerBg, borderRadius: radius.sm, padding: space.md });
-    expect(screen.getByText('Não foi possível entrar.')).toHaveStyle({ color: colors.text.danger });
+    expect(aviso()).toHaveStyle({ backgroundColor: colors.feedback.errorBg, borderRadius: radius.sm, padding: space.md });
+    expect(screen.getByText('Não foi possível entrar.')).toHaveStyle({ color: colors.feedback.errorInk });
     expect(aviso()).toHaveProp('accessibilityRole', 'alert');
   });
 
@@ -34,7 +34,7 @@ describe('Banner', () => {
   it('com ícone: desenha o ícone antes do texto, na cor do texto (o segundo sinal além da cor)', async () => {
     await render(<Banner variant="error" icon="triangle-alert">Senha atual incorreta.</Banner>);
     const desenho = JSON.stringify(screen.getByTestId('icone-triangle-alert', { includeHiddenElements: true }).children);
-    expect(desenho).toContain(colors.text.danger);
+    expect(desenho).toContain(colors.feedback.errorInk);
     expect(desenho).toContain(`"width":${size.icon.xs}`);
     expect(screen.getByText('Senha atual incorreta.')).toHaveStyle({ flex: 1 });
   });
