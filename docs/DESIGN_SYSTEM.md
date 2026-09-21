@@ -511,6 +511,8 @@ O desenho é quase plano. Toda sombra é o `boxShadow` em texto (aceito pela New
 
 Os fundos em degradê do original (cabeçalho verde, telas de conta e cabeçalho claro do formulário) são texto CSS em `gradients`, com as medidas do CSS do app web já convertidas de `du` para dp. O React Native 0.86 os aceita em `experimental_backgroundImage` (o Expo SDK 57 o indica como alternativa ao `expo-linear-gradient`) e o react-native-web só entende `backgroundImage`: por isso as telas usam `fundoEmDegrade(gradients.x)` (`src/design/efeitos.ts`) e nunca escrevem a propriedade. `src/design/__tests__/efeitos.test.ts` passa cada receita pelo parser do próprio React Native, para uma receita que o celular ignoraria reprovar antes de chegar ao aparelho.
 
+Na web, `telaDeJanelaInteira()` (`src/design/efeitos.ts`) faz a tela de abertura e a do sucesso ocuparem ao menos a janela inteira (`height: 100%` e `minHeight: 100vh`); sem isso o Safari do iPhone deixava faixas claras em cima e embaixo. A unidade `vh` é CSS: o tipo de estilo do React Native não a aceita e no iOS e no Android ela é inválida, por isso o helper só a devolve na web e devolve `{}` no celular.
+
 <!-- tokens:degrades:inicio -->
 | Token | Receita (camadas de cima para baixo) | Uso |
 |---|---|---|

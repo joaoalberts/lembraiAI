@@ -2,7 +2,7 @@ import type { ReactNode } from 'react';
 import { Image } from 'expo-image';
 import { StyleSheet, Text, View, useWindowDimensions, type ViewStyle } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { fundoEmDegrade } from '../design/efeitos';
+import { fundoEmDegrade, telaDeJanelaInteira } from '../design/efeitos';
 import { borderWidth, colors, fontFamily, fontSize, gradients, iconStroke, layout, radius, size, space, textStyles } from '../design/tokens';
 import { AppBrand } from './AppBrand';
 import { BarraDeStatus } from './BarraDeStatus';
@@ -183,7 +183,7 @@ export function Onboarding({ onSkip, onStart, standalone = false }: OnboardingPr
 }
 
 const styles = StyleSheet.create({
-  tela: { flex: 1, height: '100%', minHeight: '100vh', backgroundColor: colors.onboarding.bg }, // web: 100vh para cobrir viewport inteiro
+  tela: { flex: 1, ...telaDeJanelaInteira(), backgroundColor: colors.onboarding.bg },
   fluxo: { flex: 1, alignItems: 'stretch' },
   topo: { flexDirection: 'row', alignItems: 'flex-start', justifyContent: 'space-between', paddingHorizontal: size.onboarding.side },
   cena: { alignSelf: 'center' },

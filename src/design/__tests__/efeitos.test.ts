@@ -1,4 +1,4 @@
-import { fundoEmDegrade } from '../efeitos';
+import { fundoEmDegrade, telaDeJanelaInteira } from '../efeitos';
 import { du, gradients } from '../tokens';
 
 // Parser de degradê do próprio React Native (o que decide, no iOS e no Android, se a receita vale ou é ignorada)
@@ -33,6 +33,21 @@ describe('degradês', () => {
   it('a web recebe backgroundImage e o iOS e o Android recebem experimental_backgroundImage', () => {
     expect(fundoEmDegrade('linear-gradient(red, blue)', true)).toEqual({ backgroundImage: 'linear-gradient(red, blue)' });
     expect(fundoEmDegrade('linear-gradient(red, blue)', false)).toEqual({ experimental_backgroundImage: 'linear-gradient(red, blue)' });
+  });
+});
+
+describe('telaDeJanelaInteira', () => {
+  it('na web a tela ocupa ao menos a janela inteira (sem faixas claras em cima e embaixo)', () => {
+    expect(telaDeJanelaInteira(true)).toEqual({ height: '100%', minHeight: '100vh' });
+  });
+
+  it('no iOS e no Android não acrescenta nada: a unidade CSS `vh` é inválida para o Yoga', () => {
+    expect(telaDeJanelaInteira(false)).toEqual({});
+  });
+
+  it('sem argumento vale a plataforma da compilação: no teste (jest-expo, iOS) não acrescenta nada', () => {
+    // `process.env.EXPO_OS` é trocado por valor fixo na compilação: não dá para virá-lo aqui. O ramo web do app foi conferido no build web.
+    expect(telaDeJanelaInteira()).toEqual({});
   });
 });
 

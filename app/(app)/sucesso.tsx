@@ -13,6 +13,7 @@ import { LinkButton } from '../../src/components/LinkButton';
 import { Subida } from '../../src/components/Subida';
 import { SucessoHeroi } from '../../src/components/SucessoHeroi';
 import { respiroDoToque } from '../../src/components/Toque';
+import { telaDeJanelaInteira } from '../../src/design/efeitos';
 import { HEROI } from '../../src/design/heroi';
 import { colors, fontSize, lineHeight, motion, size, space, textStyles, fontFamily } from '../../src/design/tokens';
 import { compartilhar } from '../../src/lib/compartilhar';
@@ -142,7 +143,7 @@ function Sucesso() {
 }
 
 const styles = StyleSheet.create({
-  tela: { flex: 1, height: '100%', minHeight: '100vh', backgroundColor: colors.bg.page }, // web: 100vh para cobrir viewport inteiro
+  tela: { flex: 1, ...telaDeJanelaInteira(), backgroundColor: colors.bg.page },
   // rola por cima do fundo, que fica parado; em tela mais alta que o desenho o canvas cresce até o fim
   canvas: { flexGrow: 1, minHeight: size.sucesso.canvas },
   topo: { position: 'absolute', left: 0, right: 0 },
