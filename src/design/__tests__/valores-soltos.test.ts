@@ -11,13 +11,8 @@ const IGNORADOS = [/^src\/design\//, /__tests__\//, /\.test\.tsx?$/, /\.d\.ts$/]
  * daqui (o teste "já migrou" abaixo cobra isso). Vazia = nenhum valor visual solto no app.
  */
 const PENDENTES: string[] = [
-  'app/(app)/_layout.tsx',
   'app/(app)/config.tsx',
-  'app/(app)/index.tsx',
   'app/(app)/mapa.tsx',
-  'app/(app)/novo.tsx',
-  'app/+html.tsx',
-  'app/_layout.tsx',
   'app/auth/forgot-password.tsx',
   'app/auth/login.tsx',
   'app/auth/reset-password.tsx',

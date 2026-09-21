@@ -200,11 +200,13 @@ export const borderWidth = {
 export const size = {
   touch: 44,
   button: 52,
+  tabBar: 56,
   iconCircle: 44,
+  emptyCircle: 88,
   chip: 36,
   closeButton: 32,
   hitSlop: 6,
-  icon: { sm: 16, md: 20, lg: 24 },
+  icon: { sm: 16, md: 20, lg: 24, xl: 40 },
 } as const;
 
 export const opacity = {

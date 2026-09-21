@@ -454,13 +454,16 @@ Filosofia: o mínimo. O feedback de toque é instantâneo (troca de cor e escala
 |---|---|---|
 | `size.touch` | `44` | Área mínima de toque (44, o padrão do iOS) |
 | `size.button` | `52` | Altura dos botões |
+| `size.tabBar` | `56` | Altura útil da barra de abas (a área segura do sistema é somada por cima) |
 | `size.iconCircle` | `44` | Círculo do ícone de categoria |
+| `size.emptyCircle` | `88` | Círculo do ícone do estado vazio |
 | `size.chip` | `36` | Altura visível do chip (a área de toque chega a 44 com `size.hitSlop`) |
 | `size.closeButton` | `32` | Botão de fechar visível (a área de toque chega a 44 com `size.hitSlop`) |
 | `size.hitSlop` | `6` | Folga de toque ao redor de controles menores que 44 |
 | `size.icon.sm` | `16` | Ícones ao lado de texto pequeno |
 | `size.icon.md` | `20` | Ícones de ação |
 | `size.icon.lg` | `24` | Ícones de aba |
+| `size.icon.xl` | `40` | Ícone do estado vazio |
 | `layout.columnMax` | `560` | Largura máxima da coluna do app na web; no celular a coluna é a tela toda |
 | `layout.readingMax` | `720` | Largura máxima de texto corrido (política de privacidade) |
 <!-- tokens:tamanhos:fim -->
@@ -570,8 +573,9 @@ Cada par é testado em `src/design/__tests__/acessibilidade.test.ts`. Par novo e
 | Tokens e testes (`src/design`) | seções 3 a 7 | aplicado |
 | Botão, campo, chip, interruptor e aviso (componentes) | seções 9 a 11 | aplicado nos componentes; as telas ainda usam estilo próprio em parte (ver `PENDENTES`) |
 | Cartão de lembrete e ícones | seções 8 e 11.1 | aplicado |
-| Telas (lista, novo, mapa, configurações, contas, páginas públicas) | todas | pendente |
-| Abas, cabeçalho e coluna da web | seções 11.6 e 11.7 | pendente |
+| Lista de lembretes e novo lembrete (telas) | seções 9 a 11, 15 | aplicado |
+| Abas, cabeçalho e coluna da web | seções 11.6 e 11.7 | aplicado |
+| Mapa, configurações, contas e páginas públicas (telas) | todas | pendente |
 | Famílias tipográficas da marca | seção 4.1 | pendente (seção 19) |
 
 O teste `valores-soltos.test.ts` mantém uma lista de arquivos com valores visuais soltos (`PENDENTES`); ela só encolhe e chega a zero quando o app inteiro usa tokens.
@@ -595,6 +599,8 @@ O teste `valores-soltos.test.ts` mantém uma lista de arquivos com valores visua
 | 21/09/2026 | Ícones: Ionicons em contorno no lugar de emoji | Emoji muda por sistema e não aceita cor; o Ionicons já era usado nas abas |
 | 21/09/2026 | Botões em pílula de 52 de altura, rótulo 16/700, brilho no primário e estados (ponteiro, pressionado, foco, desabilitado) | Iguais às referências (`2.png`, `4.png`) e aos estados definidos no app web; alvo de toque de pelo menos 44 |
 | 21/09/2026 | Cartão de lembrete: superfície creme com faixa da categoria, círculo com ícone de contorno e sombra suave; chip selecionado em verde-floresta (antes laranja) | Igual à lista de referência (`5.png`); o laranja fica só para a ação |
+| 21/09/2026 | Emoji removido dos textos da interface ("📍 Você está dentro…", "📍 Usar minha localização", "✓ Local definido", "✕"): ícone Ionicons onde faz falta | Emoji muda por sistema e não aceita cor; o texto continua dizendo tudo |
+| 21/09/2026 | Barra de abas com altura própria (`size.tabBar` mais a área segura) | Na web o rótulo de 12 era cortado pela caixa de 10 px do React Navigation; a medida no navegador mostrou o corte e a correção |
 | 21/09/2026 | Sombras por `boxShadow` em texto | Único caminho igual em iOS, Android e web na New Architecture |
 | 21/09/2026 | Fontes da marca não carregadas nesta versão | Exige mexer na abertura do app e na renderização estática da web; passo próprio |
 

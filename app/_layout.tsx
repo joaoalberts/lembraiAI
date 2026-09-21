@@ -2,6 +2,7 @@ import type { ReactNode } from 'react';
 import { ActivityIndicator, Platform, StyleSheet, View } from 'react-native';
 import { Stack, useSegments } from 'expo-router';
 import Head from 'expo-router/head';
+import { colors, layout, shadow } from '../src/design/tokens';
 import { AuthProvider, useAuth } from '../src/state/auth';
 import { GeoProvider } from '../src/state/geo';
 import { GeofencesProvider } from '../src/state/geofences';
@@ -33,7 +34,7 @@ function RootLayoutNav() {
   if (session === undefined && !rotaPublica) {
     return (
       <View style={styles.loading}>
-        <ActivityIndicator size="large" color="#FE532A" />
+        <ActivityIndicator size="large" color={colors.spinner} />
       </View>
     );
   }
@@ -74,7 +75,7 @@ export default function RootLayout() {
 }
 
 const styles = StyleSheet.create({
-  page: { flex: 1, alignItems: 'center', backgroundColor: '#E8E4DC' },
-  column: { flex: 1, width: '100%', maxWidth: 560, backgroundColor: '#F5F2ED' },
-  loading: { flex: 1, alignItems: 'center', justifyContent: 'center', backgroundColor: '#F5F2ED' },
+  page: { flex: 1, alignItems: 'center', backgroundColor: colors.bg.stage },
+  column: { flex: 1, width: '100%', maxWidth: layout.columnMax, backgroundColor: colors.bg.page, boxShadow: shadow.float },
+  loading: { flex: 1, alignItems: 'center', justifyContent: 'center', backgroundColor: colors.bg.page },
 });

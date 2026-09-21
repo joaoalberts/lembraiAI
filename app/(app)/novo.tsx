@@ -1,14 +1,21 @@
+import type { ComponentProps } from 'react';
 import { useState } from 'react';
-import { ActivityIndicator, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import Ionicons from '@expo/vector-icons/Ionicons';
+import { ActivityIndicator, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { router } from 'expo-router';
+import { Banner } from '../../src/components/Banner';
 import { Button } from '../../src/components/Button';
+import { Chip } from '../../src/components/Chip';
 import { TextField } from '../../src/components/TextField';
 import { DEFAULT_RADIUS, RADIUS_OPTIONS, REPEAT_OPTIONS, type RepeatKey } from '../../src/data/reminders';
+import { UI_ICON } from '../../src/design/icons';
+import { borderWidth, colors, fontWeight, opacity, radius as raios, size, space, textStyles } from '../../src/design/tokens';
 import { formatDistance } from '../../src/lib/geo';
 import { todayISO, toDate } from '../../src/lib/format';
 import { useGeo } from '../../src/state/geo';
 import { useReminders } from '../../src/state/reminders';
 
+type IoniconName = ComponentProps<typeof Ionicons>['name'];
 type Kind = 'time' | 'local';
 interface Coord { lat: number; lng: number; accuracy: number | null }
 
@@ -74,23 +81,23 @@ export default function NovoLembreteScreen() {
 
   return (
     <ScrollView style={styles.container} contentContainerStyle={styles.content} keyboardShouldPersistTaps="handled">
-      {error !== '' && <Text style={styles.errorBanner}>{error}</Text>}
+      {error !== '' && <Banner variant="error" style={styles.aviso}>{error}</Banner>}
 
       <TextField label="Título *" placeholder="O que você quer lembrar?" value={title} onChangeText={setTitle} editable={!busy} />
 
       <Text style={styles.label}>Avisar</Text>
       <View style={styles.segment}>
         {([['time', 'Por horário'], ['local', 'Por local']] as const).map(([k, rotulo]) => (
-          <TouchableOpacity
+          <Pressable
             key={k}
-            style={[styles.segmentItem, kind === k && styles.segmentActive]}
+            style={({ pressed }) => [styles.segmentItem, kind === k && styles.segmentActive, pressed && styles.segmentPressed]}
             onPress={() => setKind(k)}
             disabled={busy}
             accessibilityRole="button"
-            accessibilityState={{ selected: kind === k }}
+            accessibilityState={{ selected: kind === k, disabled: busy }}
           >
             <Text style={[styles.segmentText, kind === k && styles.segmentTextActive]}>{rotulo}</Text>
-          </TouchableOpacity>
+          </Pressable>
         ))}
       </View>
 
@@ -102,14 +109,7 @@ export default function NovoLembreteScreen() {
           <Text style={styles.label}>Repetir</Text>
           <View style={styles.chips}>
             {REPEAT_OPTIONS.map((o) => (
-              <TouchableOpacity
-                key={o.key}
-                style={[styles.chip, repeat === o.key && styles.chipActive]}
-                onPress={() => setRepeat(o.key)}
-                disabled={busy}
-              >
-                <Text style={[styles.chipText, repeat === o.key && styles.chipTextActive]}>{o.label}</Text>
-              </TouchableOpacity>
+              <Chip key={o.key} label={o.label} selected={repeat === o.key} onPress={() => setRepeat(o.key)} disabled={busy} />
             ))}
           </View>
         </View>
@@ -119,7 +119,10 @@ export default function NovoLembreteScreen() {
 
           {coord ? (
             <View style={styles.coordCard}>
-              <Text style={styles.coordTitle}>✓ Local definido</Text>
+              <View style={styles.coordTitleRow}>
+                <Ionicons name={UI_ICON.definido as IoniconName} size={size.icon.md} color={colors.text.accent} />
+                <Text style={styles.coordTitle}>Local definido</Text>
+              </View>
               <Text style={styles.coordText}>
                 {coord.lat.toFixed(5)}, {coord.lng.toFixed(5)}
                 {coord.accuracy != null ? ` · precisão de ${formatDistance(coord.accuracy)}` : ''}
@@ -127,15 +130,13 @@ export default function NovoLembreteScreen() {
               <Button label="Usar minha localização de novo" onPress={useMyLocation} variant="ghost" disabled={busy} />
             </View>
           ) : (
-            <Button label={locating ? 'Buscando...' : '📍 Usar minha localização'} onPress={useMyLocation} variant="secondary" disabled={busy} />
+            <Button label={locating ? 'Buscando...' : 'Usar minha localização'} onPress={useMyLocation} variant="secondary" disabled={busy} />
           )}
 
           <Text style={[styles.label, styles.radiusLabel]}>Raio de aviso</Text>
           <View style={styles.chips}>
             {RADIUS_OPTIONS.map((r) => (
-              <TouchableOpacity key={r} style={[styles.chip, radius === r && styles.chipActive]} onPress={() => setRadius(r)} disabled={busy}>
-                <Text style={[styles.chipText, radius === r && styles.chipTextActive]}>{r} m</Text>
-              </TouchableOpacity>
+              <Chip key={r} label={`${r} m`} selected={radius === r} onPress={() => setRadius(r)} disabled={busy} />
             ))}
           </View>
         </View>
@@ -148,7 +149,7 @@ export default function NovoLembreteScreen() {
 
       {busy && (
         <View style={styles.loading}>
-          <ActivityIndicator color="#FE532A" />
+          <ActivityIndicator color={colors.spinner} />
         </View>
       )}
     </ScrollView>
@@ -156,25 +157,29 @@ export default function NovoLembreteScreen() {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: '#F5F2ED' },
-  content: { padding: 16, paddingBottom: 48 },
-  errorBanner: { backgroundColor: '#FFE6E6', color: '#FF4444', padding: 12, borderRadius: 8, marginBottom: 16, textAlign: 'center' },
-  label: { fontSize: 14, fontWeight: '600', color: '#0A0A0A', marginBottom: 8 },
-  radiusLabel: { marginTop: 16 },
-  block: { marginTop: 4, marginBottom: 8 },
-  segment: { flexDirection: 'row', backgroundColor: '#E8E4DC', borderRadius: 10, padding: 3, marginBottom: 16 },
-  segmentItem: { flex: 1, paddingVertical: 10, alignItems: 'center', borderRadius: 8 },
-  segmentActive: { backgroundColor: '#FFFFFF' },
-  segmentText: { fontSize: 14, fontWeight: '500', color: '#767880' },
-  segmentTextActive: { color: '#0A0A0A', fontWeight: '700' },
-  chips: { flexDirection: 'row', flexWrap: 'wrap', gap: 8 },
-  chip: { paddingVertical: 8, paddingHorizontal: 14, borderRadius: 20, backgroundColor: '#FFFFFF', borderWidth: 1, borderColor: '#E0DCD3' },
-  chipActive: { backgroundColor: '#FE532A', borderColor: '#FE532A' },
-  chipText: { fontSize: 14, color: '#0A0A0A' },
-  chipTextActive: { color: '#FFFFFF', fontWeight: '600' },
-  coordCard: { backgroundColor: '#E6F3FF', borderRadius: 8, padding: 12, borderLeftWidth: 4, borderLeftColor: '#0066CC' },
-  coordTitle: { fontSize: 14, fontWeight: '600', color: '#0A0A0A', marginBottom: 4 },
-  coordText: { fontSize: 12, color: '#4A4C52', marginBottom: 8 },
-  actions: { marginTop: 24, gap: 12 },
-  loading: { alignItems: 'center', marginTop: 16 },
+  container: { flex: 1, backgroundColor: colors.bg.page },
+  content: { padding: space.lg, paddingBottom: space.huge },
+  aviso: { marginBottom: space.lg },
+  label: { ...textStyles.label, color: colors.text.primary, marginBottom: space.sm },
+  radiusLabel: { marginTop: space.lg },
+  block: { marginTop: space.xs, marginBottom: space.sm },
+  segment: { flexDirection: 'row', backgroundColor: colors.control.segmentTrack, borderRadius: raios.md, padding: space.xs, marginBottom: space.lg },
+  segmentItem: { flex: 1, minHeight: size.touch - 2 * space.xs, alignItems: 'center', justifyContent: 'center', borderRadius: raios.sm },
+  segmentActive: { backgroundColor: colors.control.segmentThumb },
+  segmentPressed: { opacity: opacity.pressed },
+  segmentText: { ...textStyles.body, fontWeight: fontWeight.medium, color: colors.text.secondary },
+  segmentTextActive: { color: colors.text.primary, fontWeight: fontWeight.bold },
+  chips: { flexDirection: 'row', flexWrap: 'wrap', gap: space.sm },
+  coordCard: {
+    backgroundColor: colors.feedback.infoBg,
+    borderRadius: raios.sm,
+    padding: space.md,
+    borderLeftWidth: borderWidth.bar,
+    borderLeftColor: colors.feedback.infoBar,
+  },
+  coordTitleRow: { flexDirection: 'row', alignItems: 'center', gap: space.xs, marginBottom: space.xs },
+  coordTitle: { ...textStyles.label, color: colors.text.primary },
+  coordText: { ...textStyles.caption, color: colors.text.secondary, marginBottom: space.sm },
+  actions: { marginTop: space.xl, gap: space.md },
+  loading: { alignItems: 'center', marginTop: space.lg },
 });
