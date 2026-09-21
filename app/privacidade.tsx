@@ -1,4 +1,5 @@
 import { ScrollView, StyleSheet, Text, View } from 'react-native';
+import { colors, layout, space, textStyles } from '../src/design/tokens';
 
 /** Atualize a data sempre que o texto mudar. */
 const ATUALIZADO_EM = '20 de setembro de 2026';
@@ -96,12 +97,12 @@ export default function PrivacidadeScreen() {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: '#F5F2ED' },
-  content: { padding: 24, alignItems: 'center' },
-  column: { width: '100%', maxWidth: 720 },
-  title: { fontSize: 28, fontWeight: 'bold', color: '#0A0A0A', marginBottom: 4 },
-  updated: { fontSize: 13, color: '#767880', marginBottom: 24 },
-  section: { marginBottom: 20 },
-  heading: { fontSize: 18, fontWeight: '700', color: '#0A0A0A', marginBottom: 8 },
-  paragraph: { fontSize: 15, lineHeight: 22, color: '#2B2D31', marginBottom: 8 },
+  container: { flex: 1, backgroundColor: colors.bg.page },
+  content: { padding: space.xl, alignItems: 'center' },
+  column: { width: '100%', maxWidth: layout.readingMax },
+  title: { ...textStyles.display, color: colors.text.primary, marginBottom: space.xs },
+  updated: { ...textStyles.caption, color: colors.text.secondary, marginBottom: space.xl },
+  section: { marginBottom: space.xl },
+  heading: { ...textStyles.heading, color: colors.text.primary, marginBottom: space.sm },
+  paragraph: { ...textStyles.bodyLg, color: colors.text.primary, marginBottom: space.sm },
 });

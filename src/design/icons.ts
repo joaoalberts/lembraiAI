@@ -34,4 +34,5 @@ export const UI_ICON = {
   aqui: 'location',
   definido: 'checkmark-circle',
   vazio: 'notifications-outline',
+  email: 'mail-outline',
 } as const;

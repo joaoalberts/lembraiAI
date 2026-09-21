@@ -1,10 +1,18 @@
-import { View, Text, StyleSheet, ScrollView } from 'react-native';
+import type { ComponentProps } from 'react';
+import Ionicons from '@expo/vector-icons/Ionicons';
+import { View, Text, StyleSheet } from 'react-native';
 import { router } from 'expo-router';
 import { useState } from 'react';
+import { AuthLayout } from '../../src/components/AuthLayout';
+import { Banner } from '../../src/components/Banner';
 import { Button } from '../../src/components/Button';
 import { TextField } from '../../src/components/TextField';
+import { UI_ICON } from '../../src/design/icons';
+import { colors, fontWeight, radius, size, space, textStyles } from '../../src/design/tokens';
 import { CODIGO_TAMANHO, validarEmail } from '../../src/lib/validacao';
 import { useAuth } from '../../src/state/auth';
+
+type IoniconName = ComponentProps<typeof Ionicons>['name'];
 
 export default function ForgotPasswordScreen() {
   const { pedirRedefinicao } = useAuth();
@@ -30,9 +38,12 @@ export default function ForgotPasswordScreen() {
 
   if (enviado) {
     return (
-      <ScrollView style={styles.container} contentContainerStyle={styles.content}>
+      <AuthLayout>
         <View style={styles.successBox}>
-          <Text style={styles.successIcon}>✉️</Text>
+          {/* decorativo: o título logo abaixo já diz o que aconteceu */}
+          <View style={styles.successIcon} accessibilityElementsHidden importantForAccessibility="no-hide-descendants">
+            <Ionicons name={UI_ICON.email as IoniconName} size={size.icon.xl} color={colors.icon.default} />
+          </View>
           <Text style={styles.successTitle}>Confira seu e-mail</Text>
           <Text style={styles.successText}>
             Se <Text style={styles.bold}>{email.trim()}</Text> tiver conta, enviamos um código de {CODIGO_TAMANHO} números.
@@ -43,24 +54,20 @@ export default function ForgotPasswordScreen() {
           </Text>
         </View>
 
-        <Button
-          label="Digitar o código"
-          onPress={() => router.push({ pathname: '/auth/reset-password', params: { email: email.trim() } })}
-          style={styles.button}
-        />
-        <Button label="Voltar para o login" onPress={() => router.navigate('/auth/login')} variant="ghost" />
-      </ScrollView>
+        <View style={styles.actions}>
+          <Button
+            label="Digitar o código"
+            onPress={() => router.push({ pathname: '/auth/reset-password', params: { email: email.trim() } })}
+          />
+          <Button label="Voltar para o login" onPress={() => router.navigate('/auth/login')} variant="ghost" />
+        </View>
+      </AuthLayout>
     );
   }
 
   return (
-    <ScrollView style={styles.container} contentContainerStyle={styles.content}>
-      <View style={styles.header}>
-        <Text style={styles.title}>Recuperar Senha</Text>
-        <Text style={styles.subtitle}>Digite seu e-mail para receber um código</Text>
-      </View>
-
-      {error !== '' && <Text style={styles.errorBanner}>{error}</Text>}
+    <AuthLayout title="Recuperar Senha" subtitle="Digite seu e-mail para receber um código">
+      {error !== '' && <Banner variant="error" style={styles.aviso}>{error}</Banner>}
 
       <TextField
         label="E-mail"
@@ -72,94 +79,66 @@ export default function ForgotPasswordScreen() {
         editable={!loading}
       />
 
-      <Button
-        label={loading ? 'Enviando...' : 'Enviar código'}
-        onPress={handleRequest}
-        disabled={loading}
-        style={styles.button}
-      />
-      <Button
-        label="Já tenho um código"
-        onPress={() => router.push({ pathname: '/auth/reset-password', params: email.trim() ? { email: email.trim() } : {} })}
-        variant="ghost"
-        disabled={loading}
-      />
-
-      <Button
-        label="Voltar para Login"
-        onPress={() => router.navigate('/auth/login')}
-        variant="ghost"
-        disabled={loading}
-      />
-    </ScrollView>
+      <View style={styles.actions}>
+        <Button
+          label={loading ? 'Enviando...' : 'Enviar código'}
+          onPress={handleRequest}
+          disabled={loading}
+        />
+        <Button
+          label="Já tenho um código"
+          onPress={() => router.push({ pathname: '/auth/reset-password', params: email.trim() ? { email: email.trim() } : {} })}
+          variant="ghost"
+          disabled={loading}
+        />
+        <Button
+          label="Voltar para Login"
+          onPress={() => router.navigate('/auth/login')}
+          variant="ghost"
+          disabled={loading}
+        />
+      </View>
+    </AuthLayout>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#F5F2ED',
+  aviso: {
+    marginBottom: space.xl,
   },
-  content: {
-    padding: 24,
-    justifyContent: 'center',
-    minHeight: '100%',
-  },
-  header: {
-    marginBottom: 32,
-    alignItems: 'center',
-  },
-  title: {
-    fontSize: 28,
-    fontWeight: 'bold',
-    color: '#0A0A0A',
-    marginBottom: 8,
-  },
-  subtitle: {
-    fontSize: 16,
-    color: '#767880',
-  },
-  errorBanner: {
-    backgroundColor: '#FFE6E6',
-    color: '#FF4444',
-    padding: 12,
-    borderRadius: 8,
-    marginBottom: 24,
-    textAlign: 'center',
-  },
-  button: {
-    marginTop: 24,
+  actions: {
+    marginTop: space.xl,
+    gap: space.md,
   },
   successBox: {
-    backgroundColor: '#E7F4EB',
-    borderRadius: 12,
-    padding: 24,
+    backgroundColor: colors.feedback.successBg,
+    borderRadius: radius.md,
+    padding: space.xl,
     alignItems: 'center',
-    marginBottom: 32,
+    marginBottom: space.xxl,
   },
   successIcon: {
-    fontSize: 48,
-    marginBottom: 16,
+    marginBottom: space.lg,
   },
   successTitle: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    color: '#0A0A0A',
-    marginBottom: 12,
+    ...textStyles.title,
+    color: colors.text.primary,
+    marginBottom: space.md,
   },
   successText: {
-    fontSize: 16,
-    color: '#767880',
+    ...textStyles.bodyLg,
+    color: colors.text.secondary,
     textAlign: 'center',
-    marginBottom: 12,
+    marginBottom: space.md,
   },
   bold: {
-    fontWeight: '600',
-    color: '#0A0A0A',
+    fontWeight: fontWeight.semibold,
+    color: colors.text.primary,
   },
   successSubtext: {
-    fontSize: 14,
-    color: '#767880',
+    ...textStyles.body,
+    color: colors.text.secondary,
     textAlign: 'center',
+    marginBottom: space.sm,
   },
 });

@@ -1,8 +1,11 @@
 import { useEffect, useRef, useState } from 'react';
-import { ScrollView, StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import { router, useLocalSearchParams } from 'expo-router';
+import { AuthLayout } from '../../src/components/AuthLayout';
+import { Banner } from '../../src/components/Banner';
 import { Button } from '../../src/components/Button';
 import { TextField } from '../../src/components/TextField';
+import { space } from '../../src/design/tokens';
 import {
   CODIGO_TAMANHO, MIN_SENHA, forcaDaSenha, validarCodigo, validarConfirmacao, validarEmail, validarSenha,
 } from '../../src/lib/validacao';
@@ -63,13 +66,8 @@ export default function ResetPasswordScreen() {
 
   if (recuperando) {
     return (
-      <ScrollView style={styles.container} contentContainerStyle={styles.content} keyboardShouldPersistTaps="handled">
-        <View style={styles.header}>
-          <Text style={styles.title}>Nova senha</Text>
-          <Text style={styles.subtitle}>Escolha a senha que vai usar para entrar</Text>
-        </View>
-
-        {error !== '' && <Text style={styles.errorBanner}>{error}</Text>}
+      <AuthLayout title="Nova senha" subtitle="Escolha a senha que vai usar para entrar" keyboardShouldPersistTaps="handled">
+        {error !== '' && <Banner variant="error" style={styles.aviso}>{error}</Banner>}
 
         <TextField
           label="Nova senha"
@@ -91,22 +89,21 @@ export default function ResetPasswordScreen() {
           editable={!loading}
         />
 
-        <Button label={loading ? 'Salvando...' : 'Salvar nova senha'} onPress={salvarSenha} disabled={loading} style={styles.button} />
-        <Button label="Cancelar" onPress={voltar} variant="ghost" disabled={loading} />
-      </ScrollView>
+        <View style={styles.actions}>
+          <Button label={loading ? 'Salvando...' : 'Salvar nova senha'} onPress={salvarSenha} disabled={loading} />
+          <Button label="Cancelar" onPress={voltar} variant="ghost" disabled={loading} />
+        </View>
+      </AuthLayout>
     );
   }
 
   return (
-    <ScrollView style={styles.container} contentContainerStyle={styles.content} keyboardShouldPersistTaps="handled">
-      <View style={styles.header}>
-        <Text style={styles.title}>Redefinir senha</Text>
-        <Text style={styles.subtitle}>
-          {token_hash ? 'Validando o link do e-mail...' : `Digite o código de ${CODIGO_TAMANHO} números que enviamos por e-mail`}
-        </Text>
-      </View>
-
-      {error !== '' && <Text style={styles.errorBanner}>{error}</Text>}
+    <AuthLayout
+      title="Redefinir senha"
+      subtitle={token_hash ? 'Validando o link do e-mail...' : `Digite o código de ${CODIGO_TAMANHO} números que enviamos por e-mail`}
+      keyboardShouldPersistTaps="handled"
+    >
+      {error !== '' && <Banner variant="error" style={styles.aviso}>{error}</Banner>}
 
       <TextField
         label="E-mail"
@@ -128,19 +125,16 @@ export default function ResetPasswordScreen() {
         editable={!loading}
       />
 
-      <Button label={loading ? 'Verificando...' : 'Verificar código'} onPress={verificarCodigo} disabled={loading} style={styles.button} />
-      <Button label="Pedir um novo código" onPress={() => router.replace('/auth/forgot-password')} variant="ghost" disabled={loading} />
-      <Button label="Voltar para o login" onPress={voltar} variant="ghost" disabled={loading} />
-    </ScrollView>
+      <View style={styles.actions}>
+        <Button label={loading ? 'Verificando...' : 'Verificar código'} onPress={verificarCodigo} disabled={loading} />
+        <Button label="Pedir um novo código" onPress={() => router.replace('/auth/forgot-password')} variant="ghost" disabled={loading} />
+        <Button label="Voltar para o login" onPress={voltar} variant="ghost" disabled={loading} />
+      </View>
+    </AuthLayout>
   );
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: '#F5F2ED' },
-  content: { padding: 24, justifyContent: 'center', minHeight: '100%' },
-  header: { marginBottom: 32, alignItems: 'center' },
-  title: { fontSize: 28, fontWeight: 'bold', color: '#0A0A0A', marginBottom: 8 },
-  subtitle: { fontSize: 16, color: '#767880', textAlign: 'center' },
-  errorBanner: { backgroundColor: '#FFE6E6', color: '#FF4444', padding: 12, borderRadius: 8, marginBottom: 24, textAlign: 'center' },
-  button: { marginTop: 8 },
+  aviso: { marginBottom: space.xl },
+  actions: { marginTop: space.sm, gap: space.md },
 });

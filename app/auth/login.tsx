@@ -1,8 +1,12 @@
-import { View, Text, StyleSheet, ScrollView, Switch } from 'react-native';
+import { View, Text, StyleSheet } from 'react-native';
 import { router, useLocalSearchParams } from 'expo-router';
 import { useState } from 'react';
+import { AuthLayout } from '../../src/components/AuthLayout';
+import { Banner } from '../../src/components/Banner';
 import { Button } from '../../src/components/Button';
 import { TextField } from '../../src/components/TextField';
+import { Toggle } from '../../src/components/Toggle';
+import { colors, fontWeight, space, textStyles } from '../../src/design/tokens';
 import { validarEmail } from '../../src/lib/validacao';
 import { useAuth } from '../../src/state/auth';
 
@@ -37,16 +41,11 @@ export default function LoginScreen() {
   };
 
   return (
-    <ScrollView style={styles.container} contentContainerStyle={styles.content}>
-      <View style={styles.header}>
-        <Text style={styles.title}>lembreiAI</Text>
-        <Text style={styles.subtitle}>Entre na sua conta</Text>
-      </View>
-
+    <AuthLayout title="LembreiAi" subtitle="Entre na sua conta">
       {redefinida === '1' && error === '' && (
-        <Text style={styles.successBanner}>Senha redefinida. Entre com a nova senha.</Text>
+        <Banner variant="success" style={styles.aviso}>Senha redefinida. Entre com a nova senha.</Banner>
       )}
-      {error !== '' && <Text style={styles.errorBanner}>{error}</Text>}
+      {error !== '' && <Banner variant="error" style={styles.aviso}>{error}</Banner>}
 
       <TextField
         label="E-mail"
@@ -70,7 +69,7 @@ export default function LoginScreen() {
 
       <View style={styles.rememberRow}>
         <Text style={styles.rememberLabel}>Manter conectado</Text>
-        <Switch value={lembrar} onValueChange={setLembrar} disabled={loading} accessibilityLabel="Manter conectado" />
+        <Toggle value={lembrar} onValueChange={setLembrar} disabled={loading} accessibilityLabel="Manter conectado" />
       </View>
 
       <Button
@@ -94,66 +93,30 @@ export default function LoginScreen() {
           disabled={loading}
         />
       </View>
-    </ScrollView>
+    </AuthLayout>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#F5F2ED',
-  },
-  content: {
-    padding: 24,
-    justifyContent: 'center',
-    minHeight: '100%',
-  },
-  header: {
-    marginBottom: 32,
-    alignItems: 'center',
-  },
-  title: {
-    fontSize: 28,
-    fontWeight: 'bold',
-    color: '#0A0A0A',
-    marginBottom: 8,
-  },
-  subtitle: {
-    fontSize: 16,
-    color: '#767880',
-  },
-  errorBanner: {
-    backgroundColor: '#FFE6E6',
-    color: '#FF4444',
-    padding: 12,
-    borderRadius: 8,
-    marginBottom: 24,
-    textAlign: 'center',
-  },
-  successBanner: {
-    backgroundColor: '#E7F4EB',
-    color: '#0B7A3B',
-    padding: 12,
-    borderRadius: 8,
-    marginBottom: 24,
-    textAlign: 'center',
+  aviso: {
+    marginBottom: space.xl,
   },
   rememberRow: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    marginBottom: 8,
+    marginBottom: space.sm,
   },
   rememberLabel: {
-    fontSize: 14,
-    fontWeight: '500',
-    color: '#0A0A0A',
+    ...textStyles.body,
+    fontWeight: fontWeight.medium,
+    color: colors.text.primary,
   },
   button: {
-    marginTop: 24,
+    marginTop: space.xl,
   },
   links: {
-    marginTop: 16,
-    gap: 12,
+    marginTop: space.lg,
+    gap: space.md,
   },
 });

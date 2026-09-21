@@ -40,6 +40,7 @@ export const PARES_DE_CONTRASTE: ParDeContraste[] = [
   { fg: 'text.secondary', bg: 'bg.card', min: 4.5, uso: 'Metadados nos cartões' },
   { fg: 'text.secondary', bg: 'bg.field', min: 4.5, uso: 'Dicas dentro de painéis brancos' },
   { fg: 'text.secondary', bg: 'feedback.infoBg', min: 4.5, uso: 'Texto de apoio em avisos informativos' },
+  { fg: 'text.secondary', bg: 'feedback.successBg', min: 4.5, uso: 'Texto de apoio da tela "Confira seu e-mail"' },
   { fg: 'text.placeholder', bg: 'bg.field', min: 4.5, uso: 'Placeholder dos campos' },
 
   { fg: 'text.accent', bg: 'bg.page', min: 4.5, uso: 'Valores em destaque nas telas' },

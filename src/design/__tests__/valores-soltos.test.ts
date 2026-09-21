@@ -11,12 +11,6 @@ const IGNORADOS = [/^src\/design\//, /__tests__\//, /\.test\.tsx?$/, /\.d\.ts$/]
  * daqui (o teste "já migrou" abaixo cobra isso). Vazia = nenhum valor visual solto no app.
  */
 const PENDENTES: string[] = [
-  'app/auth/forgot-password.tsx',
-  'app/auth/login.tsx',
-  'app/auth/reset-password.tsx',
-  'app/auth/signup.tsx',
-  'app/excluir-conta.tsx',
-  'app/privacidade.tsx',
 ];
 
 function listar(pasta: string): string[] {

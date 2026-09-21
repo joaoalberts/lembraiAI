@@ -1,8 +1,11 @@
-import { View, Text, StyleSheet, ScrollView } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import { router } from 'expo-router';
 import { useState } from 'react';
+import { AuthLayout } from '../../src/components/AuthLayout';
+import { Banner } from '../../src/components/Banner';
 import { Button } from '../../src/components/Button';
 import { TextField } from '../../src/components/TextField';
+import { space } from '../../src/design/tokens';
 import { MIN_SENHA, forcaDaSenha, validarConfirmacao, validarEmail, validarNome, validarSenha } from '../../src/lib/validacao';
 import { AVISO_CONFIRMAR_EMAIL, useAuth } from '../../src/state/auth';
 
@@ -41,14 +44,9 @@ export default function SignupScreen() {
   };
 
   return (
-    <ScrollView style={styles.container} contentContainerStyle={styles.content}>
-      <View style={styles.header}>
-        <Text style={styles.title}>Criar Conta</Text>
-        <Text style={styles.subtitle}>Bem-vindo ao lembreiAI</Text>
-      </View>
-
-      {aviso !== '' && <Text style={styles.infoBanner}>{aviso}</Text>}
-      {error !== '' && <Text style={styles.errorBanner}>{error}</Text>}
+    <AuthLayout title="Criar Conta" subtitle="Bem-vindo ao LembreiAi">
+      {aviso !== '' && <Banner variant="info" style={styles.aviso}>{aviso}</Banner>}
+      {error !== '' && <Banner variant="error" style={styles.aviso}>{error}</Banner>}
 
       <TextField
         label="Nome"
@@ -91,64 +89,29 @@ export default function SignupScreen() {
         editable={!loading}
       />
 
-      <Button
-        label={loading ? 'Criando conta...' : 'Criar Conta'}
-        onPress={handleSignup}
-        disabled={loading}
-        style={styles.button}
-      />
-
-      <Button
-        label="Já tenho conta — Entrar"
-        onPress={() => router.navigate('/auth/login')}
-        variant="ghost"
-        disabled={loading}
-      />
-    </ScrollView>
+      <View style={styles.actions}>
+        <Button
+          label={loading ? 'Criando conta...' : 'Criar Conta'}
+          onPress={handleSignup}
+          disabled={loading}
+        />
+        <Button
+          label="Já tenho conta — Entrar"
+          onPress={() => router.navigate('/auth/login')}
+          variant="ghost"
+          disabled={loading}
+        />
+      </View>
+    </AuthLayout>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#F5F2ED',
+  aviso: {
+    marginBottom: space.xl,
   },
-  content: {
-    padding: 24,
-    justifyContent: 'center',
-    minHeight: '100%',
-  },
-  header: {
-    marginBottom: 32,
-    alignItems: 'center',
-  },
-  title: {
-    fontSize: 28,
-    fontWeight: 'bold',
-    color: '#0A0A0A',
-    marginBottom: 8,
-  },
-  subtitle: {
-    fontSize: 16,
-    color: '#767880',
-  },
-  infoBanner: {
-    backgroundColor: '#E6F3FF',
-    color: '#0A0A0A',
-    padding: 12,
-    borderRadius: 8,
-    marginBottom: 24,
-    textAlign: 'center',
-  },
-  errorBanner: {
-    backgroundColor: '#FFE6E6',
-    color: '#FF4444',
-    padding: 12,
-    borderRadius: 8,
-    marginBottom: 24,
-    textAlign: 'center',
-  },
-  button: {
-    marginTop: 24,
+  actions: {
+    marginTop: space.xl,
+    gap: space.md,
   },
 });

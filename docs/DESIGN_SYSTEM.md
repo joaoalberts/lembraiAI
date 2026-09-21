@@ -7,7 +7,7 @@
 ## 1. Como usar este documento
 
 - **Nunca escreva o valor à mão.** Cor, tamanho, espaço, raio, peso e sombra vêm de `src/design/tokens.ts`. O teste `src/design/__tests__/valores-soltos.test.ts` barra `#hex`, `rgba()`, `fontSize: 16`, `padding: 12` e `fontWeight: '600'` fora dele.
-- **Componente antes de estilo novo.** Antes de escrever um estilo, veja se `Button`, `TextField`, `Toggle`, `Chip`, `Banner` ou `ReminderCard` (em `src/components`) já resolve.
+- **Componente antes de estilo novo.** Antes de escrever um estilo, veja se `Button`, `TextField`, `Toggle`, `Chip`, `Banner`, `ReminderCard` ou `AuthLayout` (em `src/components`) já resolve.
 - **Mudou uma decisão visual?** (1) altere o token; (2) descreva-o em `src/design/doc.ts`; (3) rode `npm run design:docs`; (4) registre a decisão na seção 18; (5) rode `npm test`.
 - **Ver o resultado sem conta e sem servidor real:** `node scripts/preview-backend-falso.mjs` e um `.env.development.local` apontando para ele (as instruções estão no topo do script). O app abre com lembretes de exemplo; troque o estado da lista com `/__mode/empty`, `/__mode/error` e `/__mode/slow`.
 - **Ponto de recuperação antes deste sistema:** a tag `ponto-de-recuperacao/01-antes-do-design-system` (`git switch -c volta-01 ponto-de-recuperacao/01-antes-do-design-system`).
@@ -325,6 +325,7 @@ O desenho é quase plano. Toda sombra é o `boxShadow` em texto (aceito pela New
 | aqui | `location` |
 | definido | `checkmark-circle` |
 | vazio | `notifications-outline` |
+| email | `mail-outline` |
 <!-- tokens:icones-interface:fim -->
 
 ## 9. Botões e seus estados
@@ -513,6 +514,7 @@ Cada par é testado em `src/design/__tests__/acessibilidade.test.ts`. Par novo e
 | `colors.text.secondary` | `colors.bg.card` | 6,24:1 | 4,5:1 | ✓ | Metadados nos cartões |
 | `colors.text.secondary` | `colors.bg.field` | 6,57:1 | 4,5:1 | ✓ | Dicas dentro de painéis brancos |
 | `colors.text.secondary` | `colors.feedback.infoBg` | 5,22:1 | 4,5:1 | ✓ | Texto de apoio em avisos informativos |
+| `colors.text.secondary` | `colors.feedback.successBg` | 5,80:1 | 4,5:1 | ✓ | Texto de apoio da tela "Confira seu e-mail" |
 | `colors.text.placeholder` | `colors.bg.field` | 5,10:1 | 4,5:1 | ✓ | Placeholder dos campos |
 | `colors.text.accent` | `colors.bg.page` | 5,96:1 | 4,5:1 | ✓ | Valores em destaque nas telas |
 | `colors.text.accent` | `colors.bg.card` | 6,33:1 | 4,5:1 | ✓ | Valores em destaque nos cartões |
@@ -582,7 +584,7 @@ Cada par é testado em `src/design/__tests__/acessibilidade.test.ts`. Par novo e
 | Lista de lembretes e novo lembrete (telas) | seções 9 a 11, 15 | aplicado |
 | Abas, cabeçalho e coluna da web | seções 11.6 e 11.7 | aplicado |
 | Mapa (com a folha do marcador) e configurações (telas) | todas | aplicado |
-| Telas de conta (entrar, criar conta, esqueci e redefinir senha) e páginas públicas | todas | pendente |
+| Telas de conta (entrar, criar conta, esqueci e redefinir senha) e páginas públicas | todas | aplicado |
 | Famílias tipográficas da marca | seção 4.1 | pendente (seção 19) |
 
 O teste `valores-soltos.test.ts` mantém uma lista de arquivos com valores visuais soltos (`PENDENTES`); ela só encolhe e chega a zero quando o app inteiro usa tokens.
@@ -608,6 +610,9 @@ O teste `valores-soltos.test.ts` mantém uma lista de arquivos com valores visua
 | 21/09/2026 | Cartão de lembrete: superfície creme com faixa da categoria, círculo com ícone de contorno e sombra suave; chip selecionado em verde-floresta (antes laranja) | Igual à lista de referência (`5.png`); o laranja fica só para a ação |
 | 21/09/2026 | Emoji removido dos textos da interface ("📍 Você está dentro…", "📍 Usar minha localização", "✓ Local definido", "✕"): ícone Ionicons onde faz falta | Emoji muda por sistema e não aceita cor; o texto continua dizendo tudo |
 | 21/09/2026 | Barra de abas com altura própria (`size.tabBar` mais a área segura) | Na web o rótulo de 12 era cortado pela caixa de 10 px do React Navigation; a medida no navegador mostrou o corte e a correção |
+| 21/09/2026 | Nome da marca na interface: "LembreiAi" (as telas de entrada e de cadastro escreviam "lembreiAI") | O app web fixou o nome em "LembreiAi" em todo lugar |
+| 21/09/2026 | Telas de conta ganham uma base compartilhada (`AuthLayout`) e os botões empilhados ficam a `space.md` uns dos outros | Quatro telas repetiam o mesmo cabeçalho e o botão principal ficava colado no secundário |
+| 21/09/2026 | Texto das páginas públicas de 15 para 16 e em tinta principal (era o cinza `#2B2D31`) | Leitura confortável e um cinza a menos fora dos tokens |
 | 21/09/2026 | Sombras por `boxShadow` em texto | Único caminho igual em iOS, Android e web na New Architecture |
 | 21/09/2026 | Fontes da marca não carregadas nesta versão | Exige mexer na abertura do app e na renderização estática da web; passo próprio |
 
