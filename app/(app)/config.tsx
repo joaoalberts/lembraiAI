@@ -48,7 +48,7 @@ export default function ConfigScreen() {
             <Text style={styles.label}>Monitorar lugares</Text>
             <Text style={styles.hint}>Avisa quando você chega ao raio de um lembrete. Funciona com o app aberto.</Text>
           </View>
-          <Toggle value={monitoring} onValueChange={(on) => void setMonitoring(on)} accessibilityLabel="Monitorar lugares" />
+          <Toggle variant="form" value={monitoring} onValueChange={(on) => void setMonitoring(on)} accessibilityLabel="Monitorar lugares" />
         </View>
         <View style={styles.row}>
           <Text style={styles.label}>Permissão de localização</Text>

@@ -69,7 +69,7 @@ export default function LoginScreen() {
 
       <View style={styles.rememberRow}>
         <Text style={styles.rememberLabel}>Manter conectado</Text>
-        <Toggle value={lembrar} onValueChange={setLembrar} disabled={loading} accessibilityLabel="Manter conectado" />
+        <Toggle variant="form" value={lembrar} onValueChange={setLembrar} disabled={loading} accessibilityLabel="Manter conectado" />
       </View>
 
       <Button

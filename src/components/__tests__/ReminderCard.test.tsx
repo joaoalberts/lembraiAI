@@ -58,7 +58,7 @@ describe('ReminderCard', () => {
     const onDelete = jest.fn();
     await render(<ReminderCard reminder={porHorario} onToggle={onToggle} onDelete={onDelete} />);
 
-    await fireEvent(screen.getByLabelText('Ativar lembrete Tomar remédio'), 'valueChange', false);
+    await fireEvent.press(screen.getByLabelText('Ativar lembrete Tomar remédio'));
     expect(onToggle).toHaveBeenCalledTimes(1);
 
     await fireEvent.press(screen.getByLabelText('Excluir lembrete Tomar remédio'));

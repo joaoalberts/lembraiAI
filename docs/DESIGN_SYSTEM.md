@@ -70,7 +70,7 @@ Use `palette.*` só para definir papéis em `colors`. As telas usam os papéis (
 | `palette.forestHover` | `#1F382B` | Botão escuro com o ponteiro em cima (web) |
 | `palette.forestPressed` | `#1B3025` | Botão escuro pressionado |
 | `palette.forest700` | `#185C4B` | Foco, spinner e faixa dos avisos informativos |
-| `palette.forest600` | `#216955` | Interruptor ligado |
+| `palette.forest600` | `#216955` | Preenchimento do controle deslizante do raio |
 | `palette.mint50` | `#E7F4EB` | Fundo do aviso de sucesso |
 | `palette.mint100` | `#DBF1E5` | Círculo atrás do ícone do estado vazio |
 | `palette.mintTint` | `#DDE8DD` | Fundo do aviso informativo |
@@ -113,7 +113,8 @@ Use `palette.*` só para definir papéis em `colors`. As telas usam os papéis (
 | `palette.mist100` | `#E3EEE5` | Degradê claro do cabeçalho do formulário: meio |
 | `palette.mint200` | `#C6E4D5` | Contorno da faixa de seleção do horário |
 | `palette.mint400` | `#7FEAC6` | Anel de foco sobre fundo escuro |
-| `palette.toggleCardOn` | `#30AB7B` | Interruptor ligado no cartão de lembrete |
+| `palette.toggleCardOn` | `#2EA275` | Interruptor ligado no cartão de lembrete (o verde da imagem, #30AB7B, escurecido 5% para 3:1 com o cartão) |
+| `palette.toggleThumb` | `#FBFBFA` | Bolinha do interruptor |
 | `palette.toggleFormOn` | `#256855` | Interruptor ligado nos formulários e nas configurações |
 | `palette.frost` | `#E3E7DC` | Botão translúcido (ações do sucesso e Cancelar) |
 | `palette.frostHover` | `#D9DECF` | Botão translúcido com o ponteiro em cima (web) |
@@ -183,11 +184,11 @@ Use `palette.*` só para definir papéis em `colors`. As telas usam os papéis (
 | `colors.border.focus` | `#185C4B` | `palette.forest700` | Borda do campo em foco e anel de foco |
 | `colors.border.danger` | `#C62828` | `palette.red700` | Borda do campo com erro e do botão de exclusão |
 | `colors.border.dangerSoft` | `#F3B8B8` | `palette.red200` | Borda da zona de perigo |
-| `colors.control.on` | `#216955` | `palette.forest600` | Interruptor ligado |
-| `colors.control.onCard` | `#30AB7B` | `palette.toggleCardOn` | Interruptor ligado no cartão de lembrete |
+| `colors.control.on` | `#216955` | `palette.forest600` | Preenchimento do controle deslizante do raio |
+| `colors.control.onCard` | `#2EA275` | `palette.toggleCardOn` | Interruptor ligado no cartão de lembrete |
 | `colors.control.onForm` | `#256855` | `palette.toggleFormOn` | Interruptor ligado nos formulários e nas configurações |
 | `colors.control.off` | `#D6D5D5` | `palette.trackOff` | Interruptor desligado |
-| `colors.control.thumb` | `#FFFFFF` | `palette.white` | Bolinha do interruptor |
+| `colors.control.thumb` | `#FBFBFA` | `palette.toggleThumb` | Bolinha do interruptor |
 | `colors.control.chipOn` | `#12432F` | `palette.forest900` | Chip de filtro selecionado |
 | `colors.control.chipOff` | `#F3F4EF` | `palette.chipOff` | Chip de filtro não selecionado |
 | `colors.control.segmentTrack` | `#E8E4DC` | `palette.sand` | Trilho do controle segmentado |
@@ -479,7 +480,7 @@ Componente: `src/components/TextField.tsx`.
 - **Teclado certo:** o `TextField` já escolhe `keyboardType`, `autoCapitalize` e `autoComplete` para e-mail, senha e números.
 - **Erro em português, dizendo o que fazer.** Mensagem curta, sem código técnico.
 - **Borda suave é identidade** (1,2:1 sobre o fundo, como nas referências). O foco é o reforço: exceção registrada na seção 16.
-- **Interruptor** (`Toggle`): ligado `colors.control.on`, desligado `colors.control.off`, bolinha `colors.control.thumb`. Sempre com o rótulo ao lado e `accessibilityLabel`.
+- **Interruptor** (`Toggle`): trilho em pílula, desligado `colors.control.off`; ligado `colors.control.onCard` (variante `card`, 35 por 21, no cartão de lembrete) ou `colors.control.onForm` (variante `form`, 43 por 26, nos formulários e nas configurações). Bolinha `colors.control.thumb` com `shadow.float`, que corre em `motion.duration.toggle` (imediata com "reduzir movimento"). Medidas em `size.toggle.*`; o toque ganha folga até 44 por 44. Papel `switch` com o estado ligado, e sempre com o rótulo ao lado e `accessibilityLabel`. O verde do cartão é o da imagem (`#30AB7B`) escurecido 5% para chegar a 3:1 com o cartão (a imagem dá 2,76:1).
 - **Controle segmentado** (`SegmentedControl`; duas opções, ex.: "Por horário" e "Por local"): trilho `colors.control.segmentTrack`, raio `radius.md`; a opção selecionada fica em `colors.control.segmentThumb` com `fontWeight.bold`.
 
 ## 11. Cards, modais, menus e navegação
@@ -549,6 +550,11 @@ Filosofia: o mínimo. O feedback de toque é instantâneo (troca de cor e escala
 | `motion.duration.slow` | `300` | Entrada de modais (ms) |
 | `motion.duration.scrim` | `180` | Entrada do véu atrás de uma folha (ms) |
 | `motion.duration.sheet` | `260` | Subida de uma folha inferior (ms) |
+| `motion.duration.toggle` | `180` | Troca de estado do interruptor (ms) |
+| `motion.ease.x1` | `0.25` | Curva `ease` do CSS: cubic-bezier(x1, y1, x2, y2) |
+| `motion.ease.y1` | `0.1` | Curva `ease` do CSS: cubic-bezier(x1, y1, x2, y2) |
+| `motion.ease.x2` | `0.25` | Curva `ease` do CSS: cubic-bezier(x1, y1, x2, y2) |
+| `motion.ease.y2` | `1` | Curva `ease` do CSS: cubic-bezier(x1, y1, x2, y2) |
 | `motion.curve.x1` | `0.2` | Curva de entrada das folhas: cubic-bezier(x1, y1, x2, y2) |
 | `motion.curve.y1` | `0.8` | Curva de entrada das folhas: cubic-bezier(x1, y1, x2, y2) |
 | `motion.curve.x2` | `0.2` | Curva de entrada das folhas: cubic-bezier(x1, y1, x2, y2) |
@@ -591,6 +597,14 @@ Filosofia: o mínimo. O feedback de toque é instantâneo (troca de cor e escala
 | `size.icon.xl` | `40` | Ícone do estado vazio |
 | `size.mapPin.width` | `29` | Largura do pino do mapa no formulário |
 | `size.mapPin.height` | `37` | Altura do pino do mapa no formulário (a ponta marca o local) |
+| `size.toggle.card.width` | `35` | Interruptor (cartão · formulário): largura do trilho |
+| `size.toggle.card.height` | `21` | Interruptor (cartão · formulário): altura do trilho |
+| `size.toggle.card.thumb` | `18` | Interruptor (cartão · formulário): diâmetro da bolinha |
+| `size.toggle.card.inset` | `1.5` | Interruptor (cartão · formulário): folga da bolinha até a borda do trilho |
+| `size.toggle.form.width` | `43` | Interruptor (cartão · formulário): largura do trilho |
+| `size.toggle.form.height` | `26` | Interruptor (cartão · formulário): altura do trilho |
+| `size.toggle.form.thumb` | `22` | Interruptor (cartão · formulário): diâmetro da bolinha |
+| `size.toggle.form.inset` | `2` | Interruptor (cartão · formulário): folga da bolinha até a borda do trilho |
 | `size.sheet.paddingTop` | `11` | Folha inferior: espaço acima da alça |
 | `size.sheet.paddingHorizontal` | `20` | Folha inferior: margem dos lados |
 | `size.sheet.paddingBottom` | `35` | Folha inferior: espaço embaixo (a barra home do iOS) |
@@ -671,8 +685,11 @@ Cada par é testado em `src/design/__tests__/acessibilidade.test.ts`. Par novo e
 | `colors.icon.muted` | `colors.bg.page` | 3,94:1 | 3:1 | ✓ exceção | Ícones secundários nas telas |
 | `colors.border.focus` | `colors.bg.field` | 7,86:1 | 3:1 | ✓ exceção | Borda de foco do campo |
 | `colors.border.focus` | `colors.bg.page` | 7,04:1 | 3:1 | ✓ exceção | Anel de foco sobre a página |
-| `colors.control.on` | `colors.bg.card` | 6,20:1 | 3:1 | ✓ exceção | Interruptor ligado |
-| `colors.control.thumb` | `colors.control.on` | 6,53:1 | 3:1 | ✓ exceção | Bolinha do interruptor sobre o trilho ligado |
+| `colors.control.onCard` | `colors.bg.card` | 3,05:1 | 3:1 | ✓ exceção | Interruptor ligado no cartão |
+| `colors.control.thumb` | `colors.control.onCard` | 3,10:1 | 3:1 | ✓ exceção | Bolinha do interruptor do cartão sobre o trilho ligado |
+| `colors.control.onForm` | `colors.bg.card` | 6,25:1 | 3:1 | ✓ exceção | Interruptor ligado nos formulários e nas configurações |
+| `colors.control.thumb` | `colors.control.onForm` | 6,36:1 | 3:1 | ✓ exceção | Bolinha do interruptor do formulário sobre o trilho ligado |
+| `colors.control.on` | `colors.bg.card` | 6,20:1 | 3:1 | ✓ exceção | Preenchimento do controle deslizante do raio |
 | `colors.feedback.infoBar` | `colors.feedback.infoBg` | 6,24:1 | 3:1 | ✓ exceção | Faixa lateral do aviso informativo |
 | `colors.category.green.ink` | `colors.category.green.bg` | 14,61:1 | 3:1 | ✓ exceção | Glifo do ícone da categoria green |
 | `colors.category.orange.ink` | `colors.category.orange.bg` | 16,47:1 | 3:1 | ✓ exceção | Glifo do ícone da categoria orange |
@@ -752,6 +769,7 @@ O teste `valores-soltos.test.ts` mantém uma lista de arquivos com valores visua
 | 21/09/2026 | **Escala:** tamanhos fixos em dp derivados das imagens (`dp = du × 430 / 851`), layout flexível na largura, texto nunca abaixo de 12; a coluna da web volta a 430. **Ainda não aplicada:** entra com cada tela | As capturas são de uma coluna de 430 px. Fixo e com piso de 12 mantém a leitura e o tamanho de fonte do sistema; o app web escalava tudo pela largura e chegava a 9 |
 | 21/09/2026 | **Tokens da folha, da barra de abas e do palco:** `radius.sheet` 19, `size.sheet.*` (alça de 49 por 4), `shadow.sheet`/`tabBar`/`column`, véu `colors.overlay` verde-escuro a 46%, `colors.bg.stage` verde `#0D2A1B` (era areia), `layout.columnMax` 430 (era 560), tempos e curva das folhas (`motion.duration.scrim/sheet`, `motion.curve.*`) | Valores do CSS do app web (`../lembreiAI`, versão do disco). A conferência lado a lado com as capturas acontece quando cada folha e a barra de abas entram nas telas, nos próximos commits |
 | 21/09/2026 | **Ícones: Lucide no lugar de Ionicons** (`lucide-react-native` com `react-native-svg`, ambos gratuitos), traço por papel em `iconStroke.*` | As capturas e o app web desenham com Lucide; o Ionicons tem outro traço e outras formas (calendário, relógio, pino, lâmpada). O `react-native-svg` é o que o SDK 57 fixa (15.15.4). Pacote em `moduleNameMapper` no Jest (só publica `.mjs`) |
+| 21/09/2026 | **Interruptor próprio** (`Toggle` com duas variantes) no lugar do `Switch` do sistema; verde do cartão `#2EA275` em vez do `#30AB7B` da imagem | O `Switch` do sistema não tem o tamanho nem a cor das imagens (35 por 21 e 43 por 26). O `#30AB7B` medido dá 2,76:1 com o cartão e 2,80:1 com a bolinha, abaixo dos 3:1 do WCAG 1.4.11 que o teste de contraste exige; escurecer 5% resolve (3,05:1 e 3,10:1) e a diferença não se vê. Voltar ao valor da imagem é trocar `palette.toggleCardOn` |
 
 ## 19. Pendências
 

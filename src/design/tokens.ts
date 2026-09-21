@@ -66,7 +66,9 @@ export const palette = {
   mist100: '#E3EEE5',
   mint200: '#C6E4D5',
   mint400: '#7FEAC6',
-  toggleCardOn: '#30AB7B',
+  /** Verde do interruptor do cartão na imagem (#30AB7B) escurecido 5% para dar 3:1 com o cartão (WCAG 1.4.11): a imagem dá 2,76:1. */
+  toggleCardOn: '#2EA275',
+  toggleThumb: '#FBFBFA',
   toggleFormOn: '#256855',
   frost: '#E3E7DC',
   frostHover: '#D9DECF',
@@ -148,7 +150,7 @@ export const colors = {
     onCard: palette.toggleCardOn,
     onForm: palette.toggleFormOn,
     off: palette.trackOff,
-    thumb: palette.white,
+    thumb: palette.toggleThumb,
     chipOn: palette.forest900,
     chipOff: palette.chipOff,
     segmentTrack: palette.sand,
@@ -310,6 +312,11 @@ export const size = {
   icon: { sm: 16, md: 20, lg: 24, xl: 40 },
   /** Pino do mapa no formulário (58 × 73 du no original). A ponta fica no meio da base. */
   mapPin: { width: du(58), height: du(73) },
+  /** Interruptor do cartão de lembrete (`card`) e o dos formulários e das configurações (`form`): trilho, bolinha e folga da bolinha (21 e 26 de altura). */
+  toggle: {
+    card: { width: du(69), height: du(42), thumb: du(36), inset: 1.5 },
+    form: { width: du(85), height: du(52), thumb: du(44), inset: du(4) },
+  },
   /** Folha inferior: espaços internos, alça e o vão entre a alça e o título (medidas do CSS do app web em du). */
   sheet: { paddingTop: du(22), paddingHorizontal: du(40), paddingBottom: du(70), handleWidth: du(96), handleHeight: du(8), handleGap: du(28), actionTop: du(50), actionRight: du(34) },
 } as const;
@@ -375,7 +382,9 @@ export const gradients = {
 } as const;
 
 export const motion = {
-  duration: { fast: 120, base: 200, slow: 300, scrim: 180, sheet: 260 },
+  duration: { fast: 120, base: 200, slow: 300, scrim: 180, sheet: 260, toggle: 180 },
+  /** `ease` do CSS (cubic-bezier(.25, .1, .25, 1)): troca de estado dos interruptores e dos botões. */
+  ease: { x1: 0.25, y1: 0.1, x2: 0.25, y2: 1 },
   /** Curva de entrada das folhas: cubic-bezier(.2, .8, .2, 1) do original. */
   curve: { x1: 0.2, y1: 0.8, x2: 0.2, y2: 1 },
   pressedScale: 0.98,

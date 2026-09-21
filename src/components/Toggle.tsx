@@ -1,24 +1,77 @@
-import { Switch } from 'react-native';
-import { colors } from '../design/tokens';
+import { useEffect, useRef } from 'react';
+import { Animated, Easing, Platform, Pressable, StyleSheet } from 'react-native';
+import { anelDeFoco, type EstadoDeToque } from '../design/foco';
+import { colors, motion, opacity, radius, shadow, size } from '../design/tokens';
+import { useMovimentoReduzido } from '../lib/movimento';
+
+/** `card` = interruptor pequeno do cartão de lembrete; `form` = o maior, dos formulários e das configurações. */
+export type ToggleVariant = 'card' | 'form';
 
 interface ToggleProps {
   value: boolean;
   onValueChange: (valor: boolean) => void;
   disabled?: boolean;
   accessibilityLabel: string;
+  variant?: ToggleVariant;
 }
 
-/** Interruptor com as cores da marca (docs/DESIGN_SYSTEM.md, seção 10). Sempre com rótulo para o leitor de tela. */
-export function Toggle({ value, onValueChange, disabled = false, accessibilityLabel }: ToggleProps) {
+const LIGADO: Record<ToggleVariant, string> = { card: colors.control.onCard, form: colors.control.onForm };
+const CURVA = Easing.bezier(motion.ease.x1, motion.ease.y1, motion.ease.x2, motion.ease.y2);
+
+/** Medidas do interruptor: trilho, bolinha, folga e o quanto a bolinha anda. */
+export function medidasDoToggle(variant: ToggleVariant) {
+  const m = size.toggle[variant];
+  return { ...m, viagem: m.width - m.thumb - 2 * m.inset };
+}
+
+/**
+ * Interruptor no padrão do app original (docs/DESIGN_SYSTEM.md, seção 10): trilho em pílula e bolinha que corre em
+ * `motion.duration.toggle`. Menor que 44, então o toque ganha folga (`hitSlop`) até chegar lá. Sempre com rótulo para o leitor de tela.
+ */
+export function Toggle({ value, onValueChange, disabled = false, accessibilityLabel, variant = 'card' }: ToggleProps) {
+  const m = medidasDoToggle(variant);
+  const reduzir = useMovimentoReduzido();
+  const progresso = useRef(new Animated.Value(value ? 1 : 0)).current;
+
+  useEffect(() => {
+    if (reduzir === undefined) return;
+    if (reduzir) {
+      progresso.setValue(value ? 1 : 0);
+      return;
+    }
+    const animacao = Animated.timing(progresso, { toValue: value ? 1 : 0, duration: motion.duration.toggle, easing: CURVA, useNativeDriver: Platform.OS !== 'web' });
+    animacao.start();
+    return () => animacao.stop();
+  }, [value, reduzir, progresso]);
+
+  const folga = { vertical: Math.max(0, (size.touch - m.height) / 2), horizontal: Math.max(0, (size.touch - m.width) / 2) };
+
   return (
-    <Switch
-      value={value}
-      onValueChange={onValueChange}
+    <Pressable
+      onPress={() => onValueChange(!value)}
       disabled={disabled}
+      hitSlop={{ top: folga.vertical, bottom: folga.vertical, left: folga.horizontal, right: folga.horizontal }}
+      accessibilityRole="switch"
       accessibilityLabel={accessibilityLabel}
-      trackColor={{ false: colors.control.off, true: colors.control.on }}
-      thumbColor={colors.control.thumb}
-      ios_backgroundColor={colors.control.off}
-    />
+      accessibilityState={{ checked: value, disabled }}
+      style={(estado: EstadoDeToque) => [styles.trilho, { width: m.width, height: m.height }, estado.focused ? anelDeFoco : null, disabled ? styles.desabilitado : null]}
+    >
+      {/* o trilho ligado entra por cima do desligado, com a opacidade animada (a cor não anima no driver nativo) */}
+      <Animated.View testID="toggle-ligado" style={[StyleSheet.absoluteFill, styles.pilula, { backgroundColor: LIGADO[variant], opacity: progresso }]} />
+      <Animated.View
+        testID="toggle-bolinha"
+        style={[
+          styles.bolinha,
+          { top: m.inset, left: m.inset, width: m.thumb, height: m.thumb, transform: [{ translateX: progresso.interpolate({ inputRange: [0, 1], outputRange: [0, m.viagem] }) }] },
+        ]}
+      />
+    </Pressable>
   );
 }
+
+const styles = StyleSheet.create({
+  trilho: { borderRadius: radius.pill, backgroundColor: colors.control.off },
+  pilula: { borderRadius: radius.pill },
+  bolinha: { position: 'absolute', borderRadius: radius.pill, backgroundColor: colors.control.thumb, boxShadow: shadow.float },
+  desabilitado: { opacity: opacity.disabled },
+});

@@ -71,8 +71,11 @@ export const PARES_DE_CONTRASTE: ParDeContraste[] = [
   { fg: 'icon.muted', bg: 'bg.page', min: 3, uso: 'Ícones secundários nas telas', excecao: INTERFACE },
   { fg: 'border.focus', bg: 'bg.field', min: 3, uso: 'Borda de foco do campo', excecao: INTERFACE },
   { fg: 'border.focus', bg: 'bg.page', min: 3, uso: 'Anel de foco sobre a página', excecao: INTERFACE },
-  { fg: 'control.on', bg: 'bg.card', min: 3, uso: 'Interruptor ligado', excecao: INTERFACE },
-  { fg: 'control.thumb', bg: 'control.on', min: 3, uso: 'Bolinha do interruptor sobre o trilho ligado', excecao: INTERFACE },
+  { fg: 'control.onCard', bg: 'bg.card', min: 3, uso: 'Interruptor ligado no cartão', excecao: INTERFACE },
+  { fg: 'control.thumb', bg: 'control.onCard', min: 3, uso: 'Bolinha do interruptor do cartão sobre o trilho ligado', excecao: INTERFACE },
+  { fg: 'control.onForm', bg: 'bg.card', min: 3, uso: 'Interruptor ligado nos formulários e nas configurações', excecao: INTERFACE },
+  { fg: 'control.thumb', bg: 'control.onForm', min: 3, uso: 'Bolinha do interruptor do formulário sobre o trilho ligado', excecao: INTERFACE },
+  { fg: 'control.on', bg: 'bg.card', min: 3, uso: 'Preenchimento do controle deslizante do raio', excecao: INTERFACE },
   { fg: 'feedback.infoBar', bg: 'feedback.infoBg', min: 3, uso: 'Faixa lateral do aviso informativo', excecao: INTERFACE },
 
   ...categorias.map((c): ParDeContraste => ({ fg: `category.${c}.ink`, bg: `category.${c}.bg`, min: 3, uso: `Glifo do ícone da categoria ${c}`, excecao: INTERFACE })),
