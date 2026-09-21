@@ -7,9 +7,12 @@ import type { DOMProps } from 'expo/dom';
 import { FALLBACK_COORD } from '../data/reminders';
 import { CSS_DO_MAPA } from '../design/mapa-css';
 import { colors, iconStroke, size } from '../design/tokens';
+import { criarEnquadramento } from '../lib/enquadramento';
 import type { MapMarker } from './map-types';
 
 const ZOOM = 15;
+/** Zoom mais próximo que o enquadramento dos marcadores aceita (um lembrete sozinho não vira um mapa de rua). */
+const ZOOM_MAXIMO_DO_ENQUADRAMENTO = 16;
 
 /** Gota do pino do formulário (desenhada em 29 × 37) com o ponto branco: só SVG, sem arquivo de imagem. */
 const iconeDoPino = () =>
@@ -68,6 +71,8 @@ export default function LeafletMapDom({ center, markers, onMarkerPress, escolha 
   const pino = useRef<L.Marker | null>(null);
   const halo = useRef<L.Circle | null>(null);
   const centered = useRef(false);
+  // enquadra os marcadores quando o mapa tem tamanho (a WebView do celular o cria com 0 × 0)
+  const enquadramento = useRef<ReturnType<typeof criarEnquadramento> | null>(null);
   const onPress = useRef(onMarkerPress);
   onPress.current = onMarkerPress;
   const escolher = useRef(aoEscolher);
@@ -102,14 +107,18 @@ export default function LeafletMapDom({ center, markers, onMarkerPress, escolha 
     }).addTo(m);
     map.current = m;
     group.current = L.layerGroup().addTo(m);
-    // o layout fecha depois do mount: sem isso o Leaflet mede um contêiner vazio
-    const observer = new ResizeObserver(() => m.invalidateSize());
+    enquadramento.current = criarEnquadramento(m, ZOOM_MAXIMO_DO_ENQUADRAMENTO);
+    // o layout fecha depois do mount: sem isso o Leaflet mede um contêiner vazio; e o enquadramento que esperava o tamanho acontece agora
+    const observer = new ResizeObserver(() => {
+      m.invalidateSize();
+      if (enquadramento.current?.aoMedir()) centered.current = true;
+    });
     observer.observe(host.current);
     setReady(true);
     return () => {
       observer.disconnect();
       m.remove();
-      map.current = null; group.current = null; me.current = null; pino.current = null; halo.current = null;
+      map.current = null; group.current = null; me.current = null; pino.current = null; halo.current = null; enquadramento.current = null;
       centered.current = false;
     };
     // só no mount: posição e marcadores seguintes são tratados pelos efeitos abaixo
@@ -127,9 +136,11 @@ export default function LeafletMapDom({ center, markers, onMarkerPress, escolha 
         .on('click', () => { void onPress.current(mk); })
         .addTo(g);
     }
-    if (!centered.current && !center && markers.length > 0) {
-      centered.current = true;
-      m.fitBounds(L.latLngBounds(markers.map((x): [number, number] => [x.lat, x.lng])).pad(0.5), { maxZoom: 16 });
+    if (markers.length === 0) enquadramento.current?.cancelar();
+    else if (!centered.current && !center) {
+      // sem tamanho ainda, o pedido espera e o `ResizeObserver` o cumpre
+      const limites = L.latLngBounds(markers.map((x): [number, number] => [x.lat, x.lng])).pad(0.5);
+      if (enquadramento.current?.pedir(limites)) centered.current = true;
     }
     // `center` só decide o enquadramento inicial; recentralizar a cada posição nova brigaria com o arrastar do usuário
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -142,7 +153,7 @@ export default function LeafletMapDom({ center, markers, onMarkerPress, escolha 
     const ll: [number, number] = [center.lat, center.lng];
     if (me.current) me.current.setLatLng(ll);
     else me.current = L.circleMarker(ll, { radius: 7, color: colors.map.ring, weight: 3, fillColor: colors.map.me, fillOpacity: 1, interactive: false }).addTo(m);
-    if (!centered.current) { centered.current = true; m.setView(ll, ZOOM); }
+    if (!centered.current) { centered.current = true; enquadramento.current?.cancelar(); m.setView(ll, ZOOM); }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [ready, centerKey]);
 
