@@ -26,20 +26,25 @@ export function RemindersProvider({ children }: { children: ReactNode }) {
   const { user } = useAuth();
   const userId = user?.id;
   const [reminders, setReminders] = useState<Reminder[]>([]);
-  const [carregando, setCarregando] = useState(false);
+  const [emPedido, setEmPedido] = useState(false);
+  // Conta cuja primeira resposta já chegou (com dados ou com erro). Até lá `carregando` vale desde o primeiro render: o efeito
+  // que busca só roda depois dele, e um render sem lista e sem "carregando" faria as telas piscarem "não existe mais".
+  const [respondeuPara, setRespondeuPara] = useState<string | undefined>(undefined);
   const [erro, setErro] = useState<string | null>(null);
   const pedido = useRef(0);
+  const carregando = emPedido || (userId !== undefined && respondeuPara !== userId);
 
   const recarregar = useCallback(async () => {
     const id = ++pedido.current;
-    if (!userId) { setReminders([]); setErro(null); setCarregando(false); return; }
-    setCarregando(true);
+    if (!userId) { setReminders([]); setErro(null); setEmPedido(false); return; }
+    setEmPedido(true);
     const { data, error } = await supabase.from('reminders').select('*').eq('user_id', userId)
       .order('remind_date').order('remind_time');
     if (id !== pedido.current) return;          // trocou de conta ou recarregou no meio: descarta a resposta velha
     if (error) setErro('Não foi possível carregar seus lembretes.');
     else { setReminders((data as Row[]).map(fromRow)); setErro(null); }
-    setCarregando(false);
+    setRespondeuPara(userId);
+    setEmPedido(false);
   }, [userId]);
 
   useEffect(() => { void recarregar(); }, [recarregar]);

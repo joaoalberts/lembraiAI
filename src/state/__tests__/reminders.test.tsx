@@ -2,7 +2,8 @@ import { act, renderHook, waitFor } from '@testing-library/react-native';
 import type { Row } from '../../lib/reminder-rows';
 import { RemindersProvider, useReminders, type Draft } from '../reminders';
 
-jest.mock('../auth', () => ({ useAuth: () => ({ user: { id: 'u1' } }) }));
+const mockUseAuth = jest.fn();
+jest.mock('../auth', () => ({ useAuth: () => mockUseAuth() }));
 
 // O Supabase real não roda aqui: cada `from('reminders')` devolve uma cadeia que se encadeia em qualquer ordem e termina
 // (await ou single) no resultado que o teste combinou para aquela chamada.
@@ -49,7 +50,10 @@ async function montar(linhas: Row[]) {
   return hook;
 }
 
-beforeEach(() => { mock.__chamadas.length = 0; });
+beforeEach(() => {
+  mock.__chamadas.length = 0;
+  mockUseAuth.mockReturnValue({ user: { id: 'u1' } });
+});
 
 describe('RemindersProvider.update', () => {
   it('salva a edição, troca o lembrete na lista e reordena por data e hora', async () => {
@@ -87,5 +91,71 @@ describe('RemindersProvider.update', () => {
     expect(salvo).toBeNull();
     expect(result.current.erro).toBe('Não foi possível salvar o lembrete.');
     expect(result.current.reminders[0].title).toBe('Comprar água');
+  });
+});
+
+describe('RemindersProvider: carregando', () => {
+  /** Anota o `carregando` de CADA render (o `result.current` só mostra o último, depois dos efeitos). */
+  async function observar() {
+    const vistos: boolean[] = [];
+    const hook = await renderHook(() => { const s = useReminders(); vistos.push(s.carregando); return s; }, { wrapper: RemindersProvider });
+    return { ...hook, vistos };
+  }
+
+  it('já é "carregando" no primeiro render com conta, antes de a lista chegar: sem isso as telas piscam "não existe mais" ou "nenhum lembrete"', async () => {
+    mock.__respostas.lista = { data: [linha()], error: null };
+    const { result, vistos } = await observar();
+    expect(vistos[0]).toBe(true);
+    await waitFor(() => expect(result.current.carregando).toBe(false));
+    expect(result.current.reminders).toHaveLength(1);
+  });
+
+  it('nenhum render mostra a lista vazia e sem carregar antes de a primeira resposta chegar', async () => {
+    mock.__respostas.lista = { data: [linha()], error: null };
+    const { result, vistos } = await observar();
+    await waitFor(() => expect(result.current.carregando).toBe(false));
+    const primeiroSemCarregar = vistos.indexOf(false);
+    expect(primeiroSemCarregar).toBeGreaterThan(0);
+    expect(vistos.slice(0, primeiroSemCarregar).every(Boolean)).toBe(true);
+  });
+
+  it('se a primeira busca falha, também deixa de carregar (com o aviso de erro), em vez de girar para sempre', async () => {
+    mock.__respostas.lista = { data: null, error: { message: 'falhou' } };
+    const { result } = await observar();
+    await waitFor(() => expect(result.current.carregando).toBe(false));
+    expect(result.current.erro).toBe('Não foi possível carregar seus lembretes.');
+    expect(result.current.reminders).toHaveLength(0);
+  });
+
+  it('sem conta não há o que carregar: nunca fica carregando', async () => {
+    mockUseAuth.mockReturnValue({ user: null });
+    const { result, vistos } = await observar();
+    expect(vistos.every((v) => v === false)).toBe(true);
+    expect(result.current.carregando).toBe(false);
+  });
+
+  it('depois de sair da conta a lista esvazia e deixa de carregar (a conta que respondeu não é mais a atual)', async () => {
+    mock.__respostas.lista = { data: [linha()], error: null };
+    const { result, rerender } = await observar();
+    await waitFor(() => expect(result.current.carregando).toBe(false));
+    mockUseAuth.mockReturnValue({ user: null });
+    await rerender(undefined);
+    await waitFor(() => expect(result.current.reminders).toHaveLength(0));
+    expect(result.current.carregando).toBe(false);
+  });
+
+  it('recarregar depois da primeira vez volta a "carregando" enquanto busca e termina em falso', async () => {
+    mock.__respostas.lista = { data: [linha()], error: null };
+    const { result } = await observar();
+    await waitFor(() => expect(result.current.carregando).toBe(false));
+    let fim: () => void = () => {};
+    const terminou = new Promise<void>((ok) => { fim = ok; });
+    mock.__respostas.lista = { data: [linha(), linha({ id: 'r2' })], error: null };
+    let recarga: Promise<void> = Promise.resolve();
+    await act(async () => { recarga = result.current.recarregar().then(fim); });
+    await terminou;
+    await recarga;
+    expect(result.current.carregando).toBe(false);
+    expect(result.current.reminders).toHaveLength(2);
   });
 });
