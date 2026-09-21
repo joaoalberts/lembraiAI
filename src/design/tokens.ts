@@ -565,6 +565,8 @@ export const size = {
     notaTop: du(30),
     notaGap: du(12),
     notaIcon: du(26),
+    // as curvas do topo (`.fundo` do AuthShell): a caixa tem a altura da arte gerada (1702 × 1040 px = 851 × 520 du); o traço só ocupa os 345 du de cima
+    curvasAltura: du(520),
     // o horizonte (`.horizonte` do AuthShell): o traço só existe entre 28% e 72% dos 1000 du do original, então a faixa tem 440 du e a base dela fica 280 du acima do fim do conteúdo
     horizonteAltura: du(440),
     horizonteBase: du(280),

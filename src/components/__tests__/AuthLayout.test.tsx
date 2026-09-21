@@ -56,6 +56,8 @@ describe('AuthLayout (base das telas de conta)', () => {
     expect(gradients.contas).toContain('168deg');
     expect(estilo('auth-fundo')).toMatchObject({ pointerEvents: 'none' });
     expect(estilo('auth-curvas')).toMatchObject({ pointerEvents: 'none' });
+    // a caixa tem a altura da arte (520 du do original): com a do cabeçalho da lista (345 du) as curvas saíam achatadas
+    expect(estilo('auth-curvas')).toMatchObject({ position: 'absolute', top: 0, left: 0, right: 0, height: size.auth.curvasAltura });
     expect(imagemDe('auth-curvas').props.source[0].testUri).toMatch(/assets\/art\/topo-contas\.webp$/);
   });
 

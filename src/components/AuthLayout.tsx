@@ -106,7 +106,7 @@ const styles = StyleSheet.create({
   tela: { flex: 1, backgroundColor: colors.bg.stage },
   // só enfeite: o toque passa direto para o que está por cima
   decoracao: { pointerEvents: 'none' },
-  curvas: { position: 'absolute', top: 0, left: 0, right: 0, height: size.header.height },
+  curvas: { position: 'absolute', top: 0, left: 0, right: 0, height: size.auth.curvasAltura },
   conteudo: { flexGrow: 1, paddingHorizontal: size.auth.side, paddingBottom: size.auth.bottom },
   voltar: { position: 'absolute', left: size.auth.side, zIndex: 1 },
   marca: { flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: size.auth.marcaGap, marginBottom: size.auth.marcaBottom },
