@@ -50,6 +50,16 @@ describe('Button', () => {
     expect(botao()).toBeDisabled();
   });
 
+  it('destructive: vermelho sólido com texto branco, sem brilho laranja; frost: cinza-esverdeado com texto escuro', async () => {
+    const { rerender } = await render(<Button label="Excluir lembrete" onPress={jest.fn()} variant="destructive" />);
+    expect(botao()).toHaveStyle({ backgroundColor: colors.action.danger, minHeight: size.button });
+    expect(botao()).not.toHaveStyle({ boxShadow: shadow.cta });
+    expect(screen.getByText('Excluir lembrete')).toHaveStyle({ color: colors.text.onAction });
+    await rerender(<Button label="Cancelar" onPress={jest.fn()} variant="frost" />);
+    expect(botao()).toHaveStyle({ backgroundColor: colors.action.frost });
+    expect(screen.getByText('Cancelar')).toHaveStyle({ color: colors.text.primary });
+  });
+
   it('compacto: mais baixo, sem brilho e com o rótulo pequeno em negrito', async () => {
     await render(<Button label="Novo lembrete" onPress={jest.fn()} compact />);
     expect(botao()).toHaveStyle({ minHeight: size.buttonCompact, backgroundColor: colors.action.primary });
@@ -83,6 +93,13 @@ describe('estiloDoBotao (estados)', () => {
   it('repouso: cor da variante', () => {
     expect(plano('primary', { pressed: false })).toMatchObject({ backgroundColor: colors.action.primary });
     expect(plano('secondary', { pressed: false })).toMatchObject({ backgroundColor: colors.action.secondary });
+  });
+
+  it('destructive e frost: ponteiro em cima e pressionado têm cor própria', () => {
+    expect(plano('destructive', { pressed: false, hovered: true })).toMatchObject({ backgroundColor: colors.action.dangerHover });
+    expect(plano('destructive', { pressed: true })).toMatchObject({ backgroundColor: colors.action.dangerPressed });
+    expect(plano('frost', { pressed: false, hovered: true })).toMatchObject({ backgroundColor: colors.action.frostHover });
+    expect(plano('frost', { pressed: true })).toMatchObject({ backgroundColor: colors.action.frostPressed });
   });
 
   it('ponteiro em cima (web): cor de hover de cada variante', () => {

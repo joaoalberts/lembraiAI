@@ -1,111 +1,181 @@
-import { useMemo } from 'react';
-import { ActivityIndicator, RefreshControl, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { useCallback, useMemo, useState } from 'react';
+import { RefreshControl, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { router } from 'expo-router';
+import { AppBrand } from '../../src/components/AppBrand';
 import { Banner } from '../../src/components/Banner';
 import { Button } from '../../src/components/Button';
-import { Icon } from '../../src/components/Icon';
+import { Chip } from '../../src/components/Chip';
+import { ConfirmSheet } from '../../src/components/ConfirmSheet';
+import { GlassButton } from '../../src/components/GlassButton';
+import { GreenHeader } from '../../src/components/GreenHeader';
 import { ReminderCard } from '../../src/components/ReminderCard';
-import { SECTIONS } from '../../src/data/reminders';
-import { UI_ICON } from '../../src/design/icons';
+import { ReminderMenu } from '../../src/components/ReminderMenu';
+import { SearchField } from '../../src/components/SearchField';
+import { TipCard } from '../../src/components/TipCard';
+import type { Reminder } from '../../src/data/reminders';
 import { colors, radius, size, space, textStyles } from '../../src/design/tokens';
-import { confirmar } from '../../src/lib/confirm';
-import { sectionOf } from '../../src/lib/format';
+import { FILTROS, agruparPorSecao, contagensDosFiltros, dataDaSecao, lembretesVisiveis, textoDeAtivos, type FiltroDaLista } from '../../src/lib/lista';
 import { useGeofences } from '../../src/state/geofences';
 import { useReminders } from '../../src/state/reminders';
-
 
 export default function LembretesScreen() {
   const { reminders, carregando, erro, recarregar, toggle, remove } = useReminders();
   const { insideIds } = useGeofences();
+  const [buscando, setBuscando] = useState(false);
+  const [busca, setBusca] = useState('');
+  const [filtro, setFiltro] = useState<FiltroDaLista>('todos');
+  const [menu, setMenu] = useState<Reminder | null>(null);
+  const [aExcluir, setAExcluir] = useState<Reminder | null>(null);
 
-  const secoes = useMemo(
-    () => SECTIONS
-      .map((secao) => ({ secao, itens: reminders.filter((r) => sectionOf(r.dateISO) === secao) }))
-      .filter((s) => s.itens.length > 0),
-    [reminders],
-  );
+  const contagens = useMemo(() => contagensDosFiltros(reminders, busca), [reminders, busca]);
+  const grupos = useMemo(() => agruparPorSecao(lembretesVisiveis(reminders, busca, filtro)), [reminders, busca, filtro]);
+  const buscaAtiva = busca.trim() !== '';
 
-  const excluir = async (id: string, titulo: string) => {
-    if (await confirmar('Excluir lembrete', `"${titulo}" será removido.`)) await remove(id);
+  // Fechar a busca zera o texto e mantém o filtro escolhido; abrir e fechar não mexe no filtro
+  const alternarBusca = useCallback(() => {
+    setBuscando((aberta) => !aberta);
+    setBusca('');
+  }, []);
+
+  const pedirExclusao = () => {
+    setAExcluir(menu);
+    setMenu(null);
+  };
+  const confirmarExclusao = () => {
+    if (aExcluir) void remove(aExcluir.id);
+    setAExcluir(null);
   };
 
-  if (carregando && reminders.length === 0) {
-    return (
-      <View style={styles.center}>
-        <ActivityIndicator size="large" color={colors.spinner} />
-        <Text style={styles.loadingText}>Carregando lembretes...</Text>
-      </View>
-    );
-  }
-
   return (
-    <ScrollView
-      style={styles.container}
-      contentContainerStyle={styles.content}
-      refreshControl={<RefreshControl refreshing={carregando} onRefresh={recarregar} />}
-    >
-      {erro && (
-        <View style={styles.errorBlock}>
-          <Banner variant="error">{erro}</Banner>
-          <Button label="Tentar novamente" onPress={recarregar} variant="ghost" />
-        </View>
-      )}
-
-      {insideIds.length > 0 && (
-        <Banner variant="info" style={styles.aviso}>
-          Você está dentro do raio de {insideIds.length} lembrete{insideIds.length !== 1 ? 's' : ''}
-        </Banner>
-      )}
-
-      {reminders.length === 0 && !erro ? (
-        <View style={styles.empty}>
-          {/* o ícone é decorativo: o título já diz o que fazer */}
-          <View style={styles.emptyCircle} accessibilityElementsHidden importantForAccessibility="no-hide-descendants">
-            <Icon name={UI_ICON.vazio} size={size.icon.xl} color={colors.icon.default} />
+    <View style={styles.tela}>
+      <GreenHeader>
+        <View style={styles.topo}>
+          {buscando ? (
+            <View style={styles.campo}>
+              <SearchField value={busca} onChangeText={setBusca} onClose={alternarBusca} />
+            </View>
+          ) : (
+            <AppBrand />
+          )}
+          <View style={styles.botoes}>
+            <GlassButton icon={buscando ? 'x' : 'search'} label={buscando ? 'Fechar busca' : 'Buscar'} onPress={alternarBusca} />
+            <GlassButton icon="user-round" label="Minha conta" onPress={() => router.navigate('/config')} />
           </View>
-          <Text style={styles.emptyTitle}>Nenhum lembrete</Text>
-          <Text style={styles.emptySubtitle}>Crie seu primeiro lembrete para começar</Text>
-          <Button label="Criar lembrete" onPress={() => router.navigate('/novo')} style={styles.createBtn} />
         </View>
-      ) : (
-        secoes.map(({ secao, itens }) => (
-          <View key={secao}>
-            <Text style={styles.sectionTitle}>{secao}</Text>
-            {itens.map((r) => (
-              <ReminderCard
-                key={r.id}
-                reminder={r}
-                nearby={insideIds.includes(r.id)}
-                onToggle={() => void toggle(r.id)}
-                onMenu={() => void excluir(r.id, r.title)}
-              />
-            ))}
+        <View style={styles.titulos}>
+          <View style={styles.textos}>
+            <Text accessibilityRole="header" style={styles.titulo}>Meus lembretes</Text>
+            <Text style={styles.subtitulo}>{textoDeAtivos(reminders)}</Text>
           </View>
-        ))
-      )}
-    </ScrollView>
+          <Button compact icon="plus" label="Novo lembrete" onPress={() => router.navigate('/novo')} />
+        </View>
+      </GreenHeader>
+
+      <View style={styles.folha}>
+        <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.chipsRolagem} contentContainerStyle={styles.chips}>
+          {FILTROS.map(({ chave, rotulo }) => (
+            <Chip key={chave} label={rotulo} count={contagens[chave]} selected={filtro === chave} onPress={() => setFiltro(chave)} style={styles.chip} />
+          ))}
+        </ScrollView>
+
+        <ScrollView
+          style={styles.rolagem}
+          contentContainerStyle={styles.conteudo}
+          refreshControl={<RefreshControl refreshing={carregando} onRefresh={recarregar} />}
+          keyboardShouldPersistTaps="handled"
+        >
+          {erro && (
+            <View style={styles.erro}>
+              <Banner variant="error">{erro}</Banner>
+              <Button label="Tentar novamente" onPress={recarregar} variant="ghost" />
+            </View>
+          )}
+
+          {insideIds.length > 0 && (
+            <Banner variant="info" style={styles.aviso}>
+              Você está dentro do raio de {insideIds.length} lembrete{insideIds.length !== 1 ? 's' : ''}
+            </Banner>
+          )}
+
+          {grupos.map(({ secao, itens }, i) => (
+            <View key={secao} style={i > 0 ? styles.secaoSeguinte : null}>
+              <View style={[styles.cabecalhoDaSecao, i === 0 ? styles.primeiraSecao : null]}>
+                <Text accessibilityRole="header" style={styles.secao}>{secao}</Text>
+                {dataDaSecao(secao) ? <Text style={styles.dataDaSecao}>{dataDaSecao(secao)}</Text> : null}
+              </View>
+              <View style={styles.cartoes}>
+                {itens.map((r) => (
+                  <ReminderCard key={r.id} reminder={r} nearby={insideIds.includes(r.id)} onToggle={() => void toggle(r.id)} onMenu={() => setMenu(r)} />
+                ))}
+              </View>
+            </View>
+          ))}
+
+          {carregando && reminders.length === 0 && <Text style={styles.carregandoTexto}>Carregando seus lembretes…</Text>}
+
+          {!carregando && !erro && reminders.length === 0 && (
+            <View style={styles.vazio}>
+              <Text style={styles.vazioTitulo}>Nenhum lembrete ainda</Text>
+              <Text style={styles.vazioTexto}>Crie o primeiro e escolha se ele avisa por horário ou ao chegar num lugar.</Text>
+              <Button compact icon="plus" label="Novo lembrete" onPress={() => router.navigate('/novo')} />
+            </View>
+          )}
+
+          {reminders.length > 0 && grupos.length === 0 && buscaAtiva && (
+            <View style={styles.vazio}>
+              <Text style={styles.vazioTitulo}>Nenhum resultado para “{busca.trim()}”</Text>
+              <Text style={styles.vazioTexto}>Confira a grafia ou busque por outro nome ou local.</Text>
+            </View>
+          )}
+
+          {reminders.length > 0 && !buscaAtiva && (
+            <View style={styles.dica}>
+              <TipCard title="Dica para você" text={'Ative lembretes por local para nunca mais esquecer das suas tarefas fora de casa.'} />
+            </View>
+          )}
+        </ScrollView>
+      </View>
+
+      <ReminderMenu reminder={menu} onClose={() => setMenu(null)} onDelete={pedirExclusao} />
+      <ConfirmSheet
+        visible={aExcluir !== null}
+        title="Excluir lembrete?"
+        message={`“${aExcluir?.title ?? ''}” será removido e você não receberá mais esse aviso.`}
+        confirmLabel="Excluir lembrete"
+        onConfirm={confirmarExclusao}
+        onCancel={() => setAExcluir(null)}
+      />
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: colors.bg.page },
-  content: { padding: space.lg, paddingBottom: space.huge },
-  center: { flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: colors.bg.page },
-  loadingText: { ...textStyles.bodyLg, marginTop: space.md, color: colors.text.secondary },
-  errorBlock: { gap: space.sm, marginBottom: space.lg },
+  tela: { flex: 1, backgroundColor: colors.bg.page },
+  topo: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' },
+  campo: { flex: 1, marginRight: space.md },
+  botoes: { flexDirection: 'row', alignItems: 'center', gap: space.lg },
+  titulos: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', gap: space.md, marginTop: space.sm },
+  textos: { flexShrink: 1 },
+  titulo: { ...textStyles.display, color: colors.text.onDarkWarm },
+  subtitulo: { ...textStyles.body, color: colors.text.onHeader },
+  // a folha clara sobe sobre a parte de baixo do cabeçalho
+  folha: { flex: 1, marginTop: -(size.header.height - size.header.sheetTop), borderTopLeftRadius: radius.sheet, borderTopRightRadius: radius.sheet, overflow: 'hidden', backgroundColor: colors.bg.sheet },
+  chipsRolagem: { flexGrow: 0, paddingTop: size.list.chipsTop },
+  chips: { flexGrow: 1, gap: size.list.chipsGap, paddingHorizontal: size.header.side },
+  chip: { flexGrow: 1 },
+  rolagem: { flex: 1 },
+  conteudo: { paddingTop: size.list.listTop, paddingHorizontal: size.header.side, paddingBottom: space.huge },
+  erro: { gap: space.sm, marginBottom: space.lg },
   aviso: { marginBottom: space.lg },
-  empty: { alignItems: 'center', justifyContent: 'center', paddingVertical: space.giant },
-  emptyCircle: {
-    width: size.emptyCircle,
-    height: size.emptyCircle,
-    borderRadius: radius.pill,
-    backgroundColor: colors.feedback.emptyCircle,
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginBottom: space.lg,
-  },
-  emptyTitle: { ...textStyles.title, color: colors.text.primary, marginBottom: space.sm },
-  emptySubtitle: { ...textStyles.bodyLg, color: colors.text.secondary, textAlign: 'center', marginBottom: space.xl },
-  createBtn: { paddingHorizontal: space.huge },
-  sectionTitle: { ...textStyles.heading, color: colors.text.primary, marginBottom: space.md, marginTop: space.xs },
+  carregandoTexto: { ...textStyles.body, color: colors.text.secondary, textAlign: 'center', paddingVertical: space.xl },
+  cabecalhoDaSecao: { minHeight: size.list.sectionHead, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' },
+  primeiraSecao: { marginBottom: size.list.firstHeadGap - size.list.headGap },
+  secaoSeguinte: { marginTop: size.list.sectionGap },
+  secao: { ...textStyles.heading, color: colors.text.primary },
+  dataDaSecao: { ...textStyles.micro, color: colors.text.secondary },
+  cartoes: { gap: size.list.cardGap, marginTop: size.list.headGap },
+  dica: { marginTop: size.list.tipGap },
+  vazio: { alignItems: 'center', gap: space.sm, paddingTop: size.list.emptyTop, paddingHorizontal: space.xl },
+  vazioTitulo: { ...textStyles.title, color: colors.text.primary, textAlign: 'center' },
+  vazioTexto: { ...textStyles.body, color: colors.text.secondary, textAlign: 'center', marginBottom: space.md },
 });

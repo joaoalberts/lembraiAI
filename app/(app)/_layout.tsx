@@ -36,7 +36,7 @@ export default function AppLayout() {
         tabBarLabelStyle: { fontFamily: fontFamily.medium, fontSize: fontSize.micro },
       }}
     >
-      <Tabs.Screen name="index" options={aba('Lembretes', 'Meus Lembretes', TAB_ICON.lembretes)} />
+      <Tabs.Screen name="index" options={{ ...aba('Lembretes', 'Meus Lembretes', TAB_ICON.lembretes), headerShown: false }} />
       <Tabs.Screen name="novo" options={aba('Novo', 'Novo Lembrete', 'plus')} />
       <Tabs.Screen name="mapa" options={aba('Mapa', 'Mapa', TAB_ICON.mapa)} />
       <Tabs.Screen name="config" options={aba('Config', 'Configurações', TAB_ICON.config)} />

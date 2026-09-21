@@ -26,9 +26,11 @@ export function GreenHeader({ children }: GreenHeaderProps) {
   const topo = topoDoConteudo(top);
   return (
     <View testID="cabecalho-verde" style={[styles.cabecalho, { minHeight: size.header.height + (topo - size.header.contentTop), paddingTop: topo }]}>
-      <View testID="cabecalho-degrade" pointerEvents="none" style={[StyleSheet.absoluteFill, fundoEmDegrade(gradients.cabecalhoVerde)]} />
+      <View testID="cabecalho-degrade" style={[StyleSheet.absoluteFill, styles.decoracao, fundoEmDegrade(gradients.cabecalhoVerde)]} />
       {/* decorativa: escondida do leitor de tela */}
-      <Image source={CURVAS_DE_NIVEL} contentFit="fill" accessible={false} pointerEvents="none" style={styles.curvas} />
+      <View style={[styles.curvas, styles.decoracao]}>
+        <Image source={CURVAS_DE_NIVEL} contentFit="fill" accessible={false} style={StyleSheet.absoluteFill} />
+      </View>
       {children}
     </View>
   );
@@ -36,5 +38,7 @@ export function GreenHeader({ children }: GreenHeaderProps) {
 
 const styles = StyleSheet.create({
   cabecalho: { overflow: 'hidden', paddingHorizontal: size.header.side },
+  // só enfeite: o toque passa direto para o que está por cima
+  decoracao: { pointerEvents: 'none' },
   curvas: { position: 'absolute', top: 0, left: 0, right: 0, height: size.header.height },
 });

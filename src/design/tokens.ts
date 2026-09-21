@@ -94,6 +94,10 @@ export const palette = {
   tipText: '#375C50',
   iconDots: '#717B88',
   iconRadius: '#8B93A0',
+  rowHover: '#F7F8F4',
+  rowPressed: '#EEF1EA',
+  dangerTint: '#FBE7E4',
+  dangerRowHover: '#FDF3F1',
   tabInactive: '#777C8A',
   homeIndicator: '#B7B3AE',
   tabBarBg: '#F8F8F4',
@@ -108,6 +112,7 @@ export const colors = {
     field: palette.white,
     disabled: palette.cream200,
     sheet: palette.sheet,
+    iconCircle: palette.mint100,
   },
   text: {
     primary: palette.ink900,
@@ -172,6 +177,10 @@ export const colors = {
     segmentTrack: palette.sand,
     segmentThumb: palette.white,
     /** Halo redondo atrás das reticências do cartão (ponteiro em cima e pressionado). */
+    rowHover: palette.rowHover,
+    rowPressed: palette.rowPressed,
+    dangerRowHover: palette.dangerRowHover,
+    dangerRowPressed: palette.dangerTint,
     haloHover: 'rgba(20, 40, 30, 0.07)',
     haloPressed: 'rgba(20, 40, 30, 0.13)',
   },
@@ -186,6 +195,7 @@ export const colors = {
     errorInk: palette.alertErrorInk,
     infoInk: palette.alertInfoInk,
     tipCircle: palette.tipCircle,
+    dangerCircle: palette.dangerTint,
   },
   /** Selo "Ativo" do lembrete. */
   status: { active: palette.statusGreen },
@@ -339,6 +349,10 @@ export const size = {
   buttonCompact: du(72),
   /** Cabeçalho verde: altura da arte, topo da marca e dos botões, e onde começa a folha clara que sobe sobre ele (medidas do app web em du). */
   header: { height: du(345), contentTop: du(82), sheetTop: du(296), side: du(38), brandTile: du(75), brandGap: du(21), brandGlyph: du(44), searchHeight: du(76) },
+  /** Lista "Meus lembretes": chips, cabeçalhos de seção e vãos entre cartões e seções (medidas do app web em du). */
+  list: { chipsTop: du(21), chipsGap: du(20), listTop: du(34), sectionHead: du(44), headGap: du(10), firstHeadGap: du(16), cardGap: du(16.5), sectionGap: du(29.5), tipGap: du(22), emptyTop: du(150) },
+  /** Linha do menu do lembrete (Editar, Excluir): altura, círculo do ícone, ícone, vãos e a distância da lista até o título. */
+  menu: { row: du(116), circle: du(68), icon: du(32), gap: du(26), paddingHorizontal: du(34), listTop: du(26) },
   /** Etiqueta do cartão ("Por horário", "Por local"): altura, recuos, vão e ícone. */
   tag: { height: du(36), left: du(13), right: du(17), gap: du(12), icon: 12 },
   /** Cartão de dica: raio, círculo do ícone, recuos e vão. */

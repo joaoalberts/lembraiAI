@@ -139,6 +139,10 @@ Use `palette.*` só para definir papéis em `colors`. As telas usam os papéis (
 | `palette.tipText` | `#375C50` | Texto do cartão de dica |
 | `palette.iconDots` | `#717B88` | Reticências "mais opções" do cartão de lembrete |
 | `palette.iconRadius` | `#8B93A0` | Ícone do raio no cartão de lembrete por local |
+| `palette.rowHover` | `#F7F8F4` | Linha de menu com o ponteiro em cima (web) |
+| `palette.rowPressed` | `#EEF1EA` | Linha de menu pressionada |
+| `palette.dangerTint` | `#FBE7E4` | Círculo do ícone de excluir e linha de excluir pressionada |
+| `palette.dangerRowHover` | `#FDF3F1` | Linha de excluir com o ponteiro em cima (web) |
 | `palette.tabInactive` | `#777C8A` | Rótulo e ícone da aba inativa (medido nas capturas) |
 | `palette.homeIndicator` | `#B7B3AE` | Traço "home" do iOS sob a barra de abas |
 | `palette.tabBarBg` | `#F8F8F4` | Fundo da barra de abas |
@@ -155,6 +159,7 @@ Use `palette.*` só para definir papéis em `colors`. As telas usam os papéis (
 | `colors.bg.field` | `#FFFFFF` | `palette.white` | Campos de formulário, painéis e folhas |
 | `colors.bg.disabled` | `#F5F2ED` | `palette.cream200` | Campo desabilitado |
 | `colors.bg.sheet` | `#EFF0EA` | `palette.sheet` | Folha de cantos altos da lista e das configurações |
+| `colors.bg.iconCircle` | `#DBF1E5` | `palette.mint100` | Círculo atrás do ícone das linhas de menu (Editar, Alterar senha) |
 | `colors.text.primary` | `#0A0A0A` | `palette.ink900` | Texto principal e títulos |
 | `colors.text.secondary` | `#5B5D64` | `palette.ink700` | Subtítulos, dicas e metadados |
 | `colors.text.placeholder` | `#6B6E76` | `palette.ink650` | Texto de exemplo dentro de campos vazios |
@@ -208,6 +213,10 @@ Use `palette.*` só para definir papéis em `colors`. As telas usam os papéis (
 | `colors.control.chipOff` | `#F3F4EF` | `palette.chipOff` | Chip de filtro não selecionado |
 | `colors.control.segmentTrack` | `#E8E4DC` | `palette.sand` | Trilho do controle segmentado |
 | `colors.control.segmentThumb` | `#FFFFFF` | `palette.white` | Opção selecionada do controle segmentado |
+| `colors.control.rowHover` | `#F7F8F4` | `palette.rowHover` | Linha de menu com o ponteiro em cima (web) |
+| `colors.control.rowPressed` | `#EEF1EA` | `palette.rowPressed` | Linha de menu pressionada |
+| `colors.control.dangerRowHover` | `#FDF3F1` | `palette.dangerRowHover` | Linha de excluir com o ponteiro em cima (web) |
+| `colors.control.dangerRowPressed` | `#FBE7E4` | `palette.dangerTint` | Linha de excluir pressionada |
 | `colors.control.haloHover` | `rgba(20, 40, 30, 0.07)` | — | Halo atrás das reticências do cartão com o ponteiro em cima (web) |
 | `colors.control.haloPressed` | `rgba(20, 40, 30, 0.13)` | — | Halo atrás das reticências do cartão pressionado |
 | `colors.feedback.dangerBg` | `#FFE6E6` | `palette.red100` | Fundo do aviso de erro |
@@ -220,6 +229,7 @@ Use `palette.*` só para definir papéis em `colors`. As telas usam os papéis (
 | `colors.feedback.errorInk` | `#8E2418` | `palette.alertErrorInk` | Texto do aviso de erro nas configurações |
 | `colors.feedback.infoInk` | `#1B4436` | `palette.alertInfoInk` | Texto do aviso informativo |
 | `colors.feedback.tipCircle` | `#C3DFCE` | `palette.tipCircle` | Círculo atrás da lâmpada do cartão de dica |
+| `colors.feedback.dangerCircle` | `#FBE7E4` | `palette.dangerTint` | Círculo atrás do ícone de excluir e de sair |
 | `colors.status.active` | `#029554` | `palette.statusGreen` | Ponto do selo "Ativo" |
 | `colors.tab.background` | `#F8F8F4` | `palette.tabBarBg` | Fundo da barra de abas |
 | `colors.tab.inactive` | `#777C8A` | `palette.tabInactive` | Rótulo e ícone da aba inativa |
@@ -483,6 +493,7 @@ Componente: `src/components/Button.tsx`.
 
 Regras: uma ação primária por tela. Ação destrutiva sempre pede confirmação (`confirmar`, em `src/lib/confirm.ts`). O botão tem `accessibilityRole="button"` e `accessibilityState={{ disabled }}`.
 
+- **Excluir sólido e cancelar** (`variant="destructive"` e `"frost"`): só dentro da confirmação de uma ação sem volta. `destructive` usa `colors.action.danger` (ponteiro `dangerHover`, pressionado `dangerPressed`) com texto `colors.text.onAction`; `frost` usa `colors.action.frost` (`frostHover`, `frostPressed`) com texto `colors.text.primary`.
 - **Compacto** (`compact`, com `icon` opcional): altura `size.buttonCompact`, padding `space.lg`, rótulo `fontSize.micro` em negrito e sem o brilho `shadow.cta`; o ícone (`size.icon.xs`, traço `iconStroke.action`) vai à esquerda, na cor do rótulo, a `space.sm`. É o "Novo lembrete" do cabeçalho verde.
 - **Vidro** (`src/components/GlassButton.tsx`): botão redondo de `size.glassButton` sobre o verde escuro, para busca e conta. Fundo `colors.glass.fill` (ponteiro `fillHover`, pressionado `fillPressed` e escala `motion.pressedScale`), contorno `borderWidth.hairline` em `colors.glass.border`, ícone branco de `size.icon.md`. Sempre com `accessibilityLabel` (o ícone sozinho não diz nada) e toque de 44. O desfoque de fundo do original não é reproduzido: sobre um verde quase liso não se vê. Foco de teclado em menta (`colors.border.focusOnDark`), porque o verde-floresta some no fundo escuro.
 
@@ -545,6 +556,8 @@ Componente `src/components/Sheet.tsx`. Véu `colors.overlay` (verde-escuro a 46%
 - **Entrada:** o véu aparece em `motion.duration.scrim` (ease-out) e a folha sobe de baixo em `motion.duration.sheet`, com a curva `motion.curve`. Com "reduzir movimento" (`src/lib/movimento.ts`) ela já entra pronta. Não há animação de saída (some na hora) nem arrastar para fechar, como no app web.
 - **Fechar:** toque no véu, botão voltar do Android, Esc na web e o gesto de escape do leitor de tela (iOS).
 - **Acessibilidade:** papel `dialog`, modal, título como nome e como cabeçalho; o resto da tela sai da árvore de acessibilidade enquanto a folha está aberta.
+- **Menu do lembrete** (`src/components/ReminderMenu.tsx`, aberto pelas reticências do cartão): título do lembrete, data e hora como subtítulo, e uma lista branca de cantos `radius.lg` com contorno `colors.border.field`. Cada linha (`size.menu.*`) tem um círculo com o ícone (menta `colors.bg.iconCircle` no Editar; rosado `colors.feedback.dangerCircle` na lixeira) e o rótulo em negrito; Excluir usa `colors.text.danger`. Ponteiro em cima e pressionado trocam o fundo (`colors.control.rowHover` e `rowPressed`; rosados no Excluir). A linha Editar só aparece quando quem abre sabe editar.
+- **Confirmação** (`src/components/ConfirmSheet.tsx`, no lugar do `Alert` do sistema, que muda de cara em cada plataforma): "Excluir lembrete?", a mensagem "“título” será removido e você não receberá mais esse aviso." e dois botões empilhados a `space.sm`: `destructive` (vermelho sólido `colors.action.danger`, texto branco) e `frost` ("Cancelar", `colors.action.frost`, texto escuro). Confirmar só confirma; Cancelar, o véu e o Esc só fecham. Sem aviso de "desfazer".
 
 ### 11.6 Abas e cabeçalho
 
@@ -557,6 +570,15 @@ Componente `src/components/Sheet.tsx`. Véu `colors.overlay` (verde-escuro a 46%
 ### 11.8 Cartão de dica (`TipCard`)
 
 "Dica para você" no fim da lista (`src/components/TipCard.tsx`): fundo `colors.feedback.infoBg`, raio `size.tip.radius`, círculo `size.tip.circle` em `colors.feedback.tipCircle` com a lâmpada (`lightbulb`, `colors.icon.tip`) e a seta `chevron-right` à direita. Título em negrito (`colors.text.primary`) e texto em `colors.text.tip` (`fontSize.micro`). Na lista é só informação: o original não o torna tocável.
+
+### 11.9 Lista "Meus lembretes"
+
+Tela `app/(app)/index.tsx`, sobre o cabeçalho verde (`GreenHeader`): marca e botões de vidro (busca e conta) na primeira linha; na segunda o título `textStyles.display` em `colors.text.onDarkWarm`, o subtítulo "N lembretes ativos" (`colors.text.onHeader`) e o botão compacto "Novo lembrete". A folha clara sobe sobre o cabeçalho e traz, de cima para baixo: os quatro chips (Todos, Hoje, Esta semana, Locais, cada um com a contagem, que acompanha a busca), os grupos Hoje, Amanhã e Esta semana (título `textStyles.heading`; Hoje e Amanhã mostram a data à direita), os cartões e a dica. Medidas em `size.list.*`.
+
+- **Grupos:** Hoje = a data de hoje; Amanhã = hoje mais um dia; **Esta semana = qualquer outra data, passada ou futura** (como no original; o filtro "Esta semana" soma Amanhã). Grupo sem itens não aparece.
+- **Busca:** o botão de vidro troca a marca pelo campo e vira "Fechar busca"; casa em título, lugar, data e hora, sem acento; fechar zera o texto e mantém o filtro. A dica some enquanto se busca.
+- **Menu e exclusão:** as reticências abrem o menu do lembrete; Excluir fecha o menu e abre a confirmação. O subtítulo "N lembretes ativos" conta a lista inteira (ignora busca e filtro).
+- **Rolagem:** os chips ficam fixos (e rolam na horizontal se a tela for estreita); só a lista rola, com puxar para atualizar (o original não tem).
 
 ### 11.7 Coluna da web
 
@@ -641,6 +663,22 @@ Filosofia: o mínimo. O feedback de toque é instantâneo (troca de cor e escala
 | `size.header.brandGap` | `11` | Vão entre o tile da marca e o nome |
 | `size.header.brandGlyph` | `22` | Lado do símbolo dentro do tile da marca |
 | `size.header.searchHeight` | `38` | Altura do campo de busca |
+| `size.list.chipsTop` | `11` | Lista: distância da borda da folha até os chips |
+| `size.list.chipsGap` | `10` | Lista: vão entre os chips |
+| `size.list.listTop` | `17` | Lista: espaço entre os chips e o primeiro título de seção |
+| `size.list.sectionHead` | `22` | Lista: altura do título de seção (Hoje, Amanhã, Esta semana) |
+| `size.list.headGap` | `5` | Lista: vão entre o título da seção e o primeiro cartão |
+| `size.list.firstHeadGap` | `8` | Lista: o mesmo vão na primeira seção |
+| `size.list.cardGap` | `8` | Lista: vão entre cartões |
+| `size.list.sectionGap` | `15` | Lista: vão entre seções |
+| `size.list.tipGap` | `11` | Lista: vão entre o último cartão e a dica |
+| `size.list.emptyTop` | `76` | Lista: espaço acima da mensagem de lista vazia |
+| `size.menu.row` | `59` | Linha do menu: altura mínima |
+| `size.menu.circle` | `34` | Linha do menu: círculo do ícone |
+| `size.menu.icon` | `16` | Linha do menu: ícone dentro do círculo |
+| `size.menu.gap` | `13` | Linha do menu: vão entre o círculo e o texto |
+| `size.menu.paddingHorizontal` | `17` | Linha do menu: recuo dos lados |
+| `size.menu.listTop` | `13` | Linha do menu: distância da lista até o título da folha |
 | `size.tag.height` | `18` | Etiqueta "Por horário" / "Por local": altura |
 | `size.tag.left` | `7` | Etiqueta: recuo antes do ícone |
 | `size.tag.right` | `9` | Etiqueta: recuo depois do texto |
@@ -698,9 +736,9 @@ Filosofia: o mínimo. O feedback de toque é instantâneo (troca de cor e escala
 
 | Estado | Como aparece |
 |---|---|
-| Carregando a tela | `ActivityIndicator` grande em `colors.spinner`, centralizado, com "Carregando…" em `textStyles.bodyLg` e `colors.text.secondary`. Só quando não há dado antigo para mostrar; havendo, use puxar para atualizar |
+| Carregando a tela | `ActivityIndicator` grande em `colors.spinner`, centralizado, com "Carregando…" em `textStyles.bodyLg` e `colors.text.secondary`. Só quando não há dado antigo para mostrar; havendo, use puxar para atualizar. Na lista, só o texto "Carregando seus lembretes…" sob os chips |
 | Carregando uma ação | Botão desabilitado com o rótulo no gerúndio ("Criando…"); o formulário fica bloqueado |
-| Vazio | Círculo `colors.feedback.emptyCircle` com o ícone `vazio`, título `textStyles.title`, uma frase de orientação e o botão primário ("Criar lembrete") |
+| Vazio | Título `textStyles.title` ("Nenhum lembrete ainda"), uma frase de orientação e o botão compacto "Novo lembrete". Na lista, uma busca sem resultado diz `Nenhum resultado para “texto”` e sugere conferir a grafia; filtro sem itens (sem busca) mostra só a dica |
 | Sucesso | `Banner` `success` no topo do formulário seguinte, ou a mudança visível na lista. Sem modal de "deu certo" |
 | Erro da tela | `Banner` `error` com o botão "Tentar novamente" (`ghost`) |
 | Erro de campo | Borda e mensagem do campo (seção 10) |

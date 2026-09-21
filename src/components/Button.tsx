@@ -3,7 +3,8 @@ import { anelDeFoco, type EstadoDeToque } from '../design/foco';
 import { borderWidth, colors, fontFamily, fontSize, iconStroke, lineHeight, motion, opacity, radius, shadow, size, space, textStyles } from '../design/tokens';
 import { Icon, type IconeNome } from './Icon';
 
-export type ButtonVariant = 'primary' | 'secondary' | 'ghost' | 'danger';
+/** `destructive` = ação de excluir sólida (dentro da confirmação); `frost` = a saída tranquila ao lado dela ("Cancelar"). */
+export type ButtonVariant = 'primary' | 'secondary' | 'ghost' | 'danger' | 'destructive' | 'frost';
 
 interface ButtonProps {
   label: string;
@@ -33,6 +34,8 @@ const VISUAL: Record<ButtonVariant, Visual> = {
   secondary: { repouso: colors.action.secondary, ponteiro: colors.action.secondaryHover, pressionado: colors.action.secondaryPressed, rotulo: colors.text.onDark },
   ghost: { repouso: 'transparent', ponteiro: colors.bg.field, pressionado: colors.control.chipOff, rotulo: colors.text.primary, contorno: colors.border.strong },
   danger: { repouso: 'transparent', ponteiro: colors.bg.field, pressionado: colors.control.chipOff, rotulo: colors.text.danger, contorno: colors.border.danger },
+  destructive: { repouso: colors.action.danger, ponteiro: colors.action.dangerHover, pressionado: colors.action.dangerPressed, rotulo: colors.text.onAction },
+  frost: { repouso: colors.action.frost, ponteiro: colors.action.frostHover, pressionado: colors.action.frostPressed, rotulo: colors.text.primary },
 };
 
 /** Estilo do botão por variante e estado. Função pura e exportada: o ponteiro em cima e o foco só existem na web, então os testes chamam esta função em vez de simular o toque. */
