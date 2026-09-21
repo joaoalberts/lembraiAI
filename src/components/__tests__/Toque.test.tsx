@@ -2,7 +2,7 @@ import '@testing-library/react-native/matchers';
 import { fireEvent, render, screen } from '@testing-library/react-native';
 import { Platform, StyleSheet, Text } from 'react-native';
 import { size } from '../../design/tokens';
-import { Toque, folgaAteOAlvo } from '../Toque';
+import { Toque, folgaAteOAlvo, respiroDoToque } from '../Toque';
 
 const ESCONDIDO = { includeHiddenElements: true } as const;
 const medir = (largura: number, altura: number) =>
@@ -31,6 +31,25 @@ describe('folgaAteOAlvo (a conta)', () => {
 
   it('alvo mínimo 0 desliga a folga automática', () => {
     expect(folgaAteOAlvo({ largura: 10, altura: 10 }, 0)).toBeUndefined();
+  });
+});
+
+describe('respiroDoToque (quanto falta em cada borda para o alvo)', () => {
+  it('metade do que falta para o alvo: é o quanto o toque passa do desenho de cada lado', () => {
+    expect(respiroDoToque(36)).toBe(4);
+    expect(respiroDoToque(38)).toBe(3);
+    expect(respiroDoToque(20, 44)).toBe(12);
+  });
+
+  it('o que já tem o alvo (ou mais) não precisa de respiro, e o alvo mínimo 0 o desliga', () => {
+    expect(respiroDoToque(44)).toBe(0);
+    expect(respiroDoToque(60)).toBe(0);
+    expect(respiroDoToque(10, 0)).toBe(0);
+  });
+
+  it('usa o alvo mínimo dos tokens (44)', () => {
+    jest.replaceProperty(size, 'touch', 48 as never);
+    expect(respiroDoToque(36)).toBe(6);
   });
 });
 

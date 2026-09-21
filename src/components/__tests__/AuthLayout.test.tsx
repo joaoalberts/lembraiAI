@@ -152,8 +152,23 @@ describe('AuthLayout: voltar e rodapé', () => {
     expect(volta).toHaveBeenCalledTimes(1);
   });
 
-  it('com entalhe o botão de voltar e a marca descem o que a barra de status passar da distância do botão', async () => {
+  it('com entalhe o botão de voltar e a marca descem até o alvo de toque inteiro caber abaixo da barra de status', async () => {
     await abrir(<AuthLayout title="Entrar" voltar={jest.fn()}><Text>corpo</Text></AuthLayout>, { top: 59 });
-    expect(screen.getByTestId('auth-voltar')).toHaveStyle({ top: 59 }) // a barra de status (59) passa dos 20 do botão: tudo desce essa diferença;
+    const respiro = (size.touch - size.auth.voltar) / 2; // a folga de cima do Toque (4)
+    // a barra (59) mais a folga (4) passa dos 20 do botão: tudo desce essa diferença
+    expect(screen.getByTestId('auth-voltar')).toHaveStyle({ top: 59 + respiro });
+    const rolagem = StyleSheet.flatten(screen.getByTestId('auth-rolagem').props.contentContainerStyle) as Record<string, unknown>;
+    expect(rolagem.paddingTop).toBe(size.auth.top + 59 + respiro - size.auth.voltarTop);
+  });
+
+  // O sistema fica com todo toque dentro da barra de status: se o botão encosta nela, a folga de cima do Toque se perde e o alvo
+  // fica com 44 × 40 (medido no emulador). Decisão do João (21/09): alvo completo, com o respiro abaixo da barra.
+  it.each([0, 20, 24, 47, 59, 100])('com a barra de status de %i o alvo de toque do voltar, a folga de cima inclusive, fica abaixo dela', async (barra) => {
+    await abrir(<AuthLayout title="Entrar" voltar={jest.fn()}><Text>corpo</Text></AuthLayout>, { top: barra });
+    const respiro = (size.touch - size.auth.voltar) / 2;
+    const topo = estilo('auth-voltar').top as number;
+    expect(topo - respiro).toBeGreaterThanOrEqual(barra);
+    // sem barra que chegue perto (a web, o computador) fica o lugar do desenho
+    if (barra + respiro <= size.auth.voltarTop) expect(topo).toBe(size.auth.voltarTop);
   });
 });

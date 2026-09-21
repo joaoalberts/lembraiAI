@@ -27,6 +27,15 @@ export function folgaAteOAlvo(medida: Medida | null, alvo: number, pedida?: Pres
 }
 
 const paraFora = (n: number): number => (n === 0 ? 0 : -n);
+
+/**
+ * Quanto o toque passa do desenho em cada borda de um controle de `lado`: metade do que falta para o alvo (`size.touch`). Quem
+ * ancora um botão logo abaixo da barra de status do sistema soma isto à área segura: nenhum toque atravessa a barra, então um
+ * botão encostado nela perde a folga de cima e o alvo fica curto (medido no Android: o "Voltar" das contas ficava com 44 × 40).
+ */
+export function respiroDoToque(lado: number, alvo: number = size.touch): number {
+  return Math.max(0, (alvo - lado) / 2);
+}
 const SEM_BORDA: Folga = { top: 0, bottom: 0, left: 0, right: 0 };
 
 /** Largura da borda de cada lado do botão na web (0 sem estilo calculado, como na renderização do servidor e no Jest). */

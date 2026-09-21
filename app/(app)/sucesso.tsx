@@ -12,6 +12,7 @@ import { GlassButton } from '../../src/components/GlassButton';
 import { LinkButton } from '../../src/components/LinkButton';
 import { Subida } from '../../src/components/Subida';
 import { SucessoHeroi } from '../../src/components/SucessoHeroi';
+import { respiroDoToque } from '../../src/components/Toque';
 import { HEROI } from '../../src/design/heroi';
 import { colors, fontSize, lineHeight, motion, size, space, textStyles, fontFamily } from '../../src/design/tokens';
 import { compartilhar } from '../../src/lib/compartilhar';
@@ -81,8 +82,9 @@ function Sucesso() {
       setRetorno('indisponivel');
     }
   };
-  // com entalhe ou ilha dinâmica tudo desce o que a barra de status passar da distância do botão de fechar
-  const descido = Math.max(0, top - size.sucesso.fecharTop);
+  // com entalhe ou ilha dinâmica tudo desce o que a barra de status mais o respiro do alvo de toque passar da distância do botão de fechar
+  // (o sistema fica com o toque dentro da barra: sem o respiro a folga de cima do botão se perde)
+  const descido = Math.max(0, top + respiroDoToque(size.sucesso.fechar) - size.sucesso.fecharTop);
 
   return (
     <View style={styles.tela}>

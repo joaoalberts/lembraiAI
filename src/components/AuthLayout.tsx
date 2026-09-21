@@ -8,7 +8,7 @@ import { borderWidth, colors, fontFamily, fontSize, gradients, iconStroke, lineH
 import { BarraDeStatus } from './BarraDeStatus';
 import { GlassButton } from './GlassButton';
 import { Icon } from './Icon';
-import { Toque } from './Toque';
+import { Toque, respiroDoToque } from './Toque';
 
 const CURVAS_DE_NIVEL = require('../../assets/art/topo-contas.webp');
 const HORIZONTE = require('../../assets/art/horizonte-contas.webp');
@@ -38,8 +38,9 @@ interface AuthLayoutProps {
  */
 export function AuthLayout({ title, subtitle, children, keyboardShouldPersistTaps, voltar, rodape }: AuthLayoutProps) {
   const { top } = useSafeAreaInsets();
-  // com entalhe ou ilha dinâmica tudo desce o que a barra de status passar da distância do botão de voltar
-  const descido = Math.max(0, top - size.auth.voltarTop);
+  // com barra de status, entalhe ou ilha dinâmica tudo desce o que a barra mais o respiro do alvo de toque passar da distância do botão de voltar
+  // (o sistema fica com o toque dentro da barra: sem o respiro a folga de cima do botão se perde e o alvo fica com 44 × 40)
+  const descido = Math.max(0, top + respiroDoToque(size.auth.voltar) - size.auth.voltarTop);
 
   return (
     <View style={styles.tela}>

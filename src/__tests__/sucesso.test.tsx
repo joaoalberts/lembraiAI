@@ -1,7 +1,7 @@
 import '@testing-library/react-native/matchers';
 import { act, fireEvent, render, screen } from '@testing-library/react-native';
 import { router, useIsFocused, useLocalSearchParams } from 'expo-router';
-import { AccessibilityInfo } from 'react-native';
+import { AccessibilityInfo, StyleSheet } from 'react-native';
 import SucessoScreen from '../../app/(app)/sucesso';
 import type { Reminder } from '../data/reminders';
 import { motion, size } from '../design/tokens';
@@ -198,10 +198,19 @@ describe('tela de sucesso: sem lembrete, fora de foco e área segura', () => {
     expect(screen.getByTestId('resumo')).toBeTruthy();
   });
 
-  it('num aparelho com entalhe o herói e o botão de fechar descem o que a barra de status passa da distância do botão', async () => {
+  it('num aparelho com entalhe o herói e o botão de fechar descem até o alvo de toque inteiro caber abaixo da barra de status', async () => {
     await abrir(undefined, 'a1', true, { top: 59 });
-    const descido = 59 - size.sucesso.fecharTop;
+    const respiro = (size.touch - size.sucesso.fechar) / 2; // a folga de cima do Toque (3)
+    const descido = 59 + respiro - size.sucesso.fecharTop;
     expect(screen.getByTestId('sucesso-topo')).toHaveStyle({ top: descido });
+  });
+
+  // O sistema fica com todo toque dentro da barra de status (medido no emulador): botão encostado nela perde a folga de cima.
+  it.each([0, 24, 47, 59, 100])('com a barra de status de %i o alvo de toque do fechar, a folga de cima inclusive, fica abaixo dela', async (barra) => {
+    await abrir(undefined, 'a1', true, { top: barra });
+    const respiro = (size.touch - size.sucesso.fechar) / 2;
+    const topoDoBotao = ((StyleSheet.flatten(screen.getByTestId('sucesso-topo').props.style) as { top: number }).top) + size.sucesso.fecharTop;
+    expect(topoDoBotao - respiro).toBeGreaterThanOrEqual(barra);
   });
 
   it('sem entalhe nada se mexe (a barra de status baixa cabe acima do botão)', async () => {
@@ -212,7 +221,7 @@ describe('tela de sucesso: sem lembrete, fora de foco e área segura', () => {
 
   it('com entalhe o título e o subtítulo descem junto, para não ficarem por baixo do herói que desceu', async () => {
     await abrir(undefined, 'a1', true, { top: 59 });
-    expect(screen.getByTestId('sucesso-titulos')).toHaveStyle({ paddingTop: size.sucesso.tituloTop + 59 - size.sucesso.fecharTop });
+    expect(screen.getByTestId('sucesso-titulos')).toHaveStyle({ paddingTop: size.sucesso.tituloTop + 59 + (size.touch - size.sucesso.fechar) / 2 - size.sucesso.fecharTop });
   });
 
   it('o fim da tela soma a área segura de baixo (a barra de gestos) ao espaço do padrão', async () => {
