@@ -1,12 +1,11 @@
 import type { ReactNode } from 'react';
 import { Image } from 'expo-image';
 import { StyleSheet, Text, View, useWindowDimensions, type ViewStyle } from 'react-native';
-import { useIsFocused } from 'expo-router';
-import { StatusBar } from 'expo-status-bar';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { fundoEmDegrade } from '../design/efeitos';
 import { borderWidth, colors, fontFamily, fontSize, gradients, iconStroke, layout, radius, size, space, textStyles } from '../design/tokens';
 import { AppBrand } from './AppBrand';
+import { BarraDeStatus } from './BarraDeStatus';
 import { Button } from './Button';
 import { BellSolid, LockIcon, PinSolid } from './Glifos';
 import { GlassPill } from './GlassButton';
@@ -75,19 +74,9 @@ function Balao({ esquerdo, topo, medidas, giro, titulo, texto, glifo, testID }: 
  * alta os blocos se afastam, em tela baixa a cena encolhe. Serve de aba "Início" (com a barra de abas) e de primeira
  * tela do visitante (`standalone`).
  */
-/** Tenta verificar se o componente está em foco; em testes fora de navegador, assume que está. */
-function useEmFoco(): boolean {
-  try {
-    return useIsFocused();
-  } catch {
-    return true;
-  }
-}
-
 export function Onboarding({ onSkip, onStart, standalone = false }: OnboardingProps) {
   const { width, height } = useWindowDimensions();
   const { top, bottom } = useSafeAreaInsets();
-  const emFoco = useEmFoco();
   const coluna = Math.min(width, layout.columnMax);
   const unidade = coluna / LARGURA_DA_ARTE;
   const folga = (peso: number): ViewStyle => ({ flexGrow: peso, flexShrink: 1, flexBasis: peso * BASE_DA_FOLGA * unidade, minHeight: 0 });
@@ -101,8 +90,8 @@ export function Onboarding({ onSkip, onStart, standalone = false }: OnboardingPr
 
   return (
     <View testID="onboarding" style={styles.tela}>
-      {/* barra de status oculta quando em foco: fundo completo até o topo */}
-      {emFoco ? <StatusBar hidden={true} /> : null}
+      {/* fundo verde escuro: barra de status com texto claro */}
+      <BarraDeStatus sobre="escuro" />
       <Image source={FUNDO} contentFit="cover" accessible={false} style={StyleSheet.absoluteFill} />
       <View style={[styles.fluxo, { paddingTop: top, paddingBottom: standalone ? bottom : 0 }]}>
         <View style={folga(PESOS.topo)} />

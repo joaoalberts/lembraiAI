@@ -38,10 +38,10 @@ describe('AuthLayout (base das telas de conta)', () => {
     expect(screen.getByTestId('auth-cartao')).toHaveStyle({ backgroundColor: colors.bg.card, borderRadius: size.auth.cardRadius, boxShadow: shadow.cartaoDeConta });
   });
 
-  it('a barra de status acompanha a cor do fundo do app: o texto (relógio, bateria) é sempre escuro', async () => {
+  it('fundo verde escuro: texto da barra de status é claro', async () => {
     jest.mocked(StatusBar).mockClear();
     await abrir(<AuthLayout title="Entrar"><Text>corpo</Text></AuthLayout>);
-    expect(jest.mocked(StatusBar).mock.calls.map(([props]) => props)).toEqual([{ style: 'dark' }]);
+    expect(jest.mocked(StatusBar).mock.calls.map(([props]) => props)).toEqual([{ style: 'light' }]);
   });
 
   it('sem título não desenha cabeçalho (a tela de "confira seu e-mail" usa o próprio bloco)', async () => {

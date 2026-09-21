@@ -44,8 +44,8 @@ export function AuthLayout({ title, subtitle, children, keyboardShouldPersistTap
 
   return (
     <View style={styles.tela}>
-      {/* a barra de status acompanha a cor do fundo do app: texto sempre escuro */}
-      <BarraDeStatus sobre="claro" />
+      {/* fundo verde escuro: barra de status com texto claro */}
+      <BarraDeStatus sobre="escuro" />
       <View testID="auth-fundo" style={[StyleSheet.absoluteFill, styles.decoracao, fundoEmDegrade(gradients.contas)]} />
       <View testID="auth-curvas" style={[styles.curvas, styles.decoracao]}>
         <Image source={CURVAS_DE_NIVEL} contentFit="fill" accessible={false} style={StyleSheet.absoluteFill} />
