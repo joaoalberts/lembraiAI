@@ -43,6 +43,7 @@ Um commit por mudança, `npm run typecheck && npm test` antes, tag `ponto-de-rec
 - Rotas ficam em `app/`. **Não criar `src/app/`**: o Expo Router prioriza `src/app` e ignora `app/`.
 - Rota nova? As rotas tipadas só são regeneradas por `expo start` (o `export` não). Sem isso o `tsc` recusa `router.push('/rota-nova')`: suba o dev server uma vez.
 - **Abas ficam montadas** (`app/(app)/`): a aba em segundo plano continua na árvore (na web, visível e só `aria-hidden`). Dois formulários montados juntos duplicariam campos e ids, então `novo` e `editar` só renderizam o formulário com `useIsFocused()` (`src/__tests__/novo.test.tsx`, `editar.test.tsx`).
+- **Voltar nas abas:** o padrão do `Tabs` (`backBehavior: 'firstRoute'`) leva sempre à primeira aba e faz `router.canGoBack()` mentir num acesso direto por endereço. O layout usa `backBehavior="history"`; sem isso o Salvar da edição caía em Início e o "sem histórico → lista" do formulário nunca valia (`src/__tests__/navegacao.test.tsx`).
 - Proteção de rotas: `Stack.Protected` em `app/_layout.tsx`, com `autenticado = !!session && !recuperando`. **Nunca** navegar à mão após login/logout.
   Páginas públicas estáticas (política de privacidade, exclusão de conta) entram em `ROTAS_PUBLICAS` para saírem como HTML pronto.
 - **Recuperação de senha** = código de 6 números do e-mail (`verifyOtp` com e-mail + token). O link do e-mail usa o Site URL do Supabase e abre o app web. Entre validar o código e definir a senha já
@@ -74,5 +75,6 @@ Um commit por mudança, `npm run typecheck && npm test` antes, tag `ponto-de-rec
 ## Testes
 
 - `src/**/__tests__/` (a contagem sai de `npm test`). Lógica pura (formato, geofence, agenda de avisos, validação, linhas do banco, armazenamento da sessão, filtros da lista, formulário), o `AuthProvider` com o Supabase simulado, o texto das páginas públicas, os componentes e as telas. Testing Library 14: `render`, `fireEvent` e `act` são assíncronos, sempre com `await`.
+- Navegação de verdade: `renderRouter` (`expo-router/testing-library`) foi escrito para o `render` síncrono do RNTL 13 e no 14 devolve uma Promise que carrega os auxiliares: `const app = renderRouter(telas, { initialUrl }); await app;` e leia `app.getPathname()` sem passar `app` por uma função `async` (ela o desembrulha e os auxiliares somem). Exemplo em `src/__tests__/navegacao.test.tsx`.
 - Bom teste falha quando o bug volta: depois de escrever, quebre o código de propósito (mutação) e veja o teste vermelho. Uma rede que nunca falha não prova nada.
 - O `act` do teste junta atualizações do React, então **não** prova ordem de renders; isso se confere no navegador com o build de produção.
