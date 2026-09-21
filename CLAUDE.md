@@ -24,7 +24,7 @@ npm run design:docs        # regenera as tabelas de docs/DESIGN_SYSTEM.md a part
 - Contraste é testado (`src/design/a11y.ts`). Laranja nunca é cor de texto; cinza de texto é só `colors.text.secondary`/`placeholder`.
 - Ver o app sem conta e sem servidor real: `scripts/preview-backend-falso.mjs` (instruções no topo). Apague o `.env.development.local` depois: ele vence o `.env.local`.
 - Pontos de recuperação (tags `ponto-de-recuperacao/*`): `01-antes-do-design-system`, `02-design-system-aplicado`, `03-antes-do-visual-original`.
-- **A referência visual é o app web `../lembreiAI` (versão do disco, 19/09) e `ref/*.png`.** Fonte, imagens, efeitos e telas ainda estão sendo alinhados a ele (tarefa `visual-original-no-expo`, quadro `Tarefas/` do workspace). Onde este app divergir do original, vale o original.
+- **A fonte de verdade visual são as 15 imagens de `docs/referencias/`** (capturas do app web, 430 px em retina; índice em `INDICE.md`, medição de cor em `MEDICOES.md`) e, para o que imagem parada não mostra, o CSS do app web `../lembreiAI` (versão do disco, 19/09). Fonte já foi alinhada; imagens, efeitos e telas estão sendo portados (tarefa `visual-original-no-expo`, quadro `Tarefas/` do workspace). Onde o app divergir das imagens, valem as imagens. Capturas trazem o perfil de cor da tela: converta para sRGB antes de comparar (`scripts/amostrar-referencias.py`).
 
 ## Versionamento (leia antes de commitar)
 
