@@ -18,6 +18,8 @@ interface PlaceSearchProps {
   /** A pessoa entrou no campo e saiu dele (o formulário rola até aqui com o teclado aberto). */
   aoFocar?: () => void;
   aoSair?: () => void;
+  /** A lista de sugestões (ou a mensagem de falha) abriu ou fechou. Ela cobre o mapa que vem logo abaixo: quem usa desliga o toque do mapa enquanto ela está aberta. */
+  aoMudarSugestoes?: (abertas: boolean) => void;
   /** Só para os testes. */
   buscar?: typeof buscarLugares;
 }
@@ -27,7 +29,7 @@ interface PlaceSearchProps {
  * Só busca com 3 letras ou mais, 650 ms depois da última, e cancela o pedido anterior. Sem resultado não mostra nada;
  * com falha diz "Não foi possível buscar agora." Padrão: docs/DESIGN_SYSTEM.md, seção 11.11.
  */
-export function PlaceSearch({ value, onChangeText, onPick, aoFocar, aoSair, buscar = buscarLugares }: PlaceSearchProps) {
+export function PlaceSearch({ value, onChangeText, onPick, aoFocar, aoSair, aoMudarSugestoes, buscar = buscarLugares }: PlaceSearchProps) {
   const [itens, setItens] = useState<Lugar[]>([]);
   const [falhou, setFalhou] = useState(false);
   const [ocupado, setOcupado] = useState(false);
@@ -37,6 +39,7 @@ export function PlaceSearch({ value, onChangeText, onPick, aoFocar, aoSair, busc
   const pedido = useRef<AbortController | undefined>(undefined);
 
   useEffect(() => () => { clearTimeout(espera.current); clearTimeout(fecha.current); pedido.current?.abort(); }, []);
+  useEffect(() => { aoMudarSugestoes?.(aberta); }, [aberta]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const zerar = () => { setItens([]); setFalhou(false); setAberta(false); setOcupado(false); };
 

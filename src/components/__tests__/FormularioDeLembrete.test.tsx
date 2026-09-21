@@ -256,6 +256,18 @@ describe('Formulário: por local', () => {
     expect(nomeDoPonto).not.toHaveBeenCalled(); // o nome já veio da busca
   });
 
+  it('enquanto a lista de sugestões está aberta o mapa não recebe toque: no Android o toque na sugestão chegava também à WebView do mapa e trocava o ponto escolhido', async () => {
+    await abrir();
+    await ligarOLocal();
+    expect(screen.getByTestId('mapa-do-formulario')).not.toHaveStyle({ pointerEvents: 'none' });
+    await fireEvent.changeText(screen.getByLabelText('Endereço do lembrete'), 'mercado');
+    await esperar(700);
+    expect(screen.getByTestId('sugestoes')).toBeTruthy();
+    expect(screen.getByTestId('mapa-do-formulario')).toHaveStyle({ pointerEvents: 'none' });
+    await fireEvent.press(screen.getByRole('button', { name: 'Supermercado Frangolândia, Fortaleza' }));
+    expect(screen.getByTestId('mapa-do-formulario')).not.toHaveStyle({ pointerEvents: 'none' });
+  });
+
   it('"Usar minha localização" põe o pino onde a pessoa está e enquadra o mapa', async () => {
     geo.getCurrentPosition.mockResolvedValue({ lat: -3.71, lng: -38.51, accuracy: 20, at: 1 });
     await abrir();

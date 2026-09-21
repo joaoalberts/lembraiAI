@@ -143,3 +143,45 @@ describe('PlaceSearch', () => {
     expect(screen.queryByTestId('sugestoes')).toBeNull();
   });
 });
+
+describe('PlaceSearch: aviso de lista aberta', () => {
+  async function abrirComAviso(resposta: Lugar[] | Error = [mercado, outro]) {
+    const aoMudarSugestoes = jest.fn();
+    const buscar = jest.fn(async () => { if (resposta instanceof Error) throw resposta; return resposta; });
+    await render(<PlaceSearch value="" buscar={buscar as never} onChangeText={jest.fn()} onPick={jest.fn()} aoMudarSugestoes={aoMudarSugestoes} />);
+    return aoMudarSugestoes;
+  }
+
+  it('avisa que a lista está fechada ao começar, aberta quando as sugestões chegam e fechada de novo ao escolher uma', async () => {
+    const aviso = await abrirComAviso();
+    expect(aviso).toHaveBeenLastCalledWith(false);
+    await digitar('mercado');
+    await esperar(ESPERA_DA_BUSCA + 10);
+    expect(aviso).toHaveBeenLastCalledWith(true);
+    await fireEvent.press(screen.getByRole('button', { name: 'Supermercado Frangolândia, Avenida Washington Soares, Fortaleza' }));
+    expect(aviso).toHaveBeenLastCalledWith(false);
+  });
+
+  it('a mensagem de falha também é uma lista aberta (cobre o mapa do mesmo jeito)', async () => {
+    const aviso = await abrirComAviso(new Error('sem rede'));
+    await digitar('mercado');
+    await esperar(ESPERA_DA_BUSCA + 10);
+    expect(screen.getByText('Não foi possível buscar agora.')).toBeTruthy();
+    expect(aviso).toHaveBeenLastCalledWith(true);
+  });
+
+  it('avisa que fechou quando a pessoa sai do campo (depois da espera para o toque numa sugestão chegar) e quando apaga o texto', async () => {
+    const aviso = await abrirComAviso();
+    await digitar('mercado');
+    await esperar(ESPERA_DA_BUSCA + 10);
+    await fireEvent(screen.getByLabelText('Endereço do lembrete'), 'blur');
+    expect(aviso).toHaveBeenLastCalledWith(true); // ainda não: o toque na sugestão pode estar chegando
+    await esperar(250);
+    expect(aviso).toHaveBeenLastCalledWith(false);
+    await fireEvent(screen.getByLabelText('Endereço do lembrete'), 'focus');
+    expect(aviso).toHaveBeenLastCalledWith(true);
+    await digitar('me');
+    expect(aviso).toHaveBeenLastCalledWith(false);
+  });
+});
+

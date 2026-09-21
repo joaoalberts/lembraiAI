@@ -60,6 +60,7 @@ export function FormularioDeLembrete({ lembrete }: FormularioProps) {
   const rolagem = useRef<ScrollView>(null);
   const yDoLocal = useRef(0);
   const [buscando, setBuscando] = useState(false);
+  const [sugestoesAbertas, setSugestoesAbertas] = useState(false);
   const [estado, setEstado] = useState<EstadoDoFormulario>(() => estadoInicial(lembrete));
   const [folha, setFolha] = useState<'data' | 'horario' | 'repetir' | 'conta' | null>(null);
   const [erroDaDescricao, setErroDaDescricao] = useState<string | null>(null);
@@ -219,8 +220,9 @@ export function FormularioDeLembrete({ lembrete }: FormularioProps) {
 
           {local && (
             <View style={styles.local}>
-              <PlaceSearch value={estado.place} onChangeText={(place) => mudar({ place })} onPick={escolherLugar} aoFocar={() => setBuscando(true)} aoSair={() => setBuscando(false)} />
-              <View style={styles.mapa}>
+              <PlaceSearch value={estado.place} onChangeText={(place) => mudar({ place })} onPick={escolherLugar} aoFocar={() => setBuscando(true)} aoSair={() => setBuscando(false)} aoMudarSugestoes={setSugestoesAbertas} />
+              {/* a lista de sugestões passa por cima do mapa; no Android o toque nela chegava também à WebView e trocava o ponto */}
+              <View testID="mapa-do-formulario" style={[styles.mapa, sugestoesAbertas ? styles.semToque : null]}>
                 <MapaDeEscolha
                   escolha={estado.coord ? { ...estado.coord, raio: estado.radius } : null}
                   aoEscolher={escolherPonto}
@@ -304,6 +306,7 @@ const styles = StyleSheet.create({
   opcional: { fontFamily: fontFamily.regular, color: colors.text.secondary },
   local: { gap: space.md },
   mapa: { height: size.form.map, borderRadius: size.form.mapRadius, overflow: 'hidden', backgroundColor: colors.map.background },
+  semToque: { pointerEvents: 'none' },
   raio: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
   rotuloDoRaio: { ...textStyles.body, fontFamily: fontFamily.bold, color: colors.text.primary },
   valorDoRaio: { ...textStyles.body, fontFamily: fontFamily.bold, color: colors.text.accent },
