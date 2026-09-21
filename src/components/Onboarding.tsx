@@ -183,7 +183,7 @@ export function Onboarding({ onSkip, onStart, standalone = false }: OnboardingPr
 }
 
 const styles = StyleSheet.create({
-  tela: { flex: 1, backgroundColor: colors.onboarding.bg },
+  tela: { flex: 1, height: '100%', minHeight: '100vh', backgroundColor: colors.onboarding.bg }, // web: 100vh para cobrir viewport inteiro
   fluxo: { flex: 1, alignItems: 'stretch' },
   topo: { flexDirection: 'row', alignItems: 'flex-start', justifyContent: 'space-between', paddingHorizontal: size.onboarding.side },
   cena: { alignSelf: 'center' },
