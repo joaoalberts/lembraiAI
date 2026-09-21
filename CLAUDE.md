@@ -13,7 +13,17 @@ npm run typecheck          # tsc --noEmit
 npx expo install --check   # versões batem com o SDK?
 npx expo-doctor            # saúde do projeto (21 checagens)
 npx expo export --platform all --output-dir /tmp/lembreiai-export   # valida os bundles iOS/Android/web
+npm run design:docs        # regenera as tabelas de docs/DESIGN_SYSTEM.md a partir dos tokens
 ```
+
+## Design System (leia antes de mexer em qualquer visual)
+
+- **Padrão:** `docs/DESIGN_SYSTEM.md`. **Valores:** `src/design/tokens.ts` (cor, tipografia, espaço, raio, sombra, tamanho). As tabelas do documento são geradas dos tokens; um teste falha se divergirem.
+- **Nunca valor solto** (`#hex`, `fontSize: 16`, `padding: 12`, `fontWeight: '600'`) fora de `src/design/`: `src/design/__tests__/valores-soltos.test.ts` barra. Ele tem uma lista `PENDENTES` de arquivos ainda não migrados; ela só encolhe.
+- Mudou uma decisão visual? Token → descrição em `src/design/doc.ts` → `npm run design:docs` → registro na seção 18 do documento → `npm test`.
+- Contraste é testado (`src/design/a11y.ts`). Laranja nunca é cor de texto; cinza de texto é só `colors.text.secondary`/`placeholder`.
+- Ver o app sem conta e sem servidor real: `scripts/preview-backend-falso.mjs` (instruções no topo). Apague o `.env.development.local` depois: ele vence o `.env.local`.
+- Ponto de recuperação anterior ao Design System: tag `ponto-de-recuperacao/01-antes-do-design-system`.
 
 ## Fonte da verdade
 
