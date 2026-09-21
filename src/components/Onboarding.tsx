@@ -200,7 +200,7 @@ const styles = StyleSheet.create({
   },
   balaoTextos: { flexShrink: 1, flexGrow: 1 },
   balaoTitulo: { ...textStyles.caption, fontFamily: fontFamily.bold, color: colors.text.onDarkWarm },
-  balaoTexto: { ...textStyles.micro, color: colors.text.onHeader },
+  balaoTexto: { ...textStyles.mini, color: colors.text.onHeader }, // 21 du (11 dp)
   titulo: { alignItems: 'center' },
   heroBranco: { fontFamily: fontFamily.serif, fontSize: fontSize.hero, lineHeight: fontSize.hero, textAlign: 'center', color: colors.text.onDark },
   heroAcento: { color: colors.text.onDarkAccent },
@@ -220,10 +220,10 @@ const styles = StyleSheet.create({
     marginBottom: space.xs,
   },
   beneficioTitulo: { ...textStyles.micro, fontFamily: fontFamily.bold, textAlign: 'center', color: colors.text.onDark },
-  beneficioTexto: { ...textStyles.micro, textAlign: 'center', color: colors.text.onHeader },
+  beneficioTexto: { ...textStyles.mini, textAlign: 'center', color: colors.text.onHeader }, // 21 du (11 dp)
   rodape: { paddingHorizontal: size.onboarding.side },
   paginas: { flexDirection: 'row', justifyContent: 'center', gap: size.onboarding.pagerGap },
   pagina: { width: size.onboarding.pagerWidth, height: size.onboarding.pagerHeight, borderRadius: radius.pill },
   privacidade: { flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: space.sm },
-  privacidadeTexto: { ...textStyles.micro, color: colors.text.onDarkFaint },
+  privacidadeTexto: { ...textStyles.nano, color: colors.text.onDarkFaint }, // 19.5 du (10 dp)
 });
