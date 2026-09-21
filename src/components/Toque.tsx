@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
-import { Platform, Pressable, View, type Insets, type LayoutChangeEvent, type PressableProps } from 'react-native';
+import { Platform, Pressable, View, type Insets, type LayoutChangeEvent, type PressableProps, type PressableStateCallbackType } from 'react-native';
+import { focoDeTeclado } from '../design/foco';
 import { size } from '../design/tokens';
 
 interface Medida {
@@ -79,8 +80,9 @@ interface ToqueProps extends PressableProps {
  * transparente por dentro do botão. Todo controle do app passa por aqui (um teste barra o `Pressable` cru).
  * Padrão: docs/DESIGN_SYSTEM.md, seção 16.2.
  */
-export function Toque({ alvoMinimo = size.touch, hitSlop, onLayout, children, ...resto }: ToqueProps) {
+export function Toque({ alvoMinimo = size.touch, hitSlop, onLayout, onFocus, onBlur, style, children, ...resto }: ToqueProps) {
   const [medida, setMedida] = useState<Medida | null>(null);
+  const [teclado, setTeclado] = useState(false);
   const [borda, setBorda] = useState<Folga>(SEM_BORDA);
   const raiz = useRef<View>(null);
   const folga = folgaAteOAlvo(medida, alvoMinimo, hitSlop);
@@ -99,12 +101,31 @@ export function Toque({ alvoMinimo = size.touch, hitSlop, onLayout, children, ..
     onLayout?.(e);
   };
 
+  // o `focused` do react-native-web vale para qualquer foco, clique e toque também; o anel é só do teclado (`focoDeTeclado`)
+  const comFoco = (estado: PressableStateCallbackType): PressableStateCallbackType & { focused?: boolean } => (web ? { ...estado, focused: teclado } : estado);
+  const aoFocar: PressableProps['onFocus'] = (e) => {
+    if (web) setTeclado(focoDeTeclado(e.nativeEvent?.target));
+    onFocus?.(e);
+  };
+  const aoDesfocar: PressableProps['onBlur'] = (e) => {
+    if (web) setTeclado(false);
+    onBlur?.(e);
+  };
+
   return (
-    <Pressable {...resto} ref={raiz} hitSlop={web ? undefined : folga} onLayout={aoMedir}>
+    <Pressable
+      {...resto}
+      ref={raiz}
+      hitSlop={web ? undefined : folga}
+      onLayout={aoMedir}
+      onFocus={aoFocar}
+      onBlur={aoDesfocar}
+      style={typeof style === 'function' ? (estado) => style(comFoco(estado)) : style}
+    >
       {(estado) => (
         <>
           {web && folga ? <CamadaDeToque folga={folga} borda={borda} /> : null}
-          {typeof children === 'function' ? children(estado) : children}
+          {typeof children === 'function' ? children(comFoco(estado)) : children}
         </>
       )}
     </Pressable>

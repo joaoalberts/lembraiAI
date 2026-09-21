@@ -21,6 +21,21 @@ export const semAnelDoNavegador: { outlineWidth: number } = {
   ...(process.env.EXPO_OS === 'web' ? ({ outlineStyle: 'none' } as unknown as object) : null),
 };
 
+/**
+ * Se o foco que chegou ao controle é de teclado, o único que desenha o anel. Na web um clique ou toque também dá foco ao
+ * botão (o react-native-web avisa igual) e o navegador diz que esse não é `:focus-visible`: sem esta conferência o anel
+ * verde ficava grudado no botão clicado. Sem `matches` (celular, Jest) ou com o seletor desconhecido (Safari antigo) vale
+ * como teclado: melhor um anel a mais do que nenhum para quem só usa o teclado.
+ */
+export function focoDeTeclado(alvo: unknown): boolean {
+  try {
+    const no = alvo as { matches?: (seletor: string) => boolean } | null | undefined;
+    return typeof no?.matches === 'function' ? no.matches(':focus-visible') : true;
+  } catch {
+    return true;
+  }
+}
+
 /** O mesmo anel para controles sobre o verde escuro, onde o verde-floresta some: menta. */
 export const anelDeFocoNoEscuro = {
   ...anelDeFoco,

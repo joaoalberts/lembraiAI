@@ -183,3 +183,68 @@ describe('Toque no navegador (o react-native-web não tem hitSlop)', () => {
     expect(screen.getByTestId('folga-de-toque', ESCONDIDO)).toBeTruthy();
   });
 });
+
+describe('Toque: o anel de foco é só do teclado', () => {
+  const alvo = (visivel: boolean) => ({ matches: (seletor: string) => seletor === ':focus-visible' && visivel });
+  const focar = (destino: unknown) => fireEvent(screen.getByRole('button'), 'focus', { nativeEvent: { target: destino } });
+  const desfocar = () => fireEvent(screen.getByRole('button'), 'blur', { nativeEvent: { target: {} } });
+  const abrir = (props: Partial<React.ComponentProps<typeof Toque>> = {}) =>
+    render(
+      <Toque accessibilityRole="button" accessibilityLabel="Ir" onPress={jest.fn()} {...props}>
+        {(estado) => <Text>{(estado as { focused?: boolean }).focused ? 'com anel' : 'sem anel'}</Text>}
+      </Toque>,
+    );
+
+  describe('no navegador', () => {
+    beforeEach(() => { jest.replaceProperty(Platform, 'OS', 'web'); });
+
+    it('clique ou toque dá foco ao botão, mas o navegador diz que não é de teclado: sem anel (era o contorno verde que ficava grudado na aba)', async () => {
+      await abrir();
+      await focar(alvo(false));
+      expect(screen.getByText('sem anel')).toBeTruthy();
+    });
+
+    it('foco de teclado desenha o anel e sair do botão o apaga', async () => {
+      await abrir();
+      await focar(alvo(true));
+      expect(screen.getByText('com anel')).toBeTruthy();
+      await desfocar();
+      expect(screen.getByText('sem anel')).toBeTruthy();
+    });
+
+    it('depois de um clique, o Tab que chega de novo ao botão volta a desenhar o anel', async () => {
+      await abrir();
+      await focar(alvo(false));
+      await desfocar();
+      await focar(alvo(true));
+      expect(screen.getByText('com anel')).toBeTruthy();
+    });
+
+    it('o estilo em função recebe o mesmo estado: o anel da barra de abas segue a regra', async () => {
+      const visto: (boolean | undefined)[] = [];
+      await abrir({ style: (estado) => { visto.push((estado as { focused?: boolean }).focused); return null; } });
+      await focar(alvo(false));
+      expect(visto.at(-1)).toBe(false);
+      await desfocar();
+      await focar(alvo(true));
+      expect(visto.at(-1)).toBe(true);
+    });
+
+    it('sem `matches` no alvo vale como teclado, e o onFocus e o onBlur de quem usa continuam chamados', async () => {
+      const onFocus = jest.fn();
+      const onBlur = jest.fn();
+      await abrir({ onFocus, onBlur });
+      await focar({});
+      expect(screen.getByText('com anel')).toBeTruthy();
+      expect(onFocus).toHaveBeenCalledTimes(1);
+      await desfocar();
+      expect(onBlur).toHaveBeenCalledTimes(1);
+    });
+  });
+
+  it('no celular (iOS e Android) o estado do foco não é mexido: o anel é coisa da web', async () => {
+    await abrir();
+    await focar({});
+    expect(screen.getByText('sem anel')).toBeTruthy();
+  });
+});
