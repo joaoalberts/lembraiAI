@@ -86,6 +86,12 @@ export const palette = {
   onDark200: '#CCD8D0',
   onDark300: '#B1C3B8',
   onDark400: '#A7B9B0',
+  /** Subtítulo dos cabeçalhos verdes: mais claro que o `onDark200`, medido nas capturas (#E6EDE5). */
+  headerSubtitle: '#E6EDE5',
+  chipCount: '#395D56',
+  tipCircle: '#C3DFCE',
+  tipInk: '#013220',
+  iconDots: '#717B88',
   tabInactive: '#777C8A',
   homeIndicator: '#B7B3AE',
   tabBarBg: '#F8F8F4',
@@ -114,12 +120,16 @@ export const colors = {
     onDarkMuted: palette.onDark300,
     onDarkFaint: palette.onDark400,
     onFrost: palette.frostInk,
+    onHeader: palette.headerSubtitle,
+    chipCount: palette.chipCount,
     danger: palette.red700,
     success: palette.green700,
   },
   icon: {
     default: palette.ink900,
     muted: palette.ink600,
+    dots: palette.iconDots,
+    tip: palette.tipInk,
   },
   action: {
     primary: palette.orange500,
@@ -142,6 +152,7 @@ export const colors = {
     divider: palette.divider,
     chip: palette.chipRing,
     focus: palette.forest700,
+    focusOnDark: palette.mint400,
     danger: palette.red700,
     dangerSoft: palette.red200,
   },
@@ -166,6 +177,7 @@ export const colors = {
     errorBg: palette.alertErrorBg,
     errorInk: palette.alertErrorInk,
     infoInk: palette.alertInfoInk,
+    tipCircle: palette.tipCircle,
   },
   /** Selo "Ativo" do lembrete. */
   status: { active: palette.statusGreen },
@@ -177,6 +189,8 @@ export const colors = {
     fillHover: 'rgba(255, 255, 255, 0.1)',
     fillPressed: 'rgba(255, 255, 255, 0.16)',
     border: 'rgba(255, 255, 255, 0.2)',
+    field: 'rgba(255, 255, 255, 0.1)',
+    fieldFocus: 'rgba(255, 255, 255, 0.14)',
   },
   /** Identidade do ícone do app (tile em degradê e o símbolo); vale para ícone, tela de abertura e favicon. */
   brand: {
@@ -199,14 +213,14 @@ export const colors = {
   },
   /**
    * `bg` = fundo do ícone; `bar` = faixa lateral do cartão; `ink` = glifo; `pin` = marcador forte no mapa;
-   * `tag` = fundo da etiqueta ("Por horário"); `fg` = ícone da etiqueta.
+   * `tag` = fundo da etiqueta ("Por horário"); `fg` = ícone da etiqueta; `tagInk` = texto da etiqueta (o `fg` escurecido até dar 4,5:1 com o `tag`).
    */
   category: {
-    green: { bg: '#DBF1E4', bar: '#39C391', ink: '#011F1A', pin: '#2F9E5B', tag: '#DAF4E6', fg: '#18714E' },
-    orange: { bg: '#FDE6D6', bar: '#FD6C34', ink: '#0A0A0A', pin: '#FE532A', tag: '#FDE5D7', fg: '#F86327' },
-    blue: { bg: '#D5E8F9', bar: '#51A6F6', ink: '#024381', pin: '#2F80ED', tag: '#D6E9F9', fg: '#2C91EA' },
-    purple: { bg: '#EADFFB', bar: '#B287E8', ink: '#0A0A14', pin: '#7C3AED', tag: '#ECE4FB', fg: '#9265D8' },
-    pink: { bg: '#FCE3E9', bar: '#F980B3', ink: '#0A0A14', pin: '#E0457B', tag: '#FCE6EC', fg: '#ED6E9E' },
+    green: { bg: '#DBF1E4', bar: '#39C391', ink: '#011F1A', pin: '#2F9E5B', tag: '#DAF4E6', fg: '#18714E', tagInk: '#18714E' },
+    orange: { bg: '#FDE6D6', bar: '#FD6C34', ink: '#0A0A0A', pin: '#FE532A', tag: '#FDE5D7', fg: '#F86327', tagInk: '#183029' },
+    blue: { bg: '#D5E8F9', bar: '#51A6F6', ink: '#024381', pin: '#2F80ED', tag: '#D6E9F9', fg: '#2C91EA', tagInk: '#1F66A4' },
+    purple: { bg: '#EADFFB', bar: '#B287E8', ink: '#0A0A14', pin: '#7C3AED', tag: '#ECE4FB', fg: '#9265D8', tagInk: '#7551AD' },
+    pink: { bg: '#FCE3E9', bar: '#F980B3', ink: '#0A0A14', pin: '#E0457B', tag: '#FCE6EC', fg: '#ED6E9E', tagInk: '#9A486B' },
   },
 } as const;
 
@@ -306,12 +320,17 @@ export const size = {
   tabBar: 56,
   iconCircle: 44,
   emptyCircle: 88,
-  chip: 36,
+  chip: du(68),
   closeButton: 32,
   hitSlop: 6,
-  icon: { sm: 16, md: 20, lg: 24, xl: 40 },
+  icon: { xs: du(27), sm: 16, md: 20, lg: 24, xl: 40 },
   /** Pino do mapa no formulário (58 × 73 du no original). A ponta fica no meio da base. */
   mapPin: { width: du(58), height: du(73) },
+  /** Botão redondo de vidro do cabeçalho verde (busca, conta) e o botão "Novo lembrete" compacto. */
+  glassButton: du(84),
+  buttonCompact: du(72),
+  /** Cabeçalho verde: altura da arte, topo da marca e dos botões, e onde começa a folha clara que sobe sobre ele (medidas do app web em du). */
+  header: { height: du(345), contentTop: du(82), sheetTop: du(296), side: du(38), brandTile: du(75), brandGap: du(21), brandGlyph: du(44), searchHeight: du(76) },
   /** Interruptor do cartão de lembrete (`card`) e o dos formulários e das configurações (`form`): trilho, bolinha e folga da bolinha (21 e 26 de altura). */
   toggle: {
     card: { width: du(69), height: du(42), thumb: du(36), inset: 1.5 },
@@ -377,6 +396,8 @@ export const gradients = {
     `radial-gradient(${du(520)}px ${du(170)}px at 46% 26%, rgba(255, 255, 255, 0.55), rgba(255, 255, 255, 0) 100%)`,
     `linear-gradient(180deg, ${palette.mist300} 0%, ${palette.mist100} 44%, ${palette.cream200} 100%)`,
   ].join(', '),
+  /** Tile da marca (o mesmo menta do ícone do app). */
+  marcaTile: `linear-gradient(160deg, ${palette.mintBrand}, ${palette.mintBrandEnd})`,
   /** Esmaecimento de baixo para cima atrás do botão fixo do formulário. */
   esmaecerParaPagina: `linear-gradient(to top, ${palette.cream200} 62%, rgba(245, 242, 237, 0) 100%)`,
 } as const;

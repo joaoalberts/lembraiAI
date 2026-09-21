@@ -79,6 +79,7 @@ export const PARES_DE_CONTRASTE: ParDeContraste[] = [
   { fg: 'feedback.infoBar', bg: 'feedback.infoBg', min: 3, uso: 'Faixa lateral do aviso informativo', excecao: INTERFACE },
 
   ...categorias.map((c): ParDeContraste => ({ fg: `category.${c}.ink`, bg: `category.${c}.bg`, min: 3, uso: `Glifo do ícone da categoria ${c}`, excecao: INTERFACE })),
+  ...categorias.map((c): ParDeContraste => ({ fg: `category.${c}.tagInk`, bg: `category.${c}.tag`, min: 4.5, uso: `Texto da etiqueta "Por horário" da categoria ${c}` })),
   ...categorias.map((c): ParDeContraste => ({ fg: `category.${c}.pin`, bg: 'bg.field', min: 3, uso: `Marcador da categoria ${c} sobre o mapa claro`, excecao: INTERFACE })),
   { fg: 'map.me', bg: 'bg.field', min: 3, uso: 'Posição da pessoa sobre o mapa claro', excecao: INTERFACE },
   { fg: 'map.paused', bg: 'bg.field', min: 3, uso: 'Marcador de lembrete pausado sobre o mapa claro', excecao: INTERFACE },

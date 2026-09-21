@@ -132,6 +132,11 @@ Use `palette.*` só para definir papéis em `colors`. As telas usam os papéis (
 | `palette.onDark200` | `#CCD8D0` | Texto sobre verde escuro: subtítulo |
 | `palette.onDark300` | `#B1C3B8` | Texto sobre verde escuro: apoio |
 | `palette.onDark400` | `#A7B9B0` | Texto sobre verde escuro: o mais suave |
+| `palette.headerSubtitle` | `#E6EDE5` | Subtítulo dos cabeçalhos verdes ("5 lembretes ativos") |
+| `palette.chipCount` | `#395D56` | Contagem dentro do chip de filtro não selecionado |
+| `palette.tipCircle` | `#C3DFCE` | Círculo atrás da lâmpada do cartão de dica |
+| `palette.tipInk` | `#013220` | Lâmpada do cartão de dica |
+| `palette.iconDots` | `#717B88` | Reticências "mais opções" do cartão de lembrete |
 | `palette.tabInactive` | `#777C8A` | Rótulo e ícone da aba inativa (medido nas capturas) |
 | `palette.homeIndicator` | `#B7B3AE` | Traço "home" do iOS sob a barra de abas |
 | `palette.tabBarBg` | `#F8F8F4` | Fundo da barra de abas |
@@ -160,10 +165,14 @@ Use `palette.*` só para definir papéis em `colors`. As telas usam os papéis (
 | `colors.text.onDarkMuted` | `#B1C3B8` | `palette.onDark300` | Texto de apoio sobre verde escuro |
 | `colors.text.onDarkFaint` | `#A7B9B0` | `palette.onDark400` | Texto mais suave sobre verde escuro |
 | `colors.text.onFrost` | `#1A2C23` | `palette.frostInk` | Rótulo dos botões translúcidos |
+| `colors.text.onHeader` | `#E6EDE5` | `palette.headerSubtitle` | Subtítulo sobre o cabeçalho verde |
+| `colors.text.chipCount` | `#395D56` | `palette.chipCount` | Contagem dentro do chip de filtro não selecionado |
 | `colors.text.danger` | `#C62828` | `palette.red700` | Mensagens e rótulos de erro |
 | `colors.text.success` | `#0B7A3B` | `palette.green700` | Mensagens e rótulos de sucesso |
 | `colors.icon.default` | `#0A0A0A` | `palette.ink900` | Ícones sobre fundo claro |
 | `colors.icon.muted` | `#767880` | `palette.ink600` | Ícones secundários e da aba inativa (nunca para texto) |
+| `colors.icon.dots` | `#717B88` | `palette.iconDots` | Reticências "mais opções" do cartão de lembrete |
+| `colors.icon.tip` | `#013220` | `palette.tipInk` | Lâmpada do cartão de dica |
 | `colors.action.primary` | `#FE532A` | `palette.orange500` | Fundo do botão primário |
 | `colors.action.primaryHover` | `#EF4E28` | `palette.orangeHover` | Botão primário com o ponteiro em cima (web) |
 | `colors.action.primaryPressed` | `#DF4925` | `palette.orangePressed` | Botão primário pressionado |
@@ -182,6 +191,7 @@ Use `palette.*` só para definir papéis em `colors`. As telas usam os papéis (
 | `colors.border.divider` | `#E8E7E6` | `palette.divider` | Divisórias |
 | `colors.border.chip` | `#DFE1DB` | `palette.chipRing` | Contorno do chip não selecionado |
 | `colors.border.focus` | `#185C4B` | `palette.forest700` | Borda do campo em foco e anel de foco |
+| `colors.border.focusOnDark` | `#7FEAC6` | `palette.mint400` | Anel de foco e borda do campo em foco sobre o verde escuro |
 | `colors.border.danger` | `#C62828` | `palette.red700` | Borda do campo com erro e do botão de exclusão |
 | `colors.border.dangerSoft` | `#F3B8B8` | `palette.red200` | Borda da zona de perigo |
 | `colors.control.on` | `#216955` | `palette.forest600` | Preenchimento do controle deslizante do raio |
@@ -202,6 +212,7 @@ Use `palette.*` só para definir papéis em `colors`. As telas usam os papéis (
 | `colors.feedback.errorBg` | `#FDF0EE` | `palette.alertErrorBg` | Fundo do aviso de erro nas configurações |
 | `colors.feedback.errorInk` | `#8E2418` | `palette.alertErrorInk` | Texto do aviso de erro nas configurações |
 | `colors.feedback.infoInk` | `#1B4436` | `palette.alertInfoInk` | Texto do aviso informativo |
+| `colors.feedback.tipCircle` | `#C3DFCE` | `palette.tipCircle` | Círculo atrás da lâmpada do cartão de dica |
 | `colors.status.active` | `#029554` | `palette.statusGreen` | Ponto do selo "Ativo" |
 | `colors.tab.background` | `#F8F8F4` | `palette.tabBarBg` | Fundo da barra de abas |
 | `colors.tab.inactive` | `#777C8A` | `palette.tabInactive` | Rótulo e ícone da aba inativa |
@@ -210,6 +221,8 @@ Use `palette.*` só para definir papéis em `colors`. As telas usam os papéis (
 | `colors.glass.fillHover` | `rgba(255, 255, 255, 0.1)` | — | Botão de vidro com o ponteiro em cima (web) |
 | `colors.glass.fillPressed` | `rgba(255, 255, 255, 0.16)` | — | Botão de vidro pressionado |
 | `colors.glass.border` | `rgba(255, 255, 255, 0.2)` | — | Borda do botão de vidro |
+| `colors.glass.field` | `rgba(255, 255, 255, 0.1)` | — | Campo de busca sobre o cabeçalho verde |
+| `colors.glass.fieldFocus` | `rgba(255, 255, 255, 0.14)` | — | Campo de busca em foco |
 | `colors.brand.tile` | `#84FADA` | `palette.mintBrand` | Fundo do ícone do app, da tela de abertura e do favicon |
 | `colors.brand.tileEnd` | `#78E4C4` | `palette.mintBrandEnd` | Fim do degradê do ícone do app |
 | `colors.brand.glyph` | `#043525` | `palette.brandInk` | Símbolo do ícone do app |
@@ -230,13 +243,13 @@ Use `palette.*` só para definir papéis em `colors`. As telas usam os papéis (
 Cinco categorias, as mesmas do banco (`green`, `orange`, `blue`, `purple`, `pink`). A cor sozinha nunca informa: o ícone e o título dizem o resto.
 
 <!-- tokens:cores-categorias:inicio -->
-| Categoria | Fundo do ícone (`bg`) | Faixa (`bar`) | Glifo (`ink`) | Marcador no mapa (`pin`) | Etiqueta (`tag`) | Ícone da etiqueta (`fg`) |
-|---|---|---|---|---|---|---|
-| `colors.category.green` | `#DBF1E4` | `#39C391` | `#011F1A` | `#2F9E5B` | `#DAF4E6` | `#18714E` |
-| `colors.category.orange` | `#FDE6D6` | `#FD6C34` | `#0A0A0A` | `#FE532A` | `#FDE5D7` | `#F86327` |
-| `colors.category.blue` | `#D5E8F9` | `#51A6F6` | `#024381` | `#2F80ED` | `#D6E9F9` | `#2C91EA` |
-| `colors.category.purple` | `#EADFFB` | `#B287E8` | `#0A0A14` | `#7C3AED` | `#ECE4FB` | `#9265D8` |
-| `colors.category.pink` | `#FCE3E9` | `#F980B3` | `#0A0A14` | `#E0457B` | `#FCE6EC` | `#ED6E9E` |
+| Categoria | Fundo do ícone (`bg`) | Faixa (`bar`) | Glifo (`ink`) | Marcador no mapa (`pin`) | Etiqueta (`tag`) | Ícone da etiqueta (`fg`) | Texto da etiqueta (`tagInk`) |
+|---|---|---|---|---|---|---|---|
+| `colors.category.green` | `#DBF1E4` | `#39C391` | `#011F1A` | `#2F9E5B` | `#DAF4E6` | `#18714E` | `#18714E` |
+| `colors.category.orange` | `#FDE6D6` | `#FD6C34` | `#0A0A0A` | `#FE532A` | `#FDE5D7` | `#F86327` | `#183029` |
+| `colors.category.blue` | `#D5E8F9` | `#51A6F6` | `#024381` | `#2F80ED` | `#D6E9F9` | `#2C91EA` | `#1F66A4` |
+| `colors.category.purple` | `#EADFFB` | `#B287E8` | `#0A0A14` | `#7C3AED` | `#ECE4FB` | `#9265D8` | `#7551AD` |
+| `colors.category.pink` | `#FCE3E9` | `#F980B3` | `#0A0A14` | `#E0457B` | `#FCE6EC` | `#ED6E9E` | `#9A486B` |
 <!-- tokens:cores-categorias:fim -->
 
 ### 3.4 Regras de uso
@@ -396,6 +409,7 @@ Os fundos em degradê do original (cabeçalho verde, telas de conta e cabeçalho
 | `gradients.cabecalhoVerde` | `radial-gradient(283px 167px at 90% 6%, rgba(127, 234, 198, 0.28), rgba(127, 234, 198, 0) 70%)`<br>`radial-gradient(263px 152px at 4% 92%, rgba(33, 105, 85, 0.6), rgba(33, 105, 85, 0) 72%)`<br>`linear-gradient(168deg, #2A5B47 0%, #184434 50%, #0E301F 100%)` | Cabeçalho verde da lista e das configurações (345 du de altura) |
 | `gradients.contas` | `radial-gradient(283px 202px at 88% 4%, rgba(127, 234, 198, 0.26), rgba(127, 234, 198, 0) 70%)`<br>`radial-gradient(374px 232px at 50% 100%, rgba(132, 250, 218, 0.15), rgba(132, 250, 218, 0) 70%)`<br>`radial-gradient(263px 192px at 6% 96%, rgba(33, 105, 85, 0.55), rgba(33, 105, 85, 0) 72%)`<br>`linear-gradient(168deg, #2A5B47 0%, #184434 52%, #0E301F 100%)` | Fundo das telas de conta |
 | `gradients.cabecalhoClaro` | `radial-gradient(283px 172px at 100% 0%, rgba(33, 105, 85, 0.58), rgba(33, 105, 85, 0) 72%)`<br>`radial-gradient(243px 152px at 0% 0%, rgba(148, 249, 205, 0.36), rgba(148, 249, 205, 0) 72%)`<br>`radial-gradient(263px 86px at 46% 26%, rgba(255, 255, 255, 0.55), rgba(255, 255, 255, 0) 100%)`<br>`linear-gradient(180deg, #CBE4D6 0%, #E3EEE5 44%, #F5F2ED 100%)` | Cabeçalho claro do formulário de novo lembrete |
+| `gradients.marcaTile` | `linear-gradient(160deg, #84FADA, #78E4C4)` | Tile da marca no cabeçalho: o menta do ícone do app, a 160° |
 | `gradients.esmaecerParaPagina` | `linear-gradient(to top, #F5F2ED 62%, rgba(245, 242, 237, 0) 100%)` | Esmaecimento atrás do botão fixo do formulário |
 <!-- tokens:degrades:fim -->
 
@@ -462,6 +476,9 @@ Componente: `src/components/Button.tsx`.
 
 Regras: uma ação primária por tela. Ação destrutiva sempre pede confirmação (`confirmar`, em `src/lib/confirm.ts`). O botão tem `accessibilityRole="button"` e `accessibilityState={{ disabled }}`.
 
+- **Compacto** (`compact`, com `icon` opcional): altura `size.buttonCompact`, padding `space.lg`, rótulo `fontSize.micro` em negrito e sem o brilho `shadow.cta`; o ícone (`size.icon.xs`, traço `iconStroke.action`) vai à esquerda, na cor do rótulo, a `space.sm`. É o "Novo lembrete" do cabeçalho verde.
+- **Vidro** (`src/components/GlassButton.tsx`): botão redondo de `size.glassButton` sobre o verde escuro, para busca e conta. Fundo `colors.glass.fill` (ponteiro `fillHover`, pressionado `fillPressed` e escala `motion.pressedScale`), contorno `borderWidth.hairline` em `colors.glass.border`, ícone branco de `size.icon.md`. Sempre com `accessibilityLabel` (o ícone sozinho não diz nada) e toque de 44. O desfoque de fundo do original não é reproduzido: sobre um verde quase liso não se vê. Foco de teclado em menta (`colors.border.focusOnDark`), porque o verde-floresta some no fundo escuro.
+
 ## 10. Campos e formulários
 
 Componente: `src/components/TextField.tsx`.
@@ -524,6 +541,9 @@ Componente `src/components/Sheet.tsx`. Véu `colors.overlay` (verde-escuro a 46%
 
 - **Barra de abas:** fundo `colors.bg.card`, filete superior `colors.border.divider`, altura `size.tabBar` mais a área segura do sistema. Ativa: `colors.text.brand` com o ícone preenchido; inativa: `colors.icon.muted` com o ícone em contorno. Rótulo em `fontSize.micro` e `fontWeight.medium`, sem altura de linha própria (com ela o React Navigation cortava o pé do texto na web).
 - **Cabeçalho:** fundo `colors.bg.page`, sem sombra, título `textStyles.heading` em `colors.text.primary`.
+- **Cabeçalho verde** (`src/components/GreenHeader.tsx`, na lista e nas configurações): degradê `gradients.cabecalhoVerde` (base a 168°, luz menta e sombra de pinheiro) com as curvas de nível por cima (imagem `assets/art/topo-lista.webp`, ver `assets/art/LEIA-ME.md`), altura mínima `size.header.height` e margem lateral `size.header.side`. O conteúdo começa em `size.header.contentTop`, ou abaixo da barra de status do aparelho (entalhe, ilha) mais `space.sm` quando ela é maior; o cabeçalho cresce o quanto o conteúdo desceu. O grão de 9% do original não se vê e não é reproduzido. A folha clara (`colors.bg.sheet`, cantos `radius.sheet`) sobe sobre ele a partir de `size.header.sheetTop`.
+- **Marca** (`src/components/AppBrand.tsx`): tile de `size.header.brandTile` com `gradients.marcaTile`, símbolo `locate-fixed` em `colors.brand.glyph`, nome em serifa negrito (`colors.text.onDarkWarm`; o original usa um peso a menos, que o app não carrega) e a frase "Sua rotina, mais leve." em `colors.text.onDarkFaint`.
+- **Busca** (`src/components/SearchField.tsx`): campo em pílula de `size.header.searchHeight` no lugar da marca; fundo `colors.glass.field`, contorno `colors.glass.border`; em foco, contorno `colors.border.focusOnDark` e fundo `colors.glass.fieldFocus`. Abre com o teclado, tecla "buscar"; o Enter só recolhe o teclado e o Esc (web) fecha. Filtra enquanto se digita.
 
 ### 11.7 Coluna da web
 
@@ -588,15 +608,26 @@ Filosofia: o mínimo. O feedback de toque é instantâneo (troca de cor e escala
 | `size.tabBar` | `56` | Altura útil da barra de abas (a área segura do sistema é somada por cima) |
 | `size.iconCircle` | `44` | Círculo do ícone de categoria |
 | `size.emptyCircle` | `88` | Círculo do ícone do estado vazio |
-| `size.chip` | `36` | Altura visível do chip (a área de toque chega a 44 com `size.hitSlop`) |
+| `size.chip` | `34` | Altura visível do chip (a área de toque chega a 44 com `size.hitSlop`) |
 | `size.closeButton` | `32` | Botão de fechar visível (a área de toque chega a 44 com `size.hitSlop`) |
 | `size.hitSlop` | `6` | Folga de toque ao redor de controles menores que 44 |
+| `size.icon.xs` | `14` | Ícone dentro do botão compacto |
 | `size.icon.sm` | `16` | Ícones ao lado de texto pequeno |
 | `size.icon.md` | `20` | Ícones de ação |
 | `size.icon.lg` | `24` | Ícones de aba |
 | `size.icon.xl` | `40` | Ícone do estado vazio |
 | `size.mapPin.width` | `29` | Largura do pino do mapa no formulário |
 | `size.mapPin.height` | `37` | Altura do pino do mapa no formulário (a ponta marca o local) |
+| `size.glassButton` | `42` | Botão redondo de vidro do cabeçalho verde (busca e conta); o toque chega a 44 com `size.hitSlop` |
+| `size.buttonCompact` | `36` | Altura do botão compacto ("Novo lembrete" no cabeçalho) |
+| `size.header.height` | `174` | Altura da arte do cabeçalho verde |
+| `size.header.contentTop` | `41` | Topo da marca e dos botões no cabeçalho verde (sobe com a barra de status do aparelho) |
+| `size.header.sheetTop` | `150` | Onde começa a folha clara que sobe sobre o cabeçalho verde |
+| `size.header.side` | `19` | Margem lateral do conteúdo do cabeçalho verde |
+| `size.header.brandTile` | `38` | Lado do tile da marca |
+| `size.header.brandGap` | `11` | Vão entre o tile da marca e o nome |
+| `size.header.brandGlyph` | `22` | Lado do símbolo dentro do tile da marca |
+| `size.header.searchHeight` | `38` | Altura do campo de busca |
 | `size.toggle.card.width` | `35` | Interruptor (cartão · formulário): largura do trilho |
 | `size.toggle.card.height` | `21` | Interruptor (cartão · formulário): altura do trilho |
 | `size.toggle.card.thumb` | `18` | Interruptor (cartão · formulário): diâmetro da bolinha |
@@ -696,6 +727,11 @@ Cada par é testado em `src/design/__tests__/acessibilidade.test.ts`. Par novo e
 | `colors.category.blue.ink` | `colors.category.blue.bg` | 7,89:1 | 3:1 | ✓ exceção | Glifo do ícone da categoria blue |
 | `colors.category.purple.ink` | `colors.category.purple.bg` | 15,42:1 | 3:1 | ✓ exceção | Glifo do ícone da categoria purple |
 | `colors.category.pink.ink` | `colors.category.pink.bg` | 16,23:1 | 3:1 | ✓ exceção | Glifo do ícone da categoria pink |
+| `colors.category.green.tagInk` | `colors.category.green.tag` | 5,15:1 | 4,5:1 | ✓ | Texto da etiqueta "Por horário" da categoria green |
+| `colors.category.orange.tagInk` | `colors.category.orange.tag` | 11,63:1 | 4,5:1 | ✓ | Texto da etiqueta "Por horário" da categoria orange |
+| `colors.category.blue.tagInk` | `colors.category.blue.tag` | 4,83:1 | 4,5:1 | ✓ | Texto da etiqueta "Por horário" da categoria blue |
+| `colors.category.purple.tagInk` | `colors.category.purple.tag` | 4,82:1 | 4,5:1 | ✓ | Texto da etiqueta "Por horário" da categoria purple |
+| `colors.category.pink.tagInk` | `colors.category.pink.tag` | 5,03:1 | 4,5:1 | ✓ | Texto da etiqueta "Por horário" da categoria pink |
 | `colors.category.green.pin` | `colors.bg.field` | 3,41:1 | 3:1 | ✓ exceção | Marcador da categoria green sobre o mapa claro |
 | `colors.category.orange.pin` | `colors.bg.field` | 3,24:1 | 3:1 | ✓ exceção | Marcador da categoria orange sobre o mapa claro |
 | `colors.category.blue.pin` | `colors.bg.field` | 3,87:1 | 3:1 | ✓ exceção | Marcador da categoria blue sobre o mapa claro |
@@ -770,6 +806,7 @@ O teste `valores-soltos.test.ts` mantém uma lista de arquivos com valores visua
 | 21/09/2026 | **Tokens da folha, da barra de abas e do palco:** `radius.sheet` 19, `size.sheet.*` (alça de 49 por 4), `shadow.sheet`/`tabBar`/`column`, véu `colors.overlay` verde-escuro a 46%, `colors.bg.stage` verde `#0D2A1B` (era areia), `layout.columnMax` 430 (era 560), tempos e curva das folhas (`motion.duration.scrim/sheet`, `motion.curve.*`) | Valores do CSS do app web (`../lembreiAI`, versão do disco). A conferência lado a lado com as capturas acontece quando cada folha e a barra de abas entram nas telas, nos próximos commits |
 | 21/09/2026 | **Ícones: Lucide no lugar de Ionicons** (`lucide-react-native` com `react-native-svg`, ambos gratuitos), traço por papel em `iconStroke.*` | As capturas e o app web desenham com Lucide; o Ionicons tem outro traço e outras formas (calendário, relógio, pino, lâmpada). O `react-native-svg` é o que o SDK 57 fixa (15.15.4). Pacote em `moduleNameMapper` no Jest (só publica `.mjs`) |
 | 21/09/2026 | **Interruptor próprio** (`Toggle` com duas variantes) no lugar do `Switch` do sistema; verde do cartão `#2EA275` em vez do `#30AB7B` da imagem | O `Switch` do sistema não tem o tamanho nem a cor das imagens (35 por 21 e 43 por 26). O `#30AB7B` medido dá 2,76:1 com o cartão e 2,80:1 com a bolinha, abaixo dos 3:1 do WCAG 1.4.11 que o teste de contraste exige; escurecer 5% resolve (3,05:1 e 3,10:1) e a diferença não se vê. Voltar ao valor da imagem é trocar `palette.toggleCardOn` |
+| 21/09/2026 | **Etiqueta do cartão com texto escurecido** (`colors.category.*.tagInk`); a lista, o cabeçalho verde, a marca, o botão de vidro e a busca entram como no original, com o texto no piso de 12 | Na imagem o texto da etiqueta azul dá 2,7:1 e o rosa 2,4:1 sobre o fundo da etiqueta; o `fg` escurecido só até 4,5:1 mantém a cor e cumpre o teste. O original usa texto de 9 a 10 dp nas etiquetas, nos chips e nas datas, abaixo do piso do Design System: sobe para 12 e os cartões ficam um pouco mais altos que na imagem |
 
 ## 19. Pendências
 

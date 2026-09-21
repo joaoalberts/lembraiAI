@@ -12,6 +12,12 @@ export const anelDeFoco = {
   outlineOffset: space.hair,
 } as const;
 
+/** O mesmo anel para controles sobre o verde escuro, onde o verde-floresta some: menta. */
+export const anelDeFocoNoEscuro = {
+  ...anelDeFoco,
+  outlineColor: colors.border.focusOnDark,
+} as const;
+
 /**
  * Estado que o `Pressable` informa. `hovered` (ponteiro em cima) e `focused` (foco de teclado) só chegam na web
  * (react-native-web); no celular ficam `undefined`.

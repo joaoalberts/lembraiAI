@@ -4,7 +4,7 @@ import { achadosNoTexto } from '../valores-soltos';
 
 const RAIZ = path.join(__dirname, '../../..');
 const PASTAS = ['app', 'src'];
-const IGNORADOS = [/^src\/design\//, /__tests__\//, /\.test\.tsx?$/, /\.d\.ts$/];
+const IGNORADOS = [/^src\/design\//, /^src\/test-utils\//, /__tests__\//, /\.test\.tsx?$/, /\.d\.ts$/];
 
 /**
  * Arquivos que ainda têm cor, tamanho ou peso solto. A lista só encolhe: ao migrar um arquivo para os tokens, tire-o

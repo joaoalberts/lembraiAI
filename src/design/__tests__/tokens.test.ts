@@ -21,14 +21,14 @@ describe('cores', () => {
       .filter(([caminho, v]) => !caminho.startsWith('category.') && typeof v === 'string' && !daPaleta.has(v))
       .map(([caminho]) => caminho)
       .sort();
-    expect(fora).toEqual(['glass.border', 'glass.fill', 'glass.fillHover', 'glass.fillPressed', 'map.haloFill', 'map.haloLine', 'map.pinShadow', 'overlay']);
+    expect(fora).toEqual(['glass.border', 'glass.field', 'glass.fieldFocus', 'glass.fill', 'glass.fillHover', 'glass.fillPressed', 'map.haloFill', 'map.haloLine', 'map.pinShadow', 'overlay']);
     for (const [caminho, v] of folhas(colors)) if (fora.includes(caminho)) expect({ caminho, rgba: String(v).startsWith('rgba(') }).toEqual({ caminho, rgba: true });
   });
 
-  it('as cinco categorias do banco existem, cada uma com fundo, barra, glifo, marcador, etiqueta e ícone da etiqueta', () => {
+  it('as cinco categorias do banco existem, cada uma com fundo, barra, glifo, marcador, etiqueta, ícone da etiqueta e texto da etiqueta', () => {
     expect(Object.keys(colors.category).sort()).toEqual(['blue', 'green', 'orange', 'pink', 'purple']);
     for (const cat of Object.values(colors.category)) {
-      expect(Object.keys(cat).sort()).toEqual(['bar', 'bg', 'fg', 'ink', 'pin', 'tag']);
+      expect(Object.keys(cat).sort()).toEqual(['bar', 'bg', 'fg', 'ink', 'pin', 'tag', 'tagInk']);
       for (const cor of Object.values(cat)) expect(cor).toMatch(HEX);
     }
   });

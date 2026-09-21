@@ -1,7 +1,7 @@
 import '@testing-library/react-native/matchers';
 import { fireEvent, render, screen } from '@testing-library/react-native';
 import { StyleSheet } from 'react-native';
-import { borderWidth, colors, motion, opacity, radius, shadow, size, space } from '../../design/tokens';
+import { borderWidth, colors, fontFamily, fontSize, motion, opacity, radius, shadow, size, space } from '../../design/tokens';
 import { Button, estiloDoBotao } from '../Button';
 
 const botao = () => screen.getByRole('button');
@@ -48,6 +48,25 @@ describe('Button', () => {
     expect(botao()).toHaveStyle({ opacity: opacity.disabled });
     expect(botao()).not.toHaveStyle({ boxShadow: shadow.cta });
     expect(botao()).toBeDisabled();
+  });
+
+  it('compacto: mais baixo, sem brilho e com o rótulo pequeno em negrito', async () => {
+    await render(<Button label="Novo lembrete" onPress={jest.fn()} compact />);
+    expect(botao()).toHaveStyle({ minHeight: size.buttonCompact, backgroundColor: colors.action.primary });
+    expect(botao()).not.toHaveStyle({ boxShadow: shadow.cta });
+    expect(screen.getByText('Novo lembrete')).toHaveStyle({ fontFamily: fontFamily.bold, fontSize: fontSize.micro });
+  });
+
+  it('com ícone: desenha o ícone à esquerda do rótulo, na mesma cor dele', async () => {
+    await render(<Button label="Novo lembrete" onPress={jest.fn()} compact icon="plus" />);
+    const desenho = JSON.stringify(screen.getByTestId('icone-plus', { includeHiddenElements: true }).children);
+    expect(desenho).toContain(colors.text.onAction);
+    expect(desenho).toContain(`"width":${size.icon.xs}`);
+  });
+
+  it('sem ícone não sobra espaço nem elemento a mais', async () => {
+    await render(<Button label="Entrar" onPress={jest.fn()} />);
+    expect(screen.queryByTestId(/^icone-/, { includeHiddenElements: true })).toBeNull();
   });
 
   it('o estilo de quem usa vem por último (ex.: largura fixa)', async () => {
