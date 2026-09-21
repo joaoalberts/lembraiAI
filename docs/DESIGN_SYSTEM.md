@@ -1116,7 +1116,7 @@ Filosofia: o mínimo. O feedback de toque é instantâneo (troca de cor e escala
 - Texto corrido (política de privacidade) tem no máximo `layout.readingMax` de largura.
 - **Não há layout de duas colunas:** as referências só têm celular, o iPad não é alvo (`supportsTablet: false`) e tablets Android usam a mesma coluna cheia.
 - Conferido em 375 por 812 (celular), 768 por 1024 (tablet) e 1280 por 800 (computador).
-- Áreas seguras (entalhe, barra de gestos): quem cuida é o `react-native-safe-area-context` via `Tabs` e `Stack`; a folha do mapa tem `space.xxl` embaixo.
+- Áreas seguras (entalhe, barra de gestos): quem cuida é o `react-native-safe-area-context` via `Tabs` e `Stack`; a folha do mapa tem `space.xxl` embaixo. **As páginas públicas** (política de privacidade e exclusão de conta) ficam fora das abas e sem cabeçalho, então somam a área segura ao respiro `space.xl` (o texto começa abaixo da barra de status e termina acima da de navegação); na web e no computador as áreas valem 0 e nada muda.
 - Com fonte grande no sistema, o texto quebra de linha; `numberOfLines` só onde as reticências são aceitáveis (título do cartão).
 
 ## 15. Estados de carregamento, vazio, sucesso e erro
@@ -1309,6 +1309,7 @@ O teste `valores-soltos.test.ts` mantém uma lista de arquivos com valores visua
 | 21/09/2026 | **Botões do mapa com 44 em tela de toque** (`@media (pointer: coarse)` em `mapa-css.ts`) e o zoom do mapa pequeno do formulário some nesse caso | Continuação da decisão do João (o app web será usado no celular): o Leaflet e os botões próprios do mapa tinham 29 × 30 e a pílula 24 de altura. No mapa de 138 de altura do formulário 44 + 88 de botões não cabem, então o zoom cede à pinça. Conferido num contexto de celular do navegador (`hasTouch`) |
 | 21/09/2026 | **Área de toque do controle deslizante do raio com 44 de altura** (margem negativa devolve os 30 do desenho) | Continuação da decisão do João: o `Slider` tinha 30 de altura de toque no celular e na web e não é um `Pressable`, então não passa pelo `Toque`. A folga vira toque por cima do que está em volta, sem mexer no espaço |
 | 21/09/2026 | **Barra de status do aparelho: texto escuro por padrão e claro nas telas de fundo escuro, declarado só pela tela em foco** (`BarraDeStatus`, `BarraDeStatusPadrao`) | Achado no emulador Android (tela cheia): o app nunca declarava a cor e o relógio saía sempre branco, quase invisível sobre o formulário menta, a aba Mapa e a tela de sucesso; no iOS o padrão seria escuro, ilegível sobre o cabeçalho verde. As abas ficam montadas, então só a que está em foco pode declarar. Sem referência na web |
+| 21/09/2026 | **Páginas públicas somam a área segura ao respiro** (`paddingTop` e `paddingBottom` de `space.xl` mais os recuos do aparelho) | Achado no emulador Android ao conferir a barra de status: a política de privacidade (aberta em Configurações → "Abrir") tinha o título por baixo do relógio, porque as páginas foram feitas para a web e o app desenha por baixo das barras do sistema. Na web nada muda (recuos 0); a exportação estática segue saindo com o texto em HTML |
 
 ## 19. Pendências
 

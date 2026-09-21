@@ -1,6 +1,9 @@
 import { render, screen } from '@testing-library/react-native';
+import { StyleSheet } from 'react-native';
 import ExcluirContaScreen from '../../app/excluir-conta';
 import PrivacidadeScreen from '../../app/privacidade';
+import { space } from '../design/tokens';
+import { comAreaSegura } from '../test-utils/area-segura';
 
 /**
  * Política de privacidade e exclusão de conta são promessas públicas (as lojas exigem as duas URLs). Estes testes garantem que
@@ -18,7 +21,7 @@ afterEach(() => {
 describe('páginas públicas sem e-mail de contato (o padrão do build)', () => {
   it('a política não manda "falar pelo contato abaixo" nem mostra um bloco Contato vazio', async () => {
     semContato();
-    await render(<PrivacidadeScreen />);
+    await render(comAreaSegura(<PrivacidadeScreen />));
     expect(screen.queryByText(/contato abaixo/)).toBeNull();
     expect(screen.queryByText('Contato')).toBeNull();
     expect(screen.getByText(/apagar sua conta e todos os dados/)).toBeTruthy();
@@ -26,7 +29,7 @@ describe('páginas públicas sem e-mail de contato (o padrão do build)', () => 
 
   it('a exclusão não remete a um contato inexistente e ensina o caminho pelo app, pelo site e pelo "Esqueci minha senha"', async () => {
     semContato();
-    await render(<ExcluirContaScreen />);
+    await render(comAreaSegura(<ExcluirContaScreen />));
     expect(screen.queryByText(/contato indicado na política/)).toBeNull();
     expect(screen.queryByText('Sem conseguir entrar')).toBeNull();
     expect(screen.getByText('Pelo aplicativo ou por este site')).toBeTruthy();
@@ -37,7 +40,7 @@ describe('páginas públicas sem e-mail de contato (o padrão do build)', () => 
 describe('páginas públicas com e-mail de contato', () => {
   it('a política mostra o contato e o cita', async () => {
     comContato();
-    await render(<PrivacidadeScreen />);
+    await render(comAreaSegura(<PrivacidadeScreen />));
     expect(screen.getByText('Contato')).toBeTruthy();
     expect(screen.getByText('contato@exemplo.invalid')).toBeTruthy();
     expect(screen.getByText(/pelo contato abaixo/)).toBeTruthy();
@@ -45,7 +48,7 @@ describe('páginas públicas com e-mail de contato', () => {
 
   it('a exclusão oferece o e-mail para quem não consegue entrar', async () => {
     comContato();
-    await render(<ExcluirContaScreen />);
+    await render(comAreaSegura(<ExcluirContaScreen />));
     expect(screen.getByText('Sem conseguir entrar')).toBeTruthy();
     expect(screen.getByText(/Escreva para contato@exemplo\.invalid/)).toBeTruthy();
   });
@@ -54,16 +57,35 @@ describe('páginas públicas com e-mail de contato', () => {
 describe('consistência entre as páginas', () => {
   it('as duas prometem o mesmo prazo para os backups (14 dias, o mesmo do scripts/backup.sh)', async () => {
     semContato();
-    await render(<PrivacidadeScreen />);
+    await render(comAreaSegura(<PrivacidadeScreen />));
     expect(screen.getByText(/até 14 dias depois da exclusão/)).toBeTruthy();
-    await render(<ExcluirContaScreen />);
+    await render(comAreaSegura(<ExcluirContaScreen />));
     expect(screen.getByText(/até 14 dias/)).toBeTruthy();
   });
 
   it('a política diz onde os dados ficam sem citar um provedor que não é mais o usado', async () => {
     semContato();
-    await render(<PrivacidadeScreen />);
+    await render(comAreaSegura(<PrivacidadeScreen />));
     expect(screen.queryByText(/no Supabase, nosso provedor/)).toBeNull();
     expect(screen.getByText(/servidor virtual \(VPS\)/)).toBeTruthy();
+  });
+});
+
+describe('páginas públicas no celular (o app desenha por baixo das barras do sistema)', () => {
+  const paginas: [string, () => React.ReactElement][] = [
+    ['a política de privacidade', () => <PrivacidadeScreen />],
+    ['a exclusão de conta', () => <ExcluirContaScreen />],
+  ];
+
+  it.each(paginas)('%s começa abaixo da barra de status e termina acima da barra de navegação', async (_nome, pagina) => {
+    await render(comAreaSegura(pagina(), { top: 59, bottom: 34 }));
+    const conteudo = StyleSheet.flatten(screen.getByTestId('pagina-publica').props.contentContainerStyle) as Record<string, unknown>;
+    expect(conteudo).toMatchObject({ paddingTop: space.xl + 59, paddingBottom: space.xl + 34 });
+  });
+
+  it.each(paginas)('%s sem barras (a web, o computador) fica com o respiro de sempre', async (_nome, pagina) => {
+    await render(comAreaSegura(pagina()));
+    const conteudo = StyleSheet.flatten(screen.getByTestId('pagina-publica').props.contentContainerStyle) as Record<string, unknown>;
+    expect(conteudo).toMatchObject({ paddingTop: space.xl, paddingBottom: space.xl });
   });
 });

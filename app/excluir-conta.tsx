@@ -1,4 +1,5 @@
 import { ScrollView, StyleSheet, Text, View } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { colors, layout, space, textStyles } from '../src/design/tokens';
 
 /**
@@ -7,8 +8,10 @@ import { colors, layout, space, textStyles } from '../src/design/tokens';
  */
 export default function ExcluirContaScreen() {
   const contato = process.env.EXPO_PUBLIC_CONTACT_EMAIL; // lido ao renderizar; o Expo o embute no build
+  // no celular o app desenha por baixo das barras do sistema: o texto começa abaixo da de status e termina acima da de navegação
+  const { top, bottom } = useSafeAreaInsets();
   return (
-    <ScrollView style={styles.container} contentContainerStyle={styles.content}>
+    <ScrollView testID="pagina-publica" style={styles.container} contentContainerStyle={[styles.content, { paddingTop: space.xl + top, paddingBottom: space.xl + bottom }]}>
       <View style={styles.column}>
         <Text style={styles.title} accessibilityRole="header">Excluir conta e dados</Text>
         <Text style={styles.updated}>LembreiAi</Text>
