@@ -121,6 +121,6 @@ const styles = StyleSheet.create({
   conteudo: { paddingTop: size.sheet.paddingTop, paddingHorizontal: size.sheet.paddingHorizontal },
   alca: { alignSelf: 'center', width: size.sheet.handleWidth, height: size.sheet.handleHeight, marginBottom: size.sheet.handleGap, borderRadius: radius.pill, backgroundColor: colors.tab.indicator },
   titulo: { ...textStyles.sheetTitle, color: colors.text.primary },
-  subtitulo: { ...textStyles.micro, color: colors.text.secondary, marginTop: space.xs },
+  subtitulo: { ...textStyles.mini, color: colors.text.secondary, marginTop: space.xs }, // 23 du (11 dp)
   acao: { position: 'absolute', top: size.sheet.actionTop, right: size.sheet.actionRight },
 });
