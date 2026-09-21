@@ -565,6 +565,9 @@ export const size = {
     notaTop: du(30),
     notaGap: du(12),
     notaIcon: du(26),
+    // o horizonte (`.horizonte` do AuthShell): o traço só existe entre 28% e 72% dos 1000 du do original, então a faixa tem 440 du e a base dela fica 280 du acima do fim do conteúdo
+    horizonteAltura: du(440),
+    horizonteBase: du(280),
     check: du(42),
     checkRadius: du(12),
     checkIcon: du(26),

@@ -1,0 +1,20 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>Horizonte do pé das telas de conta</title>
+<style>
+  /* Receita do app web (AuthShell.module.css, .horizonte): 851 × 1000 du, a 2 px por du. As curvas de nível do topo, viradas de
+     cabeça para baixo e esticadas até a altura toda; a máscara abre e fecha na faixa em que o traço existe (28% a 72%). */
+  html, body { margin: 0; background: transparent; }
+  .horizonte {
+    width: 1702px; height: 2000px;
+    transform: scaleY(-1);
+    background: url('../../assets/art/topo-header.svg') center top / 100% 100% no-repeat;
+    -webkit-mask-image: linear-gradient(transparent 0 28%, #000 44%, rgba(0, 0, 0, .5) 58%, transparent 72%);
+    mask-image: linear-gradient(transparent 0 28%, #000 44%, rgba(0, 0, 0, .5) 58%, transparent 72%);
+  }
+</style>
+</head>
+<body><div class="horizonte"></div></body>
+</html>

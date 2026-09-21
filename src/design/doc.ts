@@ -579,6 +579,8 @@ const DESCRICOES: Record<string, string> = {
   'size.auth.notaTop': 'Contas: distância da nota do cadeado até o que vem antes',
   'size.auth.notaGap': 'Contas: vão entre o cadeado e o texto da nota',
   'size.auth.notaIcon': 'Contas: cadeado da nota',
+  'size.auth.horizonteAltura': 'Contas: altura da faixa do horizonte (as curvas de nível espelhadas no pé da tela)',
+  'size.auth.horizonteBase': 'Contas: distância do fim do conteúdo até a base da faixa do horizonte',
   'size.auth.check': 'Contas: caixinha "Lembrar-me"',
   'size.auth.checkRadius': 'Contas: raio da caixinha "Lembrar-me"',
   'size.auth.checkIcon': 'Contas: visto da caixinha "Lembrar-me"',

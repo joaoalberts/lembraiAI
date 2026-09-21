@@ -11,6 +11,7 @@ import { Icon } from './Icon';
 import { Toque } from './Toque';
 
 const CURVAS_DE_NIVEL = require('../../assets/art/topo-contas.webp');
+const HORIZONTE = require('../../assets/art/horizonte-contas.webp');
 
 interface RodapeProps {
   /** Com pergunta o rodapé é a barra de vidro com a pastilha de ação; sem ela, só o link. */
@@ -32,8 +33,8 @@ interface AuthLayoutProps {
 /**
  * Base das telas de conta (entrar, criar conta, esqueci e redefinir a senha; imagem 02): fundo verde em degradê com as curvas
  * de nível no alto, o botão de voltar, a marca, o cartão creme com o título e o subtítulo, e embaixo a barra de vidro (ou o
- * link de voltar) e a nota do cadeado. O "horizonte" espelhado do rodapé do original não é reproduzido (a arte não está
- * pré-renderizada). Padrão: docs/DESIGN_SYSTEM.md, seção 11.15.
+ * link de voltar) e a nota do cadeado. Atrás da barra e da nota, o "horizonte": as mesmas curvas de nível viradas e esticadas
+ * (`assets/art/horizonte-contas.webp`, gerado por `scripts/arte/gerar-topo.sh`). Padrão: docs/DESIGN_SYSTEM.md, seção 11.15.
  */
 export function AuthLayout({ title, subtitle, children, keyboardShouldPersistTaps, voltar, rodape }: AuthLayoutProps) {
   const { top } = useSafeAreaInsets();
@@ -75,6 +76,10 @@ export function AuthLayout({ title, subtitle, children, keyboardShouldPersistTap
         </View>
 
         <View style={styles.rodape}>
+          {/* as mesmas curvas de nível, viradas e esticadas: o chão que recua até o horizonte. Vem antes da barra e da nota, que desenham por cima */}
+          <View testID="auth-horizonte" style={[styles.horizonte, styles.decoracao]}>
+            <Image source={HORIZONTE} contentFit="fill" accessible={false} style={StyleSheet.absoluteFill} />
+          </View>
           {rodape?.pergunta ? (
             <View testID="auth-barra" style={styles.barra}>
               <Text style={styles.pergunta}>{rodape.pergunta}</Text>
@@ -112,6 +117,8 @@ const styles = StyleSheet.create({
   subtitulo: { ...textStyles.micro, color: colors.text.secondary, marginTop: size.auth.subtituloTop },
   formulario: { marginTop: size.auth.formTop },
   rodape: { flexGrow: 1, justifyContent: 'flex-end', paddingTop: size.auth.rodapeTop },
+  // sangra de ponta a ponta (anula o recuo dos lados) e sobe da base do conteúdo: a faixa só ocupa o meio da altura de 1000 du do original
+  horizonte: { position: 'absolute', left: -size.auth.side, right: -size.auth.side, bottom: size.auth.horizonteBase - size.auth.bottom, height: size.auth.horizonteAltura },
   barra: {
     minHeight: size.auth.barra,
     flexDirection: 'row',

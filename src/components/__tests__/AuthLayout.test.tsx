@@ -11,6 +11,8 @@ jest.mock('expo-status-bar', () => ({ StatusBar: jest.fn(() => null) }));
 const ESCONDIDO = { includeHiddenElements: true } as const;
 const abrir = (ui: React.ReactElement, insets?: { top?: number; bottom?: number }) => render(comAreaSegura(ui, insets));
 const estilo = (id: string) => StyleSheet.flatten(screen.getByTestId(id, ESCONDIDO).props.style) as Record<string, unknown>;
+/** A imagem decorativa dentro da camada de testID dado (no Jest o arquivo vira `testUri`). */
+const imagemDe = (id: string) => screen.getByTestId(id, ESCONDIDO).children[0] as unknown as { props: { source: { testUri: string }[]; contentFit: string; accessible: boolean } };
 
 /** Os filhos do elemento que contém o de testID dado (a ordem na árvore é a ordem do Tab na web). */
 function irmaosDe(testID: string): { props?: { testID?: string } }[] {
@@ -54,6 +56,33 @@ describe('AuthLayout (base das telas de conta)', () => {
     expect(gradients.contas).toContain('168deg');
     expect(estilo('auth-fundo')).toMatchObject({ pointerEvents: 'none' });
     expect(estilo('auth-curvas')).toMatchObject({ pointerEvents: 'none' });
+    expect(imagemDe('auth-curvas').props.source[0].testUri).toMatch(/assets\/art\/topo-contas\.webp$/);
+  });
+
+  it('o horizonte: as curvas do topo viradas e esticadas embaixo, de ponta a ponta, atrás da barra de vidro e da nota, sem receber toque', async () => {
+    await abrir(<AuthLayout title="Entrar" rodape={{ pergunta: 'Ainda não tem conta?', acao: 'Criar conta', onPress: jest.fn() }}><Text>corpo</Text></AuthLayout>);
+    expect(estilo('auth-horizonte')).toMatchObject({
+      position: 'absolute',
+      left: -size.auth.side,
+      right: -size.auth.side,
+      bottom: size.auth.horizonteBase - size.auth.bottom,
+      height: size.auth.horizonteAltura,
+      pointerEvents: 'none',
+    });
+    // é a arte do horizonte (e não a do topo), esticada na faixa e escondida do leitor de tela
+    expect(imagemDe('auth-horizonte').props.source[0].testUri).toMatch(/assets\/art\/horizonte-contas\.webp$/);
+    expect(imagemDe('auth-horizonte').props).toMatchObject({ contentFit: 'fill', accessible: false });
+    // dentro do rodapé e antes da barra e da nota: o que vem depois desenha por cima
+    const ids = irmaosDe('auth-horizonte').map((n) => n.props?.testID);
+    expect(ids.indexOf('auth-horizonte')).toBeGreaterThanOrEqual(0);
+    expect(ids.indexOf('auth-horizonte')).toBeLessThan(ids.indexOf('auth-barra'));
+  });
+
+  it('as telas de recuperação (só o link de voltar, sem barra) e as sem rodapé têm o mesmo horizonte', async () => {
+    await abrir(<AuthLayout title="Esqueci minha senha" rodape={{ acao: 'Voltar para entrar', onPress: jest.fn() }}><Text>corpo</Text></AuthLayout>);
+    expect(screen.getByTestId('auth-horizonte', ESCONDIDO)).toBeTruthy();
+    await abrir(<AuthLayout title="Entrar"><Text>corpo</Text></AuthLayout>);
+    expect(screen.getAllByTestId('auth-horizonte', ESCONDIDO).length).toBeGreaterThan(0);
   });
 
   it('a marca no alto: o tile menta com o símbolo e o nome em serifa', async () => {
