@@ -80,6 +80,11 @@ describe('AuthLayout (base das telas de conta)', () => {
     expect(ids.indexOf('auth-horizonte')).toBeLessThan(ids.indexOf('auth-cartao'));
   });
 
+  it('a pergunta da barra de vidro ocupa o espaço que sobra ao lado da pastilha: no Android um texto de largura justa era cortado ("Já tem conta?" saía "Já tem")', async () => {
+    await abrir(<AuthLayout title="Criar conta" rodape={{ pergunta: 'Já tem conta?', acao: 'Entrar', onPress: jest.fn() }}><Text>corpo</Text></AuthLayout>);
+    expect(screen.getByText('Já tem conta?')).toHaveStyle({ flex: 1 });
+  });
+
   it('as telas de recuperação (só o link de voltar, sem barra) e as sem rodapé têm o mesmo horizonte', async () => {
     await abrir(<AuthLayout title="Esqueci minha senha" rodape={{ acao: 'Voltar para entrar', onPress: jest.fn() }}><Text>corpo</Text></AuthLayout>);
     expect(screen.getByTestId('auth-horizonte', ESCONDIDO)).toBeTruthy();

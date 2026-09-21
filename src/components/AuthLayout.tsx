@@ -132,7 +132,8 @@ const styles = StyleSheet.create({
     borderColor: colors.conta.barraAnel,
     backgroundColor: colors.conta.barra,
   },
-  pergunta: { ...textStyles.micro, color: colors.conta.pergunta, flexShrink: 1 },
+  // `flex: 1` e não só `flexShrink`: com a caixa do tamanho justo do texto o Android quebrava a última palavra ("Já tem conta?" saía "Já tem"); o texto fica à esquerda como antes
+  pergunta: { ...textStyles.micro, color: colors.conta.pergunta, flex: 1 },
   pilula: { height: size.auth.pilula, justifyContent: 'center', paddingHorizontal: size.auth.pilulaSide, borderRadius: size.auth.pilulaRadius, borderWidth: borderWidth.hairline, borderColor: colors.conta.pilulaAnel, backgroundColor: colors.conta.pilula },
   textoDaPilula: { ...textStyles.micro, fontFamily: fontFamily.bold, color: colors.conta.pilulaTexto },
   linkDeVolta: { alignSelf: 'center', paddingHorizontal: size.auth.linkVolta, paddingVertical: size.auth.linkVolta, borderRadius: radius.md },
