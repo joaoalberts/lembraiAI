@@ -1,10 +1,11 @@
-import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
 import { REPEAT_OPTIONS, type RepeatKey } from '../data/reminders';
 import { anelDeFoco, type EstadoDeToque } from '../design/foco';
 import { borderWidth, colors, fontFamily, iconStroke, radius, size, space, textStyles } from '../design/tokens';
 import { Icon } from './Icon';
 import { Sheet } from './Sheet';
 
+import { Toque } from './Toque';
 interface RepeatSheetProps {
   visible: boolean;
   value: RepeatKey;
@@ -31,7 +32,7 @@ export function RepeatSheet({ visible, value, onSelect, onClose }: RepeatSheetPr
         {REPEAT_OPTIONS.map((o, i) => {
           const escolhida = o.key === value;
           return (
-            <Pressable
+            <Toque
               key={o.key}
               onPress={() => { onSelect(o.key); onClose(); }}
               accessibilityRole="radio"
@@ -50,7 +51,7 @@ export function RepeatSheet({ visible, value, onSelect, onClose }: RepeatSheetPr
               ) : (
                 <View testID="repetir-anel" style={[styles.marca, styles.anel]} />
               )}
-            </Pressable>
+            </Toque>
           );
         })}
       </View>

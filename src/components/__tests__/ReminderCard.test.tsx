@@ -6,6 +6,7 @@ import { GIRO_NA_LISTA, ICON_NAME, UI_ICON } from '../../design/icons';
 import { borderWidth, colors, fontFamily, iconStroke, opacity, radius, shadow, size } from '../../design/tokens';
 import { ReminderCard } from '../ReminderCard';
 
+import { alvoDeToque } from '../../test-utils/toque';
 const porHorario: Reminder = {
   id: '1', title: 'Tomar remédio', category: 'blue', icon: 'pill', kind: 'time',
   dateISO: '2026-09-20', time: '09:00', repeat: 'daily', active: true,
@@ -96,7 +97,9 @@ describe('ReminderCard: ações', () => {
   it('as reticências são um botão de 44 de toque, e o cartão em si não é tocável', async () => {
     await render(cartao(porHorario));
     const botao = screen.getByRole('button', { name: 'Mais opções: Tomar remédio' });
-    expect(size.card.dotsHeight + 2 * (botao.props.hitSlop as number)).toBeGreaterThanOrEqual(size.touch);
+    const alvo = await alvoDeToque(botao, size.card.dotsWidth, size.card.dotsHeight);
+    expect(alvo.altura).toBeGreaterThanOrEqual(size.touch);
+    expect(alvo.largura).toBeGreaterThanOrEqual(size.touch);
     expect(screen.getByTestId('reminder-card')).not.toHaveProp('onPress');
     expect(screen.queryByLabelText('Excluir lembrete: Tomar remédio')).toBeNull();
   });

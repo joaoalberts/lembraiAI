@@ -1,8 +1,9 @@
-import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
 import { anelDeFoco, type EstadoDeToque } from '../design/foco';
 import { colors, fontFamily, iconStroke, motion, opacity, radius, shadow, size, space, textStyles } from '../design/tokens';
 import { Icon, type IconeNome } from './Icon';
 
+import { Toque } from './Toque';
 interface SelectFieldProps {
   /** Ícone à esquerda (calendário, relógio). Sem ícone o campo vira uma linha de duas linhas (o "Repetir"). */
   icon?: IconeNome;
@@ -40,7 +41,7 @@ export function estiloDoSeletor(estado: EstadoDeToque, desabilitado: boolean, du
 export function SelectField({ icon, label, value, onPress, disabled = false, accessibilityLabel, chevron = 'down', leading, highlight = false }: SelectFieldProps) {
   const duasLinhas = label !== undefined;
   return (
-    <Pressable
+    <Toque
       onPress={onPress}
       disabled={disabled}
       accessibilityRole="button"
@@ -58,7 +59,7 @@ export function SelectField({ icon, label, value, onPress, disabled = false, acc
         <Text style={styles.valor} numberOfLines={1}>{value}</Text>
       )}
       <Icon name={chevron === 'down' ? 'chevron-down' : 'chevron-right'} size={size.icon.sm} color={colors.icon.default} stroke={iconStroke.action} />
-    </Pressable>
+    </Toque>
   );
 }
 

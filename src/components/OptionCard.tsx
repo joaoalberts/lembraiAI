@@ -1,8 +1,9 @@
-import { Pressable, StyleSheet, Text, View, type StyleProp, type ViewStyle } from 'react-native';
+import { StyleSheet, Text, View, type StyleProp, type ViewStyle } from 'react-native';
 import { anelDeFoco, type EstadoDeToque } from '../design/foco';
 import { borderWidth, colors, fontFamily, iconStroke, motion, radius, shadow, size, space, textStyles } from '../design/tokens';
 import { Icon, type IconeNome } from './Icon';
 
+import { Toque } from './Toque';
 interface OptionCardProps {
   icon: IconeNome;
   title: string;
@@ -30,7 +31,7 @@ export function estiloDoCartaoDeModo(selecionado: boolean, estado: EstadoDeToque
  */
 export function OptionCard({ icon, title, description, selected, onPress, style }: OptionCardProps) {
   return (
-    <Pressable
+    <Toque
       onPress={onPress}
       accessibilityRole="radio"
       accessibilityLabel={title}
@@ -51,7 +52,7 @@ export function OptionCard({ icon, title, description, selected, onPress, style 
       ) : (
         <View testID="opcao-anel" style={[styles.marca, styles.anel]} />
       )}
-    </Pressable>
+    </Toque>
   );
 }
 

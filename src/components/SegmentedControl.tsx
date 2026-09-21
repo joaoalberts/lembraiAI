@@ -1,7 +1,8 @@
-import { Pressable, StyleSheet, Text, View, type StyleProp, type ViewStyle } from 'react-native';
+import { StyleSheet, Text, View, type StyleProp, type ViewStyle } from 'react-native';
 import { anelDeFoco, type EstadoDeToque } from '../design/foco';
 import { colors, fontFamily, opacity, radius, size, space, textStyles } from '../design/tokens';
 
+import { Toque } from './Toque';
 interface Opcao<T extends string> {
   key: T;
   label: string;
@@ -26,7 +27,7 @@ export function SegmentedControl<T extends string>({ options, value, onChange, d
       {options.map((o) => {
         const selecionado = value === o.key;
         return (
-          <Pressable
+          <Toque
             key={o.key}
             onPress={() => onChange(o.key)}
             disabled={disabled}
@@ -35,7 +36,7 @@ export function SegmentedControl<T extends string>({ options, value, onChange, d
             style={(estado: EstadoDeToque) => estiloDoSegmento(selecionado, estado)}
           >
             <Text style={[styles.rotulo, selecionado ? styles.rotuloSelecionado : null]}>{o.label}</Text>
-          </Pressable>
+          </Toque>
         );
       })}
     </View>

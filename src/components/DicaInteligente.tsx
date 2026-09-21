@@ -1,8 +1,9 @@
-import { Pressable, StyleSheet, Text, View, type StyleProp, type ViewStyle } from 'react-native';
+import { StyleSheet, Text, View, type StyleProp, type ViewStyle } from 'react-native';
 import { anelDeFoco, type EstadoDeToque } from '../design/foco';
 import { colors, fontFamily, iconStroke, motion, radius, shadow, size, textStyles } from '../design/tokens';
 import { Icon } from './Icon';
 
+import { Toque } from './Toque';
 interface DicaInteligenteProps {
   onPress: () => void;
 }
@@ -27,7 +28,7 @@ export function estiloDaDica(estado: EstadoDeToque): StyleProp<ViewStyle> {
  */
 export function DicaInteligente({ onPress }: DicaInteligenteProps) {
   return (
-    <Pressable testID="dica-inteligente" onPress={onPress} accessibilityRole="button" accessibilityLabel={`${TITULO}. ${TEXTO}`} style={(estado: EstadoDeToque) => estiloDaDica(estado)}>
+    <Toque testID="dica-inteligente" onPress={onPress} accessibilityRole="button" accessibilityLabel={`${TITULO}. ${TEXTO}`} style={(estado: EstadoDeToque) => estiloDaDica(estado)}>
       <View style={styles.circulo} accessibilityElementsHidden importantForAccessibility="no-hide-descendants">
         <Icon name="lightbulb" size={size.sucesso.dica.icon} color={colors.icon.default} stroke={iconStroke.glyph} />
       </View>
@@ -36,7 +37,7 @@ export function DicaInteligente({ onPress }: DicaInteligenteProps) {
         <Text style={styles.corpo}>{TEXTO}</Text>
       </View>
       <Icon name="chevron-right" size={size.sucesso.dica.arrow} color={colors.icon.default} stroke={iconStroke.action} />
-    </Pressable>
+    </Toque>
   );
 }
 

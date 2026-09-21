@@ -9,6 +9,7 @@ import { CartaoDeResumo } from '../CartaoDeResumo';
 import { DicaInteligente, estiloDaDica } from '../DicaInteligente';
 import { LinkButton, corDoLink, estiloDoLink } from '../LinkButton';
 
+import { alvoDeToque } from '../../test-utils/toque';
 const ESCONDIDO = { includeHiddenElements: true } as const;
 const plano = (estilo: unknown) => StyleSheet.flatten(estilo as never) as Record<string, unknown>;
 
@@ -195,8 +196,8 @@ describe('LinkButton', () => {
 
   it('a faixa é baixa, então a área de toque é completada até 44 em cima e embaixo', async () => {
     await render(<LinkButton label="Criar outro lembrete" onPress={jest.fn()} />);
-    const { top, bottom } = screen.getByRole('button', { name: 'Criar outro lembrete' }).props.hitSlop as { top: number; bottom: number };
-    expect(size.sucesso.link + top + bottom).toBeGreaterThanOrEqual(size.touch);
+    const alvo = await alvoDeToque(screen.getByRole('button', { name: 'Criar outro lembrete' }), 300, size.sucesso.link);
+    expect(alvo.altura).toBeGreaterThanOrEqual(size.touch);
   });
 
   it('estados: ponteiro em cima escurece o texto, pressionado esmaece o link todo, foco de teclado põe o anel', () => {

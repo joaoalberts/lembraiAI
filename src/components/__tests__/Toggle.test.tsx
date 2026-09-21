@@ -4,6 +4,7 @@ import { AccessibilityInfo, Platform } from 'react-native';
 import { colors, motion, opacity, radius, shadow, size } from '../../design/tokens';
 import { Toggle, medidasDoToggle } from '../Toggle';
 
+import { alvoDeToque } from '../../test-utils/toque';
 afterEach(() => jest.restoreAllMocks());
 
 const trilhoLigado = () => screen.getByTestId('toggle-ligado');
@@ -75,9 +76,9 @@ describe('Toggle', () => {
 
   it('o toque chega a 44 por 44 com a folga (o trilho tem só 21 de altura)', async () => {
     await render(<Toggle value onValueChange={jest.fn()} accessibilityLabel="Ativar" />);
-    const folga = screen.getByLabelText('Ativar').props.hitSlop as { top: number; bottom: number; left: number; right: number };
-    expect(size.toggle.card.height + folga.top + folga.bottom).toBeGreaterThanOrEqual(size.touch);
-    expect(size.toggle.card.width + folga.left + folga.right).toBeGreaterThanOrEqual(size.touch);
+    const alvo = await alvoDeToque(screen.getByLabelText('Ativar'), size.toggle.card.width, size.toggle.card.height);
+    expect(alvo.altura).toBeGreaterThanOrEqual(size.touch);
+    expect(alvo.largura).toBeGreaterThanOrEqual(size.touch);
   });
 });
 

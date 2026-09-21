@@ -1,9 +1,10 @@
-import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
 import { type EstadoDeToque } from '../design/foco';
 import { colors, fontFamily, fontSize, iconStroke, radius, size } from '../design/tokens';
 import { estiloDoBotao } from './Button';
 import { Icon } from './Icon';
 
+import { Toque } from './Toque';
 interface CtaButtonProps {
   label: string;
   onPress: () => void;
@@ -17,7 +18,7 @@ interface CtaButtonProps {
  */
 export function CtaButton({ label, onPress, disabled = false }: CtaButtonProps) {
   return (
-    <Pressable
+    <Toque
       onPress={onPress}
       disabled={disabled}
       accessibilityRole="button"
@@ -28,7 +29,7 @@ export function CtaButton({ label, onPress, disabled = false }: CtaButtonProps) 
       <View testID="cta-seta" style={styles.circulo}>
         <Icon name="arrow-right" size={size.icon.md} color={colors.text.onAction} stroke={iconStroke.ui} />
       </View>
-    </Pressable>
+    </Toque>
   );
 }
 

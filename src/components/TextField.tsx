@@ -1,9 +1,10 @@
 import { useState } from 'react';
-import { Pressable, StyleSheet, Text, TextInput, View, type StyleProp, type TextInputProps, type ViewStyle } from 'react-native';
+import { StyleSheet, Text, TextInput, View, type StyleProp, type TextInputProps, type ViewStyle } from 'react-native';
 import { semAnelDoNavegador, type EstadoDeToque } from '../design/foco';
 import { colors, fontFamily, iconStroke, radius, shadow, size, textStyles } from '../design/tokens';
 import { Icon } from './Icon';
 
+import { Toque } from './Toque';
 interface TextFieldProps {
   label?: string;
   placeholder?: string;
@@ -72,7 +73,7 @@ export function TextField({
           onBlur={() => setEmFoco(false)}
         />
         {secureTextEntry ? (
-          <Pressable
+          <Toque
             onPress={() => setMostrar((v) => !v)}
             focusable={false}
             tabIndex={-1} // o react-native-web só lê o tabIndex: sem ele o olho vira uma parada do Tab
@@ -81,7 +82,7 @@ export function TextField({
             style={styles.olho}
           >
             {(estado: EstadoDeToque) => <Icon name={mostrar ? 'eye-off' : 'eye'} size={size.campo.eyeIcon} color={estado.hovered ? colors.icon.default : colors.icon.muted} stroke={iconStroke.base} />}
-          </Pressable>
+          </Toque>
         ) : null}
       </View>
       {comErro ? (

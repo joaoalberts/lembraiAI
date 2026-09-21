@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react';
-import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
 import { anelDeFoco, type EstadoDeToque } from '../design/foco';
 import { borderWidth, colors, fontFamily, iconStroke, radius, size, space, textStyles } from '../design/tokens';
 import { INICIAIS_DA_SEMANA, deslocarMes, gradeDoMes, mesDaData, tituloDoMes } from '../lib/calendario';
@@ -7,6 +7,7 @@ import { formatDate, todayISO } from '../lib/format';
 import { Icon } from './Icon';
 import { Sheet } from './Sheet';
 
+import { Toque } from './Toque';
 interface CalendarSheetProps {
   visible: boolean;
   /** "AAAA-MM-DD" */
@@ -38,13 +39,13 @@ function Corpo({ value, onSelect, onClose }: Omit<CalendarSheetProps, 'visible'>
   return (
     <View style={styles.calendario}>
       <View style={styles.cabecalho}>
-        <Pressable onPress={() => trocar(-1)} accessibilityRole="button" accessibilityLabel="Mês anterior" hitSlop={space.xs} style={(e: EstadoDeToque) => [styles.seta, e.focused ? anelDeFoco : null]}>
+        <Toque onPress={() => trocar(-1)} accessibilityRole="button" accessibilityLabel="Mês anterior" style={(e: EstadoDeToque) => [styles.seta, e.focused ? anelDeFoco : null]}>
           <Icon name="chevron-left" size={size.icon.md} color={colors.icon.default} stroke={iconStroke.action} />
-        </Pressable>
+        </Toque>
         <Text accessibilityRole="header" style={styles.mes}>{maiuscula(tituloDoMes(visto.ano, visto.mes))}</Text>
-        <Pressable onPress={() => trocar(1)} accessibilityRole="button" accessibilityLabel="Próximo mês" hitSlop={space.xs} style={(e: EstadoDeToque) => [styles.seta, e.focused ? anelDeFoco : null]}>
+        <Toque onPress={() => trocar(1)} accessibilityRole="button" accessibilityLabel="Próximo mês" style={(e: EstadoDeToque) => [styles.seta, e.focused ? anelDeFoco : null]}>
           <Icon name="chevron-right" size={size.icon.md} color={colors.icon.default} stroke={iconStroke.action} />
-        </Pressable>
+        </Toque>
       </View>
 
       <View style={styles.semana} accessibilityElementsHidden importantForAccessibility="no-hide-descendants">
@@ -58,7 +59,7 @@ function Corpo({ value, onSelect, onClose }: Omit<CalendarSheetProps, 'visible'>
             const eHoje = d.iso === hoje;
             return (
               <View key={d.iso} style={styles.celula}>
-                <Pressable
+                <Toque
                   onPress={() => escolher(d.iso)}
                   accessibilityRole="button"
                   accessibilityLabel={formatDate(d.iso)}
@@ -66,16 +67,16 @@ function Corpo({ value, onSelect, onClose }: Omit<CalendarSheetProps, 'visible'>
                   style={(estado: EstadoDeToque) => estiloDoDia(estado, escolhido, eHoje)}
                 >
                   <Text style={[styles.numero, !d.doMes ? styles.foraDoMes : null, escolhido ? styles.numeroEscolhido : null]}>{d.dia}</Text>
-                </Pressable>
+                </Toque>
               </View>
             );
           })}
         </View>
       ))}
 
-      <Pressable onPress={() => escolher(hoje)} accessibilityRole="button" accessibilityLabel="Ir para hoje" style={(e: EstadoDeToque) => [styles.hoje, e.focused ? anelDeFoco : null]}>
+      <Toque onPress={() => escolher(hoje)} accessibilityRole="button" accessibilityLabel="Ir para hoje" style={(e: EstadoDeToque) => [styles.hoje, e.focused ? anelDeFoco : null]}>
         <Text style={styles.hojeTexto}>Hoje</Text>
-      </Pressable>
+      </Toque>
     </View>
   );
 }

@@ -1,8 +1,9 @@
-import { Pressable, StyleSheet, Text, type StyleProp, type TextStyle, type ViewStyle } from 'react-native';
+import { StyleSheet, Text, type StyleProp, type TextStyle, type ViewStyle } from 'react-native';
 import { anelDeFoco, type EstadoDeToque } from '../design/foco';
 import { borderWidth, colors, fontFamily, fontSize, iconStroke, lineHeight, motion, opacity, radius, shadow, size, space, textStyles } from '../design/tokens';
 import { Icon, type IconeNome } from './Icon';
 
+import { Toque } from './Toque';
 /** `destructive` = ação de excluir sólida (dentro da confirmação); `frost` = a saída tranquila ao lado dela ("Cancelar"). */
 export type ButtonVariant = 'primary' | 'secondary' | 'ghost' | 'danger' | 'destructive' | 'frost';
 
@@ -61,7 +62,7 @@ export function estiloDoBotao(variant: ButtonVariant, estado: EstadoDeToque, dis
 
 export function Button({ label, onPress, variant = 'primary', disabled = false, style, labelStyle, compact = false, icon, iconEnd, hero = false }: ButtonProps) {
   return (
-    <Pressable
+    <Toque
       onPress={onPress}
       disabled={disabled}
       accessibilityRole="button"
@@ -70,7 +71,7 @@ export function Button({ label, onPress, variant = 'primary', disabled = false, 
       {icon ? <Icon name={icon} size={size.icon.xs} color={VISUAL[variant].rotulo} stroke={iconStroke.action} /> : null}
       <Text style={[styles.rotulo, compact ? styles.rotuloCompacto : null, { color: VISUAL[variant].rotulo }, labelStyle]}>{label}</Text>
       {iconEnd ? <Icon name={iconEnd} size={size.icon.md} color={VISUAL[variant].rotulo} stroke={iconStroke.ui} /> : null}
-    </Pressable>
+    </Toque>
   );
 }
 

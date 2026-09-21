@@ -56,9 +56,10 @@ describe('espaçamento e formas', () => {
     expect(size.button).toBeGreaterThanOrEqual(size.touch);
   });
 
-  it('controles menores que 44 (chip, botão de fechar) chegam a 44 com a folga de toque', () => {
-    expect(size.chip + 2 * size.hitSlop).toBeGreaterThanOrEqual(size.touch);
-    expect(size.closeButton + 2 * size.hitSlop).toBeGreaterThanOrEqual(size.touch);
+  it('controles visíveis menores que 44 (chip, botão de fechar) chegam a 44 pelo Toque, que mede e completa (src/components/Toque.tsx)', () => {
+    expect(size.chip).toBeLessThan(size.touch);
+    expect(size.closeButton).toBeLessThan(size.touch);
+    expect('hitSlop' in size).toBe(false); // a folga fixa de 6 saiu: o Toque calcula a de cada controle
   });
 
   it('a espessura de borda é inteira (linha nítida em telas de densidade baixa)', () => {

@@ -1,4 +1,4 @@
-import { View, Pressable, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet } from 'react-native';
 import { router, useLocalSearchParams } from 'expo-router';
 import { useState } from 'react';
 import { AuthLayout } from '../../src/components/AuthLayout';
@@ -6,6 +6,7 @@ import { Banner } from '../../src/components/Banner';
 import { Button } from '../../src/components/Button';
 import { CaixaDeMarcar } from '../../src/components/CaixaDeMarcar';
 import { TextField } from '../../src/components/TextField';
+import { Toque } from '../../src/components/Toque';
 import { colors, fontFamily, size, textStyles } from '../../src/design/tokens';
 import { validarEmail } from '../../src/lib/validacao';
 import { useAuth } from '../../src/state/auth';
@@ -72,15 +73,14 @@ export default function LoginScreen() {
 
       <View style={styles.linha}>
         <CaixaDeMarcar label="Lembrar-me" value={lembrar} onValueChange={setLembrar} disabled={loading} />
-        <Pressable
+        <Toque
           onPress={() => router.navigate('/auth/forgot-password')}
           disabled={loading}
-          hitSlop={{ top: (size.touch - size.auth.check) / 2, bottom: (size.touch - size.auth.check) / 2 }}
           accessibilityRole="button"
           accessibilityLabel="Esqueci minha senha"
         >
           <Text style={styles.esqueci}>Esqueci minha senha</Text>
-        </Pressable>
+        </Toque>
       </View>
 
       <Button label={loading ? 'Entrando…' : 'Entrar'} onPress={() => void handleLogin()} disabled={loading} style={styles.botao} />

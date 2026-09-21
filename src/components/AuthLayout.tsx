@@ -1,6 +1,6 @@
 import { Image } from 'expo-image';
 import type { ReactNode } from 'react';
-import { Pressable, ScrollView, StyleSheet, Text, View, type ScrollViewProps } from 'react-native';
+import { ScrollView, StyleSheet, Text, View, type ScrollViewProps } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { fundoEmDegrade } from '../design/efeitos';
 import { anelDeFocoNoEscuro, type EstadoDeToque } from '../design/foco';
@@ -8,6 +8,7 @@ import { borderWidth, colors, fontFamily, fontSize, gradients, iconStroke, lineH
 import { GlassButton } from './GlassButton';
 import { Icon } from './Icon';
 
+import { Toque } from './Toque';
 const CURVAS_DE_NIVEL = require('../../assets/art/topo-contas.webp');
 
 interface RodapeProps {
@@ -74,14 +75,14 @@ export function AuthLayout({ title, subtitle, children, keyboardShouldPersistTap
           {rodape?.pergunta ? (
             <View testID="auth-barra" style={styles.barra}>
               <Text style={styles.pergunta}>{rodape.pergunta}</Text>
-              <Pressable onPress={rodape.onPress} accessibilityRole="button" accessibilityLabel={rodape.acao} style={(estado: EstadoDeToque) => [styles.pilula, estado.pressed ? styles.pressionada : null, estado.focused ? anelDeFocoNoEscuro : null]}>
+              <Toque onPress={rodape.onPress} accessibilityRole="button" accessibilityLabel={rodape.acao} style={(estado: EstadoDeToque) => [styles.pilula, estado.pressed ? styles.pressionada : null, estado.focused ? anelDeFocoNoEscuro : null]}>
                 <Text style={styles.textoDaPilula}>{rodape.acao}</Text>
-              </Pressable>
+              </Toque>
             </View>
           ) : rodape ? (
-            <Pressable onPress={rodape.onPress} accessibilityRole="button" accessibilityLabel={rodape.acao} style={(estado: EstadoDeToque) => [styles.linkDeVolta, estado.pressed ? styles.pressionada : null, estado.focused ? anelDeFocoNoEscuro : null]}>
+            <Toque onPress={rodape.onPress} accessibilityRole="button" accessibilityLabel={rodape.acao} style={(estado: EstadoDeToque) => [styles.linkDeVolta, estado.pressed ? styles.pressionada : null, estado.focused ? anelDeFocoNoEscuro : null]}>
               <Text style={styles.textoDoLink}>{rodape.acao}</Text>
-            </Pressable>
+            </Toque>
           ) : null}
           <View style={styles.nota}>
             <Icon name="lock" size={size.auth.notaIcon} color={colors.conta.nota} stroke={iconStroke.ui} />

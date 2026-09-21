@@ -6,6 +6,7 @@ import { colors, fontFamily, radius, size } from '../../design/tokens';
 import { CaixaDeMarcar, estiloDaCaixa } from '../CaixaDeMarcar';
 import { MedidorDeSenha } from '../MedidorDeSenha';
 
+import { alvoDeToque } from '../../test-utils/toque';
 const ESCONDIDO = { includeHiddenElements: true } as const;
 const plano = (estilo: unknown) => StyleSheet.flatten(estilo as never) as Record<string, unknown>;
 
@@ -40,8 +41,8 @@ describe('CaixaDeMarcar', () => {
 
   it('a área de toque chega a 44 e o foco de teclado põe o anel', async () => {
     await render(<CaixaDeMarcar label="Lembrar-me" value={false} onValueChange={jest.fn()} />);
-    const { top, bottom } = screen.getByRole('checkbox', { name: 'Lembrar-me' }).props.hitSlop as { top: number; bottom: number };
-    expect(size.auth.check + top + bottom).toBeGreaterThanOrEqual(size.touch);
+    const alvo = await alvoDeToque(screen.getByRole('checkbox', { name: 'Lembrar-me' }), 94, size.auth.check);
+    expect(alvo.altura).toBeGreaterThanOrEqual(size.touch);
     expect(plano(estiloDaCaixa({ pressed: false, focused: true }))).toMatchObject(anelDeFoco);
     expect(plano(estiloDaCaixa({ pressed: false }))).not.toHaveProperty('outlineColor');
   });

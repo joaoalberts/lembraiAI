@@ -1,8 +1,9 @@
-import { Pressable, StyleSheet, Text, View, type StyleProp, type ViewStyle } from 'react-native';
+import { StyleSheet, Text, View, type StyleProp, type ViewStyle } from 'react-native';
 import { anelDeFoco, type EstadoDeToque } from '../design/foco';
 import { borderWidth, colors, iconStroke, size, textStyles } from '../design/tokens';
 import { Icon } from './Icon';
 
+import { Toque } from './Toque';
 interface CaixaDeMarcarProps {
   label: string;
   value: boolean;
@@ -22,10 +23,9 @@ export function estiloDaCaixa(estado: EstadoDeToque): StyleProp<ViewStyle> {
  */
 export function CaixaDeMarcar({ label, value, onValueChange, disabled = false }: CaixaDeMarcarProps) {
   return (
-    <Pressable
+    <Toque
       onPress={() => onValueChange(!value)}
       disabled={disabled}
-      hitSlop={{ top: (size.touch - size.auth.check) / 2, bottom: (size.touch - size.auth.check) / 2 }}
       accessibilityRole="checkbox"
       accessibilityLabel={label}
       aria-checked={value}
@@ -35,7 +35,7 @@ export function CaixaDeMarcar({ label, value, onValueChange, disabled = false }:
         {value ? <Icon name="check" size={size.auth.checkIcon} color={colors.text.onDark} stroke={iconStroke.check} /> : null}
       </View>
       <Text style={styles.texto}>{label}</Text>
-    </Pressable>
+    </Toque>
   );
 }
 

@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { KeyboardAvoidingView, Platform, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { KeyboardAvoidingView, Platform, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { router } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { REPEAT_OPTIONS, repeatLabel, type Reminder } from '../data/reminders';
@@ -30,6 +30,7 @@ import { Slider } from './Slider';
 import { TimeSheet } from './TimeSheet';
 import { Toggle } from './Toggle';
 
+import { Toque } from './Toque';
 /** Espera depois de tocar ou arrastar o pino antes de perguntar ao serviço o nome do lugar. */
 const ESPERA_DO_NOME = 700;
 const AVISO_DO_RAIO = 'Você será avisado ao entrar no raio selecionado.';
@@ -261,15 +262,14 @@ export function FormularioDeLembrete({ lembrete }: FormularioProps) {
 
 function BotaoRedondo({ icon, label, onPress }: { icon: 'chevron-left' | 'user-round'; label: string; onPress: () => void }) {
   return (
-    <Pressable
+    <Toque
       onPress={onPress}
-      hitSlop={(size.touch - size.form.nav) / 2}
       accessibilityRole="button"
       accessibilityLabel={label}
       style={(estado: EstadoDeToque) => [styles.redondo, estado.pressed ? styles.pressionado : null, estado.focused ? anelDeFoco : null]}
     >
       <Icon name={icon} size={size.icon.lg - space.xs} color={colors.icon.default} stroke={iconStroke.action} />
-    </Pressable>
+    </Toque>
   );
 }
 

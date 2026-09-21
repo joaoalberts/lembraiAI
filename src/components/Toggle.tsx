@@ -1,9 +1,10 @@
 import { useEffect, useRef } from 'react';
-import { Animated, Easing, Platform, Pressable, StyleSheet } from 'react-native';
+import { Animated, Easing, Platform, StyleSheet } from 'react-native';
 import { anelDeFoco, type EstadoDeToque } from '../design/foco';
 import { colors, motion, opacity, radius, shadow, size } from '../design/tokens';
 import { useMovimentoReduzido } from '../lib/movimento';
 
+import { Toque } from './Toque';
 /** `card` = interruptor pequeno do cartão de lembrete; `form` = o maior, dos formulários e das configurações. */
 export type ToggleVariant = 'card' | 'form';
 
@@ -26,7 +27,7 @@ export function medidasDoToggle(variant: ToggleVariant) {
 
 /**
  * Interruptor no padrão do app original (docs/DESIGN_SYSTEM.md, seção 10): trilho em pílula e bolinha que corre em
- * `motion.duration.toggle`. Menor que 44, então o toque ganha folga (`hitSlop`) até chegar lá. Sempre com rótulo para o leitor de tela.
+ * `motion.duration.toggle`. Menor que 44, então o `Toque` completa o alvo até lá. Sempre com rótulo para o leitor de tela.
  */
 export function Toggle({ value, onValueChange, disabled = false, accessibilityLabel, variant = 'card' }: ToggleProps) {
   const m = medidasDoToggle(variant);
@@ -44,13 +45,10 @@ export function Toggle({ value, onValueChange, disabled = false, accessibilityLa
     return () => animacao.stop();
   }, [value, reduzir, progresso]);
 
-  const folga = { vertical: Math.max(0, (size.touch - m.height) / 2), horizontal: Math.max(0, (size.touch - m.width) / 2) };
-
   return (
-    <Pressable
+    <Toque
       onPress={() => onValueChange(!value)}
       disabled={disabled}
-      hitSlop={{ top: folga.vertical, bottom: folga.vertical, left: folga.horizontal, right: folga.horizontal }}
       accessibilityRole="switch"
       accessibilityLabel={accessibilityLabel}
       aria-checked={value}
@@ -65,7 +63,7 @@ export function Toggle({ value, onValueChange, disabled = false, accessibilityLa
           { top: m.inset, left: m.inset, width: m.thumb, height: m.thumb, transform: [{ translateX: progresso.interpolate({ inputRange: [0, 1], outputRange: [0, m.viagem] }) }] },
         ]}
       />
-    </Pressable>
+    </Toque>
   );
 }
 

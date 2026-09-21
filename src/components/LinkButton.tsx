@@ -1,7 +1,8 @@
-import { Pressable, StyleSheet, Text, type StyleProp, type ViewStyle } from 'react-native';
+import { StyleSheet, Text, type StyleProp, type ViewStyle } from 'react-native';
 import { anelDeFoco, type EstadoDeToque } from '../design/foco';
 import { colors, fontFamily, opacity, size, textStyles } from '../design/tokens';
 
+import { Toque } from './Toque';
 interface LinkButtonProps {
   label: string;
   onPress: () => void;
@@ -21,15 +22,14 @@ export const corDoLink = (estado: EstadoDeToque): string => (estado.hovered ? co
  */
 export function LinkButton({ label, onPress }: LinkButtonProps) {
   return (
-    <Pressable
+    <Toque
       onPress={onPress}
-      hitSlop={{ top: (size.touch - size.sucesso.link) / 2, bottom: (size.touch - size.sucesso.link) / 2 }}
       accessibilityRole="button"
       accessibilityLabel={label}
       style={(estado: EstadoDeToque) => estiloDoLink(estado)}
     >
       {(estado: EstadoDeToque) => <Text style={[styles.texto, { color: corDoLink(estado) }]}>{label}</Text>}
-    </Pressable>
+    </Toque>
   );
 }
 

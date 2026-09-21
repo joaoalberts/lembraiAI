@@ -1,5 +1,5 @@
 import { Image } from 'expo-image';
-import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
 import { CATEGORY_COLORS, type Reminder } from '../data/reminders';
 import { anelDeFoco, type EstadoDeToque } from '../design/foco';
 import { GIRO_NA_LISTA, ICON_NAME, UI_ICON } from '../design/icons';
@@ -10,6 +10,7 @@ import { RadiusIcon } from './RadiusIcon';
 import { Tag } from './Tag';
 import { Toggle } from './Toggle';
 
+import { Toque } from './Toque';
 const MINIATURA_DO_MAPA = require('../../assets/art/thumb-sucesso.jpg');
 
 interface ReminderCardProps {
@@ -77,9 +78,8 @@ export function ReminderCard({ reminder: r, nearby = false, onToggle, onMenu }: 
         <Toggle value={r.active} onValueChange={onToggle} accessibilityLabel={`Ativar lembrete: ${r.title}`} />
       </View>
 
-      <Pressable
+      <Toque
         onPress={onMenu}
-        hitSlop={(size.touch - size.card.dotsHeight) / 2}
         accessibilityRole="button"
         accessibilityLabel={`Mais opções: ${r.title}`}
         style={styles.reticencias}
@@ -89,7 +89,7 @@ export function ReminderCard({ reminder: r, nearby = false, onToggle, onMenu }: 
             <Icon name="ellipsis" size={size.icon.md} color={colors.icon.dots} stroke={iconStroke.dots} />
           </View>
         )}
-      </Pressable>
+      </Toque>
     </View>
   );
 }

@@ -1,7 +1,8 @@
-import { Pressable, StyleSheet, Text, type StyleProp, type ViewStyle } from 'react-native';
+import { StyleSheet, Text, type StyleProp, type ViewStyle } from 'react-native';
 import { anelDeFoco, type EstadoDeToque } from '../design/foco';
 import { borderWidth, colors, fontFamily, opacity, radius, size, space, textStyles } from '../design/tokens';
 
+import { Toque } from './Toque';
 interface ChipProps {
   label: string;
   selected: boolean;
@@ -21,10 +22,9 @@ export function estiloDoChip(selected: boolean, estado: EstadoDeToque, disabled:
 /** Opção de escolha rápida, com ou sem contagem. Padrão: docs/DESIGN_SYSTEM.md, seção 11.4. */
 export function Chip({ label, selected, onPress, count, disabled = false, style }: ChipProps) {
   return (
-    <Pressable
+    <Toque
       onPress={onPress}
       disabled={disabled}
-      hitSlop={size.hitSlop}
       accessibilityRole="button"
       accessibilityLabel={count === undefined ? label : `${label}: ${count}`}
       aria-selected={selected}
@@ -32,7 +32,7 @@ export function Chip({ label, selected, onPress, count, disabled = false, style 
     >
       <Text numberOfLines={1} style={[styles.rotulo, selected ? styles.rotuloLigado : null]}>{label}</Text>
       {count !== undefined ? <Text style={[styles.contagem, selected ? styles.rotuloLigado : null]}>{count}</Text> : null}
-    </Pressable>
+    </Toque>
   );
 }
 

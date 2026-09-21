@@ -1,10 +1,11 @@
 import { useEffect, useRef, useState, type ReactNode } from 'react';
-import { Animated, Easing, Modal, Platform, Pressable, ScrollView, StyleSheet, Text, View, useWindowDimensions } from 'react-native';
+import { Animated, Easing, Modal, Platform, ScrollView, StyleSheet, Text, View, useWindowDimensions } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { colors, layout, motion, radius, shadow, size, space, textStyles } from '../design/tokens';
 import { useMovimentoReduzido } from '../lib/movimento';
 import { useAlturaDoTeclado } from '../lib/teclado';
 
+import { Toque } from './Toque';
 interface SheetProps {
   visible: boolean;
   /** Toque no véu, tecla Esc (web) e botão voltar do Android. */
@@ -71,7 +72,7 @@ function Conteudo({ onClose, title, subtitle, action, children }: Omit<SheetProp
   return (
     <View testID="sheet-raiz" style={[styles.raiz, { paddingBottom: teclado }]}>
       <Animated.View testID="sheet-veu" style={[StyleSheet.absoluteFill, styles.veu, { opacity: veu }]}>
-        <Pressable style={StyleSheet.absoluteFill} onPress={onClose} accessibilityRole="button" accessibilityLabel="Fechar" />
+        <Toque style={StyleSheet.absoluteFill} onPress={onClose} accessibilityRole="button" accessibilityLabel="Fechar" />
       </Animated.View>
       <Animated.View
         testID="sheet-folha"

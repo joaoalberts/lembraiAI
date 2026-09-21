@@ -633,7 +633,7 @@ Raio `radius.sm`, padding `space.md`, texto `textStyles.body`. O de erro tem `ac
 
 ### 11.4 Chip
 
-Opção de escolha rápida e filtro (`src/components/Chip.tsx`). Altura `size.chip` e área de toque de 44 (`size.hitSlop`), raio `radius.pill`, rótulo em `fontSize.micro` e negrito. Com `count`, o número vem depois do rótulo (`fontFamily.semibold`, `colors.text.chipCount`), a `space.lg`; zero também aparece. Selecionado: `colors.control.chipOn` e texto branco (rótulo e contagem). Não selecionado: `colors.control.chipOff`, contorno `colors.border.chip` e rótulo `colors.text.chip`. Para o leitor de tela lê "Hoje: 3" e informa se está selecionado. Na lista os quatro chips dividem a largura (`flexGrow`).
+Opção de escolha rápida e filtro (`src/components/Chip.tsx`). Altura `size.chip` e área de toque de 44 (o `Toque` completa), raio `radius.pill`, rótulo em `fontSize.micro` e negrito. Com `count`, o número vem depois do rótulo (`fontFamily.semibold`, `colors.text.chipCount`), a `space.lg`; zero também aparece. Selecionado: `colors.control.chipOn` e texto branco (rótulo e contagem). Não selecionado: `colors.control.chipOff`, contorno `colors.border.chip` e rótulo `colors.text.chip`. Para o leitor de tela lê "Hoje: 3" e informa se está selecionado. Na lista os quatro chips dividem a largura (`flexGrow`).
 
 ### 11.5 Folha (modal inferior)
 
@@ -835,9 +835,8 @@ Filosofia: o mínimo. O feedback de toque é instantâneo (troca de cor e escala
 | `size.tabBar.icon` | `21` | Barra de abas: lado do ícone |
 | `size.iconCircle` | `44` | Círculo do ícone de categoria |
 | `size.emptyCircle` | `88` | Círculo do ícone do estado vazio |
-| `size.chip` | `34` | Altura visível do chip (a área de toque chega a 44 com `size.hitSlop`) |
-| `size.closeButton` | `32` | Botão de fechar visível (a área de toque chega a 44 com `size.hitSlop`) |
-| `size.hitSlop` | `6` | Folga de toque ao redor de controles menores que 44 |
+| `size.chip` | `34` | Altura visível do chip (o `Toque` completa o alvo até 44) |
+| `size.closeButton` | `32` | Botão de fechar visível (o `Toque` completa o alvo até 44) |
 | `size.icon.xs` | `14` | Ícone dentro do botão compacto |
 | `size.icon.sm` | `16` | Ícones ao lado de texto pequeno |
 | `size.icon.md` | `20` | Ícones de ação |
@@ -845,7 +844,7 @@ Filosofia: o mínimo. O feedback de toque é instantâneo (troca de cor e escala
 | `size.icon.xl` | `40` | Ícone do estado vazio |
 | `size.mapPin.width` | `29` | Largura do pino do mapa no formulário |
 | `size.mapPin.height` | `37` | Altura do pino do mapa no formulário (a ponta marca o local) |
-| `size.glassButton` | `42` | Botão redondo de vidro do cabeçalho verde (busca e conta); o toque chega a 44 com `size.hitSlop` |
+| `size.glassButton` | `42` | Botão redondo de vidro do cabeçalho verde (busca e conta); o `Toque` completa o alvo até 44 |
 | `size.buttonCompact` | `36` | Altura do botão compacto ("Novo lembrete" no cabeçalho) |
 | `size.header.height` | `174` | Altura da arte do cabeçalho verde |
 | `size.header.contentTop` | `41` | Topo da marca e dos botões no cabeçalho verde (sobe com a barra de status do aparelho) |
@@ -1216,7 +1215,7 @@ Cada par é testado em `src/design/__tests__/acessibilidade.test.ts`. Par novo e
 - **Exceção conhecida: o laranja da marca.** Branco sobre `colors.action.primary` dá 3,24:1: só passa como texto grande ou componente. O laranja foi aprovado nas referências, então fica; mitiga-se com rótulo 16/700 em botão de 52 de altura. Se a marca precisar cumprir AA, troque `colors.action.primary` por `colors.action.primaryAA` (4,7:1).
 - **Exceção conhecida: borda de campo suave** (1,2:1) das referências. O foco (7:1) e o rótulo sempre visível compensam.
 - **Contornos de controle a 3:1 (decisão do João, 21/09):** o anel da caixinha desmarcada, o anel dos cartões e linhas de opção não escolhidos e o contorno do botão sem fundo usam `colors.border.strong` (`#87878A`, de 3,1:1 a 3,6:1 sobre o branco, o cartão, a página, o botão pressionado e a folha), e a barra do meio do medidor de senha usa `colors.conta.medidorMedio` (`#BF7F1F`, 3,2:1 sobre o cartão). As referências mostram os dois mais claros (`#B9B8BB`, 1,97:1, e `#E8A33D`, 2,05:1); o João escolheu escurecê-los para cumprir o WCAG 1.4.11. Todos os pares estão em `src/design/a11y.ts`.
-- **Alvos de toque de no mínimo 44** (`size.touch`). Controle visualmente menor usa `hitSlop` de `size.hitSlop`. **Vale no celular:** o react-native-web 0.21 não implementa `hitSlop`, então na web o alvo é o tamanho visual (ver as pendências).
+- **Alvos de toque de no mínimo 44** (`size.touch`), no celular e na web (o app web será usado no celular: decisão do João, 21/09). **Todo controle passa por `Toque`** (`src/components/Toque.tsx`), que mede o próprio tamanho e completa o alvo até 44 **sem mexer no visual**: no iOS e no Android com o `hitSlop` do sistema e, na web, onde o react-native-web 0.21 não implementa `hitSlop`, com uma camada transparente por dentro do botão (o clique nela sobe até o botão; a largura da borda entra na conta). Nunca importe o `Pressable` do React Native nem escreva `hitSlop` à mão: `src/__tests__/alvos-de-toque.test.ts` barra. Onde dois controles ficam colados a camada do de baixo na árvore ganha no encontro. Exceção: os créditos do OpenStreetMap e do Leaflet no canto do mapa, que são texto corrido.
 - **Todo controle tem papel e nome:** `accessibilityRole`, `accessibilityLabel` e o estado em props `aria-*` (`aria-checked`, `aria-selected`; `disabled` pela prop do `Pressable`). **Não use `accessibilityState`:** o react-native-web 0.21 não o repassa ao DOM e o estado some para quem usa leitor de tela na web (`src/__tests__/acessibilidade-web.test.ts` barra). O papel do voltar de `AuthLayout` vem antes do conteúdo na árvore, para o Tab começar por ele.
 - **Foco visível** no teclado (web) em todo controle: o mesmo anel sólido de `borderWidth.focus` em `colors.border.focus`, afastado `space.hair` (`src/design/foco.ts`), em botão, chip, opção do segmentado, lixeira do cartão e fechar da folha. O campo de texto desenha o foco só pela borda e pelo halo `shadow.focus`, sem o contorno do navegador.
 - **Não depender só da cor:** erro tem texto, categoria tem ícone, interruptor tem posição.
@@ -1295,6 +1294,7 @@ O teste `valores-soltos.test.ts` mantém uma lista de arquivos com valores visua
 | 21/09/2026 | **O formulário rola até o cartão do Local quando a busca de endereço ganha o foco com o teclado aberto** | No Android (medido no emulador) as sugestões da busca nasciam debaixo do campo, atrás do teclado: não dava para vê-las nem tocá-las |
 | 21/09/2026 | **O mapa do formulário fica sem toque enquanto a lista de sugestões está aberta** (`PlaceSearch.aoMudarSugestoes`) | No Android (emulador) o toque numa sugestão da busca chegava também à WebView do mapa: o ponto escolhido era trocado pelo do toque no mapa e o pino saía da vista |
 | 21/09/2026 | **Anel dos controles e barra âmbar do medidor escurecidos a 3:1** (`colors.border.strong` `#B9B8BB` → `#87878A`; `colors.conta.medidorMedio` `#E8A33D` → `#BF7F1F`) | Decisão do João: cumprir os 3:1 do WCAG 1.4.11, mesmo se afastando das imagens. O `border.strong` é compartilhado, então o contorno do botão sem fundo e os anéis dos cartões e linhas de opção não escolhidos escurecem juntos; os pares novos estão em `a11y.ts` |
+| 21/09/2026 | **Todo controle passa por `Toque`, que completa o alvo de toque até 44 no celular e na web**; a folga fixa de 6 (o antigo token de folga) sai | Decisão do João: o app web será usado no celular (iOS e Android). Medido no navegador a 411 px: mais de 30 controles abaixo de 44 antes (Voltar 36, olho da senha 38, Novo lembrete 36, campos de data 40, chips 34, Sair e Abrir 36, interruptores 21 a 26); 0 depois nos controles do app, com cliques reais fora da área visível funcionando (os botões do mapa e o controle deslizante vêm nos registros seguintes). O react-native-web 0.21 não tem `hitSlop`, então a camada transparente é nossa |
 
 ## 19. Pendências
 
@@ -1304,5 +1304,4 @@ O teste `valores-soltos.test.ts` mantém uma lista de arquivos com valores visua
 - **Tokens a criar** junto com cada tela: interruptor de cartão, vidro, botão de perigo, folha, avisos, texto sobre verde e os três degradês (lista e configurações, formulário, contas). Valores exatos em `referencias/MEDICOES.md`.
 - **Leitura com VoiceOver e TalkBack** e **navegação por teclado** na web: verificar em aparelho real.
 - **Modo escuro:** fora de escopo até haver referência.
-- **Alvo de toque na web:** `hitSlop` não existe no react-native-web 0.21, então "Lembrar-me" (21 px de altura), "Esqueci minha senha" (16 px) e o link "Criar outro lembrete" ficam com o tamanho visual quando o app roda no navegador (no celular chegam a 44). Solução se importar: folga por `padding` com margem negativa nesses controles.
 - **Layout de tablet nativo:** não desenhado (só existe referência de celular).

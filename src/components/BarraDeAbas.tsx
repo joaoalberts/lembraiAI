@@ -1,11 +1,12 @@
 import type { BottomTabBarProps } from 'expo-router/js-tabs';
-import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { TAB_ICON } from '../design/icons';
 import { anelDeFoco, type EstadoDeToque } from '../design/foco';
 import { colors, fontFamily, iconStroke, opacity, radius, shadow, size, textStyles } from '../design/tokens';
 import { Icon, type IconeNome } from './Icon';
 
+import { Toque } from './Toque';
 /** As quatro abas, na ordem da barra. `rota` é o nome do arquivo em `app/(app)`. */
 export const ABAS: { rota: string; rotulo: string; icone: IconeNome }[] = [
   { rota: 'inicio', rotulo: 'Início', icone: TAB_ICON.inicio },
@@ -52,7 +53,7 @@ export function BarraDeAbas({ state, descriptors, navigation }: BottomTabBarProp
       {ABAS.map((aba) => {
         const acesa = aba.rota === ativa;
         return (
-          <Pressable
+          <Toque
             key={aba.rota}
             onPress={() => tocar(aba.rota)}
             accessibilityRole="tab"
@@ -63,7 +64,7 @@ export function BarraDeAbas({ state, descriptors, navigation }: BottomTabBarProp
           >
             <Icon name={aba.icone} size={size.tabBar.icon} color={acesa ? colors.tab.activeIcon : colors.tab.inactive} stroke={acesa ? iconStroke.base : iconStroke.tab} />
             <Text style={[styles.rotulo, acesa ? styles.rotuloAtivo : null]}>{aba.rotulo}</Text>
-          </Pressable>
+          </Toque>
         );
       })}
     </View>

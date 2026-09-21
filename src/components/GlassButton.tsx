@@ -1,8 +1,9 @@
-import { Pressable, StyleSheet, Text, type StyleProp, type ViewStyle } from 'react-native';
+import { StyleSheet, Text, type StyleProp, type ViewStyle } from 'react-native';
 import { anelDeFocoNoEscuro, type EstadoDeToque } from '../design/foco';
 import { borderWidth, colors, fontFamily, iconStroke, motion, radius, size, space, textStyles } from '../design/tokens';
 import { Icon, type IconeNome } from './Icon';
 
+import { Toque } from './Toque';
 /** `cabecalho` = os botões do cabeçalho verde (busca, conta); `fechar` = o X menor, mais grosso, da tela de sucesso; `voltar` = a seta das telas de conta. */
 type TamanhoDoVidro = 'cabecalho' | 'fechar' | 'voltar';
 
@@ -39,15 +40,14 @@ export function estiloDoVidro(estado: EstadoDeToque, lado: number = size.glassBu
 export function GlassButton({ icon, label, onPress, tamanho = 'cabecalho' }: GlassButtonProps) {
   const { lado, icone, traco } = MEDIDAS[tamanho];
   return (
-    <Pressable
+    <Toque
       onPress={onPress}
-      hitSlop={(size.touch - lado) / 2}
       accessibilityRole="button"
       accessibilityLabel={label}
       style={(estado: EstadoDeToque) => estiloDoVidro(estado, lado)}
     >
       <Icon name={icon} size={icone} color={colors.text.onDark} stroke={traco} />
-    </Pressable>
+    </Toque>
   );
 }
 
@@ -61,16 +61,15 @@ interface GlassPillProps {
 /** O mesmo vidro em pílula, com texto e uma seta (o "Pular" do Onboarding). */
 export function GlassPill({ label, icon, onPress }: GlassPillProps) {
   return (
-    <Pressable
+    <Toque
       onPress={onPress}
-      hitSlop={(size.touch - size.onboarding.skipHeight) / 2}
       accessibilityRole="button"
       accessibilityLabel={label}
       style={(estado: EstadoDeToque) => [estiloDoVidro(estado), styles.pilula]}
     >
       <Text style={styles.texto}>{label}</Text>
       <Icon name={icon} size={size.icon.sm} color={colors.text.onDark} stroke={iconStroke.action} />
-    </Pressable>
+    </Toque>
   );
 }
 

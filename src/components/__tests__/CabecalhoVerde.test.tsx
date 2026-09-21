@@ -8,6 +8,7 @@ import { GlassButton, estiloDoVidro } from '../GlassButton';
 import { GreenHeader, topoDoConteudo } from '../GreenHeader';
 import { SearchField } from '../SearchField';
 
+import { alvoDeToque } from '../../test-utils/toque';
 describe('topoDoConteudo', () => {
   it('sem barra de status (web, computador) vale o topo do desenho', () => {
     expect(topoDoConteudo(0)).toBe(size.header.contentTop);
@@ -71,14 +72,16 @@ describe('GlassButton', () => {
     await render(<GlassButton icon="user-round" label="Minha conta" onPress={jest.fn()} />);
     const botao = screen.getByRole('button', { name: 'Minha conta' });
     expect(botao).toHaveStyle({ width: size.glassButton, height: size.glassButton, borderRadius: radius.pill, borderColor: colors.glass.border, backgroundColor: colors.glass.fill });
-    expect(size.glassButton + 2 * (botao.props.hitSlop as number)).toBeGreaterThanOrEqual(size.touch);
+    const alvo = await alvoDeToque(botao, size.glassButton, size.glassButton);
+    expect(Math.min(alvo.largura, alvo.altura)).toBeGreaterThanOrEqual(size.touch);
   });
 
   it('a versão "fechar" da tela de sucesso é menor e desenha o X com traço mais grosso, com a área de toque completada a 44', async () => {
     await render(<GlassButton icon="x" label="Fechar" tamanho="fechar" onPress={jest.fn()} />);
     const botao = screen.getByRole('button', { name: 'Fechar' });
     expect(botao).toHaveStyle({ width: size.sucesso.fechar, height: size.sucesso.fechar, borderRadius: radius.pill, borderColor: colors.glass.border });
-    expect(size.sucesso.fechar + 2 * (botao.props.hitSlop as number)).toBeGreaterThanOrEqual(size.touch);
+    const alvo = await alvoDeToque(botao, size.sucesso.fechar, size.sucesso.fechar);
+    expect(Math.min(alvo.largura, alvo.altura)).toBeGreaterThanOrEqual(size.touch);
     const desenho = JSON.stringify(screen.getByTestId('icone-x', { includeHiddenElements: true }).children);
     expect(desenho).toContain(`"width":${size.sucesso.fecharIcon}`);
     expect(desenho).toContain(`"strokeWidth":${iconStroke.action}`);

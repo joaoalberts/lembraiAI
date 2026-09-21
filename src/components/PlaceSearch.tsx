@@ -1,10 +1,11 @@
 import { useEffect, useRef, useState } from 'react';
-import { ActivityIndicator, Pressable, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native';
+import { ActivityIndicator, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native';
 import { anelDeFoco, semAnelDoNavegador, type EstadoDeToque } from '../design/foco';
 import { colors, fontFamily, iconStroke, radius, shadow, size, space, textStyles } from '../design/tokens';
 import { MINIMO_DE_LETRAS, buscarLugares, type Lugar } from '../lib/geocodificar';
 import { Icon } from './Icon';
 
+import { Toque } from './Toque';
 /** Espera depois da última letra antes de perguntar ao serviço (a política do Nominatim pede uso leve). */
 export const ESPERA_DA_BUSCA = 650;
 /** Fechar a lista ao sair do campo demora um instante, para o toque numa sugestão chegar antes. */
@@ -101,7 +102,7 @@ export function PlaceSearch({ value, onChangeText, onPick, aoFocar, aoSair, aoMu
               <Text accessibilityRole="alert" style={styles.erro}>Não foi possível buscar agora.</Text>
             ) : (
               itens.map((lugar) => (
-                <Pressable
+                <Toque
                   key={`${lugar.lat},${lugar.lng}`}
                   onPress={() => escolher(lugar)}
                   accessibilityRole="button"
@@ -113,7 +114,7 @@ export function PlaceSearch({ value, onChangeText, onPick, aoFocar, aoSair, aoMu
                     <Text style={styles.nome}>{lugar.nome}</Text>
                     {lugar.detalhe ? <Text style={styles.detalhe}>{lugar.detalhe}</Text> : null}
                   </View>
-                </Pressable>
+                </Toque>
               ))
             )}
           </ScrollView>

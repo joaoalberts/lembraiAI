@@ -5,6 +5,7 @@ import { anelDeFoco } from '../../design/foco';
 import { colors, fontFamily, opacity, radius, size } from '../../design/tokens';
 import { Chip, estiloDoChip } from '../Chip';
 
+import { alvoDeToque } from '../../test-utils/toque';
 const chip = () => screen.getByRole('button');
 
 describe('Chip', () => {
@@ -59,8 +60,8 @@ describe('Chip', () => {
 
   it('a área de toque chega a 44 (o chip visível tem 34 e a folga completa o resto)', async () => {
     await render(<Chip label="Nunca" selected={false} onPress={jest.fn()} />);
-    expect(chip()).toHaveProp('hitSlop', size.hitSlop);
-    expect(size.chip + 2 * size.hitSlop).toBeGreaterThanOrEqual(size.touch);
+    const alvo = await alvoDeToque(chip(), 83, size.chip);
+    expect(alvo.altura).toBeGreaterThanOrEqual(size.touch);
   });
 });
 

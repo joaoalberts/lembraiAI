@@ -1,8 +1,9 @@
-import { Pressable, StyleSheet, Text, View, type StyleProp, type ViewStyle } from 'react-native';
+import { StyleSheet, Text, View, type StyleProp, type ViewStyle } from 'react-native';
 import { anelDeFoco, type EstadoDeToque } from '../design/foco';
 import { borderWidth, colors, fontFamily, iconStroke, radius, size, space, textStyles } from '../design/tokens';
 import { Icon, type IconeNome } from './Icon';
 
+import { Toque } from './Toque';
 interface LinhaDeMenuProps {
   icon: IconeNome;
   label: string;
@@ -32,7 +33,7 @@ export function estiloDaLinha(estado: EstadoDeToque, perigo: boolean, primeira: 
  */
 export function LinhaDeMenu({ icon, label, descricao, perigo = false, primeira = false, onPress }: LinhaDeMenuProps) {
   return (
-    <Pressable
+    <Toque
       onPress={onPress}
       accessibilityRole="button"
       accessibilityLabel={descricao ? `${label}. ${descricao}` : label}
@@ -45,7 +46,7 @@ export function LinhaDeMenu({ icon, label, descricao, perigo = false, primeira =
         <Text style={[styles.titulo, perigo ? { color: colors.text.danger } : null]}>{label}</Text>
         {descricao ? <Text style={styles.descricao}>{descricao}</Text> : null}
       </View>
-    </Pressable>
+    </Toque>
   );
 }
 

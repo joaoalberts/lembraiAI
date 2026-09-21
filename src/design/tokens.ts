@@ -427,7 +427,6 @@ export const size = {
   emptyCircle: 88,
   chip: du(68),
   closeButton: 32,
-  hitSlop: 6,
   icon: { xs: du(27), sm: 16, md: 20, lg: 24, xl: 40 },
   /** Pino do mapa no formulário (58 × 73 du no original). A ponta fica no meio da base. */
   mapPin: { width: du(58), height: du(73) },

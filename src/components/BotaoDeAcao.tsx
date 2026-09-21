@@ -1,8 +1,9 @@
-import { Pressable, StyleSheet, Text, type StyleProp, type ViewStyle } from 'react-native';
+import { StyleSheet, Text, type StyleProp, type ViewStyle } from 'react-native';
 import { anelDeFoco, type EstadoDeToque } from '../design/foco';
 import { colors, fontFamily, iconStroke, motion, size, textStyles } from '../design/tokens';
 import { Icon, type IconeNome } from './Icon';
 
+import { Toque } from './Toque';
 interface BotaoDeAcaoProps {
   icon: IconeNome;
   label: string;
@@ -26,10 +27,10 @@ export function estiloDaAcao(estado: EstadoDeToque): StyleProp<ViewStyle> {
  */
 export function BotaoDeAcao({ icon, label, onPress }: BotaoDeAcaoProps) {
   return (
-    <Pressable onPress={onPress} accessibilityRole="button" accessibilityLabel={label} style={(estado: EstadoDeToque) => estiloDaAcao(estado)}>
+    <Toque onPress={onPress} accessibilityRole="button" accessibilityLabel={label} style={(estado: EstadoDeToque) => estiloDaAcao(estado)}>
       <Icon name={icon} size={size.sucesso.acao.icon} color={colors.icon.onFrost} stroke={iconStroke.base} />
       <Text accessibilityLiveRegion="polite" style={styles.rotulo}>{label}</Text>
-    </Pressable>
+    </Toque>
   );
 }
 

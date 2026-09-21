@@ -1,11 +1,12 @@
 import { useEffect, useRef, useState } from 'react';
-import { Pressable, ScrollView, StyleSheet, Text, View, type NativeScrollEvent, type NativeSyntheticEvent } from 'react-native';
+import { ScrollView, StyleSheet, Text, View, type NativeScrollEvent, type NativeSyntheticEvent } from 'react-native';
 import { fundoEmDegrade } from '../design/efeitos';
 import { anelDeFoco, type EstadoDeToque } from '../design/foco';
 import { borderWidth, colors, fontFamily, fontSize, gradients, layout, radius, size, space, textStyles } from '../design/tokens';
 import { HORAS, MINUTOS, dividirHorario, doisDigitos, indiceDaRolagem, juntarHorario } from '../lib/horario';
 import { Sheet } from './Sheet';
 
+import { Toque } from './Toque';
 /** Espera depois do último movimento da roda para dar o número por escolhido (como no app web). */
 const ESPERA_DO_REPOUSO = 120;
 /** Depois de escolher os minutos a folha se fecha sozinha, a menos que a pessoa mexa em algo. */
@@ -77,9 +78,9 @@ function Roda({ numeros, inicial, nome, unidade, onEscolher, onMexer }: RodaProp
         contentContainerStyle={styles.numeros}
       >
         {numeros.map((n, i) => (
-          <Pressable key={n} onPress={() => ir(i)} accessible={false} style={(estado: EstadoDeToque) => [styles.item, estado.focused ? anelDeFoco : null]}>
+          <Toque key={n} onPress={() => ir(i)} accessible={false} style={(estado: EstadoDeToque) => [styles.item, estado.focused ? anelDeFoco : null]}>
             <Text style={i === ativo ? styles.ativo : styles.numero}>{doisDigitos(n)}</Text>
-          </Pressable>
+          </Toque>
         ))}
       </ScrollView>
       <View testID={`roda-${nome}-esmaecer`} style={[StyleSheet.absoluteFill, styles.passivo, fundoEmDegrade(gradients.rodaDeHorario)]} />
@@ -114,9 +115,9 @@ export function TimeSheet({ visible, value, onChange, onClose }: TimeSheetProps)
       title="Horário"
       subtitle="Role a hora e os minutos. O horário é salvo ao escolher."
       action={
-        <Pressable onPress={onClose} accessibilityRole="button" accessibilityLabel="Pronto" style={(estado: EstadoDeToque) => [styles.pronto, estado.focused ? anelDeFoco : null]}>
+        <Toque onPress={onClose} accessibilityRole="button" accessibilityLabel="Pronto" style={(estado: EstadoDeToque) => [styles.pronto, estado.focused ? anelDeFoco : null]}>
           <Text style={styles.prontoTexto}>Pronto</Text>
-        </Pressable>
+        </Toque>
       }
     >
       <View style={styles.rodas}>

@@ -7,6 +7,7 @@ import { size } from '../design/tokens';
 import { AVISO_CONFIRMAR_EMAIL } from '../state/auth';
 import { comAreaSegura } from '../test-utils/area-segura';
 
+import { alvoDeToque } from '../test-utils/toque';
 const mockEntrar = jest.fn();
 const mockCadastrar = jest.fn();
 jest.mock('expo-router', () => ({ router: { navigate: jest.fn(), replace: jest.fn() }, useLocalSearchParams: jest.fn() }));
@@ -131,8 +132,8 @@ describe('Entrar', () => {
 
   it('o "Esqueci minha senha" tem alvo de toque de 44 (folga em cima e embaixo além do texto)', async () => {
     await abrir();
-    const folga = (size.touch - size.auth.check) / 2;
-    expect(screen.getByRole('button', { name: 'Esqueci minha senha' })).toHaveProp('hitSlop', { top: folga, bottom: folga });
+    const alvo = await alvoDeToque(screen.getByRole('button', { name: 'Esqueci minha senha' }), 116, size.auth.check);
+    expect(alvo.altura).toBeGreaterThanOrEqual(size.touch);
   });
 
   it('"Esqueci minha senha", "Criar conta" e o voltar levam para onde dizem', async () => {
