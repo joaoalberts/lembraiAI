@@ -1,10 +1,13 @@
 import '@testing-library/react-native/matchers';
 import { fireEvent, render, screen } from '@testing-library/react-native';
+import { StatusBar } from 'expo-status-bar';
 import { Dimensions, StyleSheet } from 'react-native';
 import { colors, fontFamily, fontSize, layout, radius, size } from '../../design/tokens';
 import { comAreaSegura } from '../../test-utils/area-segura';
 import { AppBrand } from '../AppBrand';
 import { Onboarding } from '../Onboarding';
+
+jest.mock('expo-status-bar', () => ({ StatusBar: jest.fn(() => null) }));
 
 const abrir = async (props: Partial<React.ComponentProps<typeof Onboarding>> = {}, insets = {}) => {
   const acoes = { onSkip: jest.fn(), onStart: jest.fn() };
@@ -13,6 +16,14 @@ const abrir = async (props: Partial<React.ComponentProps<typeof Onboarding>> = {
 };
 
 const estilo = (el: { props: { style?: unknown } }) => StyleSheet.flatten(el.props.style as never) as Record<string, unknown>;
+
+describe('Onboarding: barra de status', () => {
+  it('a foto é escura: o texto da barra de status (relógio, bateria) é claro', async () => {
+    jest.mocked(StatusBar).mockClear();
+    await abrir();
+    expect(jest.mocked(StatusBar).mock.calls.map(([props]) => props)).toEqual([{ style: 'light' }]);
+  });
+});
 
 describe('Onboarding: conteúdo', () => {
   it('mostra a marca, o título, o subtítulo, os três benefícios e a frase de privacidade', async () => {

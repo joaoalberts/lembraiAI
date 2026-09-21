@@ -5,6 +5,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { fundoEmDegrade } from '../design/efeitos';
 import { borderWidth, colors, fontFamily, fontSize, gradients, iconStroke, layout, radius, size, space, textStyles } from '../design/tokens';
 import { AppBrand } from './AppBrand';
+import { BarraDeStatus } from './BarraDeStatus';
 import { Button } from './Button';
 import { BellSolid, LockIcon, PinSolid } from './Glifos';
 import { GlassPill } from './GlassButton';
@@ -89,6 +90,8 @@ export function Onboarding({ onSkip, onStart, standalone = false }: OnboardingPr
 
   return (
     <View testID="onboarding" style={styles.tela}>
+      {/* a foto de fundo é escura sob a barra de status: relógio e bateria em claro */}
+      <BarraDeStatus sobre="escuro" />
       <Image source={FUNDO} contentFit="cover" accessible={false} style={StyleSheet.absoluteFill} />
       <View style={[styles.fluxo, { paddingTop: top, paddingBottom: standalone ? bottom : 0 }]}>
         <View style={folga(PESOS.topo)} />

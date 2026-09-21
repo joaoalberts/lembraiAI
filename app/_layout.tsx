@@ -3,6 +3,7 @@ import { ActivityIndicator, Platform, StyleSheet, View } from 'react-native';
 import { Stack, useSegments } from 'expo-router';
 import Head from 'expo-router/head';
 import * as SplashScreen from 'expo-splash-screen';
+import { BarraDeStatusPadrao } from '../src/components/BarraDeStatus';
 import { useFontesDaMarca } from '../src/design/fonts';
 import { colors, layout, shadow } from '../src/design/tokens';
 import { AuthProvider, useAuth } from '../src/state/auth';
@@ -79,6 +80,8 @@ export default function RootLayout() {
                   <title>LembreiAi — lembretes por hora e lugar</title>
                 </Head>
                 <ReminderScheduler />
+                {/* o padrão do app (telas claras): texto escuro; as telas de fundo escuro trocam enquanto estão em foco */}
+                <BarraDeStatusPadrao />
                 <RootLayoutNav />
               </Shell>
             </GeofencesProvider>

@@ -768,6 +768,16 @@ A base das quatro telas é o `AuthLayout` (`src/components/AuthLayout.tsx`, imag
 - **Criar conta:** "Leva menos de um minuto."; Nome ("Como podemos te chamar?"), E-mail, Senha (dica "Pelo menos 8 caracteres, com letras e números.") com o **medidor de força** (`MedidorDeSenha`: três barras finas que acendem uma vermelha, duas âmbar ou três verdes, e o rótulo "Senha fraca", "razoável" ou "forte"; só com a senha digitada) e Confirmar senha; "Criar conta" / "Criando conta…". Sem sessão (falta confirmar o e-mail) o aviso é informativo, com `mail-check`, e não vermelho como no original. Rodapé: "Já tem conta?" e "Entrar".
 - **Recuperar senha e Redefinir senha:** o app recupera por **código de 6 números** e não pelo link do original, então os textos seguem o fluxo do app; o visual é o da base (o voltar, o rodapé com o link "Voltar para entrar", o medidor na nova senha).
 
+### 11.16 Barra de status do aparelho (relógio, sinal e bateria)
+
+No iOS e no Android o app desenha por baixo da barra de status, então a cor do texto dela (relógio, sinal, bateria) precisa acompanhar o **fundo que passa por baixo**. As imagens de referência não têm barra de status (é coisa do nativo): a regra é decisão do app.
+
+- **Padrão: texto escuro**, declarado uma vez na raiz (`BarraDeStatusPadrao`, em `app/_layout.tsx`). Serve às telas de topo claro: o formulário de novo e editar lembrete (cabeçalho menta), a aba Mapa (cabeçalho creme), a tela de sucesso, as páginas públicas e o indicador de carregamento. Essas telas não declaram nada.
+- **Telas de fundo escuro pedem texto claro** com `<BarraDeStatus sobre="escuro" />` (`src/components/BarraDeStatus.tsx`): o cabeçalho verde (`GreenHeader`: lista e configurações), as telas de conta (`AuthLayout`) e a abertura (`Onboarding`, com a foto). Tela nova: se o topo for escuro, declare; se for claro, não declare.
+- **Só a tela em foco declara** (`useIsFocused()`): as abas ficam montadas em segundo plano e as declarações de várias `StatusBar` se mesclam pela ordem em que montaram (a última vence), então a de uma aba escondida venceria a da visível. Ao perder o foco a declaração some e a barra volta ao padrão de baixo. Fora de um navegador (peça solta em teste) vale como em foco.
+- **Ninguém importa `expo-status-bar` fora de `BarraDeStatus.tsx`**: `src/__tests__/barra-de-status.test.ts` barra, e confere que a raiz declara o padrão e que as três telas escuras declaram.
+- Na web não há efeito (o navegador desenha a barra do sistema). **iOS não verificado** (sem Xcode neste Mac): o padrão foi escrito pela documentação do `expo-status-bar` (SDK 57).
+
 ## 12. Imagens e ilustrações
 
 - **A interface é código, nunca imagem de tela.** Texto, botões e cartões nunca viram PNG.
@@ -1297,6 +1307,7 @@ O teste `valores-soltos.test.ts` mantém uma lista de arquivos com valores visua
 | 21/09/2026 | **Todo controle passa por `Toque`, que completa o alvo de toque até 44 no celular e na web**; a folga fixa de 6 (o antigo token de folga) sai | Decisão do João: o app web será usado no celular (iOS e Android). Medido no navegador a 411 px: mais de 30 controles abaixo de 44 antes (Voltar 36, olho da senha 38, Novo lembrete 36, campos de data 40, chips 34, Sair e Abrir 36, interruptores 21 a 26); 0 depois nos controles do app, com cliques reais fora da área visível funcionando (os botões do mapa e o controle deslizante vêm nos registros seguintes). O react-native-web 0.21 não tem `hitSlop`, então a camada transparente é nossa |
 | 21/09/2026 | **Botões do mapa com 44 em tela de toque** (`@media (pointer: coarse)` em `mapa-css.ts`) e o zoom do mapa pequeno do formulário some nesse caso | Continuação da decisão do João (o app web será usado no celular): o Leaflet e os botões próprios do mapa tinham 29 × 30 e a pílula 24 de altura. No mapa de 138 de altura do formulário 44 + 88 de botões não cabem, então o zoom cede à pinça. Conferido num contexto de celular do navegador (`hasTouch`) |
 | 21/09/2026 | **Área de toque do controle deslizante do raio com 44 de altura** (margem negativa devolve os 30 do desenho) | Continuação da decisão do João: o `Slider` tinha 30 de altura de toque no celular e na web e não é um `Pressable`, então não passa pelo `Toque`. A folga vira toque por cima do que está em volta, sem mexer no espaço |
+| 21/09/2026 | **Barra de status do aparelho: texto escuro por padrão e claro nas telas de fundo escuro, declarado só pela tela em foco** (`BarraDeStatus`, `BarraDeStatusPadrao`) | Achado no emulador Android (tela cheia): o app nunca declarava a cor e o relógio saía sempre branco, quase invisível sobre o formulário menta, a aba Mapa e a tela de sucesso; no iOS o padrão seria escuro, ilegível sobre o cabeçalho verde. As abas ficam montadas, então só a que está em foco pode declarar. Sem referência na web |
 
 ## 19. Pendências
 

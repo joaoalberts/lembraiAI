@@ -1,9 +1,12 @@
 import '@testing-library/react-native/matchers';
 import { fireEvent, render, screen } from '@testing-library/react-native';
+import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text } from 'react-native';
 import { colors, fontFamily, fontSize, gradients, shadow, size } from '../../design/tokens';
 import { comAreaSegura } from '../../test-utils/area-segura';
 import { AuthLayout } from '../AuthLayout';
+
+jest.mock('expo-status-bar', () => ({ StatusBar: jest.fn(() => null) }));
 
 const ESCONDIDO = { includeHiddenElements: true } as const;
 const abrir = (ui: React.ReactElement, insets?: { top?: number; bottom?: number }) => render(comAreaSegura(ui, insets));
@@ -31,6 +34,12 @@ describe('AuthLayout (base das telas de conta)', () => {
     expect(screen.getByText('Acesse seus lembretes por hora e por lugar.')).toHaveStyle({ color: colors.text.secondary });
     expect(screen.getByText('corpo')).toBeTruthy();
     expect(screen.getByTestId('auth-cartao')).toHaveStyle({ backgroundColor: colors.bg.card, borderRadius: size.auth.cardRadius, boxShadow: shadow.cartaoDeConta });
+  });
+
+  it('o fundo é verde-escuro: o texto da barra de status (relógio, bateria) é claro', async () => {
+    jest.mocked(StatusBar).mockClear();
+    await abrir(<AuthLayout title="Entrar"><Text>corpo</Text></AuthLayout>);
+    expect(jest.mocked(StatusBar).mock.calls.map(([props]) => props)).toEqual([{ style: 'light' }]);
   });
 
   it('sem título não desenha cabeçalho (a tela de "confira seu e-mail" usa o próprio bloco)', async () => {

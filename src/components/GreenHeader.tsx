@@ -4,6 +4,7 @@ import { StyleSheet, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { fundoEmDegrade } from '../design/efeitos';
 import { colors, gradients, radius, size, space } from '../design/tokens';
+import { BarraDeStatus } from './BarraDeStatus';
 
 const CURVAS_DE_NIVEL = require('../../assets/art/topo-lista.webp');
 
@@ -36,6 +37,8 @@ export function GreenHeader({ children }: GreenHeaderProps) {
   const topo = topoDoConteudo(top);
   return (
     <View testID="cabecalho-verde" style={[styles.cabecalho, { minHeight: size.header.height + (topo - size.header.contentTop), paddingTop: topo }]}>
+      {/* o verde-escuro passa por baixo da barra de status: relógio e bateria em claro */}
+      <BarraDeStatus sobre="escuro" />
       <View testID="cabecalho-degrade" style={[StyleSheet.absoluteFill, styles.decoracao, fundoEmDegrade(gradients.cabecalhoVerde)]} />
       {/* decorativa: escondida do leitor de tela */}
       <View style={[styles.curvas, styles.decoracao]}>

@@ -5,10 +5,11 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { fundoEmDegrade } from '../design/efeitos';
 import { anelDeFocoNoEscuro, type EstadoDeToque } from '../design/foco';
 import { borderWidth, colors, fontFamily, fontSize, gradients, iconStroke, lineHeight, motion, radius, shadow, size, textStyles } from '../design/tokens';
+import { BarraDeStatus } from './BarraDeStatus';
 import { GlassButton } from './GlassButton';
 import { Icon } from './Icon';
-
 import { Toque } from './Toque';
+
 const CURVAS_DE_NIVEL = require('../../assets/art/topo-contas.webp');
 
 interface RodapeProps {
@@ -41,6 +42,8 @@ export function AuthLayout({ title, subtitle, children, keyboardShouldPersistTap
 
   return (
     <View style={styles.tela}>
+      {/* fundo verde-escuro sob a barra de status: relógio e bateria em claro */}
+      <BarraDeStatus sobre="escuro" />
       <View testID="auth-fundo" style={[StyleSheet.absoluteFill, styles.decoracao, fundoEmDegrade(gradients.contas)]} />
       <View testID="auth-curvas" style={[styles.curvas, styles.decoracao]}>
         <Image source={CURVAS_DE_NIVEL} contentFit="fill" accessible={false} style={StyleSheet.absoluteFill} />

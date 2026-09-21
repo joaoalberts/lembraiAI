@@ -1,5 +1,6 @@
 import '@testing-library/react-native/matchers';
 import { fireEvent, render, screen } from '@testing-library/react-native';
+import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text } from 'react-native';
 import { colors, gradients, iconStroke, radius, size, space } from '../../design/tokens';
 import { comAreaSegura } from '../../test-utils/area-segura';
@@ -7,8 +8,10 @@ import { AppBrand } from '../AppBrand';
 import { GlassButton, estiloDoVidro } from '../GlassButton';
 import { GreenHeader, topoDoConteudo } from '../GreenHeader';
 import { SearchField } from '../SearchField';
-
 import { alvoDeToque } from '../../test-utils/toque';
+
+jest.mock('expo-status-bar', () => ({ StatusBar: jest.fn(() => null) }));
+
 describe('topoDoConteudo', () => {
   it('sem barra de status (web, computador) vale o topo do desenho', () => {
     expect(topoDoConteudo(0)).toBe(size.header.contentTop);
@@ -21,6 +24,14 @@ describe('topoDoConteudo', () => {
   it('com entalhe ou ilha dinâmica a marca desce para ficar abaixo da barra, com uma folga', () => {
     expect(topoDoConteudo(59)).toBe(59 + space.sm);
     expect(topoDoConteudo(47)).toBe(47 + space.sm);
+  });
+});
+
+describe('GreenHeader: barra de status', () => {
+  it('o fundo é verde-escuro: o texto da barra de status (relógio, bateria) é claro', async () => {
+    jest.mocked(StatusBar).mockClear();
+    await render(comAreaSegura(<GreenHeader><Text>conteúdo</Text></GreenHeader>));
+    expect(jest.mocked(StatusBar).mock.calls.map(([props]) => props)).toEqual([{ style: 'light' }]);
   });
 });
 
