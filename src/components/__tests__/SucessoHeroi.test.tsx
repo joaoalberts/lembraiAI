@@ -2,6 +2,7 @@ import '@testing-library/react-native/matchers';
 import { act, render, screen } from '@testing-library/react-native';
 import { AccessibilityInfo, Platform, StyleSheet, Text } from 'react-native';
 import { FAISCAS, HEROI } from '../../design/heroi';
+import { radius } from '../../design/tokens';
 import { SucessoHeroi } from '../SucessoHeroi';
 import { Subida } from '../Subida';
 
@@ -168,6 +169,14 @@ describe('SucessoHeroi: posição e leitor de tela', () => {
     expect(estilo('heroi-selo')).toMatchObject({ width: HEROI.selo.tamanho, height: HEROI.selo.tamanho, marginLeft: -HEROI.selo.tamanho / 2, marginTop: -HEROI.selo.tamanho / 2, borderRadius: HEROI.selo.raio });
     expect(estilo('heroi-disco')).toMatchObject({ width: HEROI.disco.tamanho, marginLeft: -HEROI.disco.tamanho / 2 });
     expect(estilo('heroi-brilho')).toMatchObject({ width: HEROI.brilho.tamanho, marginLeft: -HEROI.brilho.tamanho / 2 });
+  });
+
+  it('o degradê do disco é recortado no círculo (senão os cantos do quadrado aparecem como um retângulo claro atrás do selo)', async () => {
+    await render(<SucessoHeroi />);
+    const recorte = StyleSheet.flatten(el('heroi-disco-recorte').props.style) as Record<string, unknown>;
+    expect(recorte).toMatchObject({ overflow: 'hidden', borderRadius: radius.pill });
+    // o halo (sombra) fica na camada de fora: `overflow: hidden` a cortaria
+    expect(estilo('heroi-disco')).not.toHaveProperty('overflow');
   });
 
   it('o selo leva a sombra funda e o disco o halo menta, como no original', async () => {

@@ -1,12 +1,19 @@
-import { useEffect, useRef } from 'react';
+import { forwardRef, useEffect, useRef } from 'react';
 import { Animated, Easing, Platform, StyleSheet, View, type ViewStyle } from 'react-native';
-import Svg, { Defs, LinearGradient, Path, Polygon, RadialGradient, Rect, Stop } from 'react-native-svg';
+import Svg, { Defs, LinearGradient, Path, Polygon, RadialGradient, Rect, Stop, type PathProps } from 'react-native-svg';
 import { fundoEmDegrade } from '../design/efeitos';
 import { CURVAS, ESTRELA, FAISCAS, HEROI, separarCor, type Curva, type Janela } from '../design/heroi';
 import { radius } from '../design/tokens';
 import { useMovimentoReduzido } from '../lib/movimento';
 
-const CaminhoAnimado = Animated.createAnimatedComponent(Path);
+/**
+ * O `Animated` acrescenta `collapsable={false}` a todo componente animado. A `View` da web sabe ignorá-la, mas o `Path` do SVG
+ * a repassa ao `<path>` do DOM e o React reclama no console ("non-boolean attribute `collapsable`"): aqui ela é descartada.
+ */
+const CaminhoSemColapso = forwardRef<Path, PathProps & { collapsable?: boolean }>(function CaminhoSemColapso({ collapsable: _ignorada, ...props }, ref) {
+  return <Path ref={ref} {...props} />;
+});
+const CaminhoAnimado = Animated.createAnimatedComponent(CaminhoSemColapso);
 
 /** A web não tem o driver nativo do `Animated`. Lido a cada uso (e não uma vez ao carregar) para o teste poder trocar. */
 const comDriverNativo = () => Platform.OS !== 'web';
@@ -106,7 +113,10 @@ function Heroi({ animar }: { animar: boolean }) {
       />
 
       <Animated.View testID="heroi-disco" style={[centrada(disco.tamanho), styles.redonda, { boxShadow: disco.sombra, opacity: faixa(disco.janela, 0, 1, disco.curva), transform: [{ scale: faixa(disco.janela, disco.escalaInicial, 1, disco.curva) }] }]}>
-        <DegradeRadial id="heroi-disco-degrade" lado={disco.tamanho} cx={0.5} cy={disco.centroY} r={disco.raio} paradas={disco.paradas} />
+        {/* o recorte fica numa camada de dentro: `overflow: hidden` na de fora cortaria o halo (a sombra) */}
+        <View testID="heroi-disco-recorte" style={[StyleSheet.absoluteFill, styles.redonda, styles.recorte]}>
+          <DegradeRadial id="heroi-disco-degrade" lado={disco.tamanho} cx={0.5} cy={disco.centroY} r={disco.raio} paradas={disco.paradas} />
+        </View>
       </Animated.View>
 
       {animar
