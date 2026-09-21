@@ -95,7 +95,7 @@ function Sucesso() {
           </View>
         </View>
 
-        <View style={{ paddingTop: size.sucesso.tituloTop + descido }}>
+        <View testID="sucesso-titulos" style={{ paddingTop: size.sucesso.tituloTop + descido }}>
           <Subida janela={HEROI.subida.titulo} style={styles.tituloBox}>
             <Text accessibilityRole="header" style={styles.titulo}>{'Lembrete criado\ncom sucesso!'}</Text>
           </Subida>
@@ -122,7 +122,7 @@ function Sucesso() {
           <Button variant="secondary" label="Ver todos os lembretes" iconEnd="arrow-right" onPress={irParaLista} style={styles.ctaBotao} />
         </View>
 
-        <View style={[styles.link, { paddingBottom: size.sucesso.espaco.fim + bottom }]}>
+        <View testID="sucesso-fim" style={[styles.link, { paddingBottom: size.sucesso.espaco.fim + bottom }]}>
           <LinkButton label="Criar outro lembrete" onPress={criarOutro} />
         </View>
       </ScrollView>

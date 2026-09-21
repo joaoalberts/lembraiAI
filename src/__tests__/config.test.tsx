@@ -128,6 +128,25 @@ describe('Configurações: lembretes por local', () => {
     expect(screen.getByText('há 2 min')).toBeTruthy(); // 30 s + 60 s = 90 s, que arredonda para 2 min
   });
 
+  it('desligado não mostra "Dentro do raio agora" nem "Mais próximo", mesmo que a vigia tenha deixado lembretes dentro do raio', async () => {
+    await abrir({ monitoring: false, insideIds: ['a'], fences: [{ id: 'a', title: 'Mercado' }], nearest: { fence: { title: 'Mercado' }, meters: 120 } });
+    expect(screen.queryByText('Dentro do raio agora')).toBeNull();
+    expect(screen.queryByText('Mais próximo')).toBeNull();
+    expect(screen.getByText('Lembretes monitorados')).toBeTruthy();
+  });
+
+  it('ao sair da tela o relógio da "última posição" para: sem isso ele seguiria atualizando uma tela que não existe', async () => {
+    const criar = jest.spyOn(global, 'setInterval');
+    const limpar = jest.spyOn(global, 'clearInterval');
+    const { unmount } = await abrir({ monitoring: true, position: { lat: 1, lng: 2, accuracy: 10, at: AGORA - 30_000 } });
+    const indice = criar.mock.calls.findIndex(([, espera]) => espera === motion.duration.relogio);
+    expect(indice).toBeGreaterThanOrEqual(0);
+    const relogio = criar.mock.results[indice].value;
+    expect(limpar).not.toHaveBeenCalledWith(relogio);
+    await unmount();
+    expect(limpar).toHaveBeenCalledWith(relogio);
+  });
+
   it('monitorando e sem posição ainda: a última posição é "nunca"', async () => {
     await abrir({ monitoring: true });
     expect(screen.getByText('nunca')).toBeTruthy();

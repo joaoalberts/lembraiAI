@@ -144,6 +144,21 @@ describe('tela de sucesso: compartilhar', () => {
     expect(screen.getByText('Compartilhar')).toBeTruthy();
   });
 
+  it('se a resposta muda no meio da espera ("Copiado" e logo "Indisponível"), o aviso novo ganha o tempo inteiro: o relógio velho é cancelado', async () => {
+    await abrir();
+    jest.mocked(compartilhar).mockResolvedValueOnce('copiado').mockResolvedValueOnce('indisponivel');
+    await tocar();
+    expect(screen.getByText('Copiado')).toBeTruthy();
+    await act(async () => { jest.advanceTimersByTime(motion.duration.aviso / 2); });
+    await tocar();
+    expect(screen.getByText('Indisponível')).toBeTruthy();
+    // aqui o relógio velho já teria disparado (passaram 1,5 vez o tempo do aviso desde o primeiro toque)
+    await act(async () => { jest.advanceTimersByTime(motion.duration.aviso * 0.75); });
+    expect(screen.getByText('Indisponível')).toBeTruthy();
+    await act(async () => { jest.advanceTimersByTime(motion.duration.aviso / 2); });
+    expect(screen.getByText('Compartilhar')).toBeTruthy();
+  });
+
   it('sem como compartilhar nem copiar (ou se o compartilhamento falha) o rótulo diz "Indisponível"', async () => {
     await abrir();
     jest.mocked(compartilhar).mockResolvedValueOnce('indisponivel').mockRejectedValueOnce(new Error('sem folha'));
@@ -192,5 +207,16 @@ describe('tela de sucesso: sem lembrete, fora de foco e área segura', () => {
   it('sem entalhe nada se mexe (a barra de status baixa cabe acima do botão)', async () => {
     await abrir(undefined, 'a1', true, { top: 24 });
     expect(screen.getByTestId('sucesso-topo')).toHaveStyle({ top: 0 });
+    expect(screen.getByTestId('sucesso-titulos')).toHaveStyle({ paddingTop: size.sucesso.tituloTop });
+  });
+
+  it('com entalhe o título e o subtítulo descem junto, para não ficarem por baixo do herói que desceu', async () => {
+    await abrir(undefined, 'a1', true, { top: 59 });
+    expect(screen.getByTestId('sucesso-titulos')).toHaveStyle({ paddingTop: size.sucesso.tituloTop + 59 - size.sucesso.fecharTop });
+  });
+
+  it('o fim da tela soma a área segura de baixo (a barra de gestos) ao espaço do padrão', async () => {
+    await abrir(undefined, 'a1', true, { bottom: 34 });
+    expect(screen.getByTestId('sucesso-fim')).toHaveStyle({ paddingBottom: size.sucesso.espaco.fim + 34 });
   });
 });
