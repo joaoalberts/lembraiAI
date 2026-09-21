@@ -128,7 +128,7 @@ const styles = StyleSheet.create({
   // acima do mapa que vem logo abaixo (o Leaflet empilha as camadas em 400 a 1000)
   raiz: { zIndex: 1100 },
   campo: { height: size.form.field - space.xs, flexDirection: 'row', alignItems: 'center', gap: space.sm, paddingLeft: space.md, borderRadius: radius.field, backgroundColor: colors.bg.field, boxShadow: shadow.field },
-  entrada: { ...textStyles.body, flex: 1, minWidth: 0, height: '100%', paddingRight: space.md, color: colors.text.primary, fontFamily: fontFamily.regular, ...semAnelDoNavegador },
+  entrada: { ...textStyles.body, flex: 1, minWidth: 0, height: '100%', paddingRight: space.md, color: colors.text.primary, fontFamily: fontFamily.regular, ...semAnelDoNavegador, fontSize: 16 }, // web: iOS Safari auto-zoom com fontSize < 16px
   lista: { position: 'absolute', left: 0, right: 0, top: '100%', marginTop: size.suggestions.gap, padding: size.suggestions.padding, borderRadius: radius.md, backgroundColor: colors.bg.field, boxShadow: shadow.suggestions, maxHeight: size.suggestions.maxHeight },
   rolagem: { maxHeight: size.suggestions.maxHeight },
   item: { flexDirection: 'row', alignItems: 'flex-start', gap: space.sm, padding: space.sm, borderRadius: radius.sm },

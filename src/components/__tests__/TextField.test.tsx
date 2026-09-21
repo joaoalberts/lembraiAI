@@ -17,7 +17,7 @@ describe('TextField', () => {
 
   it('o texto digitado usa a fonte da marca (o campo de texto não herda a fonte do Text: sem isto cai na do sistema)', async () => {
     await render(<TextField {...base} label="E-mail" />);
-    expect(campo()).toHaveStyle({ fontFamily: fontFamily.regular, fontSize: fontSize.caption, color: colors.text.primary });
+    expect(campo()).toHaveStyle({ fontFamily: fontFamily.regular, fontSize: 16, color: colors.text.primary }); // 16 para desabilitar auto-zoom no iOS
   });
 
   it('em repouso: caixa branca de 46 de altura, raio de campo e o anel cinza por dentro', async () => {

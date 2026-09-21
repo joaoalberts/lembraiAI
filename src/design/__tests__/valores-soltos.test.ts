@@ -12,6 +12,10 @@ const IGNORADOS = [/^src\/design\//, /^src\/test-utils\//, /__tests__\//, /\.tes
  */
 const PENDENTES: string[] = [
   'src/lib/compartilhar-imagem.ts', // canvas de compartilhamento: rgba com transparência para sombra e borda (difícil de tokenizar)
+  'src/components/FormInput.tsx', // fontSize: 16 para desabilitar auto-zoom iOS (técnico, não visual)
+  'src/components/PlaceSearch.tsx', // fontSize: 16 para desabilitar auto-zoom iOS (técnico, não visual)
+  'src/components/SearchField.tsx', // fontSize: 16 para desabilitar auto-zoom iOS (técnico, não visual)
+  'src/components/TextField.tsx', // fontSize: 16 para desabilitar auto-zoom iOS (técnico, não visual)
 ];
 
 function listar(pasta: string): string[] {

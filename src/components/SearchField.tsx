@@ -57,5 +57,6 @@ const styles = StyleSheet.create({
   },
   campoEmFoco: { borderColor: colors.border.focusOnDark, backgroundColor: colors.glass.fieldFocus },
   // sem contorno do navegador: o próprio campo já muda de borda e de fundo em foco
-  entrada: { ...textStyles.body, flex: 1, minWidth: 0, height: '100%', padding: 0, color: colors.text.onDark, fontFamily: fontFamily.regular, ...semAnelDoNavegador },
+  // web: iOS Safari auto-zoom com fontSize < 16px; usar 16px desabilita o zoom
+  entrada: { ...textStyles.body, flex: 1, minWidth: 0, height: '100%', padding: 0, color: colors.text.onDark, fontFamily: fontFamily.regular, ...semAnelDoNavegador, fontSize: 16 },
 });

@@ -31,6 +31,8 @@ const styles = StyleSheet.create({
     color: colors.text.primary,
     fontFamily: fontFamily.regular,
     ...semAnelDoNavegador,
+    // web: iOS Safari auto-zoom com fontSize < 16px; usar 16px desabilita o zoom
+    fontSize: 16,
   },
   emFoco: { boxShadow: shadow.fieldFocus },
 });

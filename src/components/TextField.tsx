@@ -110,6 +110,8 @@ const styles = StyleSheet.create({
     ...textStyles.caption,
     color: colors.text.primary,
     ...semAnelDoNavegador, // o foco é o anel da caixa; sem isto o navegador soma o anel âmbar dele
+    // web: iOS Safari auto-zoom com fontSize < 16px; usar 16px aqui desabilita o zoom (visual vem do textStyles.caption)
+    fontSize: 16,
   },
   entradaDesabilitada: { color: colors.text.secondary },
   olho: { width: size.campo.eye, height: '100%', alignItems: 'center', justifyContent: 'center' },
