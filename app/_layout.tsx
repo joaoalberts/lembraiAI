@@ -72,8 +72,9 @@ export default function RootLayout() {
   return (
     <AuthProvider>
       <NotificationsProvider>
-        <GeoProvider>
-          <RemindersProvider>
+        {/* os lembretes vêm antes da localização: o GeoProvider só acompanha a posição quando existe lembrete por local */}
+        <RemindersProvider>
+          <GeoProvider>
             <GeofencesProvider>
               <Shell>
                 {/* o React Navigation apaga o <title> de +html.tsx na web; sem isto a aba fica sem nome */}
@@ -88,8 +89,8 @@ export default function RootLayout() {
                 <AvisosNaTela />
               </Shell>
             </GeofencesProvider>
-          </RemindersProvider>
-        </GeoProvider>
+          </GeoProvider>
+        </RemindersProvider>
       </NotificationsProvider>
     </AuthProvider>
   );

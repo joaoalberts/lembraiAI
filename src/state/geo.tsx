@@ -1,16 +1,24 @@
-import { createContext, useCallback, useContext, useEffect, useMemo, useState, type ReactNode } from 'react';
+import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
 import * as Location from 'expo-location';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import type { LatLng } from '../lib/geo';
+import { fencesOf } from '../lib/geofence';
 import { useAuth } from './auth';
+import { useReminders } from './reminders';
 
 const STORAGE_KEY = 'lembreiai:monitorar-local';
+const PERMISSAO_NEGADA = 'Permissão de localização negada. Libere nos ajustes do aparelho.';
 
 export interface Position extends LatLng { accuracy: number | null; at: number }
 
 interface GeoState {
-  /** Vigia ligada pelo usuário (fica salva). Só acompanha a posição com ela ligada e com o usuário logado. */
+  /**
+   * A escolha da pessoa (fica salva): vem LIGADA. O app só acompanha a posição de fato quando há um lembrete por local ativo, a
+   * permissão foi dada e ela está logada (`watching`): sem lembrete por local não há o que avisar, então não gasta bateria.
+   */
   monitoring: boolean;
+  /** Acompanhando a posição agora. */
+  watching: boolean;
   permissionGranted: boolean;
   position: Position | null;
   error: string | null;
@@ -30,32 +38,52 @@ const toPosition = (loc: Location.LocationObject): Position => ({
 
 export function GeoProvider({ children }: { children: ReactNode }) {
   const { user } = useAuth();
+  const { reminders } = useReminders();
   const userId = user?.id;
-  const [monitoring, setMonitoringState] = useState(false);
+  const temLembretePorLocal = useMemo(() => fencesOf(reminders).length > 0, [reminders]);
+  const [monitoring, setMonitoringState] = useState(true);
+  const [escolhaLida, setEscolhaLida] = useState(false);
   const [permissionGranted, setPermissionGranted] = useState(false);
+  const [permissaoLida, setPermissaoLida] = useState(false);
+  const [podePerguntar, setPodePerguntar] = useState(true);
   const [position, setPosition] = useState<Position | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const jaPediu = useRef(false);
 
   useEffect(() => {
-    AsyncStorage.getItem(STORAGE_KEY).then((v) => setMonitoringState(v === '1')).catch(() => {});
+    AsyncStorage.getItem(STORAGE_KEY).then((v) => setMonitoringState(v !== '0')).catch(() => {}).finally(() => setEscolhaLida(true));
   }, []);
 
   // estado atual da permissão, sem provocar o pedido
   useEffect(() => {
-    if (!userId) { setPosition(null); return; }
-    Location.getForegroundPermissionsAsync().then((p) => setPermissionGranted(p.granted)).catch(() => {});
+    if (!userId) { setPermissaoLida(false); return; }
+    let vivo = true;
+    Location.getForegroundPermissionsAsync()
+      .then((p) => { if (!vivo) return; setPermissionGranted(p.granted); setPodePerguntar(p.canAskAgain); setPermissaoLida(true); })
+      .catch(() => { if (vivo) setPermissaoLida(true); });
+    return () => { vivo = false; };
   }, [userId]);
 
   const ensurePermission = useCallback(async () => {
     const atual = await Location.getForegroundPermissionsAsync();
     const ok = atual.granted || (atual.canAskAgain && (await Location.requestForegroundPermissionsAsync()).granted);
     setPermissionGranted(ok);
+    if (ok) setError((e) => (e === PERMISSAO_NEGADA ? null : e));
     return ok;
   }, []);
 
+  // Existe lembrete por local e ainda falta a permissão: pede uma vez, no momento em que ela faz sentido (não na tela de entrar)
+  useEffect(() => {
+    if (!userId || !escolhaLida || !permissaoLida || !monitoring || !temLembretePorLocal || permissionGranted) return;
+    if (!podePerguntar) { setError(PERMISSAO_NEGADA); return; }
+    if (jaPediu.current) return;
+    jaPediu.current = true;
+    ensurePermission().then((ok) => { if (!ok) setError(PERMISSAO_NEGADA); }).catch(() => setError(PERMISSAO_NEGADA));
+  }, [userId, escolhaLida, permissaoLida, monitoring, temLembretePorLocal, permissionGranted, podePerguntar, ensurePermission]);
+
   const setMonitoring = useCallback(async (on: boolean) => {
     if (on && !(await ensurePermission())) {
-      setError('Permissão de localização negada. Libere nos ajustes do aparelho.');
+      setError(PERMISSAO_NEGADA);
       return;
     }
     setError(null);
@@ -73,9 +101,11 @@ export function GeoProvider({ children }: { children: ReactNode }) {
     }
   }, [ensurePermission]);
 
+  const watching = escolhaLida && monitoring && temLembretePorLocal && !!userId && permissionGranted;
+
   // Segue o mesmo desenho do app web: GPS de alta precisão, leitura a cada ~5 s ou 10 m (quem decide é o sistema).
   useEffect(() => {
-    if (!monitoring || !userId || !permissionGranted) return;
+    if (!watching) { setPosition(null); return; }
     let cancelado = false;
     let sub: Location.LocationSubscription | null = null;
     Location.watchPositionAsync(
@@ -85,11 +115,11 @@ export function GeoProvider({ children }: { children: ReactNode }) {
       .then((s) => { if (cancelado) s.remove(); else sub = s; })
       .catch(() => setError('Não foi possível acompanhar sua posição.'));
     return () => { cancelado = true; sub?.remove(); };
-  }, [monitoring, userId, permissionGranted]);
+  }, [watching]);
 
   const value = useMemo<GeoState>(
-    () => ({ monitoring, permissionGranted, position, error, setMonitoring, getCurrentPosition }),
-    [monitoring, permissionGranted, position, error, setMonitoring, getCurrentPosition],
+    () => ({ monitoring, watching, permissionGranted, position, error, setMonitoring, getCurrentPosition }),
+    [monitoring, watching, permissionGranted, position, error, setMonitoring, getCurrentPosition],
   );
   return <Ctx.Provider value={value}>{children}</Ctx.Provider>;
 }

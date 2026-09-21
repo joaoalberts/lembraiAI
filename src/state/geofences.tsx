@@ -1,4 +1,6 @@
 import { createContext, useContext, useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { lembrarCercas, registrarEntrada, registrarSaida } from '../lib/chegadas';
 import { evaluate, fencesOf, type Fence } from '../lib/geofence';
 import { useGeo } from './geo';
 import { useNotifications } from './notifications';
@@ -18,7 +20,7 @@ const Ctx = createContext<GeofencesState | null>(null);
 
 export function GeofencesProvider({ children }: { children: ReactNode }) {
   const { position } = useGeo();
-  const { reminders } = useReminders();
+  const { reminders, carregando } = useReminders();
   const { notifyNow } = useNotifications();
   const fences = useMemo(() => fencesOf(reminders), [reminders]);
   const fencesRef = useRef(fences);
@@ -30,25 +32,38 @@ export function GeofencesProvider({ children }: { children: ReactNode }) {
   const [nearest, setNearest] = useState<GeofencesState['nearest']>(null);
   const [arrivals, setArrivals] = useState<Arrival[]>([]);
 
+  // O aparelho guarda título e endereço de cada lugar: com o app fechado, o evento do sistema só traz o id do lembrete.
+  // Só depois que os lembretes chegam: uma lista vazia "de passagem" apagaria o que está guardado.
+  useEffect(() => {
+    if (carregando) return;
+    void lembrarCercas(fences, AsyncStorage);
+  }, [fences, carregando]);
+
   useEffect(() => {
     if (!position) {
+      // parou de acompanhar: não se sabe mais onde a pessoa está, então nenhuma marca de "dentro" vale
+      const estavaDentro = [...inside.current];
       inside.current = new Set();
       setInsideIds([]);
       setNearest(null);
+      estavaDentro.forEach((id) => { void registrarSaida(id, AsyncStorage); });
       return;
     }
     // precisão desconhecida não dispara alerta (mesma regra do app web: na dúvida, sem alarme falso)
     const res = evaluate(position, position.accuracy ?? Infinity, fencesRef.current, inside.current);
+    const saiu = [...inside.current].filter((id) => !res.inside.has(id));
     inside.current = res.inside;
     setInsideIds([...res.inside]);
     setNearest(res.nearest);
-    if (res.entered.length) {
-      const at = Date.now();
-      setArrivals((prev) => [...res.entered.map((f) => ({ id: f.id, title: f.title, place: f.place, at })), ...prev].slice(0, 20));
-      res.entered.forEach((f) => {
-        void notifyRef.current({ title: `Você chegou: ${f.title}`, body: f.place || undefined, data: { reminderId: f.id } });
+    saiu.forEach((id) => { void registrarSaida(id, AsyncStorage); });
+    res.entered.forEach((f) => {
+      // o sistema pode já ter avisado desta chegada com o app fechado (ou o app foi reaberto já dentro do raio): a memória do aparelho decide
+      void registrarEntrada(f.id, Date.now(), AsyncStorage).then((deveAvisar) => {
+        if (!deveAvisar) return;
+        setArrivals((prev) => [{ id: f.id, title: f.title, place: f.place, at: Date.now() }, ...prev].slice(0, 20));
+        void notifyRef.current({ title: `Você chegou: ${f.title}`, body: f.place || undefined, data: { reminderId: f.id }, identifier: `chegada-${f.id}` });
       });
-    }
+    });
   }, [position]);
 
   const value = useMemo<GeofencesState>(
