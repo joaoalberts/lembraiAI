@@ -179,6 +179,19 @@ describe('ContaSheet: alterar senha', () => {
     expect(screen.getByText('Senha alterada')).toBeTruthy();
   });
 
+  it('depois do erro do servidor o botão volta a "Salvar nova senha" e os campos destravam, para tentar de novo', async () => {
+    trocarSenha.mockResolvedValue('Senha atual incorreta.');
+    await abrir();
+    await irParaSenha();
+    await preencher('errada123', 'novasenha1', 'novasenha1');
+    await salvar();
+    expect(screen.getByRole('button', { name: 'Salvar nova senha' })).toBeEnabled();
+    expect(screen.getByLabelText('Nova senha')).toHaveProp('editable', true);
+    trocarSenha.mockResolvedValue(null);
+    await salvar();
+    expect(screen.getByText('Senha alterada')).toBeTruthy();
+  });
+
   it('fechar no meio da troca e abrir de novo recomeça do menu, sem nada digitado', async () => {
     const { rerender } = await abrir();
     await irParaSenha();
@@ -190,5 +203,36 @@ describe('ContaSheet: alterar senha', () => {
     expect(screen.getByText('Minha conta')).toBeTruthy();
     await irParaSenha();
     expect(screen.getByLabelText('Senha atual')).toHaveProp('value', '');
+  });
+});
+
+describe('ContaSheet: a resposta que chega depois de fechar', () => {
+  /** Salva com uma promessa em aberto (o servidor ainda não respondeu), fecha a folha e abre de novo; devolve quem responde. */
+  const salvarFecharEReabrir = async (): Promise<(erro: string | null) => Promise<void>> => {
+    let responder: (erro: string | null) => void = () => {};
+    trocarSenha.mockReturnValue(new Promise((ok) => { responder = ok; }));
+    const { rerender } = await abrir();
+    await irParaSenha();
+    await preencher('segredo1', 'novasenha1', 'novasenha1');
+    await salvar();
+    await fireEvent.press(screen.getByLabelText('Fechar', ESCONDIDO)); // no meio do "Salvando…"
+    await rerender(conta(false));
+    await rerender(conta(true));
+    return (erro) => act(async () => { responder(erro); });
+  };
+
+  it('a troca que deu certo depois de a folha fechar não faz a folha nova abrir em "Senha alterada"', async () => {
+    const responder = await salvarFecharEReabrir();
+    await responder(null);
+    expect(screen.getByText('Minha conta')).toBeTruthy();
+    expect(screen.queryByText('Senha alterada')).toBeNull();
+  });
+
+  it('o erro que chega depois de a folha fechar não aparece num formulário vazio quando a folha abre de novo', async () => {
+    const responder = await salvarFecharEReabrir();
+    await responder('Senha atual incorreta.');
+    await irParaSenha();
+    expect(screen.queryByText('Senha atual incorreta.')).toBeNull();
+    expect(screen.getByRole('button', { name: 'Salvar nova senha' })).toBeEnabled();
   });
 });

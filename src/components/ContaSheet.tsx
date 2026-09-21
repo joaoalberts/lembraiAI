@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { space } from '../design/tokens';
 import { validarConfirmacao, validarSenha } from '../lib/validacao';
@@ -37,8 +37,11 @@ export function ContaSheet({ visible, onClose }: ContaSheetProps) {
   const [erros, setErros] = useState<Erros>({});
   const [erroGeral, setErroGeral] = useState('');
   const [salvando, setSalvando] = useState(false);
+  // Muda a cada fechamento: a resposta de uma troca de antes não vale para a folha que abrir depois
+  const rodada = useRef(0);
 
   const recomecar = () => {
+    rodada.current += 1;
     setEtapa('menu');
     setAtual('');
     setNova('');
@@ -76,9 +79,11 @@ export function ContaSheet({ visible, onClose }: ContaSheetProps) {
       setErros(achados);
       return;
     }
+    const minha = rodada.current;
     setSalvando(true);
     setErroGeral('');
     const erro = await trocarSenha(atual, nova);
+    if (minha !== rodada.current) return; // a folha foi fechada no meio: a resposta é de outra abertura
     setSalvando(false);
     if (erro) setErroGeral(erro);
     else setEtapa('trocada');
