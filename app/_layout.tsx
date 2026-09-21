@@ -3,6 +3,7 @@ import { ActivityIndicator, Platform, StyleSheet, View } from 'react-native';
 import { Stack, useSegments } from 'expo-router';
 import Head from 'expo-router/head';
 import * as SplashScreen from 'expo-splash-screen';
+import { AvisosNaTela } from '../src/components/AvisosNaTela';
 import { BarraDeStatusPadrao } from '../src/components/BarraDeStatus';
 import { useFontesDaMarca } from '../src/design/fonts';
 import { colors, layout, shadow } from '../src/design/tokens';
@@ -83,6 +84,8 @@ export default function RootLayout() {
                 {/* o padrão do app (telas claras): texto escuro; as telas de fundo escuro trocam enquanto estão em foco */}
                 <BarraDeStatusPadrao />
                 <RootLayoutNav />
+                {/* avisos na tela (só na web): por cima de tudo, no alto da coluna */}
+                <AvisosNaTela />
               </Shell>
             </GeofencesProvider>
           </RemindersProvider>
