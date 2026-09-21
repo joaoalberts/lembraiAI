@@ -1,12 +1,13 @@
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet } from 'react-native';
 import { router } from 'expo-router';
 import { useState } from 'react';
 import { AuthLayout } from '../../src/components/AuthLayout';
 import { Banner } from '../../src/components/Banner';
 import { Button } from '../../src/components/Button';
+import { MedidorDeSenha } from '../../src/components/MedidorDeSenha';
 import { TextField } from '../../src/components/TextField';
-import { space } from '../../src/design/tokens';
-import { MIN_SENHA, forcaDaSenha, validarConfirmacao, validarEmail, validarNome, validarSenha } from '../../src/lib/validacao';
+import { size } from '../../src/design/tokens';
+import { validarConfirmacao, validarEmail, validarNome, validarSenha } from '../../src/lib/validacao';
 import { AVISO_CONFIRMAR_EMAIL, useAuth } from '../../src/state/auth';
 
 export default function SignupScreen() {
@@ -44,13 +45,18 @@ export default function SignupScreen() {
   };
 
   return (
-    <AuthLayout title="Criar Conta" subtitle="Bem-vindo ao LembreiAi">
-      {aviso !== '' && <Banner variant="info" style={styles.aviso}>{aviso}</Banner>}
-      {error !== '' && <Banner variant="error" style={styles.aviso}>{error}</Banner>}
+    <AuthLayout
+      title="Criar conta"
+      subtitle="Leva menos de um minuto."
+      voltar={() => router.navigate('/auth/bem-vindo')}
+      rodape={{ pergunta: 'Já tem conta?', acao: 'Entrar', onPress: () => router.navigate('/auth/login') }}
+    >
+      {aviso !== '' && <Banner variant="info" icon="mail-check" style={styles.aviso}>{aviso}</Banner>}
+      {error !== '' && <Banner variant="error" icon="triangle-alert" style={styles.aviso}>{error}</Banner>}
 
       <TextField
         label="Nome"
-        placeholder="Seu nome"
+        placeholder="Como podemos te chamar?"
         value={nome}
         onChangeText={setNome}
         autoComplete="name"
@@ -60,7 +66,7 @@ export default function SignupScreen() {
 
       <TextField
         label="E-mail"
-        placeholder="seu@email.com"
+        placeholder="nome@dominio.com"
         value={email}
         onChangeText={setEmail}
         keyboardType="email-address"
@@ -75,9 +81,10 @@ export default function SignupScreen() {
         onChangeText={setSenha}
         secureTextEntry
         autoComplete="new-password"
-        hint={senha ? forcaDaSenha(senha).rotulo : `Mínimo de ${MIN_SENHA} caracteres, com letras e números.`}
+        hint="Pelo menos 8 caracteres, com letras e números."
         editable={!loading}
       />
+      <MedidorDeSenha senha={senha} />
 
       <TextField
         label="Confirmar senha"
@@ -89,29 +96,12 @@ export default function SignupScreen() {
         editable={!loading}
       />
 
-      <View style={styles.actions}>
-        <Button
-          label={loading ? 'Criando conta...' : 'Criar Conta'}
-          onPress={handleSignup}
-          disabled={loading}
-        />
-        <Button
-          label="Já tenho conta — Entrar"
-          onPress={() => router.navigate('/auth/login')}
-          variant="ghost"
-          disabled={loading}
-        />
-      </View>
+      <Button label={loading ? 'Criando conta…' : 'Criar conta'} onPress={() => void handleSignup()} disabled={loading} style={styles.botao} />
     </AuthLayout>
   );
 }
 
 const styles = StyleSheet.create({
-  aviso: {
-    marginBottom: space.xl,
-  },
-  actions: {
-    marginTop: space.xl,
-    gap: space.md,
-  },
+  aviso: { marginTop: size.campo.top },
+  botao: { marginTop: size.auth.linhaTop },
 });

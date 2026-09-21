@@ -41,7 +41,7 @@ Cada tela e cada folha do app tem uma imagem em `referencias/`. O estado do Expo
 | Imagem | Tela | Estado no Expo |
 |---|---|---|
 | [`01`](referencias/01-onboarding.png) | Onboarding | Feito (`Onboarding`, aba Início e primeira tela do visitante); ver 11.10 |
-| [`02`](referencias/02-entrar.png) | Entrar | Existe; falta o fundo de curvas de nível, o cartão creme flutuante, o painel de vidro "Criar conta" e o olho da senha |
+| [`02`](referencias/02-entrar.png) | Entrar | Feito (`AuthLayout`, mais Criar conta, Recuperar e Redefinir); ver 11.15; falta só o horizonte espelhado do rodapé |
 | [`03`](referencias/03-recorte-degrade-do-formulario.png) | Recorte do degradê do formulário | Amostra de cor (usada nas medições) |
 | [`04`](referencias/04-novo-lembrete-por-data-e-horario.png) | Novo lembrete, por data e horário | Feito (`FormularioDeLembrete`); ver 11.11 |
 | [`05`](referencias/05-folha-minha-conta.png) | Folha "Minha conta" | Feito (`ContaSheet`, na lista e no formulário); ver 11.13 |
@@ -164,6 +164,9 @@ Use `palette.*` só para definir papéis em `colors`. As telas usam os papéis (
 | `palette.sucessoDado` | `#F7F5F3` | Círculo dos dados do resumo (Data, Horário, Local, Repetir) |
 | `palette.sucessoDadoAnel` | `#E6E5E4` | Anel do círculo dos dados do resumo |
 | `palette.sucessoSeloAnel` | `#DCEBE2` | Anel do selo "Ativo" |
+| `palette.contaPilula` | `#A9F7D4` | Texto da pastilha "Criar conta" sobre o verde das telas de conta |
+| `palette.contaLink` | `#9FF3D0` | Link "Voltar para entrar" sobre o verde das telas de conta |
+| `palette.medidorMedio` | `#E8A33D` | Barra do meio do medidor de força da senha (senha razoável) |
 <!-- tokens:cores-primitivas:fim -->
 
 ### 3.2 Papéis
@@ -265,6 +268,17 @@ Use `palette.*` só para definir papéis em `colors`. As telas usam os papéis (
 | `colors.sucesso.dado` | `#F7F5F3` | `palette.sucessoDado` | Círculo dos dados do resumo (Data, Horário, Local, Repetir) |
 | `colors.sucesso.dadoAnel` | `#E6E5E4` | `palette.sucessoDadoAnel` | Anel do círculo dos dados do resumo |
 | `colors.sucesso.seloAnel` | `#DCEBE2` | `palette.sucessoSeloAnel` | Anel do selo "Ativo" |
+| `colors.conta.barra` | `rgba(255, 255, 255, 0.06)` | — | Barra de vidro do rodapé das telas de conta ("Ainda não tem conta?") |
+| `colors.conta.barraAnel` | `rgba(190, 255, 228, 0.18)` | — | Contorno da barra de vidro do rodapé |
+| `colors.conta.pergunta` | `#CCD8D0` | `palette.onDark200` | Texto da pergunta na barra de vidro do rodapé |
+| `colors.conta.pilula` | `rgba(159, 243, 208, 0.15)` | — | Fundo da pastilha de ação na barra de vidro |
+| `colors.conta.pilulaAnel` | `rgba(159, 243, 208, 0.28)` | — | Contorno da pastilha de ação |
+| `colors.conta.pilulaTexto` | `#A9F7D4` | `palette.contaPilula` | Texto da pastilha de ação |
+| `colors.conta.link` | `#9FF3D0` | `palette.contaLink` | Link de voltar do rodapé, quando não há barra de vidro |
+| `colors.conta.nota` | `#B1C3B8` | `palette.onDark300` | Nota do cadeado no pé das telas de conta |
+| `colors.conta.medidorFraco` | `#D43A2A` | `palette.danger` | Medidor de força: senha fraca (uma barra) |
+| `colors.conta.medidorMedio` | `#E8A33D` | `palette.medidorMedio` | Medidor de força: senha razoável (duas barras) |
+| `colors.conta.medidorForte` | `#029554` | `palette.statusGreen` | Medidor de força: senha forte (três barras) |
 | `colors.tab.background` | `#F8F8F4` | `palette.tabBarBg` | Fundo da barra de abas |
 | `colors.tab.inactive` | `#777C8A` | `palette.tabInactive` | Rótulo e ícone da aba inativa |
 | `colors.tab.activeIcon` | `#134B36` | `palette.tabActiveIcon` | Ícone da aba ativa |
@@ -374,6 +388,8 @@ Use `...textStyles.estilo` e só troque cor (`colors.text.*`) ou família (`font
 | `fontSize.colon` | `26` | Dois-pontos entre as rodas do horário |
 | `fontSize.sucessoTitulo` | `31` | Título da tela de sucesso, "Lembrete criado com sucesso!" (60,5 du no original; fora de `textStyles`: altura de linha 1,03, sem descendentes nas duas linhas fixas) |
 | `fontSize.sucessoSubtitulo` | `15` | Subtítulo da tela de sucesso (29 du no original) |
+| `fontSize.contaTitulo` | `23` | Título do cartão das telas de conta (46 du no original) |
+| `fontSize.contaMarca` | `16` | Nome da marca no alto das telas de conta (32 du no original) |
 | `lineHeight.micro` | `16` | Altura de linha do tamanho de mesmo nome |
 | `lineHeight.caption` | `18` | Altura de linha do tamanho de mesmo nome |
 | `lineHeight.body` | `20` | Altura de linha do tamanho de mesmo nome |
@@ -383,6 +399,7 @@ Use `...textStyles.estilo` e só troque cor (`colors.text.*`) ou família (`font
 | `lineHeight.display` | `34` | Altura de linha do tamanho de mesmo nome |
 | `lineHeight.sucessoTitulo` | `32` | Altura de linha do tamanho de mesmo nome |
 | `lineHeight.sucessoSubtitulo` | `21` | Altura de linha do tamanho de mesmo nome |
+| `lineHeight.contaTitulo` | `28` | Altura de linha do tamanho de mesmo nome |
 | `fontFamily.regular` | `NunitoSans_400Regular` | Nunito Sans 400: texto corrente |
 | `fontFamily.medium` | `NunitoSans_500Medium` | Nunito Sans 500: ênfase leve |
 | `fontFamily.semibold` | `NunitoSans_600SemiBold` | Nunito Sans 600: rótulos e valores |
@@ -474,6 +491,7 @@ O desenho é quase plano. Toda sombra é o `boxShadow` em texto (aceito pela New
 | `shadow.optionOn` | `inset 0px 0px 0px 2px rgba(24, 92, 75, 1)` | Cartão de modo escolhido (anel verde por dentro) |
 | `shadow.slider` | `0px 2px 6px rgba(0, 0, 0, 0.25)` | Bolinha do controle deslizante |
 | `shadow.suggestions` | `0px 6px 16px rgba(20, 40, 30, 0.18), inset 0px 0px 0px 1px rgba(231, 232, 234, 1)` | Lista de sugestões de endereço (sombra funda e anel cinza) |
+| `shadow.cartaoDeConta` | `0px 12px 30px rgba(6, 32, 20, 0.3)` | Cartão creme das telas de conta, flutuando sobre o verde |
 | `shadow.campoErro` | `inset 0px 0px 0px 2px rgba(212, 58, 42, 1), 0px 1px 2px rgba(20, 40, 30, 0.03)` | Campo de texto com erro (anel vermelho por dentro) |
 | `shadow.campoErroFoco` | `inset 0px 0px 0px 2px rgba(212, 58, 42, 1), 0px 0px 0px 4px rgba(212, 58, 42, 0.16)` | Campo de texto com erro e em foco (anel vermelho e halo vermelho) |
 | `shadow.cartaoDoSucesso` | `inset 0px 0px 0px 1px rgba(255, 255, 255, 0.8)` | Cartões de resumo e de dica da tela de sucesso: só o anel branco por dentro |
@@ -743,6 +761,14 @@ Os cartões, na ordem:
 - **Até onde vai o monitoramento:** três itens, com o começo em negrito: app aberto, aberto e minimizado, fechado.
 - **Últimas chegadas** (só com chegadas; até cinco, com a hora e o lugar), **Política de privacidade** (botão "Abrir") e **Excluir conta** (confirmação, "Excluindo..." e o erro do servidor): o que as lojas exigem e o original web não tem.
 
+### 11.15 Telas de conta (Entrar, Criar conta, Recuperar e Redefinir a senha)
+
+A base das quatro telas é o `AuthLayout` (`src/components/AuthLayout.tsx`, imagem `02`), de cima para baixo: o fundo verde em degradê (`gradients.contas`) com as curvas de nível no alto (`assets/art/topo-contas.webp`), ambos decorativos e sem receber toque; o botão redondo de voltar (`GlassButton` `tamanho="voltar"`, só quando a tela diz para onde voltar); a marca (tile menta com o símbolo e "LembreiAi" em serifa, `fontSize.contaMarca`); o **cartão creme** (`colors.bg.card`, raio `size.auth.cardRadius`, `shadow.cartaoDeConta`) com o título em serifa (`fontSize.contaTitulo`, é o cabeçalho para o leitor de tela), o subtítulo em `colors.text.secondary` e o formulário; e o rodapé. Com pergunta, o rodapé é a **barra de vidro** (`colors.conta.barra`, contorno `colors.conta.barraAnel`) com a pergunta ("Ainda não tem conta?") e a **pastilha** de ação (`colors.conta.pilula`, texto `colors.conta.pilulaTexto`); sem pergunta, só o link de voltar (`colors.conta.link`). Por último, a nota "Por onde você passa fica no seu aparelho." com o cadeado (`colors.conta.nota`). Em aparelho com entalhe tudo desce o que a barra de status passar da distância do botão de voltar. As medidas são `size.auth.*`. O "horizonte" espelhado do rodapé do original não é reproduzido (a arte não está pré-renderizada).
+
+- **Entrar:** "Acesse seus lembretes por hora e por lugar."; E-mail ("nome@dominio.com") e Senha ("Sua senha", com o olho, 10); na mesma linha a **caixinha "Lembrar-me"** (`CaixaDeMarcar`: branca com o anel cinza desmarcada, `colors.border.focus` com o visto branco marcada; marcada de saída, como o app já fazia) e o link "Esqueci minha senha" (`colors.text.accent`); botão "Entrar" / "Entrando…" (campos e caixinha travam). O aviso de senha redefinida é verde com `circle-check`; o erro, vermelho com `triangle-alert`. Rodapé: "Ainda não tem conta?" e "Criar conta"; voltar leva à abertura.
+- **Criar conta:** "Leva menos de um minuto."; Nome ("Como podemos te chamar?"), E-mail, Senha (dica "Pelo menos 8 caracteres, com letras e números.") com o **medidor de força** (`MedidorDeSenha`: três barras finas que acendem uma vermelha, duas âmbar ou três verdes, e o rótulo "Senha fraca", "razoável" ou "forte"; só com a senha digitada) e Confirmar senha; "Criar conta" / "Criando conta…". Sem sessão (falta confirmar o e-mail) o aviso é informativo, com `mail-check`, e não vermelho como no original. Rodapé: "Já tem conta?" e "Entrar".
+- **Recuperar senha e Redefinir senha:** o app recupera por **código de 6 números** e não pelo link do original, então os textos seguem o fluxo do app; o visual é o da base (o voltar, o rodapé com o link "Voltar para entrar", o medidor na nova senha).
+
 ## 12. Imagens e ilustrações
 
 - **A interface é código, nunca imagem de tela.** Texto, botões e cartões nunca viram PNG.
@@ -926,6 +952,46 @@ Filosofia: o mínimo. O feedback de toque é instantâneo (troca de cor e escala
 | `size.config.rowGap` | `10` | Configurações: vão entre o nome e o valor de uma linha de dados |
 | `size.config.listIndent` | `13` | Configurações: recuo dos marcadores da lista de limites |
 | `size.config.listGap` | `5` | Configurações: vão entre os itens da lista de limites |
+| `size.auth.side` | `19` | Contas: recuo da tela até as bordas |
+| `size.auth.top` | `49` | Contas: distância do topo da tela até a marca |
+| `size.auth.bottom` | `30` | Contas: folga no fim da rolagem |
+| `size.auth.voltar` | `36` | Contas: botão redondo de voltar |
+| `size.auth.voltarIcon` | `18` | Contas: seta do botão de voltar |
+| `size.auth.voltarTop` | `20` | Contas: distância do botão de voltar até o topo |
+| `size.auth.marcaTile` | `32` | Contas: tile da marca |
+| `size.auth.marcaRadius` | `11` | Contas: raio do tile da marca |
+| `size.auth.marcaIcon` | `18` | Contas: símbolo dentro do tile da marca |
+| `size.auth.marcaGap` | `9` | Contas: vão entre o tile e o nome da marca |
+| `size.auth.marcaBottom` | `22` | Contas: vão entre a marca e o cartão |
+| `size.auth.cardRadius` | `20` | Contas: raio do cartão creme |
+| `size.auth.cardTop` | `22` | Contas: recuo de cima dentro do cartão |
+| `size.auth.cardSide` | `19` | Contas: recuo dos lados dentro do cartão |
+| `size.auth.cardBottom` | `20` | Contas: recuo de baixo dentro do cartão |
+| `size.auth.subtituloTop` | `5` | Contas: vão entre o título e o subtítulo |
+| `size.auth.formTop` | `4` | Contas: vão entre o subtítulo e o formulário |
+| `size.auth.rodapeTop` | `28` | Contas: vão mínimo entre o cartão e o rodapé |
+| `size.auth.barra` | `59` | Contas: altura mínima da barra de vidro do rodapé |
+| `size.auth.barraLeft` | `17` | Contas: recuo do texto na barra de vidro |
+| `size.auth.barraRight` | `9` | Contas: recuo da pastilha na barra de vidro |
+| `size.auth.barraGap` | `9` | Contas: vão entre o texto e a pastilha da barra |
+| `size.auth.barraRadius` | `17` | Contas: raio da barra de vidro |
+| `size.auth.pilula` | `42` | Contas: altura da pastilha de ação |
+| `size.auth.pilulaSide` | `15` | Contas: recuo dos lados da pastilha |
+| `size.auth.pilulaRadius` | `14` | Contas: raio da pastilha |
+| `size.auth.linkVolta` | `9` | Contas: recuo do link de voltar |
+| `size.auth.notaTop` | `15` | Contas: distância da nota do cadeado até o que vem antes |
+| `size.auth.notaGap` | `6` | Contas: vão entre o cadeado e o texto da nota |
+| `size.auth.notaIcon` | `13` | Contas: cadeado da nota |
+| `size.auth.check` | `21` | Contas: caixinha "Lembrar-me" |
+| `size.auth.checkRadius` | `6` | Contas: raio da caixinha "Lembrar-me" |
+| `size.auth.checkIcon` | `13` | Contas: visto da caixinha "Lembrar-me" |
+| `size.auth.checkGap` | `7` | Contas: vão entre a caixinha e o texto |
+| `size.auth.linhaTop` | `14` | Contas: distância da linha "Lembrar-me" / "Esqueci minha senha" até os campos |
+| `size.auth.linhaGap` | `10` | Contas: vão entre "Lembrar-me" e "Esqueci minha senha" |
+| `size.auth.medidorBarra` | `4` | Contas: altura de cada barra do medidor de força |
+| `size.auth.medidorGap` | `3` | Contas: vão entre as barras do medidor |
+| `size.auth.medidorTop` | `7` | Contas: distância do medidor até o campo de senha |
+| `size.auth.medidorRotuloGap` | `6` | Contas: vão entre as barras e o rótulo do medidor |
 | `size.suggestions.maxHeight` | `212` | Sugestões de endereço: altura máxima da lista (o resto rola) |
 | `size.suggestions.padding` | `3` | Sugestões de endereço: recuo da lista |
 | `size.suggestions.gap` | `4` | Sugestões de endereço: vão entre o campo e a lista |
@@ -1207,6 +1273,7 @@ O teste `valores-soltos.test.ts` mantém uma lista de arquivos com valores visua
 | 21/09/2026 | **Folha "Minha conta"** (`ContaSheet`) abre pelo botão de conta da lista e do formulário, no lugar do desvio para Configurações; ícone das linhas centrado no círculo | É o que a imagem `05` mostra. O glifo no alto do círculo na captura é um efeito de CSS que o próprio original não pretendia (a imagem `11` o centraliza) |
 | 21/09/2026 | O aviso de erro (`Banner` `error`) passa de `#FFE6E6`/`#C62828` para `#FDF0EE`/`#8E2418` (`colors.feedback.errorBg` e `errorInk`), em todas as telas | É o vermelho do aviso de erro do original nas telas de conta e nas configurações; o par dá mais contraste que o anterior e está na tabela testada |
 | 21/09/2026 | **Configurações** no visual da imagem `08`, com a lógica do app (permissão, monitoramento, notificações, chegadas, excluir conta); sem o cartão "Instalar o app"; "Permitir" das notificações também não existe (o estado só sabe se está permitida); os limites do monitoramento foram reescritos para o app (a frase do original manda "usar um app nativo") | O original é um app web instalável; no Expo o estado real é "permitida" ou "não", sem "ainda não pedida", e o que a tela afirma tem de ser verdade nas duas plataformas |
+| 21/09/2026 | **Telas de conta** no visual da imagem `02` (`AuthLayout`: fundo verde com curvas de nível, cartão creme, barra de vidro, nota do cadeado); "Lembrar-me" vira caixinha e o medidor de força entra no cadastro e na redefinição; a recuperação continua por código | O original recupera por link e não mostra o medidor na imagem, mas o app já recuperava por código e já tinha a regra de força; o horizonte do rodapé precisa de arte que não existe pré-renderizada |
 
 ## 19. Pendências
 

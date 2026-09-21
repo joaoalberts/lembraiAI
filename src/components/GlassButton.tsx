@@ -3,12 +3,13 @@ import { anelDeFocoNoEscuro, type EstadoDeToque } from '../design/foco';
 import { borderWidth, colors, fontFamily, iconStroke, motion, radius, size, space, textStyles } from '../design/tokens';
 import { Icon, type IconeNome } from './Icon';
 
-/** `cabecalho` = os botões do cabeçalho verde (busca, conta); `fechar` = o X menor, mais grosso, da tela de sucesso. */
-type TamanhoDoVidro = 'cabecalho' | 'fechar';
+/** `cabecalho` = os botões do cabeçalho verde (busca, conta); `fechar` = o X menor, mais grosso, da tela de sucesso; `voltar` = a seta das telas de conta. */
+type TamanhoDoVidro = 'cabecalho' | 'fechar' | 'voltar';
 
 const MEDIDAS: Record<TamanhoDoVidro, { lado: number; icone: number; traco: number }> = {
   cabecalho: { lado: size.glassButton, icone: size.icon.md, traco: iconStroke.ui },
   fechar: { lado: size.sucesso.fechar, icone: size.sucesso.fecharIcon, traco: iconStroke.action },
+  voltar: { lado: size.auth.voltar, icone: size.auth.voltarIcon, traco: iconStroke.action },
 };
 
 interface GlassButtonProps {

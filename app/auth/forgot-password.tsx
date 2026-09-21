@@ -36,7 +36,7 @@ export default function ForgotPasswordScreen() {
 
   if (enviado) {
     return (
-      <AuthLayout>
+      <AuthLayout voltar={() => router.navigate('/auth/login')} rodape={{ acao: 'Voltar para entrar', onPress: () => router.navigate('/auth/login') }}>
         <View style={styles.successBox}>
           {/* decorativo: o título logo abaixo já diz o que aconteceu */}
           <View style={styles.successIcon} accessibilityElementsHidden importantForAccessibility="no-hide-descendants">
@@ -57,19 +57,23 @@ export default function ForgotPasswordScreen() {
             label="Digitar o código"
             onPress={() => router.push({ pathname: '/auth/reset-password', params: { email: email.trim() } })}
           />
-          <Button label="Voltar para o login" onPress={() => router.navigate('/auth/login')} variant="ghost" />
         </View>
       </AuthLayout>
     );
   }
 
   return (
-    <AuthLayout title="Recuperar Senha" subtitle="Digite seu e-mail para receber um código">
-      {error !== '' && <Banner variant="error" style={styles.aviso}>{error}</Banner>}
+    <AuthLayout
+      title="Recuperar senha"
+      subtitle="Digite seu e-mail para receber um código."
+      voltar={() => router.navigate('/auth/login')}
+      rodape={{ acao: 'Voltar para entrar', onPress: () => router.navigate('/auth/login') }}
+    >
+      {error !== '' && <Banner variant="error" icon="triangle-alert" style={styles.aviso}>{error}</Banner>}
 
       <TextField
         label="E-mail"
-        placeholder="seu@email.com"
+        placeholder="nome@dominio.com"
         value={email}
         onChangeText={setEmail}
         keyboardType="email-address"
@@ -79,19 +83,13 @@ export default function ForgotPasswordScreen() {
 
       <View style={styles.actions}>
         <Button
-          label={loading ? 'Enviando...' : 'Enviar código'}
-          onPress={handleRequest}
+          label={loading ? 'Enviando…' : 'Enviar código'}
+          onPress={() => void handleRequest()}
           disabled={loading}
         />
         <Button
           label="Já tenho um código"
           onPress={() => router.push({ pathname: '/auth/reset-password', params: email.trim() ? { email: email.trim() } : {} })}
-          variant="ghost"
-          disabled={loading}
-        />
-        <Button
-          label="Voltar para Login"
-          onPress={() => router.navigate('/auth/login')}
           variant="ghost"
           disabled={loading}
         />

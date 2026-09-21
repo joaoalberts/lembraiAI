@@ -25,6 +25,7 @@ import Lightbulb from 'lucide-react-native/icons/lightbulb';
 import List from 'lucide-react-native/icons/list';
 import LoaderCircle from 'lucide-react-native/icons/loader-circle';
 import LocateFixed from 'lucide-react-native/icons/locate-fixed';
+import Lock from 'lucide-react-native/icons/lock';
 import LogOut from 'lucide-react-native/icons/log-out';
 import Mail from 'lucide-react-native/icons/mail';
 import MailCheck from 'lucide-react-native/icons/mail-check';
@@ -77,6 +78,7 @@ export const ICONES = {
   list: List,
   'loader-circle': LoaderCircle,
   'locate-fixed': LocateFixed,
+  lock: Lock,
   'log-out': LogOut,
   mail: Mail,
   'mail-check': MailCheck,

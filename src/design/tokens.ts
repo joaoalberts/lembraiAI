@@ -120,6 +120,10 @@ export const palette = {
   sucessoDado: '#F7F5F3',
   sucessoDadoAnel: '#E6E5E4',
   sucessoSeloAnel: '#DCEBE2',
+  // Telas de conta (imagem 02): pastilha e link sobre o verde, e a barra do meio do medidor de força
+  contaPilula: '#A9F7D4',
+  contaLink: '#9FF3D0',
+  medidorMedio: '#E8A33D',
 } as const;
 
 /** Cores por papel. É isto que as telas e os componentes usam. */
@@ -237,6 +241,20 @@ export const colors = {
     dadoAnel: palette.sucessoDadoAnel,
     seloAnel: palette.sucessoSeloAnel,
   },
+  /** Telas de conta (imagem 02): a barra de vidro do rodapé, a pastilha e o link sobre o verde, a nota do cadeado e o medidor de força da senha. */
+  conta: {
+    barra: 'rgba(255, 255, 255, 0.06)',
+    barraAnel: 'rgba(190, 255, 228, 0.18)',
+    pergunta: palette.onDark200,
+    pilula: 'rgba(159, 243, 208, 0.15)',
+    pilulaAnel: 'rgba(159, 243, 208, 0.28)',
+    pilulaTexto: palette.contaPilula,
+    link: palette.contaLink,
+    nota: palette.onDark300,
+    medidorFraco: palette.danger,
+    medidorMedio: palette.medidorMedio,
+    medidorForte: palette.statusGreen,
+  },
   /** Barra de abas: rótulo e ícone da aba inativa, e o traço "home" do iOS por baixo. */
   tab: { background: palette.tabBarBg, inactive: palette.tabInactive, activeIcon: palette.tabActiveIcon, indicator: palette.homeIndicator },
   /** Vidro sobre o verde escuro dos cabeçalhos: um véu branco quase transparente com borda (o desfoque não aparece sobre um verde quase liso). */
@@ -307,6 +325,9 @@ export const fontSize = {
   /** Título ("Lembrete criado com sucesso!", 60,5 du) e subtítulo (29 du) da tela de sucesso, fora da escala das telas comuns. O título fica fora de `textStyles`, como o do Onboarding: a altura de linha do original é 1,03 (`lineHeight.sucessoTitulo`), aceitável porque as duas linhas fixas não têm descendentes. */
   sucessoTitulo: du(60.5),
   sucessoSubtitulo: du(29),
+  /** Título do cartão das telas de conta (46 du no app web) e o nome da marca acima dele (32 du). */
+  contaTitulo: du(46),
+  contaMarca: du(32),
 } as const;
 
 export const lineHeight = {
@@ -319,6 +340,7 @@ export const lineHeight = {
   display: 34,
   sucessoTitulo: du(64),
   sucessoSubtitulo: du(42),
+  contaTitulo: du(55),
 } as const;
 
 /** Reserva da web: o texto aparece na fonte do sistema (e não em Times) enquanto a fonte da marca chega. */
@@ -511,6 +533,52 @@ export const size = {
     listIndent: du(26),
     listGap: du(10),
   },
+  /**
+   * Base das telas de conta (imagem 02; medidas do app web em du): recuos da tela, botão de voltar, marca, cartão, rodapé (barra
+   * de vidro, pastilha, nota), caixinha "Lembrar-me" e o medidor de força da senha.
+   */
+  auth: {
+    side: du(38),
+    top: du(96),
+    bottom: du(60),
+    voltar: du(72),
+    voltarIcon: du(36),
+    voltarTop: du(40),
+    marcaTile: du(64),
+    marcaRadius: du(22),
+    marcaIcon: du(36),
+    marcaGap: du(18),
+    marcaBottom: du(44),
+    cardRadius: du(40),
+    cardTop: du(44),
+    cardSide: du(38),
+    cardBottom: du(40),
+    subtituloTop: du(10),
+    formTop: du(8),
+    rodapeTop: du(56),
+    barra: du(116),
+    barraLeft: du(34),
+    barraRight: du(18),
+    barraGap: du(18),
+    barraRadius: du(34),
+    pilula: du(84),
+    pilulaSide: du(30),
+    pilulaRadius: du(28),
+    linkVolta: du(18),
+    notaTop: du(30),
+    notaGap: du(12),
+    notaIcon: du(26),
+    check: du(42),
+    checkRadius: du(12),
+    checkIcon: du(26),
+    checkGap: du(14),
+    linhaTop: du(28),
+    linhaGap: du(20),
+    medidorBarra: du(8),
+    medidorGap: du(6),
+    medidorTop: du(14),
+    medidorRotuloGap: du(12),
+  },
   /** Sugestões da busca de endereço: altura máxima da lista, recuo das linhas e vão até o campo. */
   suggestions: { maxHeight: du(420), padding: du(6), gap: du(8) },
   /** Lista "Meus lembretes": chips, cabeçalhos de seção e vãos entre cartões e seções (medidas do app web em du). */
@@ -638,6 +706,8 @@ export const shadow = {
   slider: '0px 2px 6px rgba(0, 0, 0, 0.25)',
   /** Lista de sugestões da busca de endereço: anel cinza por dentro e sombra funda por baixo. */
   suggestions: '0px 6px 16px rgba(20, 40, 30, 0.18), inset 0px 0px 0px 1px rgba(231, 232, 234, 1)',
+  /** Cartão creme das telas de conta, flutuando sobre o verde. */
+  cartaoDeConta: '0px 12px 30px rgba(6, 32, 20, 0.3)',
   /** Campo de texto com erro: o anel de campo vira vermelho (o da caixa) e, com foco, ganha o halo vermelho. */
   campoErro: 'inset 0px 0px 0px 2px rgba(212, 58, 42, 1), 0px 1px 2px rgba(20, 40, 30, 0.03)',
   campoErroFoco: 'inset 0px 0px 0px 2px rgba(212, 58, 42, 1), 0px 0px 0px 4px rgba(212, 58, 42, 0.16)',

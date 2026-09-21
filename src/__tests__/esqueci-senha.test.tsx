@@ -1,5 +1,6 @@
 import { fireEvent, render, screen } from '@testing-library/react-native';
 import ForgotPasswordScreen from '../../app/auth/forgot-password';
+import { comAreaSegura } from '../test-utils/area-segura';
 
 const mockPedirRedefinicao = jest.fn();
 jest.mock('expo-router', () => ({ router: { push: jest.fn(), navigate: jest.fn() } }));
@@ -14,8 +15,8 @@ describe('Esqueci minha senha', () => {
 
   it('depois de pedir o código, orienta o que fazer se o e-mail não chegar', async () => {
     mockPedirRedefinicao.mockResolvedValue('');
-    await render(<ForgotPasswordScreen />);
-    await fireEvent.changeText(screen.getByPlaceholderText('seu@email.com'), 'pessoa@exemplo.com');
+    await render(comAreaSegura(<ForgotPasswordScreen />));
+    await fireEvent.changeText(screen.getByPlaceholderText('nome@dominio.com'), 'pessoa@exemplo.com');
     await fireEvent.press(screen.getByText('Enviar código'));
 
     expect(await screen.findByText('Confira seu e-mail')).toBeTruthy();
@@ -25,8 +26,8 @@ describe('Esqueci minha senha', () => {
 
   it('se o pedido falhar, mostra o erro e NÃO a tela de "confira seu e-mail"', async () => {
     mockPedirRedefinicao.mockResolvedValue('Sem conexão com o servidor. Verifique sua internet.');
-    await render(<ForgotPasswordScreen />);
-    await fireEvent.changeText(screen.getByPlaceholderText('seu@email.com'), 'pessoa@exemplo.com');
+    await render(comAreaSegura(<ForgotPasswordScreen />));
+    await fireEvent.changeText(screen.getByPlaceholderText('nome@dominio.com'), 'pessoa@exemplo.com');
     await fireEvent.press(screen.getByText('Enviar código'));
 
     expect(await screen.findByText('Sem conexão com o servidor. Verifique sua internet.')).toBeTruthy();

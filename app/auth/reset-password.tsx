@@ -4,11 +4,10 @@ import { router, useLocalSearchParams } from 'expo-router';
 import { AuthLayout } from '../../src/components/AuthLayout';
 import { Banner } from '../../src/components/Banner';
 import { Button } from '../../src/components/Button';
+import { MedidorDeSenha } from '../../src/components/MedidorDeSenha';
 import { TextField } from '../../src/components/TextField';
-import { space } from '../../src/design/tokens';
-import {
-  CODIGO_TAMANHO, MIN_SENHA, forcaDaSenha, validarCodigo, validarConfirmacao, validarEmail, validarSenha,
-} from '../../src/lib/validacao';
+import { size, space } from '../../src/design/tokens';
+import { CODIGO_TAMANHO, validarCodigo, validarConfirmacao, validarEmail, validarSenha } from '../../src/lib/validacao';
 import { useAuth } from '../../src/state/auth';
 
 /**
@@ -66,8 +65,8 @@ export default function ResetPasswordScreen() {
 
   if (recuperando) {
     return (
-      <AuthLayout title="Nova senha" subtitle="Escolha a senha que vai usar para entrar" keyboardShouldPersistTaps="handled">
-        {error !== '' && <Banner variant="error" style={styles.aviso}>{error}</Banner>}
+      <AuthLayout title="Nova senha" subtitle="Escolha a senha que vai usar para entrar." keyboardShouldPersistTaps="handled" rodape={{ acao: 'Cancelar', onPress: voltar }}>
+        {error !== '' && <Banner variant="error" icon="triangle-alert" style={styles.aviso}>{error}</Banner>}
 
         <TextField
           label="Nova senha"
@@ -76,9 +75,10 @@ export default function ResetPasswordScreen() {
           onChangeText={setSenha}
           secureTextEntry
           autoComplete="new-password"
-          hint={senha ? forcaDaSenha(senha).rotulo : `Mínimo de ${MIN_SENHA} caracteres, com letras e números.`}
+          hint="Pelo menos 8 caracteres, com letras e números."
           editable={!loading}
         />
+        <MedidorDeSenha senha={senha} />
         <TextField
           label="Confirmar senha"
           placeholder="Repita a senha"
@@ -90,8 +90,7 @@ export default function ResetPasswordScreen() {
         />
 
         <View style={styles.actions}>
-          <Button label={loading ? 'Salvando...' : 'Salvar nova senha'} onPress={salvarSenha} disabled={loading} />
-          <Button label="Cancelar" onPress={voltar} variant="ghost" disabled={loading} />
+          <Button label={loading ? 'Salvando…' : 'Salvar nova senha'} onPress={() => void salvarSenha()} disabled={loading} />
         </View>
       </AuthLayout>
     );
@@ -100,14 +99,16 @@ export default function ResetPasswordScreen() {
   return (
     <AuthLayout
       title="Redefinir senha"
-      subtitle={token_hash ? 'Validando o link do e-mail...' : `Digite o código de ${CODIGO_TAMANHO} números que enviamos por e-mail`}
+      subtitle={token_hash ? 'Validando o link do e-mail…' : `Digite o código de ${CODIGO_TAMANHO} números que enviamos por e-mail.`}
       keyboardShouldPersistTaps="handled"
+      voltar={() => router.replace('/auth/login')}
+      rodape={{ acao: 'Voltar para entrar', onPress: voltar }}
     >
-      {error !== '' && <Banner variant="error" style={styles.aviso}>{error}</Banner>}
+      {error !== '' && <Banner variant="error" icon="triangle-alert" style={styles.aviso}>{error}</Banner>}
 
       <TextField
         label="E-mail"
-        placeholder="seu@email.com"
+        placeholder="nome@dominio.com"
         value={email}
         onChangeText={setEmail}
         keyboardType="email-address"
@@ -126,15 +127,14 @@ export default function ResetPasswordScreen() {
       />
 
       <View style={styles.actions}>
-        <Button label={loading ? 'Verificando...' : 'Verificar código'} onPress={verificarCodigo} disabled={loading} />
+        <Button label={loading ? 'Verificando…' : 'Verificar código'} onPress={() => void verificarCodigo()} disabled={loading} />
         <Button label="Pedir um novo código" onPress={() => router.replace('/auth/forgot-password')} variant="ghost" disabled={loading} />
-        <Button label="Voltar para o login" onPress={voltar} variant="ghost" disabled={loading} />
       </View>
     </AuthLayout>
   );
 }
 
 const styles = StyleSheet.create({
-  aviso: { marginBottom: space.xl },
-  actions: { marginTop: space.sm, gap: space.md },
+  aviso: { marginTop: size.campo.top },
+  actions: { marginTop: size.auth.linhaTop, gap: space.md },
 });
