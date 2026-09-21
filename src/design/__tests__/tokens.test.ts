@@ -1,4 +1,4 @@
-import { borderWidth, colors, fontSize, layout, lineHeight, opacity, palette, radius, shadow, size, space, textStyles } from '../tokens';
+import { borderWidth, colors, fontSize, layout, lineHeight, motion, opacity, palette, radius, shadow, size, space, textStyles } from '../tokens';
 
 const HEX = /^#[0-9A-F]{6}$/;
 
@@ -95,8 +95,14 @@ describe('sombras e layout', () => {
     }
   });
 
-  it('a coluna do app e a medida de leitura têm teto (a web mostra uma coluna de celular centralizada)', () => {
-    expect(layout.columnMax).toBe(560);
+  it('a coluna do app tem a largura das capturas de referência (430) e a medida de leitura é maior (a web mostra uma coluna de celular centralizada)', () => {
+    expect(layout.columnMax).toBe(430);
     expect(layout.readingMax).toBeGreaterThan(layout.columnMax);
+  });
+
+  it('a folha inferior ocupa no máximo uma fração da tela e a curva de entrada fica entre 0 e 1', () => {
+    expect(layout.sheetMaxHeight).toBeGreaterThan(0);
+    expect(layout.sheetMaxHeight).toBeLessThan(1);
+    expect([motion.curve.x1, motion.curve.x2].every((v) => v >= 0 && v <= 1)).toBe(true);
   });
 });

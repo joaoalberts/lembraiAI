@@ -86,13 +86,14 @@ export const palette = {
   onDark400: '#A7B9B0',
   tabInactive: '#777C8A',
   homeIndicator: '#B7B3AE',
+  tabBarBg: '#F8F8F4',
 } as const;
 
 /** Cores por papel. É isto que as telas e os componentes usam. */
 export const colors = {
   bg: {
     page: palette.cream200,
-    stage: palette.sand,
+    stage: palette.forest950,
     card: palette.cream100,
     field: palette.white,
     disabled: palette.cream200,
@@ -167,7 +168,7 @@ export const colors = {
   /** Selo "Ativo" do lembrete. */
   status: { active: palette.statusGreen },
   /** Barra de abas: rótulo e ícone da aba inativa, e o traço "home" do iOS por baixo. */
-  tab: { inactive: palette.tabInactive, indicator: palette.homeIndicator },
+  tab: { background: palette.tabBarBg, inactive: palette.tabInactive, indicator: palette.homeIndicator },
   /** Vidro sobre o verde escuro dos cabeçalhos: um véu branco quase transparente com borda (o desfoque não aparece sobre um verde quase liso). */
   glass: {
     fill: 'rgba(255, 255, 255, 0.05)',
@@ -182,7 +183,7 @@ export const colors = {
     glyph: palette.brandInk,
   },
   spinner: palette.forest700,
-  overlay: 'rgba(0, 0, 0, 0.4)',
+  overlay: 'rgba(13, 42, 27, 0.46)',
   map: {
     me: palette.mapBlue,
     ring: palette.white,
@@ -285,7 +286,8 @@ export const radius = {
   sm: 8,
   md: 12,
   lg: 16,
-  sheet: 20,
+  /** Cantos altos das folhas (38 du no original). */
+  sheet: du(38),
   pill: 999,
 } as const;
 
@@ -307,6 +309,8 @@ export const size = {
   icon: { sm: 16, md: 20, lg: 24, xl: 40 },
   /** Pino do mapa no formulário (58 × 73 du no original). A ponta fica no meio da base. */
   mapPin: { width: du(58), height: du(73) },
+  /** Folha inferior: espaços internos, alça e o vão entre a alça e o título (medidas do CSS do app web em du). */
+  sheet: { paddingTop: du(22), paddingHorizontal: du(40), paddingBottom: du(70), handleWidth: du(96), handleHeight: du(8), handleGap: du(28) },
 } as const;
 
 export const opacity = {
@@ -321,6 +325,9 @@ export const shadow = {
   float: '0px 1px 4px rgba(0, 0, 0, 0.16)',
   cta: '0px 8px 24px rgba(254, 83, 42, 0.3)',
   focus: '0px 0px 0px 3px rgba(24, 92, 75, 0.15)',
+  sheet: '0px -5px 20px rgba(13, 42, 27, 0.18)',
+  tabBar: '0px -1px 0px rgba(20, 40, 30, 0.05), 0px -3px 9px rgba(20, 40, 30, 0.03)',
+  column: '0px 24px 70px rgba(0, 0, 0, 0.5)',
 } as const;
 
 /**
@@ -353,11 +360,16 @@ export const gradients = {
 } as const;
 
 export const motion = {
-  duration: { fast: 120, base: 200, slow: 300 },
+  duration: { fast: 120, base: 200, slow: 300, scrim: 180, sheet: 260 },
+  /** Curva de entrada das folhas: cubic-bezier(.2, .8, .2, 1) do original. */
+  curve: { x1: 0.2, y1: 0.8, x2: 0.2, y2: 1 },
   pressedScale: 0.98,
 } as const;
 
 export const layout = {
-  columnMax: 560,
+  /** A coluna de celular é a das capturas de referência: 430. */
+  columnMax: 430,
   readingMax: 720,
+  /** Altura máxima de uma folha inferior, como fração da tela (82% no original). */
+  sheetMaxHeight: 0.82,
 } as const;

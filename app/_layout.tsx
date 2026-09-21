@@ -91,6 +91,6 @@ export default function RootLayout() {
 
 const styles = StyleSheet.create({
   page: { flex: 1, alignItems: 'center', backgroundColor: colors.bg.stage },
-  column: { flex: 1, width: '100%', maxWidth: layout.columnMax, backgroundColor: colors.bg.page, boxShadow: shadow.float },
+  column: { flex: 1, width: '100%', maxWidth: layout.columnMax, backgroundColor: colors.bg.page, boxShadow: shadow.column },
   loading: { flex: 1, alignItems: 'center', justifyContent: 'center', backgroundColor: colors.bg.page },
 });

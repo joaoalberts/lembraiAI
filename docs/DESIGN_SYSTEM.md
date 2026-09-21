@@ -133,6 +133,7 @@ Use `palette.*` só para definir papéis em `colors`. As telas usam os papéis (
 | `palette.onDark400` | `#A7B9B0` | Texto sobre verde escuro: o mais suave |
 | `palette.tabInactive` | `#777C8A` | Rótulo e ícone da aba inativa (medido nas capturas) |
 | `palette.homeIndicator` | `#B7B3AE` | Traço "home" do iOS sob a barra de abas |
+| `palette.tabBarBg` | `#F8F8F4` | Fundo da barra de abas |
 <!-- tokens:cores-primitivas:fim -->
 
 ### 3.2 Papéis
@@ -141,7 +142,7 @@ Use `palette.*` só para definir papéis em `colors`. As telas usam os papéis (
 | Token | Valor | Vem da paleta | Uso |
 |---|---|---|---|
 | `colors.bg.page` | `#F5F2ED` | `palette.cream200` | Fundo de todas as telas |
-| `colors.bg.stage` | `#E8E4DC` | `palette.sand` | Palco atrás da coluna do app na web (tablet e computador) |
+| `colors.bg.stage` | `#0D2A1B` | `palette.forest950` | Palco atrás da coluna do app na web (tablet e computador) |
 | `colors.bg.card` | `#FAF9F6` | `palette.cream100` | Superfície de cartões e da barra de abas |
 | `colors.bg.field` | `#FFFFFF` | `palette.white` | Campos de formulário, painéis e folhas |
 | `colors.bg.disabled` | `#F5F2ED` | `palette.cream200` | Campo desabilitado |
@@ -201,6 +202,7 @@ Use `palette.*` só para definir papéis em `colors`. As telas usam os papéis (
 | `colors.feedback.errorInk` | `#8E2418` | `palette.alertErrorInk` | Texto do aviso de erro nas configurações |
 | `colors.feedback.infoInk` | `#1B4436` | `palette.alertInfoInk` | Texto do aviso informativo |
 | `colors.status.active` | `#029554` | `palette.statusGreen` | Ponto do selo "Ativo" |
+| `colors.tab.background` | `#F8F8F4` | `palette.tabBarBg` | Fundo da barra de abas |
 | `colors.tab.inactive` | `#777C8A` | `palette.tabInactive` | Rótulo e ícone da aba inativa |
 | `colors.tab.indicator` | `#B7B3AE` | `palette.homeIndicator` | Traço "home" do iOS sob a barra de abas |
 | `colors.glass.fill` | `rgba(255, 255, 255, 0.05)` | — | Véu do botão de vidro sobre o verde escuro |
@@ -211,7 +213,7 @@ Use `palette.*` só para definir papéis em `colors`. As telas usam os papéis (
 | `colors.brand.tileEnd` | `#78E4C4` | `palette.mintBrandEnd` | Fim do degradê do ícone do app |
 | `colors.brand.glyph` | `#043525` | `palette.brandInk` | Símbolo do ícone do app |
 | `colors.spinner` | `#185C4B` | `palette.forest700` | Indicador de carregamento sobre fundo claro |
-| `colors.overlay` | `rgba(0, 0, 0, 0.4)` | — | Véu atrás de modais e folhas |
+| `colors.overlay` | `rgba(13, 42, 27, 0.46)` | — | Véu atrás de modais e folhas |
 | `colors.map.me` | `#2F80ED` | `palette.mapBlue` | Posição atual da pessoa no mapa |
 | `colors.map.ring` | `#FFFFFF` | `palette.white` | Aro branco em volta dos marcadores do mapa |
 | `colors.map.paused` | `#828890` | `palette.mapGray` | Marcador de lembrete pausado no mapa |
@@ -345,7 +347,7 @@ Grade de 4 (o meio-passo de 2 só para ajuste fino).
 | `radius.sm` | `8` | Avisos e miniaturas |
 | `radius.md` | `12` | Campos, cartões e controles retangulares |
 | `radius.lg` | `16` | Painéis grandes |
-| `radius.sheet` | `20` | Topo de folhas e modais |
+| `radius.sheet` | `19` | Topo de folhas e modais |
 | `radius.pill` | `999` | Botões, chips e círculos |
 <!-- tokens:raios:fim -->
 
@@ -371,12 +373,15 @@ O desenho é quase plano. Toda sombra é o `boxShadow` em texto (aceito pela New
 | Token | Valor (`boxShadow`) | Uso |
 |---|---|---|
 | `shadow.card` | `0px 1px 3px rgba(20, 40, 30, 0.05), 0px 4px 12px rgba(20, 40, 30, 0.04)` | Cartões e painéis (quase plano) |
-| `shadow.float` | `0px 1px 4px rgba(0, 0, 0, 0.16)` | Controles flutuantes e folhas |
+| `shadow.float` | `0px 1px 4px rgba(0, 0, 0, 0.16)` | Controles flutuantes |
 | `shadow.cta` | `0px 8px 24px rgba(254, 83, 42, 0.3)` | Brilho laranja do botão primário |
 | `shadow.focus` | `0px 0px 0px 3px rgba(24, 92, 75, 0.15)` | Halo de 3 em volta do campo em foco, sobre a borda `colors.border.focus` |
+| `shadow.sheet` | `0px -5px 20px rgba(13, 42, 27, 0.18)` | Folha inferior (sombra para cima) |
+| `shadow.tabBar` | `0px -1px 0px rgba(20, 40, 30, 0.05), 0px -3px 9px rgba(20, 40, 30, 0.03)` | Barra de abas: filete e sombra para cima |
+| `shadow.column` | `0px 24px 70px rgba(0, 0, 0, 0.5)` | Coluna do app sobre o palco escuro, na web (tablet e computador) |
 <!-- tokens:sombras:fim -->
 
-- `shadow.card` nos cartões e painéis; `shadow.float` nos controles flutuantes e na coluna da web; `shadow.cta` só no botão primário habilitado; `shadow.focus` como halo do campo em foco.
+- `shadow.card` nos cartões e painéis; `shadow.float` nos controles flutuantes; `shadow.sheet` nas folhas inferiores; `shadow.tabBar` na barra de abas; `shadow.column` na coluna da web; `shadow.cta` só no botão primário habilitado; `shadow.focus` como halo do campo em foco.
 - Sombra dá profundidade, nunca informação: nada pode depender dela para ser entendido.
 
 ### 7.1 Degradês
@@ -515,7 +520,7 @@ Véu `colors.overlay`; folha `colors.bg.field` com `radius.sheet` no topo, paddi
 
 ### 11.7 Coluna da web
 
-No navegador o app vive numa coluna de celular centralizada (como o frame do app web): `layout.columnMax` de largura máxima, fundo `colors.bg.page`, sombra `shadow.float`, sobre o palco `colors.bg.stage`. No iOS e no Android ocupa a tela toda.
+No navegador o app vive numa coluna de celular centralizada (como o frame do app web): `layout.columnMax` (430, a largura das capturas) de largura máxima, fundo `colors.bg.page`, sombra `shadow.column`, sobre o palco escuro `colors.bg.stage` (o verde mais fundo da marca). No iOS e no Android ocupa a tela toda.
 
 ## 12. Imagens e ilustrações
 
@@ -535,7 +540,13 @@ Filosofia: o mínimo. O feedback de toque é instantâneo (troca de cor e escala
 |---|---|---|
 | `motion.duration.fast` | `120` | Feedback de toque (ms) |
 | `motion.duration.base` | `200` | Troca de estado (ms) |
-| `motion.duration.slow` | `300` | Entrada de folhas e modais (ms) |
+| `motion.duration.slow` | `300` | Entrada de modais (ms) |
+| `motion.duration.scrim` | `180` | Entrada do véu atrás de uma folha (ms) |
+| `motion.duration.sheet` | `260` | Subida de uma folha inferior (ms) |
+| `motion.curve.x1` | `0.2` | Curva de entrada das folhas: cubic-bezier(x1, y1, x2, y2) |
+| `motion.curve.y1` | `0.8` | Curva de entrada das folhas: cubic-bezier(x1, y1, x2, y2) |
+| `motion.curve.x2` | `0.2` | Curva de entrada das folhas: cubic-bezier(x1, y1, x2, y2) |
+| `motion.curve.y2` | `1` | Curva de entrada das folhas: cubic-bezier(x1, y1, x2, y2) |
 | `motion.pressedScale` | `0.98` | Escala do botão pressionado |
 <!-- tokens:movimento:fim -->
 
@@ -574,8 +585,15 @@ Filosofia: o mínimo. O feedback de toque é instantâneo (troca de cor e escala
 | `size.icon.xl` | `40` | Ícone do estado vazio |
 | `size.mapPin.width` | `29` | Largura do pino do mapa no formulário |
 | `size.mapPin.height` | `37` | Altura do pino do mapa no formulário (a ponta marca o local) |
-| `layout.columnMax` | `560` | Largura máxima da coluna do app na web; no celular a coluna é a tela toda |
+| `size.sheet.paddingTop` | `11` | Folha inferior: espaço acima da alça |
+| `size.sheet.paddingHorizontal` | `20` | Folha inferior: margem dos lados |
+| `size.sheet.paddingBottom` | `35` | Folha inferior: espaço embaixo (a barra home do iOS) |
+| `size.sheet.handleWidth` | `49` | Alça da folha: largura (só enfeite, não arrasta) |
+| `size.sheet.handleHeight` | `4` | Alça da folha: altura |
+| `size.sheet.handleGap` | `14` | Vão entre a alça e o título da folha |
+| `layout.columnMax` | `430` | Largura máxima da coluna do app na web (a das capturas de referência); no celular a coluna é a tela toda |
 | `layout.readingMax` | `720` | Largura máxima de texto corrido (política de privacidade) |
+| `layout.sheetMaxHeight` | `0.82` | Altura máxima de uma folha inferior, como fração da tela |
 <!-- tokens:tamanhos:fim -->
 
 - Texto corrido (política de privacidade) tem no máximo `layout.readingMax` de largura.
@@ -724,6 +742,7 @@ O teste `valores-soltos.test.ts` mantém uma lista de arquivos com valores visua
 | 21/09/2026 | Na web a fonte nunca bloqueia a renderização e leva uma pilha de reserva do sistema; iOS e Android seguram a abertura até as fontes chegarem | O HTML estático das páginas públicas precisa sair com texto; sem a reserva o navegador cairia em Times até a fonte chegar |
 | 21/09/2026 | **As 15 imagens de `referencias/` são a fonte de verdade visual** (cópia integral e conferida por SHA-256 das capturas do João). A paleta foi medida contra elas: 21 de 29 pontos batem com os tokens (ΔE ≤ 1,5); 4 valores existem só no app web e 4 são fundos em degradê (`referencias/MEDICOES.md`) | O João entregou todas as imagens do app e pediu o Design System "em cima" delas. Converter o perfil de cor da tela para sRGB evitou comparar o laranja cru `#EB603C` das capturas com o token `#FE532A` |
 | 21/09/2026 | **Escala:** tamanhos fixos em dp derivados das imagens (`dp = du × 430 / 851`), layout flexível na largura, texto nunca abaixo de 12; a coluna da web volta a 430. **Ainda não aplicada:** entra com cada tela | As capturas são de uma coluna de 430 px. Fixo e com piso de 12 mantém a leitura e o tamanho de fonte do sistema; o app web escalava tudo pela largura e chegava a 9 |
+| 21/09/2026 | **Tokens da folha, da barra de abas e do palco:** `radius.sheet` 19, `size.sheet.*` (alça de 49 por 4), `shadow.sheet`/`tabBar`/`column`, véu `colors.overlay` verde-escuro a 46%, `colors.bg.stage` verde `#0D2A1B` (era areia), `layout.columnMax` 430 (era 560), tempos e curva das folhas (`motion.duration.scrim/sheet`, `motion.curve.*`) | Valores do CSS do app web (`../lembreiAI`, versão do disco). A conferência lado a lado com as capturas acontece quando cada folha e a barra de abas entram nas telas, nos próximos commits |
 
 ## 19. Pendências
 
