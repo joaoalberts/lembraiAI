@@ -1,8 +1,9 @@
 import '@testing-library/react-native/matchers';
-import { fireEvent, render, screen } from '@testing-library/react-native';
+import { act, fireEvent, render, screen } from '@testing-library/react-native';
 import { router, useLocalSearchParams } from 'expo-router';
 import LoginScreen from '../../app/auth/login';
 import SignupScreen from '../../app/auth/signup';
+import { size } from '../design/tokens';
 import { AVISO_CONFIRMAR_EMAIL } from '../state/auth';
 import { comAreaSegura } from '../test-utils/area-segura';
 
@@ -82,7 +83,7 @@ describe('Entrar', () => {
     expect(screen.getByTestId('icone-circle-check', ESCONDIDO)).toBeTruthy();
   });
 
-  it('enquanto entra o botão diz "Entrando…" e trava, e a caixinha também', async () => {
+  it('enquanto entra o botão diz "Entrando…" e trava, e os dois campos, a caixinha e o "Esqueci minha senha" também; ao terminar tudo destrava', async () => {
     let terminar: (erro: string | null) => void = () => {};
     mockEntrar.mockReturnValue(new Promise((ok) => { terminar = ok; }));
     await abrir();
@@ -90,7 +91,48 @@ describe('Entrar', () => {
     await fireEvent.press(screen.getByRole('button', { name: 'Entrar' }));
     expect(screen.getByRole('button', { name: 'Entrando…' })).toBeDisabled();
     expect(screen.getByRole('checkbox', { name: 'Lembrar-me' })).toBeDisabled();
-    terminar(null);
+    expect(screen.getByRole('button', { name: 'Esqueci minha senha' })).toBeDisabled();
+    expect(screen.getByPlaceholderText('nome@dominio.com')).toHaveProp('editable', false);
+    expect(screen.getByPlaceholderText('Sua senha')).toHaveProp('editable', false);
+    await act(async () => { terminar(null); });
+    expect(screen.getByRole('button', { name: 'Entrar' })).toBeEnabled();
+    expect(screen.getByPlaceholderText('Sua senha')).toHaveProp('editable', true);
+  });
+
+  it('depois da recusa do servidor o botão volta a "Entrar" e os campos destravam, para tentar de novo', async () => {
+    mockEntrar.mockResolvedValue('E-mail ou senha incorretos.');
+    await abrir();
+    await preencher('pessoa@exemplo.com', 'errada123');
+    await fireEvent.press(screen.getByRole('button', { name: 'Entrar' }));
+    expect(screen.getByRole('button', { name: 'Entrar' })).toBeEnabled();
+    expect(screen.getByPlaceholderText('Sua senha')).toHaveProp('editable', true);
+    expect(screen.getByRole('checkbox', { name: 'Lembrar-me' })).toBeEnabled();
+  });
+
+  it('se o pedido falhar de vez (exceção) avisa e também destrava', async () => {
+    mockEntrar.mockRejectedValue(new Error('rede'));
+    await abrir();
+    await preencher('pessoa@exemplo.com', 'segredo123');
+    await fireEvent.press(screen.getByRole('button', { name: 'Entrar' }));
+    expect(screen.getByText('Erro ao entrar. Tente novamente.')).toBeTruthy();
+    expect(screen.getByRole('button', { name: 'Entrar' })).toBeEnabled();
+  });
+
+  it('o aviso verde de "senha redefinida" sai quando o erro aparece: nunca os dois juntos', async () => {
+    jest.mocked(useLocalSearchParams).mockReturnValue({ redefinida: '1' });
+    mockEntrar.mockResolvedValue('E-mail ou senha incorretos.');
+    await abrir();
+    expect(screen.getByText('Senha redefinida. Entre com a nova senha.')).toBeTruthy();
+    await preencher('pessoa@exemplo.com', 'errada123');
+    await fireEvent.press(screen.getByRole('button', { name: 'Entrar' }));
+    expect(screen.getByText('E-mail ou senha incorretos.')).toBeTruthy();
+    expect(screen.queryByText('Senha redefinida. Entre com a nova senha.')).toBeNull();
+  });
+
+  it('o "Esqueci minha senha" tem alvo de toque de 44 (folga em cima e embaixo além do texto)', async () => {
+    await abrir();
+    const folga = (size.touch - size.auth.check) / 2;
+    expect(screen.getByRole('button', { name: 'Esqueci minha senha' })).toHaveProp('hitSlop', { top: folga, bottom: folga });
   });
 
   it('"Esqueci minha senha", "Criar conta" e o voltar levam para onde dizem', async () => {
@@ -143,6 +185,25 @@ describe('Criar conta', () => {
     await fireEvent.press(screen.getByRole('button', { name: 'Criar conta' }));
     expect(screen.getByText('As senhas não são iguais.')).toBeTruthy();
     expect(mockCadastrar).not.toHaveBeenCalled();
+  });
+
+  it('depois da recusa do servidor o botão volta a "Criar conta" e os campos destravam', async () => {
+    mockCadastrar.mockResolvedValue('Este e-mail já está cadastrado.');
+    await abrir();
+    await preencher('Ana', 'ana@exemplo.com', 'segredo123', 'segredo123');
+    await fireEvent.press(screen.getByRole('button', { name: 'Criar conta' }));
+    expect(screen.getByText('Este e-mail já está cadastrado.')).toBeTruthy();
+    expect(screen.getByRole('button', { name: 'Criar conta' })).toBeEnabled();
+    expect(screen.getByPlaceholderText('Crie uma senha')).toHaveProp('editable', true);
+  });
+
+  it('se o pedido falhar de vez (exceção) avisa e também destrava', async () => {
+    mockCadastrar.mockRejectedValue(new Error('rede'));
+    await abrir();
+    await preencher('Ana', 'ana@exemplo.com', 'segredo123', 'segredo123');
+    await fireEvent.press(screen.getByRole('button', { name: 'Criar conta' }));
+    expect(screen.getByText('Erro ao criar conta. Tente novamente.')).toBeTruthy();
+    expect(screen.getByRole('button', { name: 'Criar conta' })).toBeEnabled();
   });
 
   it('sem sessão (falta confirmar o e-mail) mostra o aviso e não recusa', async () => {

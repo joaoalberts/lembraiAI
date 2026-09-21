@@ -51,6 +51,7 @@ describe('AuthLayout (base das telas de conta)', () => {
     await abrir(<AuthLayout title="Entrar"><Text>corpo</Text></AuthLayout>);
     expect(screen.getByText('LembreiAi')).toHaveStyle({ fontFamily: fontFamily.serif, color: colors.text.onDarkWarm });
     expect(screen.getByTestId('icone-locate-fixed', ESCONDIDO)).toBeTruthy();
+    expect(screen.getByLabelText('LembreiAi')).toHaveProp('accessible', true); // para o leitor de tela a marca é um bloco só, com o nome
     expect(screen.getByTestId('auth-marca-tile')).toHaveStyle({ width: size.auth.marcaTile, height: size.auth.marcaTile, borderRadius: size.auth.marcaRadius });
   });
 
