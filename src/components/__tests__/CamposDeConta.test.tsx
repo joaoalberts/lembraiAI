@@ -48,6 +48,8 @@ describe('CaixaDeMarcar', () => {
 });
 
 describe('MedidorDeSenha', () => {
+  // 12 caracteres, com letra, número e símbolo: os quatro pontos da regra de força (exemplo, não uma credencial)
+  const FORTE = 'Abcdefghij1!';
   const barras = () => screen.getAllByTestId(/^medidor-barra-/, ESCONDIDO);
   const cores = () => barras().map((b) => plano(b.props.style).backgroundColor);
 
@@ -69,7 +71,7 @@ describe('MedidorDeSenha', () => {
   });
 
   it('forte: três barras verdes', async () => {
-    await render(<MedidorDeSenha senha="Abcdefghij1!" />);
+    await render(<MedidorDeSenha senha={FORTE} />);
     expect(screen.getByText('Senha forte')).toBeTruthy();
     expect(cores()).toEqual([colors.conta.medidorForte, colors.conta.medidorForte, colors.conta.medidorForte]);
   });
