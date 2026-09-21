@@ -113,7 +113,7 @@ export default function ConfigScreen() {
 
           {typeof window !== 'undefined' ? (
             <CartaoDeConfig
-              icon={typeof window !== 'undefined' && isIOS() ? 'share-2' : 'download'}
+              icon={typeof window !== 'undefined' && isIOS() ? 'share' : 'download'}
               titulo="Instalar o app"
               subtitulo={instalado ? 'Instalado na tela de início.' : 'Melhora as notificações e abre em tela cheia.'}
               acao={!instalado && instalavel ? <Button compact variant="secondary" label="Instalar" onPress={() => void instalar()} /> : undefined}
