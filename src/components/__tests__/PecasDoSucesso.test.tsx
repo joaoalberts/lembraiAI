@@ -49,13 +49,20 @@ describe('BotaoDeAcao', () => {
 });
 
 describe('DicaInteligente', () => {
-  it('diz a dica em duas linhas e é um botão que chama onPress', async () => {
+  it('diz a dica e é um botão que chama onPress', async () => {
     const onPress = jest.fn();
     await render(<DicaInteligente onPress={onPress} />);
     expect(screen.getByText('Dica inteligente')).toBeTruthy();
-    expect(screen.getByText('Crie lembretes recorrentes para não esquecer\ndas suas tarefas importantes.')).toBeTruthy();
+    expect(screen.getByText('Crie lembretes recorrentes para não esquecer das suas tarefas importantes.')).toBeTruthy();
     await fireEvent.press(screen.getByRole('button', { name: /Dica inteligente/ }));
     expect(onPress).toHaveBeenCalledTimes(1);
+  });
+
+  it('não força quebra de linha: em tela estreita o texto quebra sozinho (sem "esquecer" sozinho numa linha) e a largura máxima o fecha onde a imagem mostra', async () => {
+    await render(<DicaInteligente onPress={jest.fn()} />);
+    const corpo = screen.getByText(/^Crie lembretes recorrentes/);
+    expect(String(corpo.props.children)).not.toContain('\n');
+    expect(corpo).toHaveStyle({ maxWidth: size.sucesso.dica.textMax });
   });
 
   it('o leitor de tela lê o título e o texto numa frase só, sem a quebra de linha', async () => {

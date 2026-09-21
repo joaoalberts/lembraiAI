@@ -8,7 +8,7 @@ interface DicaInteligenteProps {
 }
 
 const TITULO = 'Dica inteligente';
-const TEXTO = 'Crie lembretes recorrentes para não esquecer\ndas suas tarefas importantes.';
+const TEXTO = 'Crie lembretes recorrentes para não esquecer das suas tarefas importantes.';
 
 /** Estilo por estado. Função pura e exportada: o ponteiro em cima e o foco de teclado só existem na web. */
 export function estiloDaDica(estado: EstadoDeToque): StyleProp<ViewStyle> {
@@ -27,7 +27,7 @@ export function estiloDaDica(estado: EstadoDeToque): StyleProp<ViewStyle> {
  */
 export function DicaInteligente({ onPress }: DicaInteligenteProps) {
   return (
-    <Pressable testID="dica-inteligente" onPress={onPress} accessibilityRole="button" accessibilityLabel={`${TITULO}. ${TEXTO.replace('\n', ' ')}`} style={(estado: EstadoDeToque) => estiloDaDica(estado)}>
+    <Pressable testID="dica-inteligente" onPress={onPress} accessibilityRole="button" accessibilityLabel={`${TITULO}. ${TEXTO}`} style={(estado: EstadoDeToque) => estiloDaDica(estado)}>
       <View style={styles.circulo} accessibilityElementsHidden importantForAccessibility="no-hide-descendants">
         <Icon name="lightbulb" size={size.sucesso.dica.icon} color={colors.icon.default} stroke={iconStroke.glyph} />
       </View>
@@ -56,5 +56,6 @@ const styles = StyleSheet.create({
   circulo: { width: size.sucesso.dica.circle, height: size.sucesso.dica.circle, borderRadius: radius.pill, backgroundColor: colors.sucesso.dica, alignItems: 'center', justifyContent: 'center' },
   texto: { flex: 1, gap: size.sucesso.dica.textGap },
   titulo: { ...textStyles.micro, fontFamily: fontFamily.bold, color: colors.text.primary },
-  corpo: { ...textStyles.micro, color: colors.text.secondary },
+  // sem quebra forçada: a largura máxima fecha a primeira linha onde a imagem mostra, e em tela estreita o texto quebra sozinho
+  corpo: { ...textStyles.micro, color: colors.text.secondary, maxWidth: size.sucesso.dica.textMax },
 });

@@ -501,7 +501,7 @@ export const size = {
       thumbRadius: du(24),
     },
     acao: { height: du(123), radius: du(32), gap: du(39), side: du(57), icon: du(40), top: du(24), iconGap: du(17) },
-    dica: { height: du(157), circle: du(91), icon: du(46), arrow: du(32), left: du(35), right: du(37), gap: du(31), textGap: du(6) },
+    dica: { height: du(157), circle: du(91), icon: du(46), arrow: du(32), left: du(35), right: du(37), gap: du(31), textGap: du(6), textMax: du(486) },
     cta: du(109),
     ctaSide: du(38),
     link: du(32),

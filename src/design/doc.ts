@@ -639,6 +639,7 @@ const DESCRICOES: Record<string, string> = {
   'size.sucesso.dica.right': 'Dica do sucesso: recuo da seta até a borda direita',
   'size.sucesso.dica.gap': 'Dica do sucesso: vão entre o círculo e o texto',
   'size.sucesso.dica.textGap': 'Dica do sucesso: vão entre o título e o texto',
+  'size.sucesso.dica.textMax': 'Dica do sucesso: largura máxima do texto; é onde a primeira linha da imagem fecha ("… esquecer"), então a quebra cai onde a captura mostra e, em tela estreita, o texto quebra sozinho',
   'size.sucesso.cta': 'Sucesso: altura do botão escuro "Ver todos os lembretes"',
   'size.sucesso.ctaSide': 'Sucesso: recuo do botão escuro até as bordas',
   'size.sucesso.link': 'Sucesso: altura do link "Criar outro lembrete"',
