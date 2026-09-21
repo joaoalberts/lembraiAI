@@ -88,7 +88,7 @@ Use `palette.*` só para definir papéis em `colors`. As telas usam os papéis (
 | `palette.chipOff` | `#F3F4EF` | Chip de filtro não selecionado |
 | `palette.chipRing` | `#DFE1DB` | Contorno do chip não selecionado |
 | `palette.borderSubtle` | `#E7E8EA` | Borda de campos de formulário |
-| `palette.borderStrong` | `#B9B8BB` | Contorno do botão sem fundo |
+| `palette.borderStrong` | `#87878A` | Contorno dos controles: botão sem fundo e anel da caixinha e das opções não escolhidas (3:1 sobre todas as superfícies) |
 | `palette.divider` | `#E8E7E6` | Divisórias |
 | `palette.trackOff` | `#D6D5D5` | Trilho do interruptor desligado |
 | `palette.ink900` | `#0A0A0A` | Texto principal |
@@ -165,7 +165,7 @@ Use `palette.*` só para definir papéis em `colors`. As telas usam os papéis (
 | `palette.sucessoSeloAnel` | `#DCEBE2` | Anel do selo "Ativo" |
 | `palette.contaPilula` | `#A9F7D4` | Texto da pastilha "Criar conta" sobre o verde das telas de conta |
 | `palette.contaLink` | `#9FF3D0` | Link "Voltar para entrar" sobre o verde das telas de conta |
-| `palette.medidorMedio` | `#E8A33D` | Barra do meio do medidor de força da senha (senha razoável) |
+| `palette.medidorMedio` | `#BF7F1F` | Barra do meio do medidor de força da senha (senha razoável), escurecida para 3:1 sobre o cartão |
 <!-- tokens:cores-primitivas:fim -->
 
 ### 3.2 Papéis
@@ -221,7 +221,7 @@ Use `palette.*` só para definir papéis em `colors`. As telas usam os papéis (
 | `colors.action.frostHover` | `#D9DECF` | `palette.frostHover` | Botão translúcido com o ponteiro em cima (web) |
 | `colors.action.frostPressed` | `#CFD5C4` | `palette.frostPressed` | Botão translúcido pressionado |
 | `colors.border.field` | `#E7E8EA` | `palette.borderSubtle` | Borda de campos de formulário |
-| `colors.border.strong` | `#B9B8BB` | `palette.borderStrong` | Contorno do botão sem fundo (ghost) |
+| `colors.border.strong` | `#87878A` | `palette.borderStrong` | Contorno do botão sem fundo (ghost) e anel da caixinha e das opções não escolhidas (3:1, WCAG 1.4.11) |
 | `colors.border.divider` | `#E8E7E6` | `palette.divider` | Divisórias |
 | `colors.border.chip` | `#DFE1DB` | `palette.chipRing` | Contorno do chip não selecionado |
 | `colors.border.focus` | `#185C4B` | `palette.forest700` | Borda do campo em foco e anel de foco |
@@ -275,7 +275,7 @@ Use `palette.*` só para definir papéis em `colors`. As telas usam os papéis (
 | `colors.conta.link` | `#9FF3D0` | `palette.contaLink` | Link de voltar do rodapé, quando não há barra de vidro |
 | `colors.conta.nota` | `#B1C3B8` | `palette.onDark300` | Nota do cadeado no pé das telas de conta |
 | `colors.conta.medidorFraco` | `#D43A2A` | `palette.danger` | Medidor de força: senha fraca (uma barra) |
-| `colors.conta.medidorMedio` | `#E8A33D` | `palette.medidorMedio` | Medidor de força: senha razoável (duas barras) |
+| `colors.conta.medidorMedio` | `#BF7F1F` | `palette.medidorMedio` | Medidor de força: senha razoável (duas barras) |
 | `colors.conta.medidorForte` | `#029554` | `palette.statusGreen` | Medidor de força: senha forte (três barras) |
 | `colors.tab.background` | `#F8F8F4` | `palette.tabBarBg` | Fundo da barra de abas |
 | `colors.tab.inactive` | `#777C8A` | `palette.tabInactive` | Rótulo e ícone da aba inativa |
@@ -1180,6 +1180,14 @@ Cada par é testado em `src/design/__tests__/acessibilidade.test.ts`. Par novo e
 | `colors.control.thumb` | `colors.control.onForm` | 6,36:1 | 3:1 | ✓ exceção | Bolinha do interruptor do formulário sobre o trilho ligado |
 | `colors.control.on` | `colors.bg.card` | 6,20:1 | 3:1 | ✓ exceção | Preenchimento do controle deslizante do raio |
 | `colors.feedback.infoBar` | `colors.feedback.infoBg` | 6,24:1 | 3:1 | ✓ exceção | Faixa lateral do aviso informativo |
+| `colors.border.strong` | `colors.bg.field` | 3,58:1 | 3:1 | ✓ exceção | Anel da caixinha e dos cartões e linhas de opção não escolhidos; contorno do botão sem fundo com o ponteiro em cima |
+| `colors.border.strong` | `colors.bg.card` | 3,40:1 | 3:1 | ✓ exceção | Anel da caixinha e do cartão de modo sobre o cartão; contorno do botão sem fundo no cartão de conta |
+| `colors.border.strong` | `colors.bg.page` | 3,21:1 | 3:1 | ✓ exceção | Contorno do botão sem fundo sobre a página |
+| `colors.border.strong` | `colors.control.chipOff` | 3,24:1 | 3:1 | ✓ exceção | Contorno do botão sem fundo pressionado |
+| `colors.border.strong` | `colors.bg.sheet` | 3,13:1 | 3:1 | ✓ exceção | Anel de opção sobre o fundo da folha |
+| `colors.conta.medidorFraco` | `colors.bg.card` | 4,49:1 | 3:1 | ✓ exceção | Barra do medidor de força da senha: senha fraca |
+| `colors.conta.medidorMedio` | `colors.bg.card` | 3,18:1 | 3:1 | ✓ exceção | Barra do medidor de força da senha: senha razoável |
+| `colors.conta.medidorForte` | `colors.bg.card` | 3,67:1 | 3:1 | ✓ exceção | Barra do medidor de força da senha: senha forte |
 | `colors.category.green.ink` | `colors.category.green.bg` | 14,61:1 | 3:1 | ✓ exceção | Glifo do ícone da categoria green |
 | `colors.category.orange.ink` | `colors.category.orange.bg` | 16,47:1 | 3:1 | ✓ exceção | Glifo do ícone da categoria orange |
 | `colors.category.blue.ink` | `colors.category.blue.bg` | 7,89:1 | 3:1 | ✓ exceção | Glifo do ícone da categoria blue |
@@ -1207,7 +1215,7 @@ Cada par é testado em `src/design/__tests__/acessibilidade.test.ts`. Par novo e
 - **Texto normal, no mínimo 4,5:1; texto grande** (24 px, ou 18,7 px em negrito) **e componentes de interface, no mínimo 3:1.**
 - **Exceção conhecida: o laranja da marca.** Branco sobre `colors.action.primary` dá 3,24:1: só passa como texto grande ou componente. O laranja foi aprovado nas referências, então fica; mitiga-se com rótulo 16/700 em botão de 52 de altura. Se a marca precisar cumprir AA, troque `colors.action.primary` por `colors.action.primaryAA` (4,7:1).
 - **Exceção conhecida: borda de campo suave** (1,2:1) das referências. O foco (7:1) e o rótulo sempre visível compensam.
-- **Exceção conhecida: o anel da caixinha desmarcada** (`colors.border.strong` sobre `colors.bg.field`, 1,97:1 contra os 3:1 do WCAG 1.4.11) e **a barra âmbar do medidor de senha** (2,05:1) são o que as referências mostram. A caixinha tem o rótulo ao lado e o estado por `aria-checked` (o visto marca a diferença), e o medidor é enfeite: o rótulo diz o mesmo em texto. Se a marca preferir cumprir 3:1, escureça esses dois tokens (pergunta em aberto para o João).
+- **Contornos de controle a 3:1 (decisão do João, 21/09):** o anel da caixinha desmarcada, o anel dos cartões e linhas de opção não escolhidos e o contorno do botão sem fundo usam `colors.border.strong` (`#87878A`, de 3,1:1 a 3,6:1 sobre o branco, o cartão, a página, o botão pressionado e a folha), e a barra do meio do medidor de senha usa `colors.conta.medidorMedio` (`#BF7F1F`, 3,2:1 sobre o cartão). As referências mostram os dois mais claros (`#B9B8BB`, 1,97:1, e `#E8A33D`, 2,05:1); o João escolheu escurecê-los para cumprir o WCAG 1.4.11. Todos os pares estão em `src/design/a11y.ts`.
 - **Alvos de toque de no mínimo 44** (`size.touch`). Controle visualmente menor usa `hitSlop` de `size.hitSlop`. **Vale no celular:** o react-native-web 0.21 não implementa `hitSlop`, então na web o alvo é o tamanho visual (ver as pendências).
 - **Todo controle tem papel e nome:** `accessibilityRole`, `accessibilityLabel` e o estado em props `aria-*` (`aria-checked`, `aria-selected`; `disabled` pela prop do `Pressable`). **Não use `accessibilityState`:** o react-native-web 0.21 não o repassa ao DOM e o estado some para quem usa leitor de tela na web (`src/__tests__/acessibilidade-web.test.ts` barra). O papel do voltar de `AuthLayout` vem antes do conteúdo na árvore, para o Tab começar por ele.
 - **Foco visível** no teclado (web) em todo controle: o mesmo anel sólido de `borderWidth.focus` em `colors.border.focus`, afastado `space.hair` (`src/design/foco.ts`), em botão, chip, opção do segmentado, lixeira do cartão e fechar da folha. O campo de texto desenha o foco só pela borda e pelo halo `shadow.focus`, sem o contorno do navegador.
@@ -1286,6 +1294,7 @@ O teste `valores-soltos.test.ts` mantém uma lista de arquivos com valores visua
 | 21/09/2026 | **Estado dos controles em props `aria-*`** (nada de `accessibilityState`), olho da senha com `tabIndex={-1}` e o voltar das telas de conta antes do conteúdo na árvore | O react-native-web 0.21 não repassa `accessibilityState` ao DOM (o estado de caixinha, interruptor, aba e opção sumia na web), o `Pressable` dele só lê `tabIndex` (o olho era parada do Tab) e o "Voltar", montado depois da rolagem, era o último do Tab. Conferido no DOM (Playwright); um teste de fontes barra a volta do padrão |
 | 21/09/2026 | **O formulário rola até o cartão do Local quando a busca de endereço ganha o foco com o teclado aberto** | No Android (medido no emulador) as sugestões da busca nasciam debaixo do campo, atrás do teclado: não dava para vê-las nem tocá-las |
 | 21/09/2026 | **O mapa do formulário fica sem toque enquanto a lista de sugestões está aberta** (`PlaceSearch.aoMudarSugestoes`) | No Android (emulador) o toque numa sugestão da busca chegava também à WebView do mapa: o ponto escolhido era trocado pelo do toque no mapa e o pino saía da vista |
+| 21/09/2026 | **Anel dos controles e barra âmbar do medidor escurecidos a 3:1** (`colors.border.strong` `#B9B8BB` → `#87878A`; `colors.conta.medidorMedio` `#E8A33D` → `#BF7F1F`) | Decisão do João: cumprir os 3:1 do WCAG 1.4.11, mesmo se afastando das imagens. O `border.strong` é compartilhado, então o contorno do botão sem fundo e os anéis dos cartões e linhas de opção não escolhidos escurecem juntos; os pares novos estão em `a11y.ts` |
 
 ## 19. Pendências
 

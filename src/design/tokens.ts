@@ -40,7 +40,7 @@ export const palette = {
   chipOff: '#F3F4EF',
   chipRing: '#DFE1DB',
   borderSubtle: '#E7E8EA',
-  borderStrong: '#B9B8BB',
+  borderStrong: '#87878A', // era #B9B8BB (1,97:1); escurecido a 3:1 por decisão do João (21/09)
   divider: '#E8E7E6',
   trackOff: '#D6D5D5',
   ink900: '#0A0A0A',
@@ -122,7 +122,7 @@ export const palette = {
   // Telas de conta (imagem 02): pastilha e link sobre o verde, e a barra do meio do medidor de força
   contaPilula: '#A9F7D4',
   contaLink: '#9FF3D0',
-  medidorMedio: '#E8A33D',
+  medidorMedio: '#BF7F1F', // era #E8A33D (2,05:1 sobre o cartão); escurecido a 3:1 por decisão do João (21/09)
 } as const;
 
 /** Cores por papel. É isto que as telas e os componentes usam. */
