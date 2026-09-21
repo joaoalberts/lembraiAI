@@ -69,12 +69,12 @@ const styles = StyleSheet.create({
   circulo: { width: size.config.circle, height: size.config.circle, borderRadius: radius.pill, backgroundColor: colors.bg.iconCircle, alignItems: 'center', justifyContent: 'center' },
   textos: { flex: 1, gap: size.config.textGap },
   titulo: { ...textStyles.body, fontFamily: fontFamily.bold, color: colors.text.primary },
-  subtitulo: { ...textStyles.micro, color: colors.text.secondary },
+  subtitulo: { ...textStyles.mini, color: colors.text.secondary }, // 21 du (11 dp)
   dado: { flexDirection: 'row', alignItems: 'baseline', justifyContent: 'space-between', gap: size.config.rowGap },
-  rotuloDoDado: { ...textStyles.micro, color: colors.text.secondary },
-  valorDoDado: { ...textStyles.micro, fontFamily: fontFamily.bold, color: colors.text.primary, textAlign: 'right', flexShrink: 1 },
+  rotuloDoDado: { ...textStyles.mini, color: colors.text.secondary }, // 21 du (11 dp)
+  valorDoDado: { ...textStyles.mini, fontFamily: fontFamily.bold, color: colors.text.primary, textAlign: 'right', flexShrink: 1 }, // 21 du (11 dp)
   item: { flexDirection: 'row', gap: size.config.listGap, paddingLeft: size.config.listIndent - size.config.listGap },
-  marcador: { ...textStyles.micro, color: colors.text.secondary },
-  textoDoItem: { ...textStyles.micro, color: colors.text.secondary, flex: 1 },
+  marcador: { ...textStyles.nano, color: colors.text.secondary }, // 20 du (10 dp)
+  textoDoItem: { ...textStyles.nano, color: colors.text.secondary, flex: 1 }, // 20 du (10 dp)
   destaque: { fontFamily: fontFamily.bold, color: colors.text.primary },
 });
