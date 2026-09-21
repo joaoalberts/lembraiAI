@@ -43,6 +43,7 @@ export const PARES_DE_CONTRASTE: ParDeContraste[] = [
   { fg: 'text.secondary', bg: 'feedback.infoBg', min: 4.5, uso: 'Texto de apoio em avisos informativos' },
   { fg: 'text.secondary', bg: 'feedback.successBg', min: 4.5, uso: 'Texto de apoio da tela "Confira seu e-mail"' },
   { fg: 'text.placeholder', bg: 'bg.field', min: 4.5, uso: 'Placeholder dos campos' },
+  { fg: 'text.placeholder', bg: 'bg.card', min: 4.5, uso: 'Nomes dos dados no cartão de resumo (Data, Horário, Local e Repetir)' },
 
   { fg: 'text.accent', bg: 'bg.page', min: 4.5, uso: 'Valores em destaque nas telas' },
   { fg: 'text.accent', bg: 'bg.card', min: 4.5, uso: 'Valores em destaque nos cartões' },
@@ -58,11 +59,13 @@ export const PARES_DE_CONTRASTE: ParDeContraste[] = [
   { fg: 'text.onDark', bg: 'action.secondaryHover', min: 4.5, uso: 'Botão escuro com o ponteiro em cima (web)' },
   { fg: 'text.onDark', bg: 'action.secondaryPressed', min: 4.5, uso: 'Botão escuro pressionado' },
   { fg: 'text.onDark', bg: 'control.chipOn', min: 4.5, uso: 'Chip de filtro ativo' },
+  { fg: 'text.onFrost', bg: 'action.frost', min: 4.5, uso: 'Rótulo dos botões Editar, Excluir e Compartilhar' },
+  { fg: 'text.onFrost', bg: 'action.frostHover', min: 4.5, uso: 'Rótulo dos botões de ação com o ponteiro em cima (web)' },
+  { fg: 'text.onFrost', bg: 'action.frostPressed', min: 4.5, uso: 'Rótulo dos botões de ação pressionados' },
 
   { fg: 'text.danger', bg: 'bg.page', min: 4.5, uso: 'Erro solto na tela' },
   { fg: 'text.danger', bg: 'bg.card', min: 4.5, uso: 'Erro em cartão' },
   { fg: 'text.danger', bg: 'bg.field', min: 4.5, uso: 'Erro em painel branco e mensagem de campo' },
-  { fg: 'text.danger', bg: 'feedback.dangerBg', min: 4.5, uso: 'Aviso de erro' },
   { fg: 'text.danger', bg: 'feedback.dangerWash', min: 4.5, uso: 'Zona de perigo' },
   { fg: 'text.success', bg: 'feedback.successBg', min: 4.5, uso: 'Aviso de sucesso e selo "Liberada"' },
   { fg: 'text.success', bg: 'bg.field', min: 4.5, uso: 'Sucesso em painel branco' },

@@ -20,7 +20,8 @@ describe('contraste das cores do Design System (WCAG 2.x)', () => {
     for (const esperado of [
       'text.primary|bg.page', 'text.secondary|bg.page', 'text.secondary|bg.card', 'text.placeholder|bg.field',
       'text.onAction|action.primary', 'text.onDark|action.secondary', 'text.onDark|control.chipOn',
-      'text.danger|bg.field', 'text.danger|feedback.dangerBg', 'text.success|feedback.successBg', 'text.accent|bg.page',
+      'text.danger|bg.field', 'feedback.errorInk|feedback.errorBg', 'text.success|feedback.successBg', 'text.accent|bg.page',
+      'text.placeholder|bg.card', 'text.onFrost|action.frost', 'text.onFrost|action.frostHover', 'text.onFrost|action.frostPressed',
     ]) expect(pares).toContain(esperado);
   });
 

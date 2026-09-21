@@ -99,7 +99,6 @@ Use `palette.*` só para definir papéis em `colors`. As telas usam os papéis (
 | `palette.textAccent` | `#086952` | Valor em destaque dentro do texto |
 | `palette.red700` | `#C62828` | Texto e borda de erro |
 | `palette.red200` | `#F3B8B8` | Borda da zona de perigo |
-| `palette.red100` | `#FFE6E6` | Fundo do aviso de erro |
 | `palette.red50` | `#FFF5F5` | Fundo da zona de perigo |
 | `palette.green700` | `#0B7A3B` | Texto de sucesso |
 | `palette.mapBlue` | `#2F80ED` | Posição atual da pessoa no mapa |
@@ -248,14 +247,13 @@ Use `palette.*` só para definir papéis em `colors`. As telas usam os papéis (
 | `colors.control.sliderThumb` | `#FFFEFF` | `palette.sliderThumb` | Bolinha do controle deslizante do raio |
 | `colors.control.haloHover` | `rgba(20, 40, 30, 0.07)` | — | Halo atrás das reticências do cartão com o ponteiro em cima (web) |
 | `colors.control.haloPressed` | `rgba(20, 40, 30, 0.13)` | — | Halo atrás das reticências do cartão pressionado |
-| `colors.feedback.dangerBg` | `#FFE6E6` | `palette.red100` | Fundo do aviso de erro |
 | `colors.feedback.dangerWash` | `#FFF5F5` | `palette.red50` | Fundo da zona de perigo |
 | `colors.feedback.successBg` | `#E7F4EB` | `palette.mint50` | Fundo do aviso de sucesso |
 | `colors.feedback.infoBg` | `#DDE8DD` | `palette.mintTint` | Fundo do aviso informativo (ex.: "você está dentro do raio") |
 | `colors.feedback.infoBar` | `#185C4B` | `palette.forest700` | Faixa lateral do aviso informativo |
 | `colors.feedback.emptyCircle` | `#DBF1E5` | `palette.mint100` | Círculo atrás do ícone do estado vazio |
-| `colors.feedback.errorBg` | `#FDF0EE` | `palette.alertErrorBg` | Fundo do aviso de erro nas configurações |
-| `colors.feedback.errorInk` | `#8E2418` | `palette.alertErrorInk` | Texto do aviso de erro nas configurações |
+| `colors.feedback.errorBg` | `#FDF0EE` | `palette.alertErrorBg` | Fundo do aviso de erro (todo `Banner` de erro: contas, configurações e formulário) |
+| `colors.feedback.errorInk` | `#8E2418` | `palette.alertErrorInk` | Texto e ícone do aviso de erro (todo `Banner` de erro) |
 | `colors.feedback.infoInk` | `#1B4436` | `palette.alertInfoInk` | Texto do aviso informativo |
 | `colors.feedback.tipCircle` | `#C3DFCE` | `palette.tipCircle` | Círculo atrás da lâmpada do cartão de dica |
 | `colors.feedback.dangerCircle` | `#FBE7E4` | `palette.dangerTint` | Círculo atrás do ícone de excluir e de sair |
@@ -600,7 +598,7 @@ Componente: `src/components/TextField.tsx` (campo das telas de conta e da folha 
 
 - **Senha:** com `secureTextEntry` o campo começa escondido e ganha o botão do olho (`size.campo.eye` de largura, ícone `eye` ou `eye-off` de `size.campo.eyeIcon`, `colors.icon.muted` e `colors.icon.default` com o ponteiro em cima). O botão se chama "Mostrar senha" ou "Ocultar senha" e não entra na ordem de tab (`focusable={false}` no celular e `tabIndex={-1}` na web: o `Pressable` do react-native-web só lê o `tabIndex`).
 - **Rótulo sempre visível.** Placeholder é exemplo ("seu@email.com"), não rótulo.
-- **Teclado certo:** o `TextField` já escolhe `keyboardType`, `autoCapitalize` e `autoComplete` para e-mail, senha e números.
+- **Teclado certo:** o `TextField` escolhe sozinho só a capitalização (`autoCapitalize`: nenhuma em e-mail, senha e números, para o teclado não pôr a 1ª letra do e-mail em maiúscula); `keyboardType` e `autoComplete` vêm de quem o usa (`email-address` com `email`; `current-password` ou `new-password` na senha).
 - **Erro em português, dizendo o que fazer.** Mensagem curta, sem código técnico.
 - **Anel suave é identidade** (1,2:1 sobre o fundo, como nas referências). O foco é o reforço: exceção registrada na seção 16.
 - **Interruptor** (`Toggle`): trilho em pílula, desligado `colors.control.off`; ligado `colors.control.onCard` (variante `card`, 35 por 21, no cartão de lembrete) ou `colors.control.onForm` (variante `form`, 43 por 26, nos formulários e nas configurações). Bolinha `colors.control.thumb` com `shadow.float`, que corre em `motion.duration.toggle` (imediata com "reduzir movimento"). Medidas em `size.toggle.*`; o toque ganha folga até 44 por 44. Papel `switch` com o estado ligado, e sempre com o rótulo ao lado e `accessibilityLabel`. O verde do cartão é o da imagem (`#30AB7B`) escurecido 5% para chegar a 3:1 com o cartão (a imagem dá 2,76:1).
@@ -1148,6 +1146,7 @@ Cada par é testado em `src/design/__tests__/acessibilidade.test.ts`. Par novo e
 | `colors.text.secondary` | `colors.feedback.infoBg` | 5,22:1 | 4,5:1 | ✓ | Texto de apoio em avisos informativos |
 | `colors.text.secondary` | `colors.feedback.successBg` | 5,80:1 | 4,5:1 | ✓ | Texto de apoio da tela "Confira seu e-mail" |
 | `colors.text.placeholder` | `colors.bg.field` | 5,10:1 | 4,5:1 | ✓ | Placeholder dos campos |
+| `colors.text.placeholder` | `colors.bg.card` | 4,84:1 | 4,5:1 | ✓ | Nomes dos dados no cartão de resumo (Data, Horário, Local e Repetir) |
 | `colors.text.accent` | `colors.bg.page` | 5,96:1 | 4,5:1 | ✓ | Valores em destaque nas telas |
 | `colors.text.accent` | `colors.bg.card` | 6,33:1 | 4,5:1 | ✓ | Valores em destaque nos cartões |
 | `colors.text.accent` | `colors.bg.field` | 6,66:1 | 4,5:1 | ✓ | Valores em destaque em painéis brancos |
@@ -1161,10 +1160,12 @@ Cada par é testado em `src/design/__tests__/acessibilidade.test.ts`. Par novo e
 | `colors.text.onDark` | `colors.action.secondaryHover` | 12,66:1 | 4,5:1 | ✓ | Botão escuro com o ponteiro em cima (web) |
 | `colors.text.onDark` | `colors.action.secondaryPressed` | 14,04:1 | 4,5:1 | ✓ | Botão escuro pressionado |
 | `colors.text.onDark` | `colors.control.chipOn` | 11,23:1 | 4,5:1 | ✓ | Chip de filtro ativo |
+| `colors.text.onFrost` | `colors.action.frost` | 11,71:1 | 4,5:1 | ✓ | Rótulo dos botões Editar, Excluir e Compartilhar |
+| `colors.text.onFrost` | `colors.action.frostHover` | 10,71:1 | 4,5:1 | ✓ | Rótulo dos botões de ação com o ponteiro em cima (web) |
+| `colors.text.onFrost` | `colors.action.frostPressed` | 9,78:1 | 4,5:1 | ✓ | Rótulo dos botões de ação pressionados |
 | `colors.text.danger` | `colors.bg.page` | 5,03:1 | 4,5:1 | ✓ | Erro solto na tela |
 | `colors.text.danger` | `colors.bg.card` | 5,34:1 | 4,5:1 | ✓ | Erro em cartão |
 | `colors.text.danger` | `colors.bg.field` | 5,62:1 | 4,5:1 | ✓ | Erro em painel branco e mensagem de campo |
-| `colors.text.danger` | `colors.feedback.dangerBg` | 4,74:1 | 4,5:1 | ✓ | Aviso de erro |
 | `colors.text.danger` | `colors.feedback.dangerWash` | 5,26:1 | 4,5:1 | ✓ | Zona de perigo |
 | `colors.text.success` | `colors.feedback.successBg` | 4,80:1 | 4,5:1 | ✓ | Aviso de sucesso e selo "Liberada" |
 | `colors.text.success` | `colors.bg.field` | 5,44:1 | 4,5:1 | ✓ | Sucesso em painel branco |
@@ -1206,6 +1207,7 @@ Cada par é testado em `src/design/__tests__/acessibilidade.test.ts`. Par novo e
 - **Texto normal, no mínimo 4,5:1; texto grande** (24 px, ou 18,7 px em negrito) **e componentes de interface, no mínimo 3:1.**
 - **Exceção conhecida: o laranja da marca.** Branco sobre `colors.action.primary` dá 3,24:1: só passa como texto grande ou componente. O laranja foi aprovado nas referências, então fica; mitiga-se com rótulo 16/700 em botão de 52 de altura. Se a marca precisar cumprir AA, troque `colors.action.primary` por `colors.action.primaryAA` (4,7:1).
 - **Exceção conhecida: borda de campo suave** (1,2:1) das referências. O foco (7:1) e o rótulo sempre visível compensam.
+- **Exceção conhecida: o anel da caixinha desmarcada** (`colors.border.strong` sobre `colors.bg.field`, 1,97:1 contra os 3:1 do WCAG 1.4.11) e **a barra âmbar do medidor de senha** (2,05:1) são o que as referências mostram. A caixinha tem o rótulo ao lado e o estado por `aria-checked` (o visto marca a diferença), e o medidor é enfeite: o rótulo diz o mesmo em texto. Se a marca preferir cumprir 3:1, escureça esses dois tokens (pergunta em aberto para o João).
 - **Alvos de toque de no mínimo 44** (`size.touch`). Controle visualmente menor usa `hitSlop` de `size.hitSlop`. **Vale no celular:** o react-native-web 0.21 não implementa `hitSlop`, então na web o alvo é o tamanho visual (ver as pendências).
 - **Todo controle tem papel e nome:** `accessibilityRole`, `accessibilityLabel` e o estado em props `aria-*` (`aria-checked`, `aria-selected`; `disabled` pela prop do `Pressable`). **Não use `accessibilityState`:** o react-native-web 0.21 não o repassa ao DOM e o estado some para quem usa leitor de tela na web (`src/__tests__/acessibilidade-web.test.ts` barra). O papel do voltar de `AuthLayout` vem antes do conteúdo na árvore, para o Tab começar por ele.
 - **Foco visível** no teclado (web) em todo controle: o mesmo anel sólido de `borderWidth.focus` em `colors.border.focus`, afastado `space.hair` (`src/design/foco.ts`), em botão, chip, opção do segmentado, lixeira do cartão e fechar da folha. O campo de texto desenha o foco só pela borda e pelo halo `shadow.focus`, sem o contorno do navegador.

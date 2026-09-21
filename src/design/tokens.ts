@@ -51,7 +51,6 @@ export const palette = {
   textAccent: '#086952',
   red700: '#C62828',
   red200: '#F3B8B8',
-  red100: '#FFE6E6',
   red50: '#FFF5F5',
   green700: '#0B7A3B',
   mapBlue: '#2F80ED',
@@ -217,7 +216,6 @@ export const colors = {
     haloPressed: 'rgba(20, 40, 30, 0.13)',
   },
   feedback: {
-    dangerBg: palette.red100,
     dangerWash: palette.red50,
     successBg: palette.mint50,
     infoBg: palette.mintTint,
