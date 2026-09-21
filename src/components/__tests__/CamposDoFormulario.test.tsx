@@ -172,6 +172,13 @@ describe('Slider', () => {
     expect(estilo(screen.getByTestId('slider-bolinha'))).toMatchObject({ left: 300 * 0.2 - size.form.sliderThumb / 2, width: size.form.sliderThumb, backgroundColor: colors.control.sliderThumb, boxShadow: shadow.slider });
   });
 
+  it('a área de toque tem 44 de altura e o espaço que o controle ocupa continua o do desenho (a margem negativa compensa)', async () => {
+    await abrir(150);
+    const area = estilo(screen.getByTestId('slider')) as { height: number; marginVertical: number };
+    expect(area.height).toBe(size.touch);
+    expect(area.height + 2 * area.marginVertical).toBe(size.form.sliderHeight);
+  });
+
   it('nas pontas a bolinha sai meio raio para fora, como no original', async () => {
     await abrir(50);
     expect(estilo(screen.getByTestId('slider-bolinha')).left).toBe(-size.form.sliderThumb / 2);

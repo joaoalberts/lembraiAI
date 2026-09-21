@@ -73,9 +73,12 @@ export function Slider({ value, onChange, min, max, step, label, valueText }: Sl
   );
 }
 
+const ALTURA_DO_TOQUE = Math.max(size.form.sliderHeight, size.touch);
+
 const styles = StyleSheet.create({
   passivo: { pointerEvents: 'none' },
-  area: { height: size.form.sliderHeight, justifyContent: 'center' },
+  // 44 de altura para o dedo; a margem negativa devolve o espaço do desenho (a folga vira toque por cima do que está em volta)
+  area: { height: ALTURA_DO_TOQUE, marginVertical: -(ALTURA_DO_TOQUE - size.form.sliderHeight) / 2, justifyContent: 'center' },
   trilho: { position: 'absolute', left: 0, right: 0, height: size.form.sliderTrack, borderRadius: radius.pill, backgroundColor: colors.control.off },
   preenchimento: { right: undefined, backgroundColor: colors.control.on },
   bolinha: { position: 'absolute', width: size.form.sliderThumb, height: size.form.sliderThumb, borderRadius: radius.pill, backgroundColor: colors.control.sliderThumb, boxShadow: shadow.slider },
