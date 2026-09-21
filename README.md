@@ -1,56 +1,49 @@
-# Welcome to your Expo app 👋
+# LembreiAi (Expo)
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+Lembretes que avisam **na hora certa** ou **quando você chega ao lugar certo**. App em Expo (iOS, Android e web) que porta o [`../lembreiAI`](../lembreiAI) (a especificação), com backend próprio em [`deploy/`](deploy/README.md).
 
-## Get started
+**Estado (20/09/2026):** código e testes verdes; APK Android assinado testado em emulador; backend testado em Docker. **Falta implantar na VPS.** O andamento está em [`../../Tarefas/TAREFAS.md`](../../Tarefas/TAREFAS.md).
 
-1. Install dependencies
-
-   ```bash
-   npm install
-   ```
-
-2. Start the app
-
-   ```bash
-   npx expo start
-   ```
-
-In the output, you'll find options to open the app in a
-
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
-
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
-
-## Get a fresh project
-
-When you're ready, run:
+## Rodar
 
 ```bash
-npm run reset-project
+cp .env.example .env.local        # e ajuste (veja o comentário no arquivo; o app web vizinho tem o mesmo Supabase local)
+npm install
+npm start                         # Expo: w abre a web; QR abre no Expo Go
 ```
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+Mudou o `.env.local`? Reinicie com `npx expo start --clear` (o valor é embutido no build).
 
-### Other setup steps
+## Conferir
 
-- To set up ESLint for linting, run `npx expo lint`, or follow our guide on ["Using ESLint and Prettier"](https://docs.expo.dev/guides/using-eslint/)
-- If you'd like to set up unit testing, follow our guide on ["Unit Testing with Jest"](https://docs.expo.dev/develop/unit-testing/)
-- Learn more about the TypeScript setup in this template in our guide on ["Using TypeScript"](https://docs.expo.dev/guides/typescript/)
+```bash
+npm run typecheck
+npm test                          # Jest (jest-expo): 133 testes
+npx expo-doctor                   # 21 checagens
+npx expo install --check          # versões batem com o SDK?
+```
 
-## Learn more
+## Android (grátis, sem loja)
 
-To learn more about developing your project with Expo, look at the following resources:
+```bash
+export EXPO_PUBLIC_SUPABASE_URL=https://SEU-HOST
+export EXPO_PUBLIC_SUPABASE_PUBLISHABLE_KEY=<chave anon do backend>
+scripts/build-android.sh          # gera dist-android/lembreiai.apk assinado
+```
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+Usa o JDK 17 e o Android SDK deste Mac e a chave de `~/.lembreiai/keys/` (backup: `scripts/backup-keystore.sh`). Detalhes, testes no emulador e o caminho das lojas: [`LANCAMENTO.md`](LANCAMENTO.md).
 
-## Join the community
+## Estrutura
 
-Join our community of developers creating universal apps.
+| Pasta | O que tem |
+|---|---|
+| `app/` | rotas (expo-router). **Nunca crie `src/app/`**: ele ganha de `app/` |
+| `src/components`, `src/state`, `src/lib`, `src/data` | interface, estado (auth, lembretes, geo, avisos), regras puras e modelo |
+| `deploy/` | backend próprio (Postgres + login + API) e scripts de operação: [`deploy/README.md`](deploy/README.md) |
+| `plugins/` | plugin de assinatura de release do Android |
+| `scripts/` | `build-android.sh`, `backup-keystore.sh` |
+| `public/` | manifest e ícones do PWA |
 
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+## Leia antes de mexer
+
+[`CLAUDE.md`](CLAUDE.md): armadilhas já pagas (rotas, `.env.local`, notificações do SDK 57, alarmes exatos, backups) · [`AGENTS.md`](AGENTS.md): use a doc **versionada** do Expo (SDK 57) · [`LANCAMENTO.md`](LANCAMENTO.md): distribuição gratuita e lojas.
