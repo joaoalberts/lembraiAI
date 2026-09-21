@@ -1,7 +1,9 @@
 import { useState } from 'react';
-import { ScrollView, StyleSheet, Switch, Text, View } from 'react-native';
+import { ScrollView, StyleSheet, Text, View } from 'react-native';
 import { router } from 'expo-router';
 import { Button } from '../../src/components/Button';
+import { Toggle } from '../../src/components/Toggle';
+import { borderWidth, colors, fontWeight, radius, shadow, space, textStyles } from '../../src/design/tokens';
 import { confirmar } from '../../src/lib/confirm';
 import { formatDistance } from '../../src/lib/geo';
 import { useAuth } from '../../src/state/auth';
@@ -46,7 +48,7 @@ export default function ConfigScreen() {
             <Text style={styles.label}>Monitorar lugares</Text>
             <Text style={styles.hint}>Avisa quando você chega ao raio de um lembrete. Funciona com o app aberto.</Text>
           </View>
-          <Switch value={monitoring} onValueChange={(on) => void setMonitoring(on)} accessibilityLabel="Monitorar lugares" />
+          <Toggle value={monitoring} onValueChange={(on) => void setMonitoring(on)} accessibilityLabel="Monitorar lugares" />
         </View>
         <View style={styles.row}>
           <Text style={styles.label}>Permissão de localização</Text>
@@ -117,10 +119,9 @@ export default function ConfigScreen() {
         <Button
           label={excluindo ? 'Excluindo...' : 'Excluir minha conta'}
           onPress={() => void excluir()}
-          variant="ghost"
+          variant="danger"
           disabled={excluindo}
           style={styles.deleteButton}
-          labelStyle={styles.deleteLabel}
         />
       </View>
     </ScrollView>
@@ -128,23 +129,22 @@ export default function ConfigScreen() {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: '#F5F2ED' },
-  content: { padding: 16, paddingBottom: 48 },
-  section: { backgroundColor: '#FFFFFF', borderRadius: 12, padding: 16, marginBottom: 16 },
-  sectionTitle: { fontSize: 16, fontWeight: '700', color: '#0A0A0A', marginBottom: 12 },
-  row: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginBottom: 12 },
-  rowText: { flex: 1, marginRight: 12 },
-  label: { fontSize: 14, fontWeight: '500', color: '#0A0A0A' },
-  hint: { fontSize: 12, color: '#767880', marginTop: 2 },
-  value: { fontSize: 14, fontWeight: '600', color: '#FE532A' },
-  badge: { fontSize: 12, fontWeight: '600', paddingHorizontal: 8, paddingVertical: 4, borderRadius: 4, overflow: 'hidden' },
-  badgeOk: { color: '#0B7A3B', backgroundColor: '#E6F5E6' },
-  badgeOff: { color: '#C62828', backgroundColor: '#FFE6E6' },
-  error: { fontSize: 12, color: '#C62828', marginBottom: 12 },
-  arrival: { backgroundColor: '#F5F2ED', borderRadius: 8, padding: 10, marginBottom: 8 },
-  logout: { alignSelf: 'stretch', marginTop: 8 },
-  danger: { marginTop: 32, padding: 16, borderRadius: 12, borderWidth: 1, borderColor: '#F3B8B8', backgroundColor: '#FFF5F5' },
-  dangerTitle: { fontSize: 16, fontWeight: '700', color: '#C62828', marginBottom: 4 },
-  deleteButton: { alignSelf: 'stretch', marginTop: 12, borderColor: '#C62828' },
-  deleteLabel: { color: '#C62828' },
+  container: { flex: 1, backgroundColor: colors.bg.page },
+  content: { padding: space.lg, paddingBottom: space.huge },
+  section: { backgroundColor: colors.bg.card, borderRadius: radius.md, padding: space.lg, marginBottom: space.lg, boxShadow: shadow.card },
+  sectionTitle: { ...textStyles.heading, color: colors.text.primary, marginBottom: space.md },
+  row: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginBottom: space.md },
+  rowText: { flex: 1, marginRight: space.md },
+  label: { ...textStyles.body, fontWeight: fontWeight.medium, color: colors.text.primary },
+  hint: { ...textStyles.caption, color: colors.text.secondary, marginTop: space.hair },
+  value: { ...textStyles.label, color: colors.text.accent },
+  badge: { ...textStyles.caption, fontWeight: fontWeight.semibold, paddingHorizontal: space.sm, paddingVertical: space.xs, borderRadius: radius.xs, overflow: 'hidden' },
+  badgeOk: { color: colors.text.success, backgroundColor: colors.feedback.successBg },
+  badgeOff: { color: colors.text.danger, backgroundColor: colors.feedback.dangerBg },
+  error: { ...textStyles.caption, color: colors.text.danger, marginBottom: space.md },
+  arrival: { backgroundColor: colors.bg.page, borderRadius: radius.sm, padding: space.md, marginBottom: space.sm },
+  logout: { alignSelf: 'stretch', marginTop: space.sm },
+  danger: { marginTop: space.xxl, padding: space.lg, borderRadius: radius.md, borderWidth: borderWidth.hairline, borderColor: colors.border.dangerSoft, backgroundColor: colors.feedback.dangerWash },
+  dangerTitle: { ...textStyles.heading, color: colors.text.danger, marginBottom: space.xs },
+  deleteButton: { alignSelf: 'stretch', marginTop: space.md },
 });

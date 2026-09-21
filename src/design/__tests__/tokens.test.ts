@@ -15,13 +15,13 @@ describe('cores', () => {
     expect(erradas).toEqual([]);
   });
 
-  it('as cores semânticas vêm da paleta; fora as categorias, as únicas exceções são o véu do modal e o marcador pausado do mapa', () => {
+  it('as cores semânticas vêm da paleta; fora as categorias, a única exceção é o véu do modal (rgba)', () => {
     const daPaleta = new Set<string>(Object.values(palette));
     const fora = folhas(colors)
       .filter(([caminho, v]) => !caminho.startsWith('category.') && typeof v === 'string' && !daPaleta.has(v))
       .map(([caminho]) => caminho)
       .sort();
-    expect(fora).toEqual(['map.paused', 'overlay']);
+    expect(fora).toEqual(['overlay']);
   });
 
   it('as cinco categorias do banco existem, cada uma com fundo, barra, glifo e marcador', () => {

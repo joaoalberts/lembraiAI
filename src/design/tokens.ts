@@ -47,6 +47,8 @@ export const palette = {
   red100: '#FFE6E6',
   red50: '#FFF5F5',
   green700: '#0B7A3B',
+  mapBlue: '#2F80ED',
+  mapGray: '#828890',
 } as const;
 
 /** Cores por papel. É isto que as telas e os componentes usam. */
@@ -117,7 +119,10 @@ export const colors = {
   spinner: palette.forest700,
   overlay: 'rgba(0, 0, 0, 0.4)',
   map: {
-    paused: '#828890',
+    me: palette.mapBlue,
+    ring: palette.white,
+    paused: palette.mapGray,
+    background: palette.sand,
   },
   /** `bg` = fundo do ícone; `bar` = faixa lateral do cartão; `ink` = glifo; `pin` = marcador forte no mapa. */
   category: {

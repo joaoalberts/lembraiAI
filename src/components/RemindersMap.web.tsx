@@ -1,5 +1,6 @@
 import { lazy, Suspense, useEffect, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
+import { colors } from '../design/tokens';
 import type { RemindersMapProps } from './map-types';
 
 // O Leaflet toca em `window` ao ser importado: a renderização estática do export roda em Node e não pode carregá-lo.
@@ -23,5 +24,5 @@ export function RemindersMap({ center, markers, onMarkerPress }: RemindersMapPro
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: '#E8E4DC' },
+  container: { flex: 1, backgroundColor: colors.map.background },
 });

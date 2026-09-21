@@ -1,14 +1,18 @@
+import type { ComponentProps } from 'react';
 import { useEffect, useMemo, useState } from 'react';
-import { Modal, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import Ionicons from '@expo/vector-icons/Ionicons';
+import { Modal, Pressable, StyleSheet, Text, View } from 'react-native';
 import { CATEGORY_COLORS } from '../../src/data/reminders';
 import { RemindersMap } from '../../src/components/RemindersMap';
 import type { MapMarker } from '../../src/components/map-types';
+import { UI_ICON } from '../../src/design/icons';
+import { colors, layout, radius, shadow, size, space, textStyles } from '../../src/design/tokens';
 import { distance, formatDistance, type LatLng } from '../../src/lib/geo';
 import { useGeo } from '../../src/state/geo';
 import { useGeofences } from '../../src/state/geofences';
 import { useReminders } from '../../src/state/reminders';
 
-const PAUSADO = '#9AA0A6';
+type IoniconName = ComponentProps<typeof Ionicons>['name'];
 
 export default function MapaScreen() {
   const { reminders } = useReminders();
@@ -36,7 +40,7 @@ export default function MapaScreen() {
         radius: r.radius!,
         title: r.title,
         place: r.place,
-        color: r.active ? CATEGORY_COLORS[r.category].pin : PAUSADO,
+        color: r.active ? CATEGORY_COLORS[r.category].pin : colors.map.paused,
         active: r.active,
       })),
     [reminders],
@@ -55,9 +59,15 @@ export default function MapaScreen() {
       <Modal visible={selecionado !== null} transparent animationType="slide" onRequestClose={() => setSelecionado(null)}>
         <View style={styles.overlay}>
           <View style={styles.sheet}>
-            <TouchableOpacity style={styles.close} onPress={() => setSelecionado(null)} accessibilityRole="button" accessibilityLabel="Fechar">
-              <Text style={styles.closeText}>✕</Text>
-            </TouchableOpacity>
+            <Pressable
+              style={styles.close}
+              onPress={() => setSelecionado(null)}
+              hitSlop={size.hitSlop}
+              accessibilityRole="button"
+              accessibilityLabel="Fechar"
+            >
+              <Ionicons name={UI_ICON.fechar as IoniconName} size={size.icon.md} color={colors.icon.default} />
+            </Pressable>
             {selecionado && (
               <>
                 <Text style={styles.sheetTitle}>{selecionado.title}</Text>
@@ -65,7 +75,7 @@ export default function MapaScreen() {
                 <Text style={styles.sheetRow}>Raio de aviso: {selecionado.radius} m</Text>
                 {center && <Text style={styles.sheetRow}>Distância de você: {formatDistance(distance(center, selecionado))}</Text>}
                 <Text style={styles.sheetRow}>
-                  {!selecionado.active ? 'Lembrete pausado' : insideIds.includes(selecionado.id) ? '📍 Você está dentro do raio' : 'Monitorando'}
+                  {!selecionado.active ? 'Lembrete pausado' : insideIds.includes(selecionado.id) ? 'Você está dentro do raio' : 'Monitorando'}
                 </Text>
               </>
             )}
@@ -77,15 +87,14 @@ export default function MapaScreen() {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: '#F5F2ED' },
-  hint: { position: 'absolute', top: 12, left: 16, right: 16, backgroundColor: '#FFFFFF', borderRadius: 12, padding: 12, pointerEvents: 'none' },
-  hintText: { fontSize: 13, color: '#0A0A0A', textAlign: 'center' },
-  overlay: { flex: 1, backgroundColor: 'rgba(0,0,0,0.4)', justifyContent: 'flex-end', alignItems: 'center' },
+  container: { flex: 1, backgroundColor: colors.bg.page },
+  hint: { position: 'absolute', top: space.md, left: space.lg, right: space.lg, backgroundColor: colors.bg.field, borderRadius: radius.md, padding: space.md, boxShadow: shadow.float, pointerEvents: 'none' },
+  hintText: { ...textStyles.body, color: colors.text.primary, textAlign: 'center' },
+  overlay: { flex: 1, backgroundColor: colors.overlay, justifyContent: 'flex-end', alignItems: 'center' },
   // o Modal da web sai da coluna do app: sem o maxWidth o painel viraria uma faixa da largura da janela
-  sheet: { width: '100%', maxWidth: 560, backgroundColor: '#FFFFFF', borderTopLeftRadius: 20, borderTopRightRadius: 20, padding: 24, paddingBottom: 36 },
-  close: { position: 'absolute', top: 12, right: 12, width: 32, height: 32, borderRadius: 16, backgroundColor: '#F5F2ED', alignItems: 'center', justifyContent: 'center' },
-  closeText: { fontSize: 16, fontWeight: 'bold', color: '#0A0A0A' },
-  sheetTitle: { fontSize: 20, fontWeight: 'bold', color: '#0A0A0A', marginRight: 40, marginBottom: 4 },
-  sheetPlace: { fontSize: 14, color: '#767880', marginBottom: 12 },
-  sheetRow: { fontSize: 14, color: '#0A0A0A', marginTop: 8 },
+  sheet: { width: '100%', maxWidth: layout.columnMax, backgroundColor: colors.bg.field, borderTopLeftRadius: radius.sheet, borderTopRightRadius: radius.sheet, padding: space.xl, paddingBottom: space.xxl },
+  close: { position: 'absolute', top: space.md, right: space.md, width: size.closeButton, height: size.closeButton, borderRadius: radius.pill, backgroundColor: colors.bg.page, alignItems: 'center', justifyContent: 'center' },
+  sheetTitle: { ...textStyles.title, color: colors.text.primary, marginRight: size.closeButton + space.sm, marginBottom: space.xs },
+  sheetPlace: { ...textStyles.body, color: colors.text.secondary, marginBottom: space.md },
+  sheetRow: { ...textStyles.body, color: colors.text.primary, marginTop: space.sm },
 });

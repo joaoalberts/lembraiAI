@@ -79,6 +79,8 @@ Use `palette.*` só para definir papéis em `colors`. As telas usam os papéis (
 | `palette.red100` | `#FFE6E6` | Fundo do aviso de erro |
 | `palette.red50` | `#FFF5F5` | Fundo da zona de perigo |
 | `palette.green700` | `#0B7A3B` | Texto de sucesso |
+| `palette.mapBlue` | `#2F80ED` | Posição atual da pessoa no mapa |
+| `palette.mapGray` | `#828890` | Marcador de lembrete pausado no mapa |
 <!-- tokens:cores-primitivas:fim -->
 
 ### 3.2 Papéis
@@ -134,7 +136,10 @@ Use `palette.*` só para definir papéis em `colors`. As telas usam os papéis (
 | `colors.brand.glyph` | `#043525` | `palette.brandInk` | Símbolo do ícone do app |
 | `colors.spinner` | `#185C4B` | `palette.forest700` | Indicador de carregamento sobre fundo claro |
 | `colors.overlay` | `rgba(0, 0, 0, 0.4)` | — | Véu atrás de modais e folhas |
-| `colors.map.paused` | `#828890` | — | Marcador de lembrete pausado no mapa |
+| `colors.map.me` | `#2F80ED` | `palette.mapBlue` | Posição atual da pessoa no mapa |
+| `colors.map.ring` | `#FFFFFF` | `palette.white` | Aro branco em volta dos marcadores do mapa |
+| `colors.map.paused` | `#828890` | `palette.mapGray` | Marcador de lembrete pausado no mapa |
+| `colors.map.background` | `#E8E4DC` | `palette.sand` | Fundo do mapa enquanto os mapas carregam |
 <!-- tokens:cores-semanticas:fim -->
 
 ### 3.3 Categorias de lembrete
@@ -547,6 +552,7 @@ Cada par é testado em `src/design/__tests__/acessibilidade.test.ts`. Par novo e
 | `colors.category.blue.pin` | `colors.bg.field` | 3,87:1 | 3:1 | ✓ exceção | Marcador da categoria blue sobre o mapa claro |
 | `colors.category.purple.pin` | `colors.bg.field` | 5,70:1 | 3:1 | ✓ exceção | Marcador da categoria purple sobre o mapa claro |
 | `colors.category.pink.pin` | `colors.bg.field` | 3,96:1 | 3:1 | ✓ exceção | Marcador da categoria pink sobre o mapa claro |
+| `colors.map.me` | `colors.bg.field` | 3,87:1 | 3:1 | ✓ exceção | Posição da pessoa sobre o mapa claro |
 | `colors.map.paused` | `colors.bg.field` | 3,58:1 | 3:1 | ✓ exceção | Marcador de lembrete pausado sobre o mapa claro |
 
 - **Exceção:** Exceção conhecida: o laranja da marca (aprovado nas referências) dá menos de 4,5:1 com texto branco. Só passa como texto grande ou componente. Mitigação: rótulo 16/700 em botão de 52 de altura; alternativa AA pronta em `colors.action.primaryAA`.
@@ -575,7 +581,8 @@ Cada par é testado em `src/design/__tests__/acessibilidade.test.ts`. Par novo e
 | Cartão de lembrete e ícones | seções 8 e 11.1 | aplicado |
 | Lista de lembretes e novo lembrete (telas) | seções 9 a 11, 15 | aplicado |
 | Abas, cabeçalho e coluna da web | seções 11.6 e 11.7 | aplicado |
-| Mapa, configurações, contas e páginas públicas (telas) | todas | pendente |
+| Mapa (com a folha do marcador) e configurações (telas) | todas | aplicado |
+| Telas de conta (entrar, criar conta, esqueci e redefinir senha) e páginas públicas | todas | pendente |
 | Famílias tipográficas da marca | seção 4.1 | pendente (seção 19) |
 
 O teste `valores-soltos.test.ts` mantém uma lista de arquivos com valores visuais soltos (`PENDENTES`); ela só encolhe e chega a zero quando o app inteiro usa tokens.

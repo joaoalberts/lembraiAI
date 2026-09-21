@@ -5,10 +5,10 @@ import * as L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import type { DOMProps } from 'expo/dom';
 import { FALLBACK_COORD } from '../data/reminders';
+import { colors } from '../design/tokens';
 import type { MapMarker } from './map-types';
 
 const ZOOM = 15;
-const ME_COLOR = '#2F80ED';
 
 interface Props {
   /** Injetado pelo Expo no iOS/Android: configura a WebView que hospeda este componente. */
@@ -71,7 +71,7 @@ export default function LeafletMapDom({ center, markers, onMarkerPress }: Props)
     g.clearLayers();
     for (const mk of markers) {
       L.circle([mk.lat, mk.lng], { radius: mk.radius, color: mk.color, weight: 2, fillColor: mk.color, fillOpacity: 0.15 }).addTo(g);
-      L.circleMarker([mk.lat, mk.lng], { radius: 9, color: '#FFFFFF', weight: 3, fillColor: mk.color, fillOpacity: 1 })
+      L.circleMarker([mk.lat, mk.lng], { radius: 9, color: colors.map.ring, weight: 3, fillColor: mk.color, fillOpacity: 1 })
         .bindTooltip(mk.title)
         .on('click', () => { void onPress.current(mk); })
         .addTo(g);
@@ -90,7 +90,7 @@ export default function LeafletMapDom({ center, markers, onMarkerPress }: Props)
     if (!center) { me.current?.remove(); me.current = null; return; }
     const ll: [number, number] = [center.lat, center.lng];
     if (me.current) me.current.setLatLng(ll);
-    else me.current = L.circleMarker(ll, { radius: 7, color: '#FFFFFF', weight: 3, fillColor: ME_COLOR, fillOpacity: 1, interactive: false }).addTo(m);
+    else me.current = L.circleMarker(ll, { radius: 7, color: colors.map.ring, weight: 3, fillColor: colors.map.me, fillOpacity: 1, interactive: false }).addTo(m);
     if (!centered.current) { centered.current = true; m.setView(ll, ZOOM); }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [ready, centerKey]);
