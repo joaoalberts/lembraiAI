@@ -13,6 +13,8 @@ interface Store {
   recarregar: () => Promise<void>;
   toggle: (id: string) => Promise<void>;
   create: (d: Draft) => Promise<Reminder | null>;
+  /** Salva a edição de um lembrete existente (o mesmo formulário da criação). */
+  update: (id: string, d: Draft) => Promise<Reminder | null>;
   remove: (id: string) => Promise<void>;
 }
 
@@ -65,6 +67,21 @@ export function RemindersProvider({ children }: { children: ReactNode }) {
     return novo;
   }, [userId]);
 
+  /**
+   * Categoria e ícone saem de novo do título (como na criação). Os avisos agendados e os geofences dependem só da lista,
+   * então se refazem sozinhos quando ela muda: não há nada a agendar aqui.
+   */
+  const update = useCallback(async (id: string, d: Draft) => {
+    if (!userId) return null;
+    const { user_id: _dono, ...campos } = toRow(d, userId);
+    const { data, error } = await supabase.from('reminders').update(campos).eq('id', id).select().single();
+    if (error || !data) { setErro('Não foi possível salvar o lembrete.'); return null; }
+    const atualizado = fromRow(data as Row);
+    setReminders((rs) => rs.map((r) => (r.id === id ? atualizado : r)).sort(ordenar));
+    setErro(null);
+    return atualizado;
+  }, [userId]);
+
   const remove = useCallback(async (id: string) => {
     const antes = reminders;
     setReminders((rs) => rs.filter((r) => r.id !== id));
@@ -73,8 +90,8 @@ export function RemindersProvider({ children }: { children: ReactNode }) {
   }, [reminders]);
 
   const value = useMemo<Store>(
-    () => ({ reminders, carregando, erro, recarregar, toggle, create, remove }),
-    [reminders, carregando, erro, recarregar, toggle, create, remove],
+    () => ({ reminders, carregando, erro, recarregar, toggle, create, update, remove }),
+    [reminders, carregando, erro, recarregar, toggle, create, update, remove],
   );
   return <Ctx.Provider value={value}>{children}</Ctx.Provider>;
 }
