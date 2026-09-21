@@ -46,6 +46,13 @@ describe('achadosNoTexto (o detector de valores soltos)', () => {
     expect(achadosNoTexto('const t = { fontWeight: fontWeight.bold };')).toHaveLength(1);
   });
 
+  it('acusa du( solto e degradê escrito à mão, mas não fundoEmDegrade nem o token', () => {
+    expect(achadosNoTexto('height: du(345)')).toHaveLength(1);
+    expect(achadosNoTexto("experimental_backgroundImage: 'linear-gradient(red, blue)'")).toHaveLength(1);
+    expect(achadosNoTexto("backgroundImage: 'linear-gradient(red, blue)'")).toHaveLength(1);
+    expect(achadosNoTexto('...fundoEmDegrade(gradients.cabecalhoVerde)')).toHaveLength(0);
+  });
+
   it('acusa família de fonte escrita à mão, mas não a que vem dos tokens', () => {
     expect(achadosNoTexto("fontFamily: 'Inter'")).toHaveLength(1);
     expect(achadosNoTexto('fontFamily: "Georgia, serif"')).toHaveLength(1);

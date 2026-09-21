@@ -8,6 +8,13 @@
  * ou decididos aqui, com o motivo no "Registro de decisões" do documento.
  */
 
+/**
+ * Unidade de desenho do app web: 1 du = 1 px da arte de referência de 851 px de largura. As capturas de referência
+ * (docs/referencias) têm 430 px de CSS de largura, então 1 du = 430/851 dp. Só este arquivo converte: as telas usam os
+ * tokens (o teste de valores soltos barra `du(` fora de src/design). Nenhuma medida sai abaixo de 1.
+ */
+export const du = (n: number): number => Math.max(1, Math.round((n * 430) / 851));
+
 /** Cores primitivas. Nas telas use `colors` (papéis), não estas. Nomes iguais aos do app web quando o valor é o mesmo. */
 export const palette = {
   forest900: '#12432F',
@@ -49,6 +56,36 @@ export const palette = {
   green700: '#0B7A3B',
   mapBlue: '#2F80ED',
   mapGray: '#828890',
+  // Medidas nas capturas (docs/referencias/MEDICOES.md); valores exatos do CSS do app web
+  forest950: '#0D2A1B',
+  forestPin: '#054C39',
+  headerTop: '#2A5B47',
+  headerMid: '#184434',
+  headerBottom: '#0E301F',
+  mist300: '#CBE4D6',
+  mist100: '#E3EEE5',
+  mint200: '#C6E4D5',
+  mint400: '#7FEAC6',
+  toggleCardOn: '#30AB7B',
+  toggleFormOn: '#256855',
+  frost: '#E3E7DC',
+  frostHover: '#D9DECF',
+  frostPressed: '#CFD5C4',
+  frostInk: '#1A2C23',
+  danger: '#D43A2A',
+  dangerHover: '#C63424',
+  dangerPressed: '#B92F20',
+  sheet: '#EFF0EA',
+  alertErrorBg: '#FDF0EE',
+  alertErrorInk: '#8E2418',
+  alertInfoInk: '#1B4436',
+  statusGreen: '#029554',
+  onDark100: '#FDFAF6',
+  onDark200: '#CCD8D0',
+  onDark300: '#B1C3B8',
+  onDark400: '#A7B9B0',
+  tabInactive: '#777C8A',
+  homeIndicator: '#B7B3AE',
 } as const;
 
 /** Cores por papel. É isto que as telas e os componentes usam. */
@@ -59,6 +96,7 @@ export const colors = {
     card: palette.cream100,
     field: palette.white,
     disabled: palette.cream200,
+    sheet: palette.sheet,
   },
   text: {
     primary: palette.ink900,
@@ -68,6 +106,11 @@ export const colors = {
     brand: palette.inkBrand,
     onAction: palette.white,
     onDark: palette.white,
+    onDarkWarm: palette.onDark100,
+    onDarkSoft: palette.onDark200,
+    onDarkMuted: palette.onDark300,
+    onDarkFaint: palette.onDark400,
+    onFrost: palette.frostInk,
     danger: palette.red700,
     success: palette.green700,
   },
@@ -83,6 +126,12 @@ export const colors = {
     secondary: palette.forest800,
     secondaryHover: palette.forestHover,
     secondaryPressed: palette.forestPressed,
+    danger: palette.danger,
+    dangerHover: palette.dangerHover,
+    dangerPressed: palette.dangerPressed,
+    frost: palette.frost,
+    frostHover: palette.frostHover,
+    frostPressed: palette.frostPressed,
   },
   border: {
     field: palette.borderSubtle,
@@ -95,6 +144,8 @@ export const colors = {
   },
   control: {
     on: palette.forest600,
+    onCard: palette.toggleCardOn,
+    onForm: palette.toggleFormOn,
     off: palette.trackOff,
     thumb: palette.white,
     chipOn: palette.forest900,
@@ -109,6 +160,20 @@ export const colors = {
     infoBg: palette.mintTint,
     infoBar: palette.forest700,
     emptyCircle: palette.mint100,
+    errorBg: palette.alertErrorBg,
+    errorInk: palette.alertErrorInk,
+    infoInk: palette.alertInfoInk,
+  },
+  /** Selo "Ativo" do lembrete. */
+  status: { active: palette.statusGreen },
+  /** Barra de abas: rótulo e ícone da aba inativa, e o traço "home" do iOS por baixo. */
+  tab: { inactive: palette.tabInactive, indicator: palette.homeIndicator },
+  /** Vidro sobre o verde escuro dos cabeçalhos: um véu branco quase transparente com borda (o desfoque não aparece sobre um verde quase liso). */
+  glass: {
+    fill: 'rgba(255, 255, 255, 0.05)',
+    fillHover: 'rgba(255, 255, 255, 0.1)',
+    fillPressed: 'rgba(255, 255, 255, 0.16)',
+    border: 'rgba(255, 255, 255, 0.2)',
   },
   /** Identidade do ícone do app (tile em degradê e o símbolo); vale para ícone, tela de abertura e favicon. */
   brand: {
@@ -123,14 +188,21 @@ export const colors = {
     ring: palette.white,
     paused: palette.mapGray,
     background: palette.sand,
+    /** Pino do formulário (verde-floresta escuro) e o halo do raio de aviso. */
+    pin: palette.forestPin,
+    haloFill: 'rgba(45, 170, 120, 0.21)',
+    haloLine: 'rgba(45, 170, 120, 0.32)',
   },
-  /** `bg` = fundo do ícone; `bar` = faixa lateral do cartão; `ink` = glifo; `pin` = marcador forte no mapa. */
+  /**
+   * `bg` = fundo do ícone; `bar` = faixa lateral do cartão; `ink` = glifo; `pin` = marcador forte no mapa;
+   * `tag` = fundo da etiqueta ("Por horário"); `fg` = ícone da etiqueta.
+   */
   category: {
-    green: { bg: '#DBF1E4', bar: '#39C391', ink: '#011F1A', pin: '#2F9E5B' },
-    orange: { bg: '#FDE6D6', bar: '#FD6C34', ink: '#0A0A0A', pin: '#FE532A' },
-    blue: { bg: '#D5E8F9', bar: '#51A6F6', ink: '#024381', pin: '#2F80ED' },
-    purple: { bg: '#EADFFB', bar: '#B287E8', ink: '#0A0A14', pin: '#7C3AED' },
-    pink: { bg: '#FCE3E9', bar: '#F980B3', ink: '#0A0A14', pin: '#E0457B' },
+    green: { bg: '#DBF1E4', bar: '#39C391', ink: '#011F1A', pin: '#2F9E5B', tag: '#DAF4E6', fg: '#18714E' },
+    orange: { bg: '#FDE6D6', bar: '#FD6C34', ink: '#0A0A0A', pin: '#FE532A', tag: '#FDE5D7', fg: '#F86327' },
+    blue: { bg: '#D5E8F9', bar: '#51A6F6', ink: '#024381', pin: '#2F80ED', tag: '#D6E9F9', fg: '#2C91EA' },
+    purple: { bg: '#EADFFB', bar: '#B287E8', ink: '#0A0A14', pin: '#7C3AED', tag: '#ECE4FB', fg: '#9265D8' },
+    pink: { bg: '#FCE3E9', bar: '#F980B3', ink: '#0A0A14', pin: '#E0457B', tag: '#FCE6EC', fg: '#ED6E9E' },
   },
 } as const;
 
@@ -246,6 +318,35 @@ export const shadow = {
   float: '0px 1px 4px rgba(0, 0, 0, 0.16)',
   cta: '0px 8px 24px rgba(254, 83, 42, 0.3)',
   focus: '0px 0px 0px 3px rgba(24, 92, 75, 0.15)',
+} as const;
+
+/**
+ * Fundos em degradê como texto CSS (`linear-gradient` e `radial-gradient`, medidas do CSS do app web convertidas de du para dp).
+ * O React Native 0.86 aceita em `experimental_backgroundImage` e a web em `backgroundImage`: use `fundoEmDegrade` (efeitos.ts).
+ */
+export const gradients = {
+  /** Cabeçalho verde da lista e das configurações (345 du de altura): base a 168°, luz menta e sombra de pinheiro. */
+  cabecalhoVerde: [
+    `radial-gradient(${du(560)}px ${du(330)}px at 90% 6%, rgba(127, 234, 198, 0.28), rgba(127, 234, 198, 0) 70%)`,
+    `radial-gradient(${du(520)}px ${du(300)}px at 4% 92%, rgba(33, 105, 85, 0.6), rgba(33, 105, 85, 0) 72%)`,
+    `linear-gradient(168deg, ${palette.headerTop} 0%, ${palette.headerMid} 50%, ${palette.headerBottom} 100%)`,
+  ].join(', '),
+  /** Fundo das telas de conta: o mesmo verde, com três luzes. */
+  contas: [
+    `radial-gradient(${du(560)}px ${du(400)}px at 88% 4%, rgba(127, 234, 198, 0.26), rgba(127, 234, 198, 0) 70%)`,
+    `radial-gradient(${du(740)}px ${du(460)}px at 50% 100%, rgba(132, 250, 218, 0.15), rgba(132, 250, 218, 0) 70%)`,
+    `radial-gradient(${du(520)}px ${du(380)}px at 6% 96%, rgba(33, 105, 85, 0.55), rgba(33, 105, 85, 0) 72%)`,
+    `linear-gradient(168deg, ${palette.headerTop} 0%, ${palette.headerMid} 52%, ${palette.headerBottom} 100%)`,
+  ].join(', '),
+  /** Cabeçalho claro do formulário de novo lembrete: névoa menta que termina no fundo da página. */
+  cabecalhoClaro: [
+    `radial-gradient(${du(560)}px ${du(340)}px at 100% 0%, rgba(33, 105, 85, 0.58), rgba(33, 105, 85, 0) 72%)`,
+    `radial-gradient(${du(480)}px ${du(300)}px at 0% 0%, rgba(148, 249, 205, 0.36), rgba(148, 249, 205, 0) 72%)`,
+    `radial-gradient(${du(520)}px ${du(170)}px at 46% 26%, rgba(255, 255, 255, 0.55), rgba(255, 255, 255, 0) 100%)`,
+    `linear-gradient(180deg, ${palette.mist300} 0%, ${palette.mist100} 44%, ${palette.cream200} 100%)`,
+  ].join(', '),
+  /** Esmaecimento de baixo para cima atrás do botão fixo do formulário. */
+  esmaecerParaPagina: `linear-gradient(to top, ${palette.cream200} 62%, rgba(245, 242, 237, 0) 100%)`,
 } as const;
 
 export const motion = {

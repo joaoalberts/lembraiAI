@@ -5,7 +5,7 @@
  */
 import { PARES_DE_CONTRASTE, razaoDoPar } from './a11y';
 import { ICON_NAME, TAB_ICON, UI_ICON } from './icons';
-import { borderWidth, colors, fontFamily, fontSize, layout, lineHeight, motion, opacity, palette, radius, shadow, size, space, textStyles } from './tokens';
+import { borderWidth, colors, fontFamily, fontSize, gradients, layout, lineHeight, motion, opacity, palette, radius, shadow, size, space, textStyles } from './tokens';
 
 type Folha = { caminho: string; valor: string | number };
 
@@ -14,7 +14,7 @@ const achatar = (objeto: object, prefixo: string): Folha[] =>
     valor !== null && typeof valor === 'object' ? achatar(valor, `${prefixo}.${chave}`) : [{ caminho: `${prefixo}.${chave}`, valor: valor as string | number }],
   );
 
-const GRUPOS = { palette, colors, fontSize, lineHeight, fontFamily, space, radius, borderWidth, size, opacity, shadow, motion, layout };
+const GRUPOS = { palette, colors, fontSize, lineHeight, fontFamily, space, radius, borderWidth, size, opacity, shadow, gradients, motion, layout };
 
 /** Todo token existente, como "colors.text.primary". Os estilos de texto contam como um token cada (`textStyles.body`). */
 export const CAMINHOS_DE_TOKEN: string[] = [
@@ -63,6 +63,35 @@ const DESCRICOES: Record<string, string> = {
   'palette.green700': 'Texto de sucesso',
   'palette.mapBlue': 'Posição atual da pessoa no mapa',
   'palette.mapGray': 'Marcador de lembrete pausado no mapa',
+  'palette.forest950': 'Palco escuro atrás da coluna do app na web, como no app original',
+  'palette.forestPin': 'Pino do mapa no formulário de novo lembrete',
+  'palette.headerTop': 'Degradê verde dos cabeçalhos e das telas de conta: topo',
+  'palette.headerMid': 'Degradê verde dos cabeçalhos e das telas de conta: meio',
+  'palette.headerBottom': 'Degradê verde dos cabeçalhos e das telas de conta: base',
+  'palette.mist300': 'Degradê claro do cabeçalho do formulário: topo',
+  'palette.mist100': 'Degradê claro do cabeçalho do formulário: meio',
+  'palette.mint200': 'Contorno da faixa de seleção do horário',
+  'palette.mint400': 'Anel de foco sobre fundo escuro',
+  'palette.toggleCardOn': 'Interruptor ligado no cartão de lembrete',
+  'palette.toggleFormOn': 'Interruptor ligado nos formulários e nas configurações',
+  'palette.frost': 'Botão translúcido (ações do sucesso e Cancelar)',
+  'palette.frostHover': 'Botão translúcido com o ponteiro em cima (web)',
+  'palette.frostPressed': 'Botão translúcido pressionado',
+  'palette.frostInk': 'Texto dos botões translúcidos',
+  'palette.danger': 'Botão de perigo (Excluir lembrete)',
+  'palette.dangerHover': 'Botão de perigo com o ponteiro em cima (web)',
+  'palette.dangerPressed': 'Botão de perigo pressionado',
+  'palette.sheet': 'Folha de cantos altos da lista e das configurações',
+  'palette.alertErrorBg': 'Fundo do aviso de erro nas configurações',
+  'palette.alertErrorInk': 'Texto do aviso de erro nas configurações',
+  'palette.alertInfoInk': 'Texto do aviso informativo',
+  'palette.statusGreen': 'Ponto do selo "Ativo"',
+  'palette.onDark100': 'Texto sobre verde escuro: título',
+  'palette.onDark200': 'Texto sobre verde escuro: subtítulo',
+  'palette.onDark300': 'Texto sobre verde escuro: apoio',
+  'palette.onDark400': 'Texto sobre verde escuro: o mais suave',
+  'palette.tabInactive': 'Rótulo e ícone da aba inativa (medido nas capturas)',
+  'palette.homeIndicator': 'Traço "home" do iOS sob a barra de abas',
 
   'colors.bg.page': 'Fundo de todas as telas',
   'colors.bg.stage': 'Palco atrás da coluna do app na web (tablet e computador)',
@@ -120,6 +149,39 @@ const DESCRICOES: Record<string, string> = {
   'colors.category.*.bar': 'Faixa lateral do cartão da categoria',
   'colors.category.*.ink': 'Glifo do ícone da categoria',
   'colors.category.*.pin': 'Marcador da categoria no mapa',
+  'colors.category.*.tag': 'Fundo da etiqueta do cartão ("Por horário", "Por local")',
+  'colors.category.*.fg': 'Ícone da etiqueta do cartão',
+  'colors.bg.sheet': 'Folha de cantos altos da lista e das configurações',
+  'colors.text.onDarkWarm': 'Título sobre verde escuro',
+  'colors.text.onDarkSoft': 'Subtítulo sobre verde escuro',
+  'colors.text.onDarkMuted': 'Texto de apoio sobre verde escuro',
+  'colors.text.onDarkFaint': 'Texto mais suave sobre verde escuro',
+  'colors.text.onFrost': 'Rótulo dos botões translúcidos',
+  'colors.action.danger': 'Fundo do botão de perigo',
+  'colors.action.dangerHover': 'Botão de perigo com o ponteiro em cima (web)',
+  'colors.action.dangerPressed': 'Botão de perigo pressionado',
+  'colors.action.frost': 'Fundo dos botões translúcidos',
+  'colors.action.frostHover': 'Botão translúcido com o ponteiro em cima (web)',
+  'colors.action.frostPressed': 'Botão translúcido pressionado',
+  'colors.control.onCard': 'Interruptor ligado no cartão de lembrete',
+  'colors.control.onForm': 'Interruptor ligado nos formulários e nas configurações',
+  'colors.feedback.errorBg': 'Fundo do aviso de erro nas configurações',
+  'colors.feedback.errorInk': 'Texto do aviso de erro nas configurações',
+  'colors.feedback.infoInk': 'Texto do aviso informativo',
+  'colors.status.active': 'Ponto do selo "Ativo"',
+  'colors.tab.inactive': 'Rótulo e ícone da aba inativa',
+  'colors.tab.indicator': 'Traço "home" do iOS sob a barra de abas',
+  'colors.glass.fill': 'Véu do botão de vidro sobre o verde escuro',
+  'colors.glass.fillHover': 'Botão de vidro com o ponteiro em cima (web)',
+  'colors.glass.fillPressed': 'Botão de vidro pressionado',
+  'colors.glass.border': 'Borda do botão de vidro',
+  'colors.map.pin': 'Pino do mapa no formulário de novo lembrete',
+  'colors.map.haloFill': 'Preenchimento do círculo do raio de aviso',
+  'colors.map.haloLine': 'Contorno do círculo do raio de aviso',
+  'gradients.cabecalhoVerde': 'Cabeçalho verde da lista e das configurações (345 du de altura)',
+  'gradients.contas': 'Fundo das telas de conta',
+  'gradients.cabecalhoClaro': 'Cabeçalho claro do formulário de novo lembrete',
+  'gradients.esmaecerParaPagina': 'Esmaecimento atrás do botão fixo do formulário',
 
   'fontSize.micro': 'Tags e legendas: o piso de legibilidade do app',
   'fontSize.caption': 'Dicas, metadados e mensagens de campo',
@@ -224,8 +286,8 @@ export function blocosGerados(): Record<string, string> {
     ),
 
     'cores-categorias': tabela(
-      ['Categoria', 'Fundo do ícone (`bg`)', 'Faixa (`bar`)', 'Glifo (`ink`)', 'Marcador no mapa (`pin`)'],
-      categorias.map((c) => [cod(`colors.category.${c}`), cod(category[c].bg), cod(category[c].bar), cod(category[c].ink), cod(category[c].pin)]),
+      ['Categoria', 'Fundo do ícone (`bg`)', 'Faixa (`bar`)', 'Glifo (`ink`)', 'Marcador no mapa (`pin`)', 'Etiqueta (`tag`)', 'Ícone da etiqueta (`fg`)'],
+      categorias.map((c) => [cod(`colors.category.${c}`), cod(category[c].bg), cod(category[c].bar), cod(category[c].ink), cod(category[c].pin), cod(category[c].tag), cod(category[c].fg)]),
     ),
 
     contraste: [
@@ -255,6 +317,14 @@ export function blocosGerados(): Record<string, string> {
     tamanhos: tabela(['Token', 'Valor', 'Uso'], [...linhasSimples('size', size), ...linhasSimples('layout', layout)]),
     opacidade: tabela(['Token', 'Valor', 'Uso'], linhasSimples('opacity', opacity)),
     sombras: tabela(['Token', 'Valor (`boxShadow`)', 'Uso'], linhasSimples('shadow', shadow)),
+    degrades: tabela(
+      ['Token', 'Receita (camadas de cima para baixo)', 'Uso'],
+      Object.entries(gradients).map(([nome, receita]) => [
+        cod(`gradients.${nome}`),
+        receita.split(/,\s*(?=(?:radial|linear)-gradient\()/).map((camada) => cod(camada)).join('<br>'),
+        descricaoDoToken(`gradients.${nome}`) ?? '',
+      ]),
+    ),
     movimento: tabela(['Token', 'Valor', 'Uso'], linhasSimples('motion', motion)),
 
     'icones-categorias': tabela(['Ícone do lembrete', 'Ionicons'], Object.entries(ICON_NAME).map(([chave, nome]) => [cod(chave), cod(nome)])),

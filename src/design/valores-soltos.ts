@@ -25,6 +25,10 @@ const COR_FUNCAO = /\brgba?\(/g;
 /** Fonte própria ignora `fontWeight` e soma negrito falso: o peso vem da família (`fontFamily.*`), então o próprio `fontWeight` é proibido. */
 const PESO_ESCRITO = /\bfontWeight\s*:/g;
 const FAMILIA_ESCRITA = /\bfontFamily\s*:\s*['"`]/g;
+/** `du(` só converte dentro dos tokens; a tela usa o token nomeado. */
+const DU_SOLTO = /\bdu\(/g;
+/** Degradê só por `fundoEmDegrade(gradients.x)`: cada plataforma quer uma propriedade diferente. */
+const DEGRADE_ESCRITO = /\b(?:experimental_)?backgroundImage\s*:/g;
 
 /** Tira comentários sem mexer nos números de linha (a barra dupla de uma URL, como em "https://", não conta). */
 function semComentarios(texto: string): string {
@@ -43,6 +47,8 @@ export function achadosNoTexto(texto: string): Achado[] {
     for (const m of linha.matchAll(NUMERICA)) if (parseFloat(m[2]) !== 0) achados.push({ linha: i + 1, trecho: m[0], tipo: 'medida numérica' });
     for (const m of linha.matchAll(PESO_ESCRITO)) achados.push({ linha: i + 1, trecho: m[0], tipo: 'peso de fonte escrito' });
     for (const m of linha.matchAll(FAMILIA_ESCRITA)) achados.push({ linha: i + 1, trecho: m[0], tipo: 'família de fonte escrita' });
+    for (const m of linha.matchAll(DU_SOLTO)) achados.push({ linha: i + 1, trecho: m[0], tipo: 'medida em du fora dos tokens' });
+    for (const m of linha.matchAll(DEGRADE_ESCRITO)) achados.push({ linha: i + 1, trecho: m[0], tipo: 'degradê escrito à mão (use fundoEmDegrade)' });
   });
   return achados;
 }

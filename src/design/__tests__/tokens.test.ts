@@ -15,19 +15,20 @@ describe('cores', () => {
     expect(erradas).toEqual([]);
   });
 
-  it('as cores semânticas vêm da paleta; fora as categorias, a única exceção é o véu do modal (rgba)', () => {
+  it('as cores semânticas vêm da paleta; fora as categorias, as exceções são os véus translúcidos (rgba): modal, vidro e halo do raio', () => {
     const daPaleta = new Set<string>(Object.values(palette));
     const fora = folhas(colors)
       .filter(([caminho, v]) => !caminho.startsWith('category.') && typeof v === 'string' && !daPaleta.has(v))
       .map(([caminho]) => caminho)
       .sort();
-    expect(fora).toEqual(['overlay']);
+    expect(fora).toEqual(['glass.border', 'glass.fill', 'glass.fillHover', 'glass.fillPressed', 'map.haloFill', 'map.haloLine', 'overlay']);
+    for (const [caminho, v] of folhas(colors)) if (fora.includes(caminho)) expect({ caminho, rgba: String(v).startsWith('rgba(') }).toEqual({ caminho, rgba: true });
   });
 
-  it('as cinco categorias do banco existem, cada uma com fundo, barra, glifo e marcador', () => {
+  it('as cinco categorias do banco existem, cada uma com fundo, barra, glifo, marcador, etiqueta e ícone da etiqueta', () => {
     expect(Object.keys(colors.category).sort()).toEqual(['blue', 'green', 'orange', 'pink', 'purple']);
     for (const cat of Object.values(colors.category)) {
-      expect(Object.keys(cat).sort()).toEqual(['bar', 'bg', 'ink', 'pin']);
+      expect(Object.keys(cat).sort()).toEqual(['bar', 'bg', 'fg', 'ink', 'pin', 'tag']);
       for (const cor of Object.values(cat)) expect(cor).toMatch(HEX);
     }
   });

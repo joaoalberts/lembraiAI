@@ -104,6 +104,35 @@ Use `palette.*` só para definir papéis em `colors`. As telas usam os papéis (
 | `palette.green700` | `#0B7A3B` | Texto de sucesso |
 | `palette.mapBlue` | `#2F80ED` | Posição atual da pessoa no mapa |
 | `palette.mapGray` | `#828890` | Marcador de lembrete pausado no mapa |
+| `palette.forest950` | `#0D2A1B` | Palco escuro atrás da coluna do app na web, como no app original |
+| `palette.forestPin` | `#054C39` | Pino do mapa no formulário de novo lembrete |
+| `palette.headerTop` | `#2A5B47` | Degradê verde dos cabeçalhos e das telas de conta: topo |
+| `palette.headerMid` | `#184434` | Degradê verde dos cabeçalhos e das telas de conta: meio |
+| `palette.headerBottom` | `#0E301F` | Degradê verde dos cabeçalhos e das telas de conta: base |
+| `palette.mist300` | `#CBE4D6` | Degradê claro do cabeçalho do formulário: topo |
+| `palette.mist100` | `#E3EEE5` | Degradê claro do cabeçalho do formulário: meio |
+| `palette.mint200` | `#C6E4D5` | Contorno da faixa de seleção do horário |
+| `palette.mint400` | `#7FEAC6` | Anel de foco sobre fundo escuro |
+| `palette.toggleCardOn` | `#30AB7B` | Interruptor ligado no cartão de lembrete |
+| `palette.toggleFormOn` | `#256855` | Interruptor ligado nos formulários e nas configurações |
+| `palette.frost` | `#E3E7DC` | Botão translúcido (ações do sucesso e Cancelar) |
+| `palette.frostHover` | `#D9DECF` | Botão translúcido com o ponteiro em cima (web) |
+| `palette.frostPressed` | `#CFD5C4` | Botão translúcido pressionado |
+| `palette.frostInk` | `#1A2C23` | Texto dos botões translúcidos |
+| `palette.danger` | `#D43A2A` | Botão de perigo (Excluir lembrete) |
+| `palette.dangerHover` | `#C63424` | Botão de perigo com o ponteiro em cima (web) |
+| `palette.dangerPressed` | `#B92F20` | Botão de perigo pressionado |
+| `palette.sheet` | `#EFF0EA` | Folha de cantos altos da lista e das configurações |
+| `palette.alertErrorBg` | `#FDF0EE` | Fundo do aviso de erro nas configurações |
+| `palette.alertErrorInk` | `#8E2418` | Texto do aviso de erro nas configurações |
+| `palette.alertInfoInk` | `#1B4436` | Texto do aviso informativo |
+| `palette.statusGreen` | `#029554` | Ponto do selo "Ativo" |
+| `palette.onDark100` | `#FDFAF6` | Texto sobre verde escuro: título |
+| `palette.onDark200` | `#CCD8D0` | Texto sobre verde escuro: subtítulo |
+| `palette.onDark300` | `#B1C3B8` | Texto sobre verde escuro: apoio |
+| `palette.onDark400` | `#A7B9B0` | Texto sobre verde escuro: o mais suave |
+| `palette.tabInactive` | `#777C8A` | Rótulo e ícone da aba inativa (medido nas capturas) |
+| `palette.homeIndicator` | `#B7B3AE` | Traço "home" do iOS sob a barra de abas |
 <!-- tokens:cores-primitivas:fim -->
 
 ### 3.2 Papéis
@@ -116,6 +145,7 @@ Use `palette.*` só para definir papéis em `colors`. As telas usam os papéis (
 | `colors.bg.card` | `#FAF9F6` | `palette.cream100` | Superfície de cartões e da barra de abas |
 | `colors.bg.field` | `#FFFFFF` | `palette.white` | Campos de formulário, painéis e folhas |
 | `colors.bg.disabled` | `#F5F2ED` | `palette.cream200` | Campo desabilitado |
+| `colors.bg.sheet` | `#EFF0EA` | `palette.sheet` | Folha de cantos altos da lista e das configurações |
 | `colors.text.primary` | `#0A0A0A` | `palette.ink900` | Texto principal e títulos |
 | `colors.text.secondary` | `#5B5D64` | `palette.ink700` | Subtítulos, dicas e metadados |
 | `colors.text.placeholder` | `#6B6E76` | `palette.ink650` | Texto de exemplo dentro de campos vazios |
@@ -123,6 +153,11 @@ Use `palette.*` só para definir papéis em `colors`. As telas usam os papéis (
 | `colors.text.brand` | `#0A3924` | `palette.inkBrand` | Rótulo da aba ativa |
 | `colors.text.onAction` | `#FFFFFF` | `palette.white` | Rótulo sobre o botão primário |
 | `colors.text.onDark` | `#FFFFFF` | `palette.white` | Rótulo sobre fundo escuro (botão escuro, chip selecionado) |
+| `colors.text.onDarkWarm` | `#FDFAF6` | `palette.onDark100` | Título sobre verde escuro |
+| `colors.text.onDarkSoft` | `#CCD8D0` | `palette.onDark200` | Subtítulo sobre verde escuro |
+| `colors.text.onDarkMuted` | `#B1C3B8` | `palette.onDark300` | Texto de apoio sobre verde escuro |
+| `colors.text.onDarkFaint` | `#A7B9B0` | `palette.onDark400` | Texto mais suave sobre verde escuro |
+| `colors.text.onFrost` | `#1A2C23` | `palette.frostInk` | Rótulo dos botões translúcidos |
 | `colors.text.danger` | `#C62828` | `palette.red700` | Mensagens e rótulos de erro |
 | `colors.text.success` | `#0B7A3B` | `palette.green700` | Mensagens e rótulos de sucesso |
 | `colors.icon.default` | `#0A0A0A` | `palette.ink900` | Ícones sobre fundo claro |
@@ -134,6 +169,12 @@ Use `palette.*` só para definir papéis em `colors`. As telas usam os papéis (
 | `colors.action.secondary` | `#254233` | `palette.forest800` | Fundo do botão escuro (secundário) |
 | `colors.action.secondaryHover` | `#1F382B` | `palette.forestHover` | Botão escuro com o ponteiro em cima (web) |
 | `colors.action.secondaryPressed` | `#1B3025` | `palette.forestPressed` | Botão escuro pressionado |
+| `colors.action.danger` | `#D43A2A` | `palette.danger` | Fundo do botão de perigo |
+| `colors.action.dangerHover` | `#C63424` | `palette.dangerHover` | Botão de perigo com o ponteiro em cima (web) |
+| `colors.action.dangerPressed` | `#B92F20` | `palette.dangerPressed` | Botão de perigo pressionado |
+| `colors.action.frost` | `#E3E7DC` | `palette.frost` | Fundo dos botões translúcidos |
+| `colors.action.frostHover` | `#D9DECF` | `palette.frostHover` | Botão translúcido com o ponteiro em cima (web) |
+| `colors.action.frostPressed` | `#CFD5C4` | `palette.frostPressed` | Botão translúcido pressionado |
 | `colors.border.field` | `#E7E8EA` | `palette.borderSubtle` | Borda de campos de formulário |
 | `colors.border.strong` | `#B9B8BB` | `palette.borderStrong` | Contorno do botão sem fundo (ghost) |
 | `colors.border.divider` | `#E8E7E6` | `palette.divider` | Divisórias |
@@ -142,6 +183,8 @@ Use `palette.*` só para definir papéis em `colors`. As telas usam os papéis (
 | `colors.border.danger` | `#C62828` | `palette.red700` | Borda do campo com erro e do botão de exclusão |
 | `colors.border.dangerSoft` | `#F3B8B8` | `palette.red200` | Borda da zona de perigo |
 | `colors.control.on` | `#216955` | `palette.forest600` | Interruptor ligado |
+| `colors.control.onCard` | `#30AB7B` | `palette.toggleCardOn` | Interruptor ligado no cartão de lembrete |
+| `colors.control.onForm` | `#256855` | `palette.toggleFormOn` | Interruptor ligado nos formulários e nas configurações |
 | `colors.control.off` | `#D6D5D5` | `palette.trackOff` | Interruptor desligado |
 | `colors.control.thumb` | `#FFFFFF` | `palette.white` | Bolinha do interruptor |
 | `colors.control.chipOn` | `#12432F` | `palette.forest900` | Chip de filtro selecionado |
@@ -154,6 +197,16 @@ Use `palette.*` só para definir papéis em `colors`. As telas usam os papéis (
 | `colors.feedback.infoBg` | `#DDE8DD` | `palette.mintTint` | Fundo do aviso informativo (ex.: "você está dentro do raio") |
 | `colors.feedback.infoBar` | `#185C4B` | `palette.forest700` | Faixa lateral do aviso informativo |
 | `colors.feedback.emptyCircle` | `#DBF1E5` | `palette.mint100` | Círculo atrás do ícone do estado vazio |
+| `colors.feedback.errorBg` | `#FDF0EE` | `palette.alertErrorBg` | Fundo do aviso de erro nas configurações |
+| `colors.feedback.errorInk` | `#8E2418` | `palette.alertErrorInk` | Texto do aviso de erro nas configurações |
+| `colors.feedback.infoInk` | `#1B4436` | `palette.alertInfoInk` | Texto do aviso informativo |
+| `colors.status.active` | `#029554` | `palette.statusGreen` | Ponto do selo "Ativo" |
+| `colors.tab.inactive` | `#777C8A` | `palette.tabInactive` | Rótulo e ícone da aba inativa |
+| `colors.tab.indicator` | `#B7B3AE` | `palette.homeIndicator` | Traço "home" do iOS sob a barra de abas |
+| `colors.glass.fill` | `rgba(255, 255, 255, 0.05)` | — | Véu do botão de vidro sobre o verde escuro |
+| `colors.glass.fillHover` | `rgba(255, 255, 255, 0.1)` | — | Botão de vidro com o ponteiro em cima (web) |
+| `colors.glass.fillPressed` | `rgba(255, 255, 255, 0.16)` | — | Botão de vidro pressionado |
+| `colors.glass.border` | `rgba(255, 255, 255, 0.2)` | — | Borda do botão de vidro |
 | `colors.brand.tile` | `#84FADA` | `palette.mintBrand` | Fundo do ícone do app, da tela de abertura e do favicon |
 | `colors.brand.tileEnd` | `#78E4C4` | `palette.mintBrandEnd` | Fim do degradê do ícone do app |
 | `colors.brand.glyph` | `#043525` | `palette.brandInk` | Símbolo do ícone do app |
@@ -163,6 +216,9 @@ Use `palette.*` só para definir papéis em `colors`. As telas usam os papéis (
 | `colors.map.ring` | `#FFFFFF` | `palette.white` | Aro branco em volta dos marcadores do mapa |
 | `colors.map.paused` | `#828890` | `palette.mapGray` | Marcador de lembrete pausado no mapa |
 | `colors.map.background` | `#E8E4DC` | `palette.sand` | Fundo do mapa enquanto os mapas carregam |
+| `colors.map.pin` | `#054C39` | `palette.forestPin` | Pino do mapa no formulário de novo lembrete |
+| `colors.map.haloFill` | `rgba(45, 170, 120, 0.21)` | — | Preenchimento do círculo do raio de aviso |
+| `colors.map.haloLine` | `rgba(45, 170, 120, 0.32)` | — | Contorno do círculo do raio de aviso |
 <!-- tokens:cores-semanticas:fim -->
 
 ### 3.3 Categorias de lembrete
@@ -170,13 +226,13 @@ Use `palette.*` só para definir papéis em `colors`. As telas usam os papéis (
 Cinco categorias, as mesmas do banco (`green`, `orange`, `blue`, `purple`, `pink`). A cor sozinha nunca informa: o ícone e o título dizem o resto.
 
 <!-- tokens:cores-categorias:inicio -->
-| Categoria | Fundo do ícone (`bg`) | Faixa (`bar`) | Glifo (`ink`) | Marcador no mapa (`pin`) |
-|---|---|---|---|---|
-| `colors.category.green` | `#DBF1E4` | `#39C391` | `#011F1A` | `#2F9E5B` |
-| `colors.category.orange` | `#FDE6D6` | `#FD6C34` | `#0A0A0A` | `#FE532A` |
-| `colors.category.blue` | `#D5E8F9` | `#51A6F6` | `#024381` | `#2F80ED` |
-| `colors.category.purple` | `#EADFFB` | `#B287E8` | `#0A0A14` | `#7C3AED` |
-| `colors.category.pink` | `#FCE3E9` | `#F980B3` | `#0A0A14` | `#E0457B` |
+| Categoria | Fundo do ícone (`bg`) | Faixa (`bar`) | Glifo (`ink`) | Marcador no mapa (`pin`) | Etiqueta (`tag`) | Ícone da etiqueta (`fg`) |
+|---|---|---|---|---|---|---|
+| `colors.category.green` | `#DBF1E4` | `#39C391` | `#011F1A` | `#2F9E5B` | `#DAF4E6` | `#18714E` |
+| `colors.category.orange` | `#FDE6D6` | `#FD6C34` | `#0A0A0A` | `#FE532A` | `#FDE5D7` | `#F86327` |
+| `colors.category.blue` | `#D5E8F9` | `#51A6F6` | `#024381` | `#2F80ED` | `#D6E9F9` | `#2C91EA` |
+| `colors.category.purple` | `#EADFFB` | `#B287E8` | `#0A0A14` | `#7C3AED` | `#ECE4FB` | `#9265D8` |
+| `colors.category.pink` | `#FCE3E9` | `#F980B3` | `#0A0A14` | `#E0457B` | `#FCE6EC` | `#ED6E9E` |
 <!-- tokens:cores-categorias:fim -->
 
 ### 3.4 Regras de uso
@@ -321,6 +377,19 @@ O desenho é quase plano. Toda sombra é o `boxShadow` em texto (aceito pela New
 
 - `shadow.card` nos cartões e painéis; `shadow.float` nos controles flutuantes e na coluna da web; `shadow.cta` só no botão primário habilitado; `shadow.focus` como halo do campo em foco.
 - Sombra dá profundidade, nunca informação: nada pode depender dela para ser entendido.
+
+### 7.1 Degradês
+
+Os fundos em degradê do original (cabeçalho verde, telas de conta e cabeçalho claro do formulário) são texto CSS em `gradients`, com as medidas do CSS do app web já convertidas de `du` para dp. O React Native 0.86 os aceita em `experimental_backgroundImage` (o Expo SDK 57 o indica como alternativa ao `expo-linear-gradient`) e o react-native-web só entende `backgroundImage`: por isso as telas usam `fundoEmDegrade(gradients.x)` (`src/design/efeitos.ts`) e nunca escrevem a propriedade. `src/design/__tests__/efeitos.test.ts` passa cada receita pelo parser do próprio React Native, para uma receita que o celular ignoraria reprovar antes de chegar ao aparelho.
+
+<!-- tokens:degrades:inicio -->
+| Token | Receita (camadas de cima para baixo) | Uso |
+|---|---|---|
+| `gradients.cabecalhoVerde` | `radial-gradient(283px 167px at 90% 6%, rgba(127, 234, 198, 0.28), rgba(127, 234, 198, 0) 70%)`<br>`radial-gradient(263px 152px at 4% 92%, rgba(33, 105, 85, 0.6), rgba(33, 105, 85, 0) 72%)`<br>`linear-gradient(168deg, #2A5B47 0%, #184434 50%, #0E301F 100%)` | Cabeçalho verde da lista e das configurações (345 du de altura) |
+| `gradients.contas` | `radial-gradient(283px 202px at 88% 4%, rgba(127, 234, 198, 0.26), rgba(127, 234, 198, 0) 70%)`<br>`radial-gradient(374px 232px at 50% 100%, rgba(132, 250, 218, 0.15), rgba(132, 250, 218, 0) 70%)`<br>`radial-gradient(263px 192px at 6% 96%, rgba(33, 105, 85, 0.55), rgba(33, 105, 85, 0) 72%)`<br>`linear-gradient(168deg, #2A5B47 0%, #184434 52%, #0E301F 100%)` | Fundo das telas de conta |
+| `gradients.cabecalhoClaro` | `radial-gradient(283px 172px at 100% 0%, rgba(33, 105, 85, 0.58), rgba(33, 105, 85, 0) 72%)`<br>`radial-gradient(243px 152px at 0% 0%, rgba(148, 249, 205, 0.36), rgba(148, 249, 205, 0) 72%)`<br>`radial-gradient(263px 86px at 46% 26%, rgba(255, 255, 255, 0.55), rgba(255, 255, 255, 0) 100%)`<br>`linear-gradient(180deg, #CBE4D6 0%, #E3EEE5 44%, #F5F2ED 100%)` | Cabeçalho claro do formulário de novo lembrete |
+| `gradients.esmaecerParaPagina` | `linear-gradient(to top, #F5F2ED 62%, rgba(245, 242, 237, 0) 100%)` | Esmaecimento atrás do botão fixo do formulário |
+<!-- tokens:degrades:fim -->
 
 ## 8. Ícones
 
