@@ -154,24 +154,44 @@ export const lineHeight = {
   display: 34,
 } as const;
 
-export const fontWeight = {
-  regular: '400',
-  medium: '500',
-  semibold: '600',
-  bold: '700',
+/** Reserva da web: o texto aparece na fonte do sistema (e não em Times) enquanto a fonte da marca chega. */
+export const pilhaDeReserva = {
+  sans: 'system-ui, -apple-system, "Segoe UI", Roboto, sans-serif',
+  serif: 'Georgia, "Times New Roman", serif',
 } as const;
 
-/** Estilos de texto prontos: `...textStyles.body`. Cor fica por conta de quem usa (`colors.text.*`). */
+/** Monta o `fontFamily` de um estilo: só o nome no iOS e no Android; o nome mais a reserva na web. */
+export function nomeDeFamilia(nome: string, reserva: string, web: boolean): string {
+  return web ? `${nome}, ${reserva}` : nome;
+}
+
+/** `process.env.EXPO_OS` vira 'ios', 'android' ou 'web' na compilação (babel-preset-expo); em Node puro fica indefinido. */
+const NA_WEB = process.env.EXPO_OS === 'web';
+
+/**
+ * Famílias da marca: Nunito Sans na interface e Source Serif 4 em negrito nos títulos, como nas referências.
+ * Fonte própria ignora `fontWeight` no iOS e no Android: cada peso é uma família, registrada com este mesmo nome em
+ * `src/design/fonts.ts`. Por isso não há token de peso e `fontWeight` nunca se escreve junto (soma negrito falso).
+ */
+export const fontFamily = {
+  regular: nomeDeFamilia('NunitoSans_400Regular', pilhaDeReserva.sans, NA_WEB),
+  medium: nomeDeFamilia('NunitoSans_500Medium', pilhaDeReserva.sans, NA_WEB),
+  semibold: nomeDeFamilia('NunitoSans_600SemiBold', pilhaDeReserva.sans, NA_WEB),
+  bold: nomeDeFamilia('NunitoSans_700Bold', pilhaDeReserva.sans, NA_WEB),
+  serif: nomeDeFamilia('SourceSerif4_700Bold', pilhaDeReserva.serif, NA_WEB),
+} as const;
+
+/** Estilos de texto prontos: `...textStyles.body`. Cor fica por conta de quem usa (`colors.text.*`). Títulos em serifa, o resto em sans. */
 export const textStyles = {
-  display: { fontSize: fontSize.display, lineHeight: lineHeight.display, fontWeight: fontWeight.bold },
-  title: { fontSize: fontSize.title, lineHeight: lineHeight.title, fontWeight: fontWeight.bold },
-  heading: { fontSize: fontSize.heading, lineHeight: lineHeight.heading, fontWeight: fontWeight.bold },
-  bodyLg: { fontSize: fontSize.bodyLg, lineHeight: lineHeight.bodyLg, fontWeight: fontWeight.regular },
-  body: { fontSize: fontSize.body, lineHeight: lineHeight.body, fontWeight: fontWeight.regular },
-  label: { fontSize: fontSize.body, lineHeight: lineHeight.body, fontWeight: fontWeight.semibold },
-  button: { fontSize: fontSize.bodyLg, lineHeight: lineHeight.body, fontWeight: fontWeight.bold },
-  caption: { fontSize: fontSize.caption, lineHeight: lineHeight.caption, fontWeight: fontWeight.regular },
-  micro: { fontSize: fontSize.micro, lineHeight: lineHeight.micro, fontWeight: fontWeight.regular },
+  display: { fontFamily: fontFamily.serif, fontSize: fontSize.display, lineHeight: lineHeight.display },
+  title: { fontFamily: fontFamily.serif, fontSize: fontSize.title, lineHeight: lineHeight.title },
+  heading: { fontFamily: fontFamily.serif, fontSize: fontSize.heading, lineHeight: lineHeight.heading },
+  bodyLg: { fontFamily: fontFamily.regular, fontSize: fontSize.bodyLg, lineHeight: lineHeight.bodyLg },
+  body: { fontFamily: fontFamily.regular, fontSize: fontSize.body, lineHeight: lineHeight.body },
+  label: { fontFamily: fontFamily.semibold, fontSize: fontSize.body, lineHeight: lineHeight.body },
+  button: { fontFamily: fontFamily.bold, fontSize: fontSize.bodyLg, lineHeight: lineHeight.body },
+  caption: { fontFamily: fontFamily.regular, fontSize: fontSize.caption, lineHeight: lineHeight.caption },
+  micro: { fontFamily: fontFamily.regular, fontSize: fontSize.micro, lineHeight: lineHeight.micro },
 } as const;
 
 /** Grade de 4 (com o meio-passo de 2). */

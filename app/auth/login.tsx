@@ -6,7 +6,7 @@ import { Banner } from '../../src/components/Banner';
 import { Button } from '../../src/components/Button';
 import { TextField } from '../../src/components/TextField';
 import { Toggle } from '../../src/components/Toggle';
-import { colors, fontWeight, space, textStyles } from '../../src/design/tokens';
+import { colors, fontFamily, space, textStyles } from '../../src/design/tokens';
 import { validarEmail } from '../../src/lib/validacao';
 import { useAuth } from '../../src/state/auth';
 
@@ -109,7 +109,7 @@ const styles = StyleSheet.create({
   },
   rememberLabel: {
     ...textStyles.body,
-    fontWeight: fontWeight.medium,
+    fontFamily: fontFamily.medium,
     color: colors.text.primary,
   },
   button: {

@@ -2,7 +2,7 @@ import '@testing-library/react-native/matchers';
 import { fireEvent, render, screen } from '@testing-library/react-native';
 import { StyleSheet } from 'react-native';
 import { anelDeFoco } from '../../design/foco';
-import { colors, fontWeight, opacity, radius, size } from '../../design/tokens';
+import { colors, fontFamily, opacity, radius, size } from '../../design/tokens';
 import { Chip, estiloDoChip } from '../Chip';
 
 const chip = () => screen.getByRole('button');
@@ -11,7 +11,7 @@ describe('Chip', () => {
   it('selecionado: fundo escuro, rótulo branco em semibold e estado selecionado para o leitor de tela', async () => {
     await render(<Chip label="Toda semana" selected onPress={jest.fn()} />);
     expect(chip()).toHaveStyle({ backgroundColor: colors.control.chipOn, borderRadius: radius.pill, minHeight: size.chip });
-    expect(screen.getByText('Toda semana')).toHaveStyle({ color: colors.text.onDark, fontWeight: fontWeight.semibold });
+    expect(screen.getByText('Toda semana')).toHaveStyle({ color: colors.text.onDark, fontFamily: fontFamily.semibold });
     expect(chip()).toBeSelected();
   });
 

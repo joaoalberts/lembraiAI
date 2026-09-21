@@ -1,6 +1,6 @@
 /**
- * Detector de valor visual solto (cor, tamanho, espaçamento, raio, peso de fonte escritos à mão), usado pelo teste
- * `valores-soltos.test.ts` para manter as telas falando só a língua dos tokens (src/design/tokens.ts).
+ * Detector de valor visual solto (cor, tamanho, espaçamento, raio, família e peso de fonte escritos à mão), usado pelo
+ * teste `valores-soltos.test.ts` para manter as telas falando só a língua dos tokens (src/design/tokens.ts).
  */
 export interface Achado {
   linha: number;
@@ -22,7 +22,9 @@ const PROPRIEDADES_NUMERICAS = [
 const NUMERICA = new RegExp(`\\b(${PROPRIEDADES_NUMERICAS.join('|')})\\s*:\\s*(-?\\d+(?:\\.\\d+)?)`, 'g');
 const COR_HEX = /#[0-9A-Fa-f]{3,8}\b/g;
 const COR_FUNCAO = /\brgba?\(/g;
-const PESO_ESCRITO = /\bfontWeight\s*:\s*['"`]/g;
+/** Fonte própria ignora `fontWeight` e soma negrito falso: o peso vem da família (`fontFamily.*`), então o próprio `fontWeight` é proibido. */
+const PESO_ESCRITO = /\bfontWeight\s*:/g;
+const FAMILIA_ESCRITA = /\bfontFamily\s*:\s*['"`]/g;
 
 /** Tira comentários sem mexer nos números de linha (a barra dupla de uma URL, como em "https://", não conta). */
 function semComentarios(texto: string): string {
@@ -40,6 +42,7 @@ export function achadosNoTexto(texto: string): Achado[] {
     for (const m of linha.matchAll(COR_FUNCAO)) achados.push({ linha: i + 1, trecho: m[0], tipo: 'cor rgb/rgba' });
     for (const m of linha.matchAll(NUMERICA)) if (parseFloat(m[2]) !== 0) achados.push({ linha: i + 1, trecho: m[0], tipo: 'medida numérica' });
     for (const m of linha.matchAll(PESO_ESCRITO)) achados.push({ linha: i + 1, trecho: m[0], tipo: 'peso de fonte escrito' });
+    for (const m of linha.matchAll(FAMILIA_ESCRITA)) achados.push({ linha: i + 1, trecho: m[0], tipo: 'família de fonte escrita' });
   });
   return achados;
 }

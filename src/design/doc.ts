@@ -5,7 +5,7 @@
  */
 import { PARES_DE_CONTRASTE, razaoDoPar } from './a11y';
 import { ICON_NAME, TAB_ICON, UI_ICON } from './icons';
-import { borderWidth, colors, fontSize, fontWeight, layout, lineHeight, motion, opacity, palette, radius, shadow, size, space, textStyles } from './tokens';
+import { borderWidth, colors, fontFamily, fontSize, layout, lineHeight, motion, opacity, palette, radius, shadow, size, space, textStyles } from './tokens';
 
 type Folha = { caminho: string; valor: string | number };
 
@@ -14,7 +14,7 @@ const achatar = (objeto: object, prefixo: string): Folha[] =>
     valor !== null && typeof valor === 'object' ? achatar(valor, `${prefixo}.${chave}`) : [{ caminho: `${prefixo}.${chave}`, valor: valor as string | number }],
   );
 
-const GRUPOS = { palette, colors, fontSize, lineHeight, fontWeight, space, radius, borderWidth, size, opacity, shadow, motion, layout };
+const GRUPOS = { palette, colors, fontSize, lineHeight, fontFamily, space, radius, borderWidth, size, opacity, shadow, motion, layout };
 
 /** Todo token existente, como "colors.text.primary". Os estilos de texto contam como um token cada (`textStyles.body`). */
 export const CAMINHOS_DE_TOKEN: string[] = [
@@ -129,13 +129,14 @@ const DESCRICOES: Record<string, string> = {
   'fontSize.title': 'Títulos de tela e de estados',
   'fontSize.display': 'Nome do app nas telas de conta',
   'lineHeight.*': 'Altura de linha do tamanho de mesmo nome',
-  'fontWeight.regular': 'Texto corrente',
-  'fontWeight.medium': 'Ênfase leve',
-  'fontWeight.semibold': 'Rótulos e valores',
-  'fontWeight.bold': 'Títulos e botões',
-  'textStyles.display': 'Nome do app nas telas de conta',
+  'fontFamily.regular': 'Nunito Sans 400: texto corrente',
+  'fontFamily.medium': 'Nunito Sans 500: ênfase leve',
+  'fontFamily.semibold': 'Nunito Sans 600: rótulos e valores',
+  'fontFamily.bold': 'Nunito Sans 700: botões e destaques',
+  'fontFamily.serif': 'Source Serif 4 700: títulos de tela, de seção e de cartão',
+  'textStyles.display': 'Título grande: nome do app nas telas de conta e títulos das páginas públicas',
   'textStyles.title': 'Título de tela, de estado vazio e de folha',
-  'textStyles.heading': 'Título de seção ("Hoje", "Amanhã")',
+  'textStyles.heading': 'Título de seção ("Hoje", "Amanhã") e de cabeçalho',
   'textStyles.bodyLg': 'Texto de leitura (política de privacidade) e de campos',
   'textStyles.body': 'Texto corrente',
   'textStyles.label': 'Rótulo de campo e de linha',
@@ -240,12 +241,12 @@ export function blocosGerados(): Record<string, string> {
     ].join('\n'),
 
     'tipografia-estilos': tabela(
-      ['Estilo', 'Tamanho', 'Altura de linha', 'Peso', 'Uso'],
-      Object.entries(textStyles).map(([nome, e]) => [cod(`textStyles.${nome}`), e.fontSize, e.lineHeight, e.fontWeight, descricaoDoToken(`textStyles.${nome}`) ?? '']),
+      ['Estilo', 'Tamanho', 'Altura de linha', 'Família', 'Uso'],
+      Object.entries(textStyles).map(([nome, e]) => [cod(`textStyles.${nome}`), e.fontSize, e.lineHeight, cod(e.fontFamily), descricaoDoToken(`textStyles.${nome}`) ?? '']),
     ),
 
     'tipografia-escala': [
-      tabela(['Token', 'Valor', 'Uso'], [...linhasSimples('fontSize', fontSize), ...linhasSimples('lineHeight', lineHeight), ...linhasSimples('fontWeight', fontWeight)]),
+      tabela(['Token', 'Valor', 'Uso'], [...linhasSimples('fontSize', fontSize), ...linhasSimples('lineHeight', lineHeight), ...linhasSimples('fontFamily', fontFamily)]),
     ].join('\n'),
 
     espacamento: tabela(['Token', 'Valor', 'Uso'], linhasSimples('space', space)),

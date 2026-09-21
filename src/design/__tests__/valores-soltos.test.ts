@@ -41,6 +41,17 @@ describe('achadosNoTexto (o detector de valores soltos)', () => {
     expect(achadosNoTexto("fontWeight: 'bold'")).toHaveLength(1);
   });
 
+  it('acusa fontWeight de qualquer forma: a fonte da marca é uma família por peso e o peso soma negrito falso', () => {
+    expect(achadosNoTexto('fontWeight: peso')).toHaveLength(1);
+    expect(achadosNoTexto('const t = { fontWeight: fontWeight.bold };')).toHaveLength(1);
+  });
+
+  it('acusa família de fonte escrita à mão, mas não a que vem dos tokens', () => {
+    expect(achadosNoTexto("fontFamily: 'Inter'")).toHaveLength(1);
+    expect(achadosNoTexto('fontFamily: "Georgia, serif"')).toHaveLength(1);
+    expect(achadosNoTexto('fontFamily: fontFamily.serif')).toHaveLength(0);
+  });
+
   it('não acusa token, zero, porcentagem, flex nem comentário', () => {
     for (const linha of ['padding: space.md', 'fontSize: fontSize.body', 'margin: 0', 'width: \'100%\'', 'flex: 1', '// padding: 12 era assim', '/* #FFF */', 'opacity: opacity.disabled', 'borderWidth: borderWidth.hairline']) {
       expect({ linha, n: achadosNoTexto(linha).length }).toEqual({ linha, n: 0 });

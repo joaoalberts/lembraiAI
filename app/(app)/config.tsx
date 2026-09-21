@@ -3,7 +3,7 @@ import { ScrollView, StyleSheet, Text, View } from 'react-native';
 import { router } from 'expo-router';
 import { Button } from '../../src/components/Button';
 import { Toggle } from '../../src/components/Toggle';
-import { borderWidth, colors, fontWeight, radius, shadow, space, textStyles } from '../../src/design/tokens';
+import { borderWidth, colors, fontFamily, radius, shadow, space, textStyles } from '../../src/design/tokens';
 import { confirmar } from '../../src/lib/confirm';
 import { formatDistance } from '../../src/lib/geo';
 import { useAuth } from '../../src/state/auth';
@@ -135,10 +135,10 @@ const styles = StyleSheet.create({
   sectionTitle: { ...textStyles.heading, color: colors.text.primary, marginBottom: space.md },
   row: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginBottom: space.md },
   rowText: { flex: 1, marginRight: space.md },
-  label: { ...textStyles.body, fontWeight: fontWeight.medium, color: colors.text.primary },
+  label: { ...textStyles.body, fontFamily: fontFamily.medium, color: colors.text.primary },
   hint: { ...textStyles.caption, color: colors.text.secondary, marginTop: space.hair },
   value: { ...textStyles.label, color: colors.text.accent },
-  badge: { ...textStyles.caption, fontWeight: fontWeight.semibold, paddingHorizontal: space.sm, paddingVertical: space.xs, borderRadius: radius.xs, overflow: 'hidden' },
+  badge: { ...textStyles.caption, fontFamily: fontFamily.semibold, paddingHorizontal: space.sm, paddingVertical: space.xs, borderRadius: radius.xs, overflow: 'hidden' },
   badgeOk: { color: colors.text.success, backgroundColor: colors.feedback.successBg },
   badgeOff: { color: colors.text.danger, backgroundColor: colors.feedback.dangerBg },
   error: { ...textStyles.caption, color: colors.text.danger, marginBottom: space.md },

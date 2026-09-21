@@ -1,6 +1,6 @@
 import { Pressable, StyleSheet, Text, View, type StyleProp, type ViewStyle } from 'react-native';
 import { anelDeFoco, type EstadoDeToque } from '../design/foco';
-import { colors, fontWeight, opacity, radius, size, space, textStyles } from '../design/tokens';
+import { colors, fontFamily, opacity, radius, size, space, textStyles } from '../design/tokens';
 
 interface Opcao<T extends string> {
   key: T;
@@ -47,6 +47,6 @@ const styles = StyleSheet.create({
   opcao: { flex: 1, minHeight: size.touch - 2 * space.xs, alignItems: 'center', justifyContent: 'center', borderRadius: radius.sm },
   selecionada: { backgroundColor: colors.control.segmentThumb },
   pressionada: { opacity: opacity.pressed },
-  rotulo: { ...textStyles.body, fontWeight: fontWeight.medium, color: colors.text.secondary },
-  rotuloSelecionado: { color: colors.text.primary, fontWeight: fontWeight.bold },
+  rotulo: { ...textStyles.body, fontFamily: fontFamily.medium, color: colors.text.secondary },
+  rotuloSelecionado: { color: colors.text.primary, fontFamily: fontFamily.bold },
 });

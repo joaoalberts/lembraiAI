@@ -1,6 +1,6 @@
 import { TextInput, View, Text, StyleSheet, ViewStyle, type TextInputProps } from 'react-native';
 import { useState } from 'react';
-import { borderWidth, colors, fontSize, radius, shadow, space, textStyles } from '../design/tokens';
+import { borderWidth, colors, fontFamily, fontSize, radius, shadow, space, textStyles } from '../design/tokens';
 
 interface TextFieldProps {
   label?: string;
@@ -86,6 +86,7 @@ const styles = StyleSheet.create({
     borderWidth: borderWidth.hairline,
     borderColor: colors.border.field,
     borderRadius: radius.md,
+    fontFamily: fontFamily.regular,
     fontSize: fontSize.bodyLg,
     color: colors.text.primary,
     backgroundColor: colors.bg.field,

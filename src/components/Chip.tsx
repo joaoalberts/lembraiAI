@@ -1,6 +1,6 @@
 import { Pressable, StyleSheet, Text, type StyleProp, type ViewStyle } from 'react-native';
 import { anelDeFoco, type EstadoDeToque } from '../design/foco';
-import { borderWidth, colors, fontWeight, opacity, radius, size, space, textStyles } from '../design/tokens';
+import { borderWidth, colors, fontFamily, opacity, radius, size, space, textStyles } from '../design/tokens';
 
 interface ChipProps {
   label: string;
@@ -44,5 +44,5 @@ const styles = StyleSheet.create({
   pressionado: { opacity: opacity.pressed },
   desabilitado: { opacity: opacity.disabled },
   rotulo: { ...textStyles.body, color: colors.text.primary },
-  rotuloLigado: { color: colors.text.onDark, fontWeight: fontWeight.semibold },
+  rotuloLigado: { color: colors.text.onDark, fontFamily: fontFamily.semibold },
 });

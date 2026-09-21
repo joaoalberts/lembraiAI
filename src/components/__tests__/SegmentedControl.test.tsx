@@ -2,7 +2,7 @@ import '@testing-library/react-native/matchers';
 import { fireEvent, render, screen } from '@testing-library/react-native';
 import { StyleSheet } from 'react-native';
 import { anelDeFoco } from '../../design/foco';
-import { colors, fontWeight, opacity, radius, size } from '../../design/tokens';
+import { colors, fontFamily, opacity, radius, size } from '../../design/tokens';
 import { SegmentedControl, estiloDoSegmento } from '../SegmentedControl';
 
 const opcoes = [{ key: 'time', label: 'Por horário' }, { key: 'local', label: 'Por local' }] as const;
@@ -33,8 +33,8 @@ describe('SegmentedControl', () => {
     await render(<SegmentedControl options={opcoes} value="time" onChange={jest.fn()} />);
     expect(screen.getByTestId('segmented')).toHaveStyle({ backgroundColor: colors.control.segmentTrack, borderRadius: radius.md });
     expect(screen.getByRole('button', { name: 'Por horário' })).toHaveStyle({ backgroundColor: colors.control.segmentThumb });
-    expect(screen.getByText('Por horário')).toHaveStyle({ color: colors.text.primary, fontWeight: fontWeight.bold });
-    expect(screen.getByText('Por local')).toHaveStyle({ color: colors.text.secondary, fontWeight: fontWeight.medium });
+    expect(screen.getByText('Por horário')).toHaveStyle({ color: colors.text.primary, fontFamily: fontFamily.bold });
+    expect(screen.getByText('Por local')).toHaveStyle({ color: colors.text.secondary, fontFamily: fontFamily.medium });
   });
 
   it('cada opção tem pelo menos 44 de altura, com o padding do trilho', async () => {

@@ -1,7 +1,9 @@
-import type { ReactNode } from 'react';
+import { useEffect, type ReactNode } from 'react';
 import { ActivityIndicator, Platform, StyleSheet, View } from 'react-native';
 import { Stack, useSegments } from 'expo-router';
 import Head from 'expo-router/head';
+import * as SplashScreen from 'expo-splash-screen';
+import { useFontesDaMarca } from '../src/design/fonts';
 import { colors, layout, shadow } from '../src/design/tokens';
 import { AuthProvider, useAuth } from '../src/state/auth';
 import { GeoProvider } from '../src/state/geo';
@@ -11,6 +13,9 @@ import { ReminderScheduler } from '../src/state/reminder-scheduler';
 import { RemindersProvider } from '../src/state/reminders';
 
 const ROTAS_PUBLICAS = ['privacidade', 'excluir-conta'];
+
+// Segura a abertura (splash) até a fonte da marca chegar; sem isso o texto piscaria em outra fonte no iOS e no Android
+SplashScreen.preventAutoHideAsync();
 
 /** Na web o app fica numa coluna de celular centralizada (como o frame do app original); no iOS/Android ocupa a tela. */
 function Shell({ children }: { children: ReactNode }) {
@@ -52,6 +57,16 @@ function RootLayoutNav() {
 }
 
 export default function RootLayout() {
+  const fontesProntas = useFontesDaMarca();
+
+  useEffect(() => {
+    if (fontesProntas) SplashScreen.hideAsync();
+  }, [fontesProntas]);
+
+  // Só o iOS e o Android esperam a fonte. A web nunca bloqueia: o `useFonts` do servidor devolve `true`, o HTML estático
+  // já sai com o texto (as páginas públicas dependem disso) e a fonte entra com `display: swap`
+  if (!fontesProntas && Platform.OS !== 'web') return null;
+
   return (
     <AuthProvider>
       <NotificationsProvider>

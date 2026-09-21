@@ -1,4 +1,4 @@
-import { borderWidth, colors, fontSize, fontWeight, layout, lineHeight, opacity, palette, radius, shadow, size, space, textStyles } from '../tokens';
+import { borderWidth, colors, fontSize, layout, lineHeight, opacity, palette, radius, shadow, size, space, textStyles } from '../tokens';
 
 const HEX = /^#[0-9A-F]{6}$/;
 
@@ -75,12 +75,6 @@ describe('tipografia', () => {
     for (const [nome, estilo] of Object.entries(textStyles)) {
       expect({ nome, razao: estilo.lineHeight / estilo.fontSize >= 1.2 }).toEqual({ nome, razao: true });
     }
-  });
-
-  it('só há quatro pesos (400, 500, 600, 700) e cada estilo usa um deles', () => {
-    const permitidos = Object.values(fontWeight);
-    expect(permitidos).toEqual(['400', '500', '600', '700']);
-    for (const estilo of Object.values(textStyles)) expect(permitidos).toContain(estilo.fontWeight);
   });
 
   it('cada estilo de texto usa tamanho e altura de linha da escala', () => {

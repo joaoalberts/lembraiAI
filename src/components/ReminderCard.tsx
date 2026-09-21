@@ -4,7 +4,7 @@ import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { CATEGORY_COLORS, repeatLabel, type Reminder } from '../data/reminders';
 import { anelDeFoco, type EstadoDeToque } from '../design/foco';
 import { ICON_NAME, UI_ICON } from '../design/icons';
-import { borderWidth, colors, fontWeight, opacity, radius, shadow, size, space, textStyles } from '../design/tokens';
+import { borderWidth, colors, fontFamily, opacity, radius, shadow, size, space, textStyles } from '../design/tokens';
 import { formatDate } from '../lib/format';
 import { Toggle } from './Toggle';
 
@@ -87,10 +87,10 @@ const styles = StyleSheet.create({
     marginRight: space.md,
   },
   content: { flex: 1 },
-  title: { ...textStyles.bodyLg, fontWeight: fontWeight.semibold, color: colors.text.primary, marginBottom: space.hair },
+  title: { ...textStyles.bodyLg, fontFamily: fontFamily.serif, color: colors.text.primary, marginBottom: space.hair },
   meta: { ...textStyles.caption, color: colors.text.secondary },
   nearbyRow: { flexDirection: 'row', alignItems: 'center', gap: space.xs, marginTop: space.xs },
-  nearbyTag: { ...textStyles.caption, fontWeight: fontWeight.semibold, color: colors.text.accent },
+  nearbyTag: { ...textStyles.caption, fontFamily: fontFamily.semibold, color: colors.text.accent },
   actions: { alignItems: 'center', marginLeft: space.sm, gap: space.xs },
   deleteBtn: { padding: space.sm, borderRadius: radius.pill },
   deletePressed: { backgroundColor: colors.control.chipOff },

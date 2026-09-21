@@ -5,10 +5,20 @@ import * as L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import type { DOMProps } from 'expo/dom';
 import { FALLBACK_COORD } from '../data/reminders';
-import { colors } from '../design/tokens';
+import { colors, fontFamily } from '../design/tokens';
 import type { MapMarker } from './map-types';
 
 const ZOOM = 15;
+
+/**
+ * O Leaflet traz fonte própria (Helvetica no mapa, monoespaçada nos botões de zoom). Aqui ele fala a língua da marca.
+ * Na web as fontes já foram carregadas pela página; na WebView do app cai na pilha de reserva do sistema.
+ * Botões de zoom: família bold com peso normal (o Leaflet pede `bold` e somaria negrito falso sobre a regular).
+ */
+const CSS_DO_MAPA = `
+.leaflet-container, .leaflet-tooltip { font-family: ${fontFamily.regular}; }
+.leaflet-control-zoom a { font-family: ${fontFamily.bold}; font-weight: normal; }
+`;
 
 interface Props {
   /** Injetado pelo Expo no iOS/Android: configura a WebView que hospeda este componente. */
@@ -95,5 +105,10 @@ export default function LeafletMapDom({ center, markers, onMarkerPress }: Props)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [ready, centerKey]);
 
-  return <div ref={host} style={{ position: 'absolute', top: 0, right: 0, bottom: 0, left: 0 }} />;
+  return (
+    <>
+      <style>{CSS_DO_MAPA}</style>
+      <div ref={host} style={{ position: 'absolute', top: 0, right: 0, bottom: 0, left: 0 }} />
+    </>
+  );
 }

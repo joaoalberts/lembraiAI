@@ -1,6 +1,6 @@
 import '@testing-library/react-native/matchers';
 import { fireEvent, render, screen } from '@testing-library/react-native';
-import { borderWidth, colors, radius, shadow } from '../../design/tokens';
+import { borderWidth, colors, fontFamily, radius, shadow } from '../../design/tokens';
 import { TextField } from '../TextField';
 
 const campo = () => screen.getByPlaceholderText('seu@email.com');
@@ -11,6 +11,12 @@ describe('TextField', () => {
     await render(<TextField {...base} label="E-mail" />);
     expect(screen.getByText('E-mail')).toHaveStyle({ color: colors.text.primary });
     expect(campo()).toHaveProp('placeholderTextColor', colors.text.placeholder);
+  });
+
+  it('o texto digitado usa a fonte da marca (o campo de texto não herda a fonte do Text: sem isto cai na do sistema)', async () => {
+    await render(<TextField {...base} label="E-mail" />);
+    expect(campo()).toHaveStyle({ fontFamily: fontFamily.regular });
+    expect(screen.getByText('E-mail')).toHaveStyle({ fontFamily: fontFamily.semibold });
   });
 
   it('em repouso: fundo branco, borda suave e raio de campo', async () => {

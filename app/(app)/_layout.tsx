@@ -4,7 +4,7 @@ import Ionicons from '@expo/vector-icons/Ionicons';
 import { Tabs } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { TAB_ICON } from '../../src/design/icons';
-import { colors, fontSize, fontWeight, size, textStyles } from '../../src/design/tokens';
+import { colors, fontFamily, fontSize, size, textStyles } from '../../src/design/tokens';
 
 type IconName = ComponentProps<typeof Ionicons>['name'];
 
@@ -36,7 +36,7 @@ export default function AppLayout() {
           height: size.tabBar + bottom,
           paddingBottom: bottom,
         },
-        tabBarLabelStyle: { fontSize: fontSize.micro, fontWeight: fontWeight.medium },
+        tabBarLabelStyle: { fontFamily: fontFamily.medium, fontSize: fontSize.micro },
       }}
     >
       <Tabs.Screen name="index" options={aba('Lembretes', 'Meus Lembretes', TAB_ICON.lembretes)} />

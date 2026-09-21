@@ -6,7 +6,7 @@
 
 ## 1. Como usar este documento
 
-- **Nunca escreva o valor à mão.** Cor, tamanho, espaço, raio, peso e sombra vêm de `src/design/tokens.ts`. O teste `src/design/__tests__/valores-soltos.test.ts` barra `#hex`, `rgba()`, `fontSize: 16`, `padding: 12` e `fontWeight: '600'` fora dele.
+- **Nunca escreva o valor à mão.** Cor, tamanho, espaço, raio, fonte e sombra vêm de `src/design/tokens.ts`. O teste `src/design/__tests__/valores-soltos.test.ts` barra `#hex`, `rgba()`, `fontSize: 16`, `padding: 12`, `fontWeight` e `fontFamily: 'Inter'` fora dele.
 - **Componente antes de estilo novo.** Antes de escrever um estilo, veja se `Button`, `TextField`, `Toggle`, `Chip`, `SegmentedControl`, `Banner`, `ReminderCard` ou `AuthLayout` (em `src/components`) já resolve.
 - **Mudou uma decisão visual?** (1) altere o token; (2) descreva-o em `src/design/doc.ts`; (3) rode `npm run design:docs`; (4) registre a decisão na seção 18; (5) rode `npm test`.
 - **Ver o resultado sem conta e sem servidor real:** `node scripts/preview-backend-falso.mjs` e um `.env.development.local` apontando para ele (as instruções estão no topo do script). O app abre com lembretes de exemplo; troque o estado da lista com `/__mode/empty`, `/__mode/error` e `/__mode/slow`.
@@ -169,24 +169,32 @@ Cinco categorias, as mesmas do banco (`green`, `orange`, `blue`, `purple`, `pink
 
 ### 4.1 Famílias
 
-A identidade das referências usa **Nunito Sans** (interface) e **Source Serif 4** (títulos em negrito). O app usa hoje a **fonte do sistema** (San Francisco no iOS, Roboto no Android, a pilha do sistema na web). Carregar as famílias da marca está registrado como pendência (seção 19): mexe na abertura do app e na renderização estática da web e merece um passo próprio.
+A identidade das referências, e do app web `lembreiAI`, usa **Nunito Sans** na interface e **Source Serif 4** em negrito nos títulos. `src/design/fonts.ts` registra cinco arquivos (Nunito Sans 400, 500, 600 e 700; Source Serif 4 700), vindos de `@expo-google-fonts/nunito-sans` e `@expo-google-fonts/source-serif-4` e importados por peso, para o bundle levar só o que se usa.
+
+- **Uma família por peso.** Fonte própria ignora `fontWeight` no iOS e no Android, e escrevê-lo soma negrito falso. Por isso não há token de peso: escolha `fontFamily.regular`, `medium`, `semibold`, `bold` ou `serif`. O detector de valores soltos barra `fontWeight` e `fontFamily` escritos à mão.
+- **Serifa nos títulos:** `display`, `title` e `heading`, mais o título do cartão de lembrete. O resto é sans.
+- **iOS e Android** seguram a abertura (splash) até as fontes chegarem (`app/_layout.tsx`). Se falharem, o app segue na fonte do sistema.
+- **Web:** nunca bloqueia. Na renderização estática o Expo Router extrai as fontes carregadas com `expo-font` e as embute no HTML, então as páginas públicas saem com texto pronto (conferido na exportação: `/privacidade` e `/excluir-conta` trazem o texto, um `<link rel="preload">` por fonte e o `<style id="expo-generated-fonts">` com `font-display: swap`). `display: swap` mostra o texto na pilha de reserva do sistema (`pilhaDeReserva`, em `tokens.ts`) até a fonte chegar.
+- **Campo de texto não herda a fonte:** o `TextInput` não herda a família do `Text`, e sem ela cai na fonte do sistema. O `TextField` define `fontFamily.regular` e um teste garante.
+- **Mapa:** o Leaflet traz fonte própria (Helvetica no mapa, monoespaçada nos botões de zoom). `LeafletMapDom.tsx` a troca pela da marca; na WebView do app, onde as fontes da marca não existem, cai na reserva do sistema.
+- **Corte óptico:** o Source Serif 4 tem eixo de tamanho óptico, que o React Native não expõe (a doc do Expo recomenda fontes estáticas). Os pacotes trazem um corte por peso; se ele destoar das referências nos títulos grandes, veja a seção 19.
 
 ### 4.2 Estilos
 
-Use `...textStyles.estilo` e só troque cor (`colors.text.*`) ou peso (`fontWeight.*`) com tokens.
+Use `...textStyles.estilo` e só troque cor (`colors.text.*`) ou família (`fontFamily.*`) com tokens.
 
 <!-- tokens:tipografia-estilos:inicio -->
-| Estilo | Tamanho | Altura de linha | Peso | Uso |
+| Estilo | Tamanho | Altura de linha | Família | Uso |
 |---|---|---|---|---|
-| `textStyles.display` | 28 | 34 | 700 | Nome do app nas telas de conta |
-| `textStyles.title` | 20 | 26 | 700 | Título de tela, de estado vazio e de folha |
-| `textStyles.heading` | 18 | 24 | 700 | Título de seção ("Hoje", "Amanhã") |
-| `textStyles.bodyLg` | 16 | 24 | 400 | Texto de leitura (política de privacidade) e de campos |
-| `textStyles.body` | 14 | 20 | 400 | Texto corrente |
-| `textStyles.label` | 14 | 20 | 600 | Rótulo de campo e de linha |
-| `textStyles.button` | 16 | 20 | 700 | Rótulo de botão |
-| `textStyles.caption` | 13 | 18 | 400 | Dica, metadado e mensagem de campo |
-| `textStyles.micro` | 12 | 16 | 400 | Legenda mínima |
+| `textStyles.display` | 28 | 34 | `SourceSerif4_700Bold` | Título grande: nome do app nas telas de conta e títulos das páginas públicas |
+| `textStyles.title` | 20 | 26 | `SourceSerif4_700Bold` | Título de tela, de estado vazio e de folha |
+| `textStyles.heading` | 18 | 24 | `SourceSerif4_700Bold` | Título de seção ("Hoje", "Amanhã") e de cabeçalho |
+| `textStyles.bodyLg` | 16 | 24 | `NunitoSans_400Regular` | Texto de leitura (política de privacidade) e de campos |
+| `textStyles.body` | 14 | 20 | `NunitoSans_400Regular` | Texto corrente |
+| `textStyles.label` | 14 | 20 | `NunitoSans_600SemiBold` | Rótulo de campo e de linha |
+| `textStyles.button` | 16 | 20 | `NunitoSans_700Bold` | Rótulo de botão |
+| `textStyles.caption` | 13 | 18 | `NunitoSans_400Regular` | Dica, metadado e mensagem de campo |
+| `textStyles.micro` | 12 | 16 | `NunitoSans_400Regular` | Legenda mínima |
 <!-- tokens:tipografia-estilos:fim -->
 
 ### 4.3 Escala
@@ -208,17 +216,18 @@ Use `...textStyles.estilo` e só troque cor (`colors.text.*`) ou peso (`fontWeig
 | `lineHeight.heading` | `24` | Altura de linha do tamanho de mesmo nome |
 | `lineHeight.title` | `26` | Altura de linha do tamanho de mesmo nome |
 | `lineHeight.display` | `34` | Altura de linha do tamanho de mesmo nome |
-| `fontWeight.regular` | `400` | Texto corrente |
-| `fontWeight.medium` | `500` | Ênfase leve |
-| `fontWeight.semibold` | `600` | Rótulos e valores |
-| `fontWeight.bold` | `700` | Títulos e botões |
+| `fontFamily.regular` | `NunitoSans_400Regular` | Nunito Sans 400: texto corrente |
+| `fontFamily.medium` | `NunitoSans_500Medium` | Nunito Sans 500: ênfase leve |
+| `fontFamily.semibold` | `NunitoSans_600SemiBold` | Nunito Sans 600: rótulos e valores |
+| `fontFamily.bold` | `NunitoSans_700Bold` | Nunito Sans 700: botões e destaques |
+| `fontFamily.serif` | `SourceSerif4_700Bold` | Source Serif 4 700: títulos de tela, de seção e de cartão |
 <!-- tokens:tipografia-escala:fim -->
 
 ### 4.4 Regras
 
 - **Piso de 12.** O app web escalava tudo pela largura da tela e chegou a 6 px, ilegível. Aqui o tamanho é fixo e respeita o tamanho de fonte do sistema (não desligue `allowFontScaling`).
 - **Altura de linha de pelo menos 1,2 vez o tamanho**, para não cortar acentos.
-- **Quatro pesos:** 400, 500, 600 e 700. Título e botão em 700; corpo em 400.
+- **Quatro pesos de sans (400, 500, 600 e 700) e um de serifa (700).** Título de tela em serifa; botão em sans 700; corpo em 400. Peso novo é arquivo novo em `src/design/fonts.ts`, token novo e teste.
 - **Sem caixa alta contínua** e sem sublinhado, salvo em link.
 - **Nunca** `{texto && <Text/>}` com texto possivelmente vazio (derruba o app no iOS e no Android): use `texto !== ''` ou `!!texto`.
 
@@ -615,11 +624,14 @@ O teste `valores-soltos.test.ts` mantém uma lista de arquivos com valores visua
 | 21/09/2026 | Texto das páginas públicas de 15 para 16 e em tinta principal (era o cinza `#2B2D31`) | Leitura confortável e um cinza a menos fora dos tokens |
 | 21/09/2026 | Foco de teclado com um anel só (verde-floresta, 2, afastado 2) e controle segmentado virou componente | A conferência no navegador mostrou o anel âmbar do navegador em chip e segmentado e um contorno duplicado no campo |
 | 21/09/2026 | Sombras por `boxShadow` em texto | Único caminho igual em iOS, Android e web na New Architecture |
-| 21/09/2026 | Fontes da marca não carregadas nesta versão | Exige mexer na abertura do app e na renderização estática da web; passo próprio |
+| 21/09/2026 | Fontes da marca não carregadas nesta versão (**revogada na linha seguinte**) | Exigia mexer na abertura do app e na renderização estática da web; a doc do Expo depois esclareceu a renderização estática |
+| 21/09/2026 | **Fontes da marca carregadas:** Nunito Sans (400, 500, 600 e 700) e Source Serif 4 (700) em todo o texto; títulos, seções e título do cartão em serifa; o token `fontWeight` deixou de existir | O João apontou a fonte como parte do que veio errado, e o app web usa as duas famílias. Fonte própria ignora `fontWeight` no iOS e no Android, então cada peso é uma família. Doc do Expo: "Expo Font has automatic static optimization" na renderização estática; `useFonts` no servidor devolve `true` |
+| 21/09/2026 | Na web a fonte nunca bloqueia a renderização e leva uma pilha de reserva do sistema; iOS e Android seguram a abertura até as fontes chegarem | O HTML estático das páginas públicas precisa sair com texto; sem a reserva o navegador cairia em Times até a fonte chegar |
 
 ## 19. Pendências
 
-- **Famílias da marca (Nunito Sans e Source Serif 4):** carregar com `expo-font` sem bloquear a renderização estática da web (as páginas públicas precisam sair como HTML pronto).
+- **Corte óptico do Source Serif 4:** os pacotes trazem um corte por peso. Comparar os títulos grandes com as referências (o app web fixa `opsz` por estilo); se destoarem, gerar instâncias estáticas com o corte de título.
+- **Peso das fontes na web:** cada arquivo `.ttf` tem 110 KB (Nunito Sans) e 322 KB (Source Serif 4). Um subconjunto latino em `woff2` reduziria, se o carregamento incomodar.
 - **Telas das referências ainda não portadas:** onboarding (`ref/1.png`), sucesso do lembrete (`ref/4.png`), cabeçalho verde da lista com filtros e "Dica para você" (`ref/5.png`), seletores de data e hora (`ref/2.png`; hoje são campos de texto).
 - **Leitura com VoiceOver e TalkBack** e **navegação por teclado** na web: verificar em aparelho real.
 - **Modo escuro:** fora de escopo até haver referência.

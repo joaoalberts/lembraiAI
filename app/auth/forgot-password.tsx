@@ -8,7 +8,7 @@ import { Banner } from '../../src/components/Banner';
 import { Button } from '../../src/components/Button';
 import { TextField } from '../../src/components/TextField';
 import { UI_ICON } from '../../src/design/icons';
-import { colors, fontWeight, radius, size, space, textStyles } from '../../src/design/tokens';
+import { colors, fontFamily, radius, size, space, textStyles } from '../../src/design/tokens';
 import { CODIGO_TAMANHO, validarEmail } from '../../src/lib/validacao';
 import { useAuth } from '../../src/state/auth';
 
@@ -132,7 +132,7 @@ const styles = StyleSheet.create({
     marginBottom: space.md,
   },
   bold: {
-    fontWeight: fontWeight.semibold,
+    fontFamily: fontFamily.semibold,
     color: colors.text.primary,
   },
   successSubtext: {
