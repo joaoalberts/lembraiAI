@@ -2,9 +2,12 @@ import { createContext, useCallback, useContext, useEffect, useMemo, useRef, use
 import { Platform } from 'react-native';
 import * as Notifications from 'expo-notifications';
 import { router } from 'expo-router';
-import { repeatLabel, type Reminder } from '../data/reminders';
-import { planNotifications, type Plan } from '../lib/schedule';
+import type { Reminder } from '../data/reminders';
+import { corpoDoLembrete, orcamentoDeAvisos, planNotifications, type Plan } from '../lib/schedule';
 import { useAuth } from './auth';
+import type { NotificationsState, NotifyInput } from './notifications-tipos';
+
+export type { NotificationsState, NotifyInput };
 
 /** O Expo não oferece notificações locais na web: lá o provedor fica inerte. */
 const supported = Platform.OS !== 'web';
@@ -31,18 +34,6 @@ function toTrigger(plan: Plan): Notifications.NotificationTriggerInput {
     case 'monthly': return { type: T.MONTHLY, day: plan.day, hour: plan.hour, minute: plan.minute, channelId };
     case 'yearly': return { type: T.YEARLY, month: plan.month, day: plan.day, hour: plan.hour, minute: plan.minute, channelId };
   }
-}
-
-export interface NotifyInput { title: string; body?: string; data?: Record<string, unknown> }
-
-interface NotificationsState {
-  supported: boolean;
-  permissionGranted: boolean;
-  /** Avisos por horário que estão agendados no aparelho agora. */
-  scheduledCount: number;
-  notifyNow: (n: NotifyInput) => Promise<void>;
-  /** Deixa o agendamento do aparelho idêntico à lista: cancela tudo e agenda de novo os lembretes por horário ativos. */
-  syncReminders: (reminders: Reminder[]) => Promise<void>;
 }
 
 const Ctx = createContext<NotificationsState | null>(null);
@@ -80,10 +71,11 @@ export function NotificationsProvider({ children }: { children: ReactNode }) {
     return () => sub.remove();
   }, []);
 
-  const notifyNow = useCallback(async ({ title, body, data }: NotifyInput) => {
+  const notifyNow = useCallback(async ({ title, body, data, identifier }: NotifyInput) => {
     if (!supported || !permissionGranted) return;
     try {
       await Notifications.scheduleNotificationAsync({
+        identifier,
         content: { title, body, data },
         trigger: Platform.OS === 'android' ? { channelId: CHANNEL_ID } : null,
       });
@@ -100,18 +92,18 @@ export function NotificationsProvider({ children }: { children: ReactNode }) {
       if (id !== latest.current) return;
       await Notifications.cancelAllScheduledNotificationsAsync();
       if (permissionGranted) {
-        for (const r of reminders) {
-          for (const plan of planNotifications(r)) {
-            if (id !== latest.current) return;
-            await Notifications.scheduleNotificationAsync({
-              content: {
-                title: r.title,
-                body: r.repeat === 'never' ? `Lembrete das ${r.time}` : `Lembrete das ${r.time} · ${repeatLabel(r.repeat)}`,
-                data: { reminderId: r.id },
-              },
-              trigger: toTrigger(plan),
-            });
-          }
+        // o sistema guarda um número limitado de avisos pendentes (64 no iOS): ficam os recorrentes e os datados mais próximos
+        const itens = reminders.flatMap((reminder) => planNotifications(reminder).map((plano) => ({ id: reminder.id, plano, reminder })));
+        for (const { reminder: r, plano } of orcamentoDeAvisos(itens)) {
+          if (id !== latest.current) return;
+          await Notifications.scheduleNotificationAsync({
+            content: {
+              title: r.title,
+              body: corpoDoLembrete(r),
+              data: { reminderId: r.id },
+            },
+            trigger: toTrigger(plano),
+          });
         }
       }
       if (id === latest.current) setScheduledCount((await Notifications.getAllScheduledNotificationsAsync()).length);
@@ -120,7 +112,7 @@ export function NotificationsProvider({ children }: { children: ReactNode }) {
   }, [permissionGranted]);
 
   const value = useMemo<NotificationsState>(
-    () => ({ supported, permissionGranted, scheduledCount, notifyNow, syncReminders }),
+    () => ({ supported, modo: 'sistema', permissionGranted, scheduledCount, notifyNow, syncReminders }),
     [permissionGranted, scheduledCount, notifyNow, syncReminders],
   );
   return <Ctx.Provider value={value}>{children}</Ctx.Provider>;
