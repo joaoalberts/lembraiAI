@@ -77,7 +77,7 @@ export default function LembretesScreen() {
                 reminder={r}
                 nearby={insideIds.includes(r.id)}
                 onToggle={() => void toggle(r.id)}
-                onDelete={() => void excluir(r.id, r.title)}
+                onMenu={() => void excluir(r.id, r.title)}
               />
             ))}
           </View>

@@ -21,7 +21,7 @@ describe('cores', () => {
       .filter(([caminho, v]) => !caminho.startsWith('category.') && typeof v === 'string' && !daPaleta.has(v))
       .map(([caminho]) => caminho)
       .sort();
-    expect(fora).toEqual(['glass.border', 'glass.field', 'glass.fieldFocus', 'glass.fill', 'glass.fillHover', 'glass.fillPressed', 'map.haloFill', 'map.haloLine', 'map.pinShadow', 'overlay']);
+    expect(fora).toEqual(['control.haloHover', 'control.haloPressed', 'glass.border', 'glass.field', 'glass.fieldFocus', 'glass.fill', 'glass.fillHover', 'glass.fillPressed', 'map.haloFill', 'map.haloLine', 'map.pinShadow', 'overlay']);
     for (const [caminho, v] of folhas(colors)) if (fora.includes(caminho)) expect({ caminho, rgba: String(v).startsWith('rgba(') }).toEqual({ caminho, rgba: true });
   });
 

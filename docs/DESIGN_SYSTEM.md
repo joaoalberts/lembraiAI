@@ -136,7 +136,9 @@ Use `palette.*` só para definir papéis em `colors`. As telas usam os papéis (
 | `palette.chipCount` | `#395D56` | Contagem dentro do chip de filtro não selecionado |
 | `palette.tipCircle` | `#C3DFCE` | Círculo atrás da lâmpada do cartão de dica |
 | `palette.tipInk` | `#013220` | Lâmpada do cartão de dica |
+| `palette.tipText` | `#375C50` | Texto do cartão de dica |
 | `palette.iconDots` | `#717B88` | Reticências "mais opções" do cartão de lembrete |
+| `palette.iconRadius` | `#8B93A0` | Ícone do raio no cartão de lembrete por local |
 | `palette.tabInactive` | `#777C8A` | Rótulo e ícone da aba inativa (medido nas capturas) |
 | `palette.homeIndicator` | `#B7B3AE` | Traço "home" do iOS sob a barra de abas |
 | `palette.tabBarBg` | `#F8F8F4` | Fundo da barra de abas |
@@ -166,12 +168,15 @@ Use `palette.*` só para definir papéis em `colors`. As telas usam os papéis (
 | `colors.text.onDarkFaint` | `#A7B9B0` | `palette.onDark400` | Texto mais suave sobre verde escuro |
 | `colors.text.onFrost` | `#1A2C23` | `palette.frostInk` | Rótulo dos botões translúcidos |
 | `colors.text.onHeader` | `#E6EDE5` | `palette.headerSubtitle` | Subtítulo sobre o cabeçalho verde |
+| `colors.text.chip` | `#12432F` | `palette.forest900` | Rótulo do chip de filtro não selecionado |
 | `colors.text.chipCount` | `#395D56` | `palette.chipCount` | Contagem dentro do chip de filtro não selecionado |
+| `colors.text.tip` | `#375C50` | `palette.tipText` | Texto do cartão de dica |
 | `colors.text.danger` | `#C62828` | `palette.red700` | Mensagens e rótulos de erro |
 | `colors.text.success` | `#0B7A3B` | `palette.green700` | Mensagens e rótulos de sucesso |
 | `colors.icon.default` | `#0A0A0A` | `palette.ink900` | Ícones sobre fundo claro |
 | `colors.icon.muted` | `#767880` | `palette.ink600` | Ícones secundários e da aba inativa (nunca para texto) |
 | `colors.icon.dots` | `#717B88` | `palette.iconDots` | Reticências "mais opções" do cartão de lembrete |
+| `colors.icon.radius` | `#8B93A0` | `palette.iconRadius` | Ícone do raio no cartão de lembrete por local |
 | `colors.icon.tip` | `#013220` | `palette.tipInk` | Lâmpada do cartão de dica |
 | `colors.action.primary` | `#FE532A` | `palette.orange500` | Fundo do botão primário |
 | `colors.action.primaryHover` | `#EF4E28` | `palette.orangeHover` | Botão primário com o ponteiro em cima (web) |
@@ -203,6 +208,8 @@ Use `palette.*` só para definir papéis em `colors`. As telas usam os papéis (
 | `colors.control.chipOff` | `#F3F4EF` | `palette.chipOff` | Chip de filtro não selecionado |
 | `colors.control.segmentTrack` | `#E8E4DC` | `palette.sand` | Trilho do controle segmentado |
 | `colors.control.segmentThumb` | `#FFFFFF` | `palette.white` | Opção selecionada do controle segmentado |
+| `colors.control.haloHover` | `rgba(20, 40, 30, 0.07)` | — | Halo atrás das reticências do cartão com o ponteiro em cima (web) |
+| `colors.control.haloPressed` | `rgba(20, 40, 30, 0.13)` | — | Halo atrás das reticências do cartão pressionado |
 | `colors.feedback.dangerBg` | `#FFE6E6` | `palette.red100` | Fundo do aviso de erro |
 | `colors.feedback.dangerWash` | `#FFF5F5` | `palette.red50` | Fundo da zona de perigo |
 | `colors.feedback.successBg` | `#E7F4EB` | `palette.mint50` | Fundo do aviso de sucesso |
@@ -504,10 +511,12 @@ Componente: `src/components/TextField.tsx`.
 
 ### 11.1 Cartão de lembrete (`ReminderCard`)
 
-Superfície `colors.bg.card`, raio `radius.md`, sombra `shadow.card`, faixa lateral de `borderWidth.bar` em `colors.category.*.bar`. À esquerda, círculo de `size.iconCircle` com `colors.category.*.bg` e o ícone da categoria (`colors.category.*.ink`, `size.icon.md`). No centro, título (`textStyles.bodyLg` em `fontWeight.semibold`, até 2 linhas) e metadado (`textStyles.caption`, `colors.text.secondary`). À direita, o `Toggle` e o botão de excluir (ícone `excluir`, `colors.icon.muted`, área de toque de 44 com `size.hitSlop`).
+Superfície `colors.bg.card`, raio `radius.md`, sombra `shadow.card`, faixa lateral de `borderWidth.bar` em `colors.category.*.bar` (recortada pelos cantos do cartão). À esquerda, o círculo de `size.card.circle` alinhado ao **topo**, com `colors.category.*.bg` e o glifo da categoria (`colors.category.*.ink`, `size.card.glyph`, traço `iconStroke.glyph`; halter e avião giram 45° e −45°). No centro: o título em serifa (`fontSize.body`, uma linha, com reticências se passar), a data com o ícone de calendário (por horário) ou o lugar e o raio (por local; o raio tem ícone próprio, `RadiusIcon`) e a etiqueta (`Tag`). À direita: a hora (`fontFamily.medium`), o `Toggle` (variante `card`) e, no canto, as reticências (`ellipsis`, `colors.icon.dots`, halo `colors.control.haloHover` e `haloPressed`) que abrem o menu do lembrete. Nos lembretes por local há a miniatura do mapa (`thumb-sucesso.jpg`, sempre a mesma) e a coluna da hora desce `size.card.localShift`. O cartão em si não é tocável: só o interruptor e as reticências respondem.
 
-- **Dentro do raio:** anel `borderWidth.focus` em `colors.border.focus` e a linha "Você está aqui" em `colors.text.accent` com o ícone `aqui`.
-- **Pausado:** `opacity.inactive` no cartão inteiro.
+- **Etiqueta** (`src/components/Tag.tsx`): pílula na cor da categoria (`colors.category.*.tag`), ícone de pino em `.fg` e o texto "Por horário" ou "Por local" em `.tagInk` (o `fg` escurecido até 4,5:1; o azul e o rosa da imagem dão 2,7:1 e 2,4:1).
+- **Dentro do raio:** anel `borderWidth.focus` em `colors.border.focus` e a linha "Você está aqui" (`colors.text.accent`, ícone de pino). É um recurso do app: o original não tem.
+- **Pausado:** `opacity.inactive` no cartão inteiro. O original não escurece o cartão pausado (só o interruptor muda); o app mantém o esmaecido para se ver de relance o que está desligado.
+- **Texto no piso de 12:** o original usa 9 a 11 dp na data, no lugar e na etiqueta. Aqui o título é 14 e o resto 12, e o cartão fica um pouco mais alto que na imagem (`size.card.minHeight` é só o mínimo: ele cresce com o texto e com a fonte grande do sistema).
 
 ### 11.2 Painel
 
@@ -527,7 +536,7 @@ Raio `radius.sm`, padding `space.md`, texto `textStyles.body`. O de erro tem `ac
 
 ### 11.4 Chip
 
-Opção de escolha rápida (repetição, raio). Altura `size.chip` e área de toque de 44 (`size.hitSlop`), raio `radius.pill`. Selecionado: `colors.control.chipOn` com `colors.text.onDark` e `fontWeight.semibold`. Não selecionado: `colors.control.chipOff`, contorno `colors.border.chip`, `colors.text.primary`.
+Opção de escolha rápida e filtro (`src/components/Chip.tsx`). Altura `size.chip` e área de toque de 44 (`size.hitSlop`), raio `radius.pill`, rótulo em `fontSize.micro` e negrito. Com `count`, o número vem depois do rótulo (`fontFamily.semibold`, `colors.text.chipCount`), a `space.lg`; zero também aparece. Selecionado: `colors.control.chipOn` e texto branco (rótulo e contagem). Não selecionado: `colors.control.chipOff`, contorno `colors.border.chip` e rótulo `colors.text.chip`. Para o leitor de tela lê "Hoje: 3" e informa se está selecionado. Na lista os quatro chips dividem a largura (`flexGrow`).
 
 ### 11.5 Folha (modal inferior)
 
@@ -544,6 +553,10 @@ Componente `src/components/Sheet.tsx`. Véu `colors.overlay` (verde-escuro a 46%
 - **Cabeçalho verde** (`src/components/GreenHeader.tsx`, na lista e nas configurações): degradê `gradients.cabecalhoVerde` (base a 168°, luz menta e sombra de pinheiro) com as curvas de nível por cima (imagem `assets/art/topo-lista.webp`, ver `assets/art/LEIA-ME.md`), altura mínima `size.header.height` e margem lateral `size.header.side`. O conteúdo começa em `size.header.contentTop`, ou abaixo da barra de status do aparelho (entalhe, ilha) mais `space.sm` quando ela é maior; o cabeçalho cresce o quanto o conteúdo desceu. O grão de 9% do original não se vê e não é reproduzido. A folha clara (`colors.bg.sheet`, cantos `radius.sheet`) sobe sobre ele a partir de `size.header.sheetTop`.
 - **Marca** (`src/components/AppBrand.tsx`): tile de `size.header.brandTile` com `gradients.marcaTile`, símbolo `locate-fixed` em `colors.brand.glyph`, nome em serifa negrito (`colors.text.onDarkWarm`; o original usa um peso a menos, que o app não carrega) e a frase "Sua rotina, mais leve." em `colors.text.onDarkFaint`.
 - **Busca** (`src/components/SearchField.tsx`): campo em pílula de `size.header.searchHeight` no lugar da marca; fundo `colors.glass.field`, contorno `colors.glass.border`; em foco, contorno `colors.border.focusOnDark` e fundo `colors.glass.fieldFocus`. Abre com o teclado, tecla "buscar"; o Enter só recolhe o teclado e o Esc (web) fecha. Filtra enquanto se digita.
+
+### 11.8 Cartão de dica (`TipCard`)
+
+"Dica para você" no fim da lista (`src/components/TipCard.tsx`): fundo `colors.feedback.infoBg`, raio `size.tip.radius`, círculo `size.tip.circle` em `colors.feedback.tipCircle` com a lâmpada (`lightbulb`, `colors.icon.tip`) e a seta `chevron-right` à direita. Título em negrito (`colors.text.primary`) e texto em `colors.text.tip` (`fontSize.micro`). Na lista é só informação: o original não o torna tocável.
 
 ### 11.7 Coluna da web
 
@@ -628,6 +641,32 @@ Filosofia: o mínimo. O feedback de toque é instantâneo (troca de cor e escala
 | `size.header.brandGap` | `11` | Vão entre o tile da marca e o nome |
 | `size.header.brandGlyph` | `22` | Lado do símbolo dentro do tile da marca |
 | `size.header.searchHeight` | `38` | Altura do campo de busca |
+| `size.tag.height` | `18` | Etiqueta "Por horário" / "Por local": altura |
+| `size.tag.left` | `7` | Etiqueta: recuo antes do ícone |
+| `size.tag.right` | `9` | Etiqueta: recuo depois do texto |
+| `size.tag.gap` | `6` | Etiqueta: vão entre o ícone e o texto |
+| `size.tag.icon` | `12` | Etiqueta: lado do ícone |
+| `size.tip.radius` | `14` | Cartão de dica: raio |
+| `size.tip.circle` | `49` | Cartão de dica: círculo do ícone |
+| `size.tip.padding` | `11` | Cartão de dica: recuo do círculo até a borda |
+| `size.tip.gap` | `15` | Cartão de dica: vão entre o círculo e o texto |
+| `size.card.minHeight` | `78` | Cartão de lembrete: altura mínima (cresce com o texto e com a fonte grande) |
+| `size.card.circle` | `46` | Cartão de lembrete: círculo do ícone da categoria (alinhado ao topo) |
+| `size.card.circleLeft` | `14` | Cartão de lembrete: distância do círculo até a borda esquerda |
+| `size.card.circleTop` | `9` | Cartão de lembrete: distância do círculo até o topo |
+| `size.card.glyph` | `25` | Cartão de lembrete: glifo da categoria dentro do círculo |
+| `size.card.textGap` | `17` | Cartão de lembrete: vão entre o círculo e o texto |
+| `size.card.metaIcon` | `15` | Cartão de lembrete: ícone da data e do lugar |
+| `size.card.metaGap` | `7` | Cartão de lembrete: vão entre o ícone e o texto da data |
+| `size.card.rightColumn` | `45` | Cartão de lembrete: largura da coluna da hora e do interruptor |
+| `size.card.rightTop` | `13` | Cartão de lembrete: distância da hora até o topo (lembrete por horário) |
+| `size.card.localShift` | `18` | Cartão de lembrete por local: quanto a coluna da hora desce (o cartão é mais alto) |
+| `size.card.rightInset` | `35` | Cartão de lembrete: distância da coluna da direita até a borda |
+| `size.card.dotsWidth` | `44` | Botão "mais opções": largura da área de toque |
+| `size.card.dotsCenter` | `18` | Botão "mais opções": distância do centro das reticências até a borda direita |
+| `size.card.dotsHeight` | `33` | Botão "mais opções": altura da área de toque |
+| `size.card.thumbWidth` | `69` | Lembrete por local: largura da miniatura do mapa |
+| `size.card.thumbHeight` | `70` | Lembrete por local: altura da miniatura do mapa |
 | `size.toggle.card.width` | `35` | Interruptor (cartão · formulário): largura do trilho |
 | `size.toggle.card.height` | `21` | Interruptor (cartão · formulário): altura do trilho |
 | `size.toggle.card.thumb` | `18` | Interruptor (cartão · formulário): diâmetro da bolinha |

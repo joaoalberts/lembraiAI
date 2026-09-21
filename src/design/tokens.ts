@@ -91,7 +91,9 @@ export const palette = {
   chipCount: '#395D56',
   tipCircle: '#C3DFCE',
   tipInk: '#013220',
+  tipText: '#375C50',
   iconDots: '#717B88',
+  iconRadius: '#8B93A0',
   tabInactive: '#777C8A',
   homeIndicator: '#B7B3AE',
   tabBarBg: '#F8F8F4',
@@ -121,7 +123,9 @@ export const colors = {
     onDarkFaint: palette.onDark400,
     onFrost: palette.frostInk,
     onHeader: palette.headerSubtitle,
+    chip: palette.forest900,
     chipCount: palette.chipCount,
+    tip: palette.tipText,
     danger: palette.red700,
     success: palette.green700,
   },
@@ -129,6 +133,7 @@ export const colors = {
     default: palette.ink900,
     muted: palette.ink600,
     dots: palette.iconDots,
+    radius: palette.iconRadius,
     tip: palette.tipInk,
   },
   action: {
@@ -166,6 +171,9 @@ export const colors = {
     chipOff: palette.chipOff,
     segmentTrack: palette.sand,
     segmentThumb: palette.white,
+    /** Halo redondo atrás das reticências do cartão (ponteiro em cima e pressionado). */
+    haloHover: 'rgba(20, 40, 30, 0.07)',
+    haloPressed: 'rgba(20, 40, 30, 0.13)',
   },
   feedback: {
     dangerBg: palette.red100,
@@ -331,6 +339,33 @@ export const size = {
   buttonCompact: du(72),
   /** Cabeçalho verde: altura da arte, topo da marca e dos botões, e onde começa a folha clara que sobe sobre ele (medidas do app web em du). */
   header: { height: du(345), contentTop: du(82), sheetTop: du(296), side: du(38), brandTile: du(75), brandGap: du(21), brandGlyph: du(44), searchHeight: du(76) },
+  /** Etiqueta do cartão ("Por horário", "Por local"): altura, recuos, vão e ícone. */
+  tag: { height: du(36), left: du(13), right: du(17), gap: du(12), icon: 12 },
+  /** Cartão de dica: raio, círculo do ícone, recuos e vão. */
+  tip: { radius: du(27), circle: du(97), padding: du(22), gap: du(29) },
+  /**
+   * Cartão de lembrete (medidas do app web em du): círculo do ícone alinhado ao topo, glifo, distância até o texto, ícone
+   * da data, coluna da direita (hora e interruptor) e a miniatura do mapa nos lembretes por local.
+   */
+  card: {
+    minHeight: du(154),
+    circle: du(92),
+    circleLeft: du(28),
+    circleTop: du(17),
+    glyph: du(50),
+    textGap: du(33),
+    metaIcon: du(30),
+    metaGap: du(13),
+    rightColumn: du(90),
+    rightTop: du(26),
+    localShift: du(35),
+    rightInset: du(70),
+    dotsWidth: du(88),
+    dotsCenter: du(35),
+    dotsHeight: du(66),
+    thumbWidth: du(136),
+    thumbHeight: du(138),
+  },
   /** Interruptor do cartão de lembrete (`card`) e o dos formulários e das configurações (`form`): trilho, bolinha e folga da bolinha (21 e 26 de altura). */
   toggle: {
     card: { width: du(69), height: du(42), thumb: du(36), inset: 1.5 },
