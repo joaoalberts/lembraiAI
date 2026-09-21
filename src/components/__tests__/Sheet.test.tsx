@@ -1,8 +1,8 @@
 import '@testing-library/react-native/matchers';
 import { act, fireEvent, render, screen } from '@testing-library/react-native';
-import { AccessibilityInfo, Dimensions, Platform, Text } from 'react-native';
+import { AccessibilityInfo, Dimensions, Keyboard, Platform, StyleSheet, Text } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
-import { colors, layout, radius, size } from '../../design/tokens';
+import { colors, layout, radius, size, space } from '../../design/tokens';
 import { Sheet } from '../Sheet';
 
 /** Com a folha modal, o resto (o véu) sai da árvore de acessibilidade de propósito: os testes o alcançam mesmo assim. */
@@ -155,5 +155,72 @@ describe('Sheet: movimento', () => {
     } finally {
       jest.useRealTimers();
     }
+  });
+});
+
+describe('Sheet: teclado', () => {
+  /** O sistema avisa a altura do teclado pelos eventos do `Keyboard` (no iOS, "Will"); o teste os "digita". */
+  function simularTeclado() {
+    const ouvintes = new Map<string, (e: unknown) => void>();
+    jest.spyOn(Keyboard, 'addListener').mockImplementation(((evento: string, ouvinte: (e: unknown) => void) => {
+      ouvintes.set(evento, ouvinte);
+      return { remove: jest.fn() };
+    }) as never);
+    const disparar = (evento: string, altura: number) =>
+      act(async () => { ouvintes.get(evento)?.({ endCoordinates: { screenX: 0, screenY: 0, width: TELA.width, height: altura } }); });
+    return { abrirTeclado: (altura: number) => disparar('keyboardWillShow', altura), fecharTeclado: () => disparar('keyboardWillHide', 0) };
+  }
+  const janela = () => Dimensions.get('window').height;
+  const raiz = () => screen.getByTestId('sheet-raiz', ESCONDIDO);
+  const folha = () => screen.getByTestId('sheet-folha');
+  const doTopo = 47; // a barra de status de comInsets()
+
+  it('com o teclado fechado a folha fica colada embaixo, sem folga extra', async () => {
+    simularTeclado();
+    await abrir();
+    expect(raiz()).toHaveStyle({ paddingBottom: 0 });
+    expect(folha()).toHaveStyle({ maxHeight: janela() * layout.sheetMaxHeight });
+  });
+
+  it('com o teclado aberto a folha sobe para ficar acima dele (o Android com barras translúcidas não redimensiona a janela); ao fechar desce', async () => {
+    const { abrirTeclado, fecharTeclado } = simularTeclado();
+    await abrir();
+    await abrirTeclado(300);
+    expect(raiz()).toHaveStyle({ paddingBottom: 300 });
+    await fecharTeclado();
+    expect(raiz()).toHaveStyle({ paddingBottom: 0 });
+  });
+
+  it('encolhe para caber no espaço que sobra acima do teclado, sem chegar à barra de status; fechado, volta aos 82%', async () => {
+    const { abrirTeclado, fecharTeclado } = simularTeclado();
+    await abrir();
+    await abrirTeclado(900);
+    expect(folha()).toHaveStyle({ maxHeight: janela() - 900 - doTopo - space.md });
+    await fecharTeclado();
+    expect(folha()).toHaveStyle({ maxHeight: janela() * layout.sheetMaxHeight });
+  });
+
+  it('com um teclado baixo a folha nunca passa dos 82% de sempre', async () => {
+    const { abrirTeclado } = simularTeclado();
+    await abrir();
+    await abrirTeclado(100);
+    expect(folha()).toHaveStyle({ maxHeight: janela() * layout.sheetMaxHeight });
+  });
+
+  it('teclado maior que a tela não gera altura negativa', async () => {
+    const { abrirTeclado } = simularTeclado();
+    await abrir();
+    await abrirTeclado(janela());
+    expect(StyleSheet.flatten(folha().props.style).maxHeight).toBe(0);
+  });
+
+  it('com o teclado aberto a base da folha não reserva a barra do sistema: o teclado já cobre essa área', async () => {
+    const { abrirTeclado } = simularTeclado();
+    await abrir({}, 60);
+    expect(JSON.stringify(screen.toJSON())).toContain('"paddingBottom":60');
+    await abrirTeclado(300);
+    const arvore = JSON.stringify(screen.toJSON());
+    expect(arvore).toContain(`"paddingBottom":${size.sheet.paddingBottom}`);
+    expect(arvore).not.toContain('"paddingBottom":60');
   });
 });

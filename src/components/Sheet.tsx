@@ -3,6 +3,7 @@ import { Animated, Easing, Modal, Platform, Pressable, ScrollView, StyleSheet, T
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { colors, layout, motion, radius, shadow, size, space, textStyles } from '../design/tokens';
 import { useMovimentoReduzido } from '../lib/movimento';
+import { useAlturaDoTeclado } from '../lib/teclado';
 
 interface SheetProps {
   visible: boolean;
@@ -24,7 +25,8 @@ const CURVA_DO_VEU = Easing.out(Easing.ease);
 /**
  * Folha inferior (padrão: docs/DESIGN_SYSTEM.md, seção 11.5): véu, folha de cantos altos colada embaixo com alça, título e
  * subtítulo. O véu aparece em 180 ms e a folha sobe em 260 ms; com "reduzir movimento" entram prontos. Não há animação
- * de saída (a folha some na hora, como no app web) nem gesto de arrastar. Só existe enquanto `visible`.
+ * de saída (a folha some na hora, como no app web) nem gesto de arrastar. Só existe enquanto `visible`. Com o teclado
+ * aberto ela sobe para ficar acima dele e encolhe para caber no espaço que sobra (o resto rola).
  */
 export function Sheet({ visible, onClose, title, subtitle, action, children }: SheetProps) {
   return (
@@ -39,7 +41,8 @@ export function Sheet({ visible, onClose, title, subtitle, action, children }: S
 function Conteudo({ onClose, title, subtitle, action, children }: Omit<SheetProps, 'visible'>) {
   const reduzir = useMovimentoReduzido();
   const { height: alturaDaTela } = useWindowDimensions();
-  const { bottom } = useSafeAreaInsets();
+  const { top, bottom } = useSafeAreaInsets();
+  const teclado = useAlturaDoTeclado();
   const [alturaDaFolha, setAlturaDaFolha] = useState(0);
   const veu = useRef(new Animated.Value(0)).current;
   const subida = useRef(new Animated.Value(1)).current;
@@ -61,9 +64,12 @@ function Conteudo({ onClose, title, subtitle, action, children }: Omit<SheetProp
 
   // A folha só aparece depois de medida (senão piscaria no lugar final antes de subir)
   const medida = alturaDaFolha > 0 && reduzir !== undefined;
+  // Com o teclado aberto o espaço é o que sobra acima dele, abaixo da barra de status (com um respiro)
+  const limiteDaTela = alturaDaTela * layout.sheetMaxHeight;
+  const alturaMaxima = teclado > 0 ? Math.max(0, Math.min(limiteDaTela, alturaDaTela - teclado - top - space.md)) : limiteDaTela;
 
   return (
-    <View style={styles.raiz}>
+    <View testID="sheet-raiz" style={[styles.raiz, { paddingBottom: teclado }]}>
       <Animated.View testID="sheet-veu" style={[StyleSheet.absoluteFill, styles.veu, { opacity: veu }]}>
         <Pressable style={StyleSheet.absoluteFill} onPress={onClose} accessibilityRole="button" accessibilityLabel="Fechar" />
       </Animated.View>
@@ -77,14 +83,15 @@ function Conteudo({ onClose, title, subtitle, action, children }: Omit<SheetProp
         onLayout={(e) => setAlturaDaFolha(e.nativeEvent.layout.height)}
         style={[
           styles.folha,
-          { maxHeight: alturaDaTela * layout.sheetMaxHeight, opacity: medida ? 1 : 0, transform: [{ translateY: subida.interpolate({ inputRange: [0, 1], outputRange: [0, alturaDaFolha || alturaDaTela] }) }] },
+          { maxHeight: alturaMaxima, opacity: medida ? 1 : 0, transform: [{ translateY: subida.interpolate({ inputRange: [0, 1], outputRange: [0, alturaDaFolha || alturaDaTela] }) }] },
         ]}
       >
         <ScrollView
           bounces={false}
           showsVerticalScrollIndicator={false}
           keyboardShouldPersistTaps="handled"
-          contentContainerStyle={[styles.conteudo, { paddingBottom: Math.max(size.sheet.paddingBottom, bottom) }]}
+          // com o teclado aberto ele cobre a barra do sistema: só o espaço do padrão
+          contentContainerStyle={[styles.conteudo, { paddingBottom: teclado > 0 ? size.sheet.paddingBottom : Math.max(size.sheet.paddingBottom, bottom) }]}
         >
           <View style={styles.alca} />
           <Text accessibilityRole="header" style={styles.titulo}>{title}</Text>
