@@ -44,5 +44,5 @@ const styles = StyleSheet.create({
   caixa: { width: size.auth.check, height: size.auth.check, borderRadius: size.auth.checkRadius, alignItems: 'center', justifyContent: 'center', borderWidth: borderWidth.hairline },
   desmarcada: { backgroundColor: colors.bg.field, borderColor: colors.border.strong },
   marcada: { backgroundColor: colors.border.focus, borderColor: colors.border.focus },
-  texto: { ...textStyles.micro, color: colors.text.primary },
+  texto: { ...textStyles.mini, color: colors.text.primary }, // 22 du (11 dp)
 });

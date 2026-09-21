@@ -99,7 +99,7 @@ export function TextField({
 
 const styles = StyleSheet.create({
   campo: { marginTop: size.campo.top, gap: size.campo.gap },
-  rotulo: { ...textStyles.micro, fontFamily: fontFamily.bold, color: colors.text.primary },
+  rotulo: { ...textStyles.mini, fontFamily: fontFamily.bold, color: colors.text.primary }, // 22 du (11 dp)
   caixa: { height: size.campo.height, flexDirection: 'row', alignItems: 'center', borderRadius: radius.campo, backgroundColor: colors.bg.field },
   desabilitada: { backgroundColor: colors.bg.disabled },
   entrada: {

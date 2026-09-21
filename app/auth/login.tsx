@@ -91,6 +91,6 @@ export default function LoginScreen() {
 const styles = StyleSheet.create({
   aviso: { marginTop: size.campo.top },
   linha: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', gap: size.auth.linhaGap, marginTop: size.auth.linhaTop },
-  esqueci: { ...textStyles.micro, fontFamily: fontFamily.bold, color: colors.text.accent },
+  esqueci: { ...textStyles.mini, fontFamily: fontFamily.bold, color: colors.text.accent }, // 22 du (11 dp)
   botao: { marginTop: size.auth.linhaTop },
 });

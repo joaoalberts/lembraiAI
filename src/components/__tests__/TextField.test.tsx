@@ -11,7 +11,7 @@ const ESCONDIDO = { includeHiddenElements: true } as const;
 describe('TextField', () => {
   it('rótulo em negrito acima e placeholder na cor de placeholder', async () => {
     await render(<TextField {...base} label="E-mail" />);
-    expect(screen.getByText('E-mail')).toHaveStyle({ color: colors.text.primary, fontFamily: fontFamily.bold, fontSize: fontSize.micro });
+    expect(screen.getByText('E-mail')).toHaveStyle({ color: colors.text.primary, fontFamily: fontFamily.bold, fontSize: fontSize.mini });
     expect(campo()).toHaveProp('placeholderTextColor', colors.text.placeholder);
   });
 

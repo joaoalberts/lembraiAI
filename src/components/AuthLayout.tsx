@@ -115,7 +115,7 @@ const styles = StyleSheet.create({
   nome: { fontFamily: fontFamily.serif, fontSize: fontSize.contaMarca, color: colors.text.onDarkWarm },
   cartao: { paddingTop: size.auth.cardTop, paddingHorizontal: size.auth.cardSide, paddingBottom: size.auth.cardBottom, borderRadius: size.auth.cardRadius, backgroundColor: colors.bg.card, boxShadow: shadow.cartaoDeConta },
   titulo: { fontFamily: fontFamily.serif, fontSize: fontSize.contaTitulo, lineHeight: lineHeight.contaTitulo, color: colors.text.primary },
-  subtitulo: { ...textStyles.micro, color: colors.text.secondary, marginTop: size.auth.subtituloTop },
+  subtitulo: { ...textStyles.micro, color: colors.text.secondary, marginTop: size.auth.subtituloTop }, // 24 du do original
   formulario: { marginTop: size.auth.formTop },
   rodape: { flexGrow: 1, justifyContent: 'flex-end', paddingTop: size.auth.rodapeTop },
   // de ponta a ponta (o absoluto ignora o recuo dos lados) e subindo do fim do conteúdo: a faixa só ocupa o meio da altura de 1000 du do original
@@ -134,12 +134,12 @@ const styles = StyleSheet.create({
     backgroundColor: colors.conta.barra,
   },
   // `flex: 1` e não só `flexShrink`: com a caixa do tamanho justo do texto o Android quebrava a última palavra ("Já tem conta?" saía "Já tem"); o texto fica à esquerda como antes
-  pergunta: { ...textStyles.micro, color: colors.conta.pergunta, flex: 1 },
+  pergunta: { ...textStyles.mini, color: colors.conta.pergunta, flex: 1 }, // 22 du (11 dp)
   pilula: { height: size.auth.pilula, justifyContent: 'center', paddingHorizontal: size.auth.pilulaSide, borderRadius: size.auth.pilulaRadius, borderWidth: borderWidth.hairline, borderColor: colors.conta.pilulaAnel, backgroundColor: colors.conta.pilula },
-  textoDaPilula: { ...textStyles.micro, fontFamily: fontFamily.bold, color: colors.conta.pilulaTexto },
+  textoDaPilula: { ...textStyles.mini, fontFamily: fontFamily.bold, color: colors.conta.pilulaTexto }, // 22 du (11 dp)
   linkDeVolta: { alignSelf: 'center', paddingHorizontal: size.auth.linkVolta, paddingVertical: size.auth.linkVolta, borderRadius: radius.md },
-  textoDoLink: { ...textStyles.micro, fontFamily: fontFamily.bold, color: colors.conta.link, textAlign: 'center' },
+  textoDoLink: { ...textStyles.mini, fontFamily: fontFamily.bold, color: colors.conta.link, textAlign: 'center' }, // 22 du (11 dp)
   pressionada: { transform: [{ scale: motion.pressedScale }] },
   nota: { flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: size.auth.notaGap, marginTop: size.auth.notaTop },
-  textoDaNota: { ...textStyles.micro, color: colors.conta.nota },
+  textoDaNota: { ...textStyles.mini, color: colors.conta.nota }, // 22 du (11 dp)
 });
