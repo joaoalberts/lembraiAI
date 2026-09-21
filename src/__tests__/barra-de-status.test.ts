@@ -10,19 +10,24 @@ describe('barra de status (relógio e bateria) legível em toda tela', () => {
     expect(raiz).toContain('<BarraDeStatusPadrao />');
   });
 
-  it('todas as telas declaram texto escuro pelo BarraDeStatus (a barra acompanha a cor do fundo do app)', () => {
-    for (const arquivo of ['src/components/GreenHeader.tsx', 'src/components/AuthLayout.tsx', 'src/components/Onboarding.tsx']) {
+  it('GreenHeader e AuthLayout declaram texto escuro pelo BarraDeStatus', () => {
+    for (const arquivo of ['src/components/GreenHeader.tsx', 'src/components/AuthLayout.tsx']) {
       expect({ arquivo, declara: ler(arquivo).includes('<BarraDeStatus sobre="claro" />') }).toEqual({ arquivo, declara: true });
     }
   });
 
-  it('ninguém usa a StatusBar direto: só o BarraDeStatus (que declara só com a tela em foco)', () => {
+  it('Onboarding esconde a barra de status para ocupar todo o espaço', () => {
+    const arquivo = 'src/components/Onboarding.tsx';
+    expect(ler(arquivo)).toContain('<StatusBar hidden={true} />');
+  });
+
+  it('ninguém usa a StatusBar direto além do Onboarding: só o BarraDeStatus nos outros', () => {
     const usam: string[] = [];
     const varrer = (pasta: string) => {
       for (const e of fs.readdirSync(path.join(__dirname, '../..', pasta), { withFileTypes: true })) {
         const rel = path.posix.join(pasta, e.name);
         if (e.isDirectory()) { if (e.name !== 'node_modules' && e.name !== '__tests__') varrer(rel); continue; }
-        if (!/\.tsx$/.test(e.name) || /BarraDeStatus\.tsx$/.test(e.name)) continue;
+        if (!/\.tsx$/.test(e.name) || /BarraDeStatus\.tsx$/.test(e.name) || /Onboarding\.tsx$/.test(e.name)) continue;
         if (/from 'expo-status-bar'/.test(ler(rel)) || /\bStatusBar\b.*from 'react-native'/.test(ler(rel))) usam.push(rel);
       }
     };

@@ -18,10 +18,10 @@ const abrir = async (props: Partial<React.ComponentProps<typeof Onboarding>> = {
 const estilo = (el: { props: { style?: unknown } }) => StyleSheet.flatten(el.props.style as never) as Record<string, unknown>;
 
 describe('Onboarding: barra de status', () => {
-  it('a barra de status acompanha a cor do fundo do app: o texto (relógio, bateria) é sempre escuro', async () => {
+  it('barra de status oculta: fundo ocupa todo o espaço até o topo', async () => {
     jest.mocked(StatusBar).mockClear();
     await abrir();
-    expect(jest.mocked(StatusBar).mock.calls.map(([props]) => props)).toEqual([{ style: 'dark' }]);
+    expect(jest.mocked(StatusBar).mock.calls.map(([props]) => props)).toEqual([{ hidden: true }]);
   });
 });
 
