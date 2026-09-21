@@ -17,3 +17,15 @@ export interface RemindersMapProps {
   markers: MapMarker[];
   onMarkerPress: (marker: MapMarker) => void;
 }
+
+/** Mapa do formulário: um pino arrastável com o círculo do raio de aviso, que a pessoa põe tocando no mapa. */
+export interface MapaDeEscolhaProps {
+  /** O ponto escolhido e o raio (metros); `null` = ainda não escolheu (o mapa abre no padrão). */
+  escolha: { lat: number; lng: number; raio: number } | null;
+  aoEscolher: (lat: number, lng: number) => void;
+  /** Cada valor novo reenquadra o mapa no pino (busca de endereço, "Usar minha localização"). */
+  enquadrar?: number;
+  /** Toque na pílula "Usar minha localização" que flutua sobre o mapa. */
+  aoUsarLocalizacao: () => void;
+  localizando: boolean;
+}

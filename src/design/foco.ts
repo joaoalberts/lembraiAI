@@ -12,6 +12,15 @@ export const anelDeFoco = {
   outlineOffset: space.hair,
 } as const;
 
+/**
+ * Campo de texto que desenha o próprio foco (borda e halo): tira o anel do navegador. Na web `outline-style: auto` ignora
+ * a largura zero e o anel âmbar do navegador apareceria por cima; o `none` só vale na web (no celular o valor é inválido).
+ */
+export const semAnelDoNavegador: { outlineWidth: number } = {
+  outlineWidth: 0,
+  ...(process.env.EXPO_OS === 'web' ? ({ outlineStyle: 'none' } as unknown as object) : null),
+};
+
 /** O mesmo anel para controles sobre o verde escuro, onde o verde-floresta some: menta. */
 export const anelDeFocoNoEscuro = {
   ...anelDeFoco,

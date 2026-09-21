@@ -101,6 +101,10 @@ export const palette = {
   optionBadge: '#195A48',
   sliderThumb: '#FFFEFF',
   hint: '#717074',
+  suggestionHover: '#F2F5F0',
+  mapControl: '#FDFDFD',
+  mapControlPressed: '#F0F0F0',
+  mapControlDivider: '#E2E2E2',
   wheelItem: '#9EA1A8',
   rowHover: '#F7F8F4',
   rowPressed: '#EEF1EA',
@@ -191,6 +195,7 @@ export const colors = {
     segmentThumb: palette.white,
     /** Halo redondo atrás das reticências do cartão (ponteiro em cima e pressionado). */
     rowHover: palette.rowHover,
+    suggestionHover: palette.suggestionHover,
     rowPressed: palette.rowPressed,
     dangerRowHover: palette.dangerRowHover,
     dangerRowPressed: palette.dangerTint,
@@ -231,6 +236,7 @@ export const colors = {
     featureFill: 'rgba(255, 255, 255, 0.04)',
     featureRing: 'rgba(150, 220, 180, 0.4)',
     divider: 'rgba(233, 255, 243, 0.22)',
+    ctaCircle: 'rgba(255, 255, 255, 0.13)',
   },
   /** Identidade do ícone do app (tile em degradê e o símbolo); vale para ícone, tela de abertura e favicon. */
   brand: {
@@ -250,6 +256,10 @@ export const colors = {
     haloFill: 'rgba(45, 170, 120, 0.21)',
     haloLine: 'rgba(45, 170, 120, 0.32)',
     pinShadow: 'rgba(0, 0, 0, 0.18)',
+    /** Botões que flutuam sobre o mapa do formulário (centralizar, zoom, "Usar minha localização"). */
+    control: palette.mapControl,
+    controlPressed: palette.mapControlPressed,
+    controlDivider: palette.mapControlDivider,
   },
   /**
    * `bg` = fundo do ícone; `bar` = faixa lateral do cartão; `ink` = glifo; `pin` = marcador forte no mapa;
@@ -400,10 +410,14 @@ export const size = {
     pagerGap: du(14),
     brandName: du(37),
   },
+  /** Sugestões da busca de endereço: altura máxima da lista, recuo das linhas e vão até o campo. */
+  suggestions: { maxHeight: du(420), padding: du(6), gap: du(8) },
   /** Lista "Meus lembretes": chips, cabeçalhos de seção e vãos entre cartões e seções (medidas do app web em du). */
   list: { chipsTop: du(21), chipsGap: du(20), listTop: du(34), sectionHead: du(44), headGap: du(10), firstHeadGap: du(16), cardGap: du(16.5), sectionGap: du(29.5), tipGap: du(22), emptyTop: du(150) },
   /** Linha do menu do lembrete (Editar, Excluir): altura, círculo do ícone, ícone, vãos e a distância da lista até o título. */
   menu: { row: du(116), circle: du(68), icon: du(32), gap: du(26), paddingHorizontal: du(34), listTop: du(26) },
+  /** Botões sobre o mapa do formulário: lado do botão quadrado, altura da pílula "Usar minha localização" e o desenho dos ícones. */
+  mapControl: { button: du(58), pill: du(48), icon: du(30) },
   /** Etiqueta do cartão ("Por horário", "Por local"): altura, recuos, vão e ícone. */
   tag: { height: du(36), left: du(13), right: du(17), gap: du(12), icon: 12 },
   /** Cartão de dica: raio, círculo do ícone, recuos e vão. */
@@ -446,6 +460,16 @@ export const size = {
     sliderTrack: du(11),
     sliderThumb: du(43),
     sliderHeight: du(60),
+    /** Cabeçalho claro (altura da arte, botões de voltar e conta, distância do topo e dos lados), mapa, botão de criar e a base que ele esmaece. */
+    header: du(440),
+    nav: du(72),
+    navTop: du(110),
+    navSide: du(29),
+    map: du(274),
+    mapRadius: du(20),
+    cta: du(117),
+    ctaCircle: du(80),
+    dock: du(170),
     /** Linha de escolha das folhas (Repetir): altura mínima, recuos, vão e a marca de escolhida. */
     row: du(108),
     rowLeft: du(38),
@@ -509,6 +533,8 @@ export const shadow = {
   optionOn: 'inset 0px 0px 0px 2px rgba(24, 92, 75, 1)',
   /** Bolinha do controle deslizante. */
   slider: '0px 2px 6px rgba(0, 0, 0, 0.25)',
+  /** Lista de sugestões da busca de endereço: anel cinza por dentro e sombra funda por baixo. */
+  suggestions: '0px 6px 16px rgba(20, 40, 30, 0.18), inset 0px 0px 0px 1px rgba(231, 232, 234, 1)',
 } as const;
 
 /**

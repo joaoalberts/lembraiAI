@@ -31,8 +31,9 @@ describe('abaAtiva', () => {
     for (const { rota } of ABAS) expect(abaAtiva(rota)).toBe(rota);
   });
 
-  it('o formulário de novo lembrete acende "Lembretes"', () => {
+  it('o formulário de novo lembrete e o de edição acendem "Lembretes"', () => {
     expect(abaAtiva('novo')).toBe('index');
+    expect(abaAtiva('editar')).toBe('index');
   });
 
   it('tela que não pertence a nenhuma aba (sucesso) não acende nenhuma', () => {

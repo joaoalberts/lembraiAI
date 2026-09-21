@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { StyleSheet, TextInput, View, type NativeSyntheticEvent, type TextInputKeyPressEventData } from 'react-native';
+import { semAnelDoNavegador } from '../design/foco';
 import { borderWidth, colors, fontFamily, iconStroke, radius, size, space, textStyles } from '../design/tokens';
 import { Icon } from './Icon';
 
@@ -56,5 +57,5 @@ const styles = StyleSheet.create({
   },
   campoEmFoco: { borderColor: colors.border.focusOnDark, backgroundColor: colors.glass.fieldFocus },
   // sem contorno do navegador: o próprio campo já muda de borda e de fundo em foco
-  entrada: { ...textStyles.body, flex: 1, minWidth: 0, height: '100%', padding: 0, color: colors.text.onDark, fontFamily: fontFamily.regular, outlineWidth: 0 },
+  entrada: { ...textStyles.body, flex: 1, minWidth: 0, height: '100%', padding: 0, color: colors.text.onDark, fontFamily: fontFamily.regular, ...semAnelDoNavegador },
 });

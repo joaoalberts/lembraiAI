@@ -205,9 +205,12 @@ describe('Lista: menu e exclusão', () => {
     expect(screen.getByRole('button', { name: 'Excluir' })).toBeTruthy();
   });
 
-  it('por enquanto o menu só tem Excluir: Editar entra junto com a edição no formulário', async () => {
-    await abrirMenuDe('Comprar água no mercado');
+  it('Editar abre o formulário de edição daquele lembrete e fecha o menu', async () => {
+    await abrirMenuDe('Tomar vitamina');
+    await fireEvent.press(screen.getByRole('button', { name: 'Editar' }));
+    expect(router.navigate).toHaveBeenCalledWith({ pathname: '/editar', params: { id: '4' } });
     expect(screen.queryByRole('button', { name: 'Editar' })).toBeNull();
+    expect(acoes.remove).not.toHaveBeenCalled();
   });
 
   it('Excluir fecha o menu e abre a confirmação com o nome do lembrete', async () => {

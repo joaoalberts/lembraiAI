@@ -18,7 +18,8 @@ export default function AppLayout() {
     >
       <Tabs.Screen name="inicio" options={{ title: 'Início', headerShown: false }} />
       <Tabs.Screen name="index" options={{ title: 'Lembretes', headerShown: false }} />
-      <Tabs.Screen name="novo" options={{ title: 'Novo lembrete', headerTitle: 'Novo Lembrete' }} />
+      <Tabs.Screen name="novo" options={{ title: 'Novo lembrete', headerShown: false }} />
+      <Tabs.Screen name="editar" options={{ title: 'Editar lembrete', headerShown: false }} />
       <Tabs.Screen name="mapa" options={{ title: 'Mapa', headerTitle: 'Mapa' }} />
       <Tabs.Screen name="config" options={{ title: 'Configurações', headerTitle: 'Configurações' }} />
     </Tabs>

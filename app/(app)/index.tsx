@@ -37,6 +37,10 @@ export default function LembretesScreen() {
     setBusca('');
   }, []);
 
+  const editar = () => {
+    if (menu) router.navigate({ pathname: '/editar', params: { id: menu.id } });
+    setMenu(null);
+  };
   const pedirExclusao = () => {
     setAExcluir(menu);
     setMenu(null);
@@ -136,7 +140,7 @@ export default function LembretesScreen() {
         </ScrollView>
       </View>
 
-      <ReminderMenu reminder={menu} onClose={() => setMenu(null)} onDelete={pedirExclusao} />
+      <ReminderMenu reminder={menu} onClose={() => setMenu(null)} onEdit={editar} onDelete={pedirExclusao} />
       <ConfirmSheet
         visible={aExcluir !== null}
         title="Excluir lembrete?"

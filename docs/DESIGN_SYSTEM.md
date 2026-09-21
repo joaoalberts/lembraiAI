@@ -146,6 +146,10 @@ Use `palette.*` só para definir papéis em `colors`. As telas usam os papéis (
 | `palette.optionBadge` | `#195A48` | Selo de seleção dos cartões de modo e das linhas escolhidas |
 | `palette.sliderThumb` | `#FFFEFF` | Bolinha do controle deslizante do raio |
 | `palette.hint` | `#717074` | Subtítulo do cabeçalho claro do formulário |
+| `palette.suggestionHover` | `#F2F5F0` | Sugestão de endereço com o ponteiro em cima (web) |
+| `palette.mapControl` | `#FDFDFD` | Botões que flutuam sobre o mapa do formulário |
+| `palette.mapControlPressed` | `#F0F0F0` | Botão sobre o mapa pressionado |
+| `palette.mapControlDivider` | `#E2E2E2` | Divisória entre os botões de zoom do mapa |
 | `palette.wheelItem` | `#9EA1A8` | Número não escolhido da roda do horário (o app usa `colors.text.secondary` para dar contraste) |
 | `palette.rowHover` | `#F7F8F4` | Linha de menu com o ponteiro em cima (web) |
 | `palette.rowPressed` | `#EEF1EA` | Linha de menu pressionada |
@@ -227,6 +231,7 @@ Use `palette.*` só para definir papéis em `colors`. As telas usam os papéis (
 | `colors.control.segmentTrack` | `#E8E4DC` | `palette.sand` | Trilho do controle segmentado |
 | `colors.control.segmentThumb` | `#FFFFFF` | `palette.white` | Opção selecionada do controle segmentado |
 | `colors.control.rowHover` | `#F7F8F4` | `palette.rowHover` | Linha de menu com o ponteiro em cima (web) |
+| `colors.control.suggestionHover` | `#F2F5F0` | `palette.suggestionHover` | Sugestão de endereço com o ponteiro em cima (web) |
 | `colors.control.rowPressed` | `#EEF1EA` | `palette.rowPressed` | Linha de menu pressionada |
 | `colors.control.dangerRowHover` | `#FDF3F1` | `palette.dangerRowHover` | Linha de excluir com o ponteiro em cima (web) |
 | `colors.control.dangerRowPressed` | `#FBE7E4` | `palette.dangerTint` | Linha de excluir pressionada |
@@ -264,6 +269,7 @@ Use `palette.*` só para definir papéis em `colors`. As telas usam os papéis (
 | `colors.glass.featureFill` | `rgba(255, 255, 255, 0.04)` | — | Fundo do círculo dos benefícios do Onboarding |
 | `colors.glass.featureRing` | `rgba(150, 220, 180, 0.4)` | — | Contorno do círculo dos benefícios do Onboarding |
 | `colors.glass.divider` | `rgba(233, 255, 243, 0.22)` | — | Divisória vertical entre os benefícios do Onboarding |
+| `colors.glass.ctaCircle` | `rgba(255, 255, 255, 0.13)` | — | Círculo da seta dentro do botão "Criar lembrete" |
 | `colors.brand.tile` | `#84FADA` | `palette.mintBrand` | Fundo do ícone do app, da tela de abertura e do favicon |
 | `colors.brand.tileEnd` | `#78E4C4` | `palette.mintBrandEnd` | Fim do degradê do ícone do app |
 | `colors.brand.glyph` | `#043525` | `palette.brandInk` | Símbolo do ícone do app |
@@ -277,6 +283,9 @@ Use `palette.*` só para definir papéis em `colors`. As telas usam os papéis (
 | `colors.map.haloFill` | `rgba(45, 170, 120, 0.21)` | — | Preenchimento do círculo do raio de aviso |
 | `colors.map.haloLine` | `rgba(45, 170, 120, 0.32)` | — | Contorno do círculo do raio de aviso |
 | `colors.map.pinShadow` | `rgba(0, 0, 0, 0.18)` | — | Sombra do pino do mapa no formulário |
+| `colors.map.control` | `#FDFDFD` | `palette.mapControl` | Botões que flutuam sobre o mapa do formulário |
+| `colors.map.controlPressed` | `#F0F0F0` | `palette.mapControlPressed` | Botão sobre o mapa pressionado |
+| `colors.map.controlDivider` | `#E2E2E2` | `palette.mapControlDivider` | Divisória entre os botões de zoom do mapa |
 <!-- tokens:cores-semanticas:fim -->
 
 ### 3.3 Categorias de lembrete
@@ -447,6 +456,7 @@ O desenho é quase plano. Toda sombra é o `boxShadow` em texto (aceito pela New
 | `shadow.fieldFocus` | `inset 0px 0px 0px 2px rgba(24, 92, 75, 1), 0px 0px 0px 4px rgba(24, 92, 75, 0.15)` | Campo do formulário em foco (anel verde e halo) |
 | `shadow.optionOn` | `inset 0px 0px 0px 2px rgba(24, 92, 75, 1)` | Cartão de modo escolhido (anel verde por dentro) |
 | `shadow.slider` | `0px 2px 6px rgba(0, 0, 0, 0.25)` | Bolinha do controle deslizante |
+| `shadow.suggestions` | `0px 6px 16px rgba(20, 40, 30, 0.18), inset 0px 0px 0px 1px rgba(231, 232, 234, 1)` | Lista de sugestões de endereço (sombra funda e anel cinza) |
 <!-- tokens:sombras:fim -->
 
 - `shadow.card` nos cartões e painéis; `shadow.float` nos controles flutuantes; `shadow.sheet` nas folhas inferiores; `shadow.tabBar` na barra de abas; `shadow.column` na coluna da web; `shadow.cta` só no botão primário habilitado; `shadow.focus` como halo do campo em foco.
@@ -644,6 +654,12 @@ As peças do formulário (imagens `04`, `06` e `15`), em `src/components`:
 - **Cartão de modo** (`OptionCard`; "Por data e horário" e "Por local"): papel `radio`. Escolhido: fundo branco, anel verde por dentro (`shadow.optionOn`) e o selo de visto (`colors.control.badge`, `size.form.optionBadge`); não escolhido: fundo de cartão e só o anel vazio de opção (`colors.border.strong`). Círculo do ícone `colors.bg.iconCircle`.
 - **Controle deslizante** (`Slider`; o raio de aviso): trilho `colors.control.off`, preenchimento `colors.control.on`, bolinha `colors.control.sliderThumb` com `shadow.slider`, que passa meio raio de cada ponta. Toque, arrasto e, para o leitor de tela, papel `adjustable` com os gestos de aumentar e diminuir. Valor sempre no passo pedido e dentro dos limites.
 
+A tela (`FormularioDeLembrete`, nas rotas `novo` e `editar?id=`), de cima para baixo: o cabeçalho claro (`CabecalhoClaro`: `gradients.cabecalhoClaro` mais cinco anéis brancos no canto direito, `size.form.header` de altura; o conteúdo desce com a barra de status do aparelho) com os botões redondos de voltar e de conta (`size.form.nav`, brancos, `shadow.float`), o título em serifa e "Na hora certa. No lugar certo."; o cartão **Descrição**; os dois **cartões de modo**; o cartão de **data, horário e repetir**; o cartão **Local (opcional)**, com o interruptor `form`; e, fixo embaixo sobre o esmaecimento `gradients.esmaecerParaPagina`, o botão **Criar lembrete** (`CtaButton`: laranja, `size.form.cta`, rótulo em serifa e a seta num círculo `colors.glass.ctaCircle`).
+
+- **Modo:** o cartão "Por local" e o interruptor do Local são a mesma escolha. Por local, o campo Horário esmaece e não responde (o lembrete guarda o horário mesmo assim); Data e Repetir continuam ativos.
+- **Local ligado:** a busca de endereço (`PlaceSearch`: Nominatim, só com 3 letras ou mais, 650 ms depois da última, pedido anterior cancelado; até cinco sugestões; falha diz "Não foi possível buscar agora."), o mapa (`MapaDeEscolha`, Leaflet + OpenStreetMap, `size.form.map` de altura; toque ou arrasto do pino põe o ponto e o nome do lugar vem do serviço 700 ms depois; o círculo mostra o raio), o raio (50 a 550 m de 10 em 10, padrão 150) e a dica "Você será avisado ao entrar no raio selecionado.". No mapa flutuam três botões: centralizar no pino, zoom e "Usar minha localização" (`colors.map.control`, `shadow.float`). A roda do mouse só dá zoom no mapa depois de um clique, senão rolar a página com o cursor em cima dele o faria dar zoom sozinho.
+- **Salvar:** a descrição é obrigatória ("Dê uma descrição ao lembrete.", embaixo do campo, em `colors.text.danger`); por local precisa de um ponto escolhido ("Escolha o local no mapa ou busque um endereço."). Criar leva à tela de sucesso; editar volta de onde veio. Falha do banco: aviso `error` no topo e o botão volta a funcionar. **Decisões do app, diferentes do original:** o original grava um lembrete sem descrição como "Comprar água no mercado" e um "por local" sem ponto no endereço de exemplo de Fortaleza; o app exige a descrição e o ponto. A localização só é pedida quando a pessoa toca em "Usar minha localização".
+
 As folhas do formulário (`Sheet`, seção 11.5):
 
 - **Repetir** (`RepeatSheet`, imagem `14`): título "Repetir", uma lista branca de seis linhas (Nunca, Todos os dias, Dias úteis, Toda semana, Todo mês, Todo ano), cada uma com o título em negrito e a explicação embaixo (`REPEAT_OPTIONS.desc`). A linha escolhida tem o fundo `colors.feedback.successBg` e o selo de visto (`size.form.rowBadge`); as outras, um anel vazio. Papéis `radiogroup` e `radio`. Escolher uma linha aplica e fecha na hora.
@@ -748,6 +764,9 @@ Filosofia: o mínimo. O feedback de toque é instantâneo (troca de cor e escala
 | `size.onboarding.pagerHeight` | `6` | Onboarding: altura de cada ponto da página |
 | `size.onboarding.pagerGap` | `7` | Onboarding: vão entre os pontos da página |
 | `size.onboarding.brandName` | `19` | Onboarding: tamanho do nome da marca |
+| `size.suggestions.maxHeight` | `212` | Sugestões de endereço: altura máxima da lista (o resto rola) |
+| `size.suggestions.padding` | `3` | Sugestões de endereço: recuo da lista |
+| `size.suggestions.gap` | `4` | Sugestões de endereço: vão entre o campo e a lista |
 | `size.list.chipsTop` | `11` | Lista: distância da borda da folha até os chips |
 | `size.list.chipsGap` | `10` | Lista: vão entre os chips |
 | `size.list.listTop` | `17` | Lista: espaço entre os chips e o primeiro título de seção |
@@ -764,6 +783,9 @@ Filosofia: o mínimo. O feedback de toque é instantâneo (troca de cor e escala
 | `size.menu.gap` | `13` | Linha do menu: vão entre o círculo e o texto |
 | `size.menu.paddingHorizontal` | `17` | Linha do menu: recuo dos lados |
 | `size.menu.listTop` | `13` | Linha do menu: distância da lista até o título da folha |
+| `size.mapControl.button` | `29` | Mapa do formulário: lado dos botões de centralizar e zoom |
+| `size.mapControl.pill` | `24` | Mapa do formulário: altura da pílula "Usar minha localização" |
+| `size.mapControl.icon` | `15` | Mapa do formulário: ícone dentro dos botões |
 | `size.tag.height` | `18` | Etiqueta "Por horário" / "Por local": altura |
 | `size.tag.left` | `7` | Etiqueta: recuo antes do ícone |
 | `size.tag.right` | `9` | Etiqueta: recuo depois do texto |
@@ -803,6 +825,15 @@ Filosofia: o mínimo. O feedback de toque é instantâneo (troca de cor e escala
 | `size.form.sliderTrack` | `6` | Formulário: espessura do trilho do controle deslizante |
 | `size.form.sliderThumb` | `22` | Formulário: bolinha do controle deslizante |
 | `size.form.sliderHeight` | `30` | Formulário: altura da área de toque do controle deslizante |
+| `size.form.header` | `222` | Formulário: altura da arte do cabeçalho claro |
+| `size.form.nav` | `36` | Formulário: botões redondos de voltar e de conta |
+| `size.form.navTop` | `56` | Formulário: distância dos botões até o topo (desce com a barra de status do aparelho) |
+| `size.form.navSide` | `15` | Formulário: distância dos botões até as bordas |
+| `size.form.map` | `138` | Formulário: altura do mapa |
+| `size.form.mapRadius` | `10` | Formulário: raio do mapa |
+| `size.form.cta` | `59` | Formulário: altura do botão "Criar lembrete" |
+| `size.form.ctaCircle` | `40` | Formulário: círculo da seta do botão "Criar lembrete" |
+| `size.form.dock` | `86` | Formulário: altura da base que esmaece atrás do botão fixo |
 | `size.form.row` | `55` | Folha Repetir: altura mínima de cada linha |
 | `size.form.rowLeft` | `19` | Folha Repetir: recuo da esquerda |
 | `size.form.rowRight` | `17` | Folha Repetir: recuo da direita |
@@ -1001,6 +1032,7 @@ O teste `valores-soltos.test.ts` mantém uma lista de arquivos com valores visua
 | 21/09/2026 | **Interruptor próprio** (`Toggle` com duas variantes) no lugar do `Switch` do sistema; verde do cartão `#2EA275` em vez do `#30AB7B` da imagem | O `Switch` do sistema não tem o tamanho nem a cor das imagens (35 por 21 e 43 por 26). O `#30AB7B` medido dá 2,76:1 com o cartão e 2,80:1 com a bolinha, abaixo dos 3:1 do WCAG 1.4.11 que o teste de contraste exige; escurecer 5% resolve (3,05:1 e 3,10:1) e a diferença não se vê. Voltar ao valor da imagem é trocar `palette.toggleCardOn` |
 | 21/09/2026 | **Etiqueta do cartão com texto escurecido** (`colors.category.*.tagInk`); a lista, o cabeçalho verde, a marca, o botão de vidro e a busca entram como no original, com o texto no piso de 12 | Na imagem o texto da etiqueta azul dá 2,7:1 e o rosa 2,4:1 sobre o fundo da etiqueta; o `fg` escurecido só até 4,5:1 mantém a cor e cumpre o teste. O original usa texto de 9 a 10 dp nas etiquetas, nos chips e nas datas, abaixo do piso do Design System: sobe para 12 e os cartões ficam um pouco mais altos que na imagem |
 | 21/09/2026 | **Barra de abas própria** (`BarraDeAbas`) com Início, Lembretes, Mapa e Configurações; "Novo" sai da barra; `Tabs` vem de `expo-router/js-tabs` | O padrão do React Navigation não reproduz a barra das imagens (abas iguais, traço que engrossa, sombra para cima, base da área segura) e não deixa o formulário acender "Lembretes". Em `expo-router` 57 o `Tabs` da raiz do pacote está marcado como obsoleto em favor de `expo-router/js-tabs` |
+| 21/09/2026 | **Formulário de novo lembrete e de edição no mesmo componente** (`FormularioDeLembrete`; rotas `novo` e `editar?id=`), com descrição e ponto de local obrigatórios, raio de 50 a 550 m e a localização só a pedido | O original aceita descrição vazia (grava um exemplo) e "por local" sem ponto (grava Fortaleza): serve para demonstração, não para uma pessoa real; a tabela aceita 10 a 5000 m e as capturas mostram o controle de 0 a 550, e abaixo de 50 m o aviso por geofence não é confiável (o piso de 200 m de precisão já é decisão do usuário) |
 
 ## 19. Pendências
 

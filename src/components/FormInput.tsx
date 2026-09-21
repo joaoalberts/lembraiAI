@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { StyleSheet, TextInput, type TextInputProps } from 'react-native';
+import { semAnelDoNavegador } from '../design/foco';
 import { colors, fontFamily, radius, shadow, size, space, textStyles } from '../design/tokens';
 
 /**
@@ -29,7 +30,7 @@ const styles = StyleSheet.create({
     boxShadow: shadow.field,
     color: colors.text.primary,
     fontFamily: fontFamily.regular,
-    outlineWidth: 0,
+    ...semAnelDoNavegador,
   },
   emFoco: { boxShadow: shadow.fieldFocus },
 });

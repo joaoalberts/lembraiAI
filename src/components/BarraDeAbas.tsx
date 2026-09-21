@@ -14,8 +14,8 @@ export const ABAS: { rota: string; rotulo: string; icone: IconeNome }[] = [
   { rota: 'config', rotulo: 'Configurações', icone: TAB_ICON.config },
 ];
 
-/** Telas que não são aba mas pertencem a uma: o formulário de novo lembrete fica sob "Lembretes", como no app web. */
-const ABA_DA_TELA: Record<string, string> = { novo: 'index' };
+/** Telas que não são aba mas pertencem a uma: o formulário de novo lembrete e o de edição ficam sob "Lembretes", como no app web. */
+const ABA_DA_TELA: Record<string, string> = { novo: 'index', editar: 'index' };
 
 /** Qual aba fica acesa para a tela em foco; `null` quando a tela não pertence a nenhuma. */
 export function abaAtiva(nomeDaRota: string): string | null {

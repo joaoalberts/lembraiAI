@@ -1,5 +1,6 @@
 import { TextInput, View, Text, StyleSheet, ViewStyle, type TextInputProps } from 'react-native';
 import { useState } from 'react';
+import { semAnelDoNavegador } from '../design/foco';
 import { borderWidth, colors, fontFamily, fontSize, radius, shadow, space, textStyles } from '../design/tokens';
 
 interface TextFieldProps {
@@ -90,7 +91,7 @@ const styles = StyleSheet.create({
     fontSize: fontSize.bodyLg,
     color: colors.text.primary,
     backgroundColor: colors.bg.field,
-    outlineWidth: 0, // o foco é a borda verde + o halo; sem isto o navegador soma o anel âmbar dele
+    ...semAnelDoNavegador, // o foco é a borda verde + o halo; sem isto o navegador soma o anel âmbar dele
   },
   inputFocused: {
     borderColor: colors.border.focus,

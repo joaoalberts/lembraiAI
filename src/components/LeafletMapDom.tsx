@@ -5,7 +5,8 @@ import * as L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import type { DOMProps } from 'expo/dom';
 import { FALLBACK_COORD } from '../data/reminders';
-import { colors, fontFamily, size } from '../design/tokens';
+import { CSS_DO_MAPA } from '../design/mapa-css';
+import { colors, iconStroke, size } from '../design/tokens';
 import type { MapMarker } from './map-types';
 
 const ZOOM = 15;
@@ -22,17 +23,13 @@ const iconeDoPino = () =>
       `<circle cx="14.5" cy="14.3" r="5.5" fill="${colors.map.ring}"/></svg>`,
   });
 
-/**
- * O Leaflet traz fonte própria (Helvetica no mapa, monoespaçada nos botões de zoom). Aqui ele fala a língua da marca.
- * Na web as fontes já foram carregadas pela página; na WebView do app cai na pilha de reserva do sistema.
- * Botões de zoom: família bold com peso normal (o Leaflet pede `bold` e somaria negrito falso sobre a regular).
- */
-const CSS_DO_MAPA = `
-.leaflet-container, .leaflet-tooltip { font-family: ${fontFamily.regular}; }
-.leaflet-control-zoom a { font-family: ${fontFamily.bold}; font-weight: normal; }
-.leaflet-tile-pane { filter: saturate(0.72) contrast(0.94) brightness(1.04); }
-.pino-de-escolha { background: none; border: 0; filter: drop-shadow(0 1.5px 1.5px ${colors.map.pinShadow}); cursor: grab; }
-`;
+/** Ícones dos botões sobre o mapa (do Lucide, embutidos porque este arquivo roda no navegador e não importa nada do React Native). */
+const icone = (corpo: string, lado: number) =>
+  `<svg xmlns="http://www.w3.org/2000/svg" width="${lado}" height="${lado}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="${iconStroke.ui}" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${corpo}</svg>`;
+const ICONE_CENTRALIZAR = icone('<polygon points="3 11 22 2 13 21 11 13 3 11"/>', size.mapControl.icon);
+const ICONE_LOCALIZACAO = icone('<line x1="2" x2="5" y1="12" y2="12"/><line x1="19" x2="22" y1="12" y2="12"/><line x1="12" x2="12" y1="2" y2="5"/><line x1="12" x2="12" y1="19" y2="22"/><circle cx="12" cy="12" r="7"/><circle cx="12" cy="12" r="3"/>', size.mapControl.icon);
+const TEXTO_DA_PILULA = 'Usar minha localização';
+const TEXTO_DA_PILULA_OCUPADA = 'Localizando…';
 
 interface Props {
   /** Injetado pelo Expo no iOS/Android: configura a WebView que hospeda este componente. */
@@ -49,6 +46,10 @@ interface Props {
   aoEscolher?: (lat: number, lng: number) => Promise<void> | void;
   /** Cada valor novo reenquadra o mapa no pino (busca de endereço, "Usar minha localização"). */
   enquadrar?: number;
+  /** Modo de escolha: toque na pílula "Usar minha localização" (o pedido de posição fica do lado do app). */
+  aoUsarLocalizacao?: () => Promise<void> | void;
+  /** Enquanto a posição é lida, a pílula mostra "Localizando…" e não aceita toque. */
+  localizando?: boolean;
 }
 
 /**
@@ -59,7 +60,7 @@ interface Props {
  * Só pode importar coisas que rodam no navegador (nada de `react-native`). Pinos são `circleMarker` (sem imagens),
  * o que evita o problema clássico dos ícones do Leaflet quebrados em bundlers.
  */
-export default function LeafletMapDom({ center, markers, onMarkerPress, escolha = null, aoEscolher, enquadrar }: Props) {
+export default function LeafletMapDom({ center, markers, onMarkerPress, escolha = null, aoEscolher, enquadrar, aoUsarLocalizacao, localizando = false }: Props) {
   const host = useRef<HTMLDivElement>(null);
   const map = useRef<L.Map | null>(null);
   const group = useRef<L.LayerGroup | null>(null);
@@ -71,6 +72,9 @@ export default function LeafletMapDom({ center, markers, onMarkerPress, escolha 
   onPress.current = onMarkerPress;
   const escolher = useRef(aoEscolher);
   escolher.current = aoEscolher;
+  const usarLocalizacao = useRef(aoUsarLocalizacao);
+  usarLocalizacao.current = aoUsarLocalizacao;
+  const botaoDaPilula = useRef<HTMLButtonElement | null>(null);
   const [ready, setReady] = useState(false);
   const escolhendo = aoEscolher !== undefined;
 
@@ -83,7 +87,15 @@ export default function LeafletMapDom({ center, markers, onMarkerPress, escolha 
     const inicio = escolha ?? center ?? (markers[0] ? { lat: markers[0].lat, lng: markers[0].lng } : FALLBACK_COORD);
     // com um pino já escolhido (edição), a posição da pessoa que chega depois não puxa o mapa para longe dele
     if (escolha) centered.current = true;
-    const m = L.map(host.current).setView([inicio.lat, inicio.lng], ZOOM);
+    // no modo de escolha o zoom é um dos botões do canto (mais abaixo), no lugar do padrão do Leaflet
+    // O mapa do formulário fica dentro de uma página que rola: a roda do mouse só dá zoom nele depois de um clique (e para ao sair),
+    // senão rolar a página com o cursor em cima do mapa a faria dar zoom sozinha.
+    const escolhendoAgora = aoEscolher !== undefined;
+    const m = L.map(host.current, { zoomControl: !escolhendoAgora, scrollWheelZoom: !escolhendoAgora }).setView([inicio.lat, inicio.lng], ZOOM);
+    if (escolhendoAgora) {
+      m.on('click focus', () => m.scrollWheelZoom.enable());
+      m.on('mouseout blur', () => m.scrollWheelZoom.disable());
+    }
     L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
       maxZoom: 19,
       attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
@@ -164,6 +176,52 @@ export default function LeafletMapDom({ center, markers, onMarkerPress, escolha 
     if (halo.current) { halo.current.setLatLng(ll); halo.current.setRadius(escolha.raio); }
     else halo.current = L.circle(ll, { radius: escolha.raio, color: colors.map.haloLine, weight: 2, fillColor: colors.map.haloFill, fillOpacity: 1, interactive: false }).addTo(m);
   }, [ready, escolha?.lat, escolha?.lng, escolha?.raio]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  // Modo de escolha: botões que flutuam sobre o mapa (centralizar e zoom no canto de cima, "Usar minha localização" embaixo)
+  useEffect(() => {
+    const m = map.current;
+    if (!ready || !m || !escolhendo) return;
+    const centralizar = new L.Control({ position: 'topright' });
+    centralizar.onAdd = () => {
+      const barra = L.DomUtil.create('div', 'controle-do-mapa');
+      const botao = L.DomUtil.create('a', '', barra);
+      botao.setAttribute('role', 'button');
+      botao.setAttribute('href', '#');
+      botao.setAttribute('aria-label', 'Centralizar no lembrete');
+      botao.innerHTML = ICONE_CENTRALIZAR;
+      L.DomEvent.disableClickPropagation(barra);
+      L.DomEvent.on(botao, 'click', (e) => {
+        L.DomEvent.preventDefault(e);
+        const p = pino.current?.getLatLng();
+        if (p) m.setView(p, m.getZoom(), { animate: true });
+      });
+      return barra;
+    };
+    centralizar.addTo(m);
+    const zoom = L.control.zoom({ position: 'topright', zoomInTitle: 'Aproximar', zoomOutTitle: 'Afastar' }).addTo(m);
+    const pilula = new L.Control({ position: 'bottomleft' });
+    pilula.onAdd = () => {
+      const barra = L.DomUtil.create('div', 'pilula-do-mapa');
+      const botao = L.DomUtil.create('button', '', barra);
+      botao.type = 'button';
+      botao.innerHTML = `${ICONE_LOCALIZACAO}<span>${TEXTO_DA_PILULA}</span>`;
+      L.DomEvent.disableClickPropagation(barra);
+      L.DomEvent.on(botao, 'click', () => { void usarLocalizacao.current?.(); });
+      botaoDaPilula.current = botao;
+      return barra;
+    };
+    pilula.addTo(m);
+    return () => { centralizar.remove(); zoom.remove(); pilula.remove(); botaoDaPilula.current = null; };
+  }, [ready, escolhendo]);
+
+  // a pílula acompanha o pedido de posição em andamento
+  useEffect(() => {
+    const botao = botaoDaPilula.current;
+    if (!botao) return;
+    botao.disabled = localizando;
+    const texto = botao.querySelector('span');
+    if (texto) texto.textContent = localizando ? TEXTO_DA_PILULA_OCUPADA : TEXTO_DA_PILULA;
+  }, [ready, escolhendo, localizando]);
 
   // Reenquadrar no pino a pedido (busca de endereço e "Usar minha localização")
   useEffect(() => {
