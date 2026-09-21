@@ -131,11 +131,8 @@ describe('Onboarding: encaixe na tela', () => {
     jest.restoreAllMocks();
   });
 
-  it('com a barra de abas embaixo a base não soma a área segura; sozinho (visitante) soma', async () => {
-    await abrir({ standalone: false }, { top: 47, bottom: 34 });
-    expect(estilo(screen.getByTestId('onboarding').children[1] as never)).toMatchObject({ paddingTop: 47, paddingBottom: 0 });
-    await screen.unmount();
-    await abrir({ standalone: true }, { top: 47, bottom: 34 });
+  it('é a tela de quem ainda não entrou, sem barra de abas: a base respeita a área segura do sistema', async () => {
+    await abrir({}, { top: 47, bottom: 34 });
     expect(estilo(screen.getByTestId('onboarding').children[1] as never)).toMatchObject({ paddingTop: 47, paddingBottom: 34 });
   });
 

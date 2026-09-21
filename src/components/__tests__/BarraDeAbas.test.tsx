@@ -7,7 +7,7 @@ import { colors, fontFamily, fontSize, iconStroke, lineHeight, opacity, shadow, 
 import { comAreaSegura } from '../../test-utils/area-segura';
 import { ABAS, BarraDeAbas, abaAtiva, estiloDaAba } from '../BarraDeAbas';
 
-const NOMES = ['inicio', 'index', 'novo', 'mapa', 'config', 'sucesso'];
+const NOMES = ['novo', 'index', 'editar', 'mapa', 'config', 'sucesso'];
 const rotas = NOMES.map((name) => ({ key: `${name}-1`, name }));
 
 function props(emFoco: string, opcoesDaTela: Record<string, unknown> = {}) {
@@ -31,9 +31,13 @@ describe('abaAtiva', () => {
     for (const { rota } of ABAS) expect(abaAtiva(rota)).toBe(rota);
   });
 
-  it('o formulário de novo lembrete e o de edição acendem "Lembretes"', () => {
-    expect(abaAtiva('novo')).toBe('index');
+  it('o formulário de novo lembrete é a aba "Criar" e o de edição acende "Lembretes"', () => {
+    expect(abaAtiva('novo')).toBe('novo');
     expect(abaAtiva('editar')).toBe('index');
+  });
+
+  it('a abertura ("Lembre de tudo!") não é aba: só quem ainda não entrou a vê, então nenhuma rota `inicio` acende aba', () => {
+    expect(abaAtiva('inicio')).toBeNull();
   });
 
   it('tela que não pertence a nenhuma aba (sucesso) não acende nenhuma', () => {
@@ -44,22 +48,22 @@ describe('abaAtiva', () => {
 describe('BarraDeAbas', () => {
   it('o rótulo da aba tem o tamanho do original (`.tab`, 17,8 du = 9 dp)', async () => {
     await abrir('index');
-    for (const nome of ['Início', 'Lembretes', 'Mapa', 'Configurações']) {
+    for (const nome of ['Criar', 'Lembretes', 'Mapa', 'Configurações']) {
       expect(screen.getByText(nome)).toHaveStyle({ fontSize: fontSize.pico, lineHeight: lineHeight.pico });
     }
   });
 
-  it('mostra as quatro abas na ordem Início, Lembretes, Mapa, Configurações', async () => {
+  it('mostra as quatro abas na ordem Criar, Lembretes, Mapa, Configurações', async () => {
     await abrir('index');
-    expect(screen.getAllByRole('tab').map((t) => t.props.accessibilityLabel)).toEqual(['Início', 'Lembretes', 'Mapa', 'Configurações']);
-    expect(ABAS.map((a) => a.rota)).toEqual(['inicio', 'index', 'mapa', 'config']);
+    expect(screen.getAllByRole('tab').map((t) => t.props.accessibilityLabel)).toEqual(['Criar', 'Lembretes', 'Mapa', 'Configurações']);
+    expect(ABAS.map((a) => a.rota)).toEqual(['novo', 'index', 'mapa', 'config']);
   });
 
   it('a aba em foco está selecionada e as outras não; só ela leva aria-current', async () => {
     await abrir('mapa');
     expect(aba('Mapa')).toBeSelected();
     expect(aba('Mapa').props['aria-current']).toBe('page');
-    for (const outra of ['Início', 'Lembretes', 'Configurações']) {
+    for (const outra of ['Criar', 'Lembretes', 'Configurações']) {
       expect(aba(outra)).not.toBeSelected();
       expect(aba(outra).props['aria-current']).toBeUndefined();
     }
@@ -70,17 +74,29 @@ describe('BarraDeAbas', () => {
     const desenho = (nome: string) => JSON.stringify(screen.getByTestId(`icone-${nome}`, { includeHiddenElements: true }).children);
     expect(desenho('list')).toContain(colors.tab.activeIcon);
     expect(desenho('list')).toContain(`"strokeWidth":${iconStroke.base}`);
-    expect(desenho('house')).toContain(colors.tab.inactive);
-    expect(desenho('house')).toContain(`"strokeWidth":${iconStroke.tab}`);
+    expect(desenho('plus')).toContain(colors.tab.inactive);
+    expect(desenho('plus')).toContain(`"strokeWidth":${iconStroke.tab}`);
     expect(estilo(screen.getByText('Lembretes'))).toMatchObject({ fontFamily: fontFamily.bold, color: colors.text.brand });
-    expect(estilo(screen.getByText('Início'))).toMatchObject({ color: colors.tab.inactive });
-    expect(estilo(screen.getByText('Início'))).not.toMatchObject({ fontFamily: fontFamily.bold });
+    expect(estilo(screen.getByText('Criar'))).toMatchObject({ color: colors.tab.inactive });
+    expect(estilo(screen.getByText('Criar'))).not.toMatchObject({ fontFamily: fontFamily.bold });
   });
 
-  it('no formulário de novo lembrete a aba Lembretes fica acesa', async () => {
+  it('no formulário de novo lembrete a aba Criar fica acesa', async () => {
     await abrir('novo');
+    expect(aba('Criar')).toBeSelected();
+    expect(aba('Lembretes')).not.toBeSelected();
+  });
+
+  it('na edição de um lembrete a aba Lembretes fica acesa', async () => {
+    await abrir('editar');
     expect(aba('Lembretes')).toBeSelected();
-    expect(aba('Início')).not.toBeSelected();
+    expect(aba('Criar')).not.toBeSelected();
+  });
+
+  it('tocar em Criar leva ao formulário de novo lembrete', async () => {
+    const navigation = await abrir('index');
+    await fireEvent.press(aba('Criar'));
+    expect(navigation.navigate).toHaveBeenCalledWith('novo');
   });
 
   it('toque numa aba diferente avisa o navegador e navega; toque na aba atual não faz nada', async () => {
@@ -97,7 +113,7 @@ describe('BarraDeAbas', () => {
     const { propsDaBarra, navigation } = props('index');
     navigation.emit.mockReturnValue({ defaultPrevented: true });
     await render(comAreaSegura(<BarraDeAbas {...propsDaBarra} />));
-    await fireEvent.press(aba('Início'));
+    await fireEvent.press(aba('Criar'));
     expect(navigation.navigate).not.toHaveBeenCalled();
   });
 

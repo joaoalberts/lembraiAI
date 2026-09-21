@@ -40,8 +40,6 @@ const BENEFICIOS: { icone: IconeNome; titulo: string; texto: string }[] = [
 interface OnboardingProps {
   onSkip: () => void;
   onStart: () => void;
-  /** Sem barra de abas embaixo (visitante): a base respeita a área segura do sistema. */
-  standalone?: boolean;
 }
 
 interface BalaoProps {
@@ -71,10 +69,10 @@ function Balao({ esquerdo, topo, medidas, giro, titulo, texto, glifo, testID }: 
 /**
  * Tela de abertura (padrão: docs/DESIGN_SYSTEM.md, seção 11.10): foto de fundo, marca e "Pular", o pino 3D com dois balões
  * de vidro, o título, três benefícios, o botão grande e o pager. Um único fluxo vertical com folgas elásticas: em tela
- * alta os blocos se afastam, em tela baixa a cena encolhe. Serve de aba "Início" (com a barra de abas) e de primeira
- * tela do visitante (`standalone`).
+ * alta os blocos se afastam, em tela baixa a cena encolhe. É a primeira tela de quem ainda não entrou
+ * (`app/auth/bem-vindo.tsx`), sem barra de abas: a base respeita a área segura do sistema. Depois de entrar o app não a mostra mais.
  */
-export function Onboarding({ onSkip, onStart, standalone = false }: OnboardingProps) {
+export function Onboarding({ onSkip, onStart }: OnboardingProps) {
   const { width, height } = useWindowDimensions();
   const { top, bottom } = useSafeAreaInsets();
   const coluna = Math.min(width, layout.columnMax);
@@ -93,7 +91,7 @@ export function Onboarding({ onSkip, onStart, standalone = false }: OnboardingPr
       {/* fundo verde escuro: barra de status com texto claro */}
       <BarraDeStatus sobre="escuro" />
       <Image source={FUNDO} contentFit="cover" accessible={false} style={StyleSheet.absoluteFill} />
-      <View style={[styles.fluxo, { paddingTop: top, paddingBottom: standalone ? bottom : 0 }]}>
+      <View style={[styles.fluxo, { paddingTop: top, paddingBottom: bottom }]}>
         <View style={folga(PESOS.topo)} />
         <View style={styles.topo}>
           <AppBrand variant="onboarding" />

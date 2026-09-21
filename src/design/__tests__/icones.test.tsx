@@ -23,8 +23,9 @@ describe('ícones do Design System (Lucide)', () => {
     expect(Object.keys(GIRO_NA_LISTA).every((k) => k in ICON_NAME)).toBe(true);
   });
 
-  it('as abas são as quatro do app: Início, Lembretes, Mapa e Configurações', () => {
-    expect(Object.keys(TAB_ICON)).toEqual(['inicio', 'lembretes', 'mapa', 'config']);
+  it('as abas são as quatro do app: Criar, Lembretes, Mapa e Configurações (a abertura não é aba de quem já entrou)', () => {
+    expect(Object.keys(TAB_ICON)).toEqual(['criar', 'lembretes', 'mapa', 'config']);
+    expect(TAB_ICON.criar).toBe('plus');
   });
 
   it('a espessura do traço é positiva e cresce do mais fino ao mais grosso', () => {

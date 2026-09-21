@@ -36,11 +36,11 @@
 
 ### 2.3 As telas de referência
 
-Cada tela e cada folha do app tem uma imagem em `referencias/`. O estado do Expo é o de 21/09/2026, conferido por captura de tela e leitura do código. A barra de abas das imagens é **Início, Lembretes, Mapa e Configurações** (o Início abre o onboarding, a rota `/` do app web); "Novo lembrete" abre pelo botão laranja da lista. O Expo tem as quatro abas (Início, Lembretes, Mapa, Configurações); "Novo" deixou de ser aba e abre pelo botão laranja da lista.
+Cada tela e cada folha do app tem uma imagem em `referencias/`. O estado do Expo é o de 21/09/2026, conferido por captura de tela e leitura do código. A barra de abas das imagens é **Início, Lembretes, Mapa e Configurações** (o Início abre o onboarding, a rota `/` do app web); "Novo lembrete" abre pelo botão laranja da lista. O Expo **diverge das imagens por decisão do João (21/09)**: a primeira aba é **Criar** (o formulário de novo lembrete), no lugar de Início, e a abertura só existe para quem ainda não entrou. As abas são Criar, Lembretes, Mapa e Configurações; o botão laranja da lista também abre o formulário.
 
 | Imagem | Tela | Estado no Expo |
 |---|---|---|
-| [`01`](referencias/01-onboarding.png) | Onboarding | Feito (`Onboarding`, aba Início e primeira tela do visitante); ver 11.10 |
+| [`01`](referencias/01-onboarding.png) | Onboarding | Feito (`Onboarding`, primeira tela de quem ainda não entrou; não é aba); ver 11.10 |
 | [`02`](referencias/02-entrar.png) | Entrar | Feito (`AuthLayout`, mais Criar conta, Recuperar e Redefinir, com o horizonte do rodapé); ver 11.15 |
 | [`03`](referencias/03-recorte-degrade-do-formulario.png) | Recorte do degradê do formulário | Amostra de cor (usada nas medições) |
 | [`04`](referencias/04-novo-lembrete-por-data-e-horario.png) | Novo lembrete, por data e horário | Feito (`FormularioDeLembrete`); ver 11.11 |
@@ -552,7 +552,7 @@ Na web, `telaDeJanelaInteira()` (`src/design/efeitos.ts`) faz a tela de abertura
 <!-- tokens:icones-interface:inicio -->
 | Uso | Lucide |
 |---|---|
-| Aba inicio | `house` |
+| Aba criar | `plus` |
 | Aba lembretes | `list` |
 | Aba mapa | `map-pin` |
 | Aba config | `settings` |
@@ -660,7 +660,7 @@ Componente `src/components/Sheet.tsx`. Véu `colors.overlay` (verde-escuro a 46%
 
 ### 11.6 Abas e cabeçalho
 
-- **Barra de abas** (`src/components/BarraDeAbas.tsx`, uma barra própria no lugar da padrão do React Navigation, ligada por `tabBar` em `Tabs` de `expo-router/js-tabs`): quatro abas iguais, Início, Lembretes, Mapa e Configurações. Fundo `colors.tab.background` com a sombra `shadow.tabBar` para cima, `size.tabBar.top` de espaço em cima e, embaixo, no mínimo `size.tabBar.bottom` (a área segura do sistema o substitui quando é maior). Cada aba tem o ícone de `size.tabBar.icon` com traço `iconStroke.tab` e o rótulo em `textStyles.pico` (9 dp, `.tab` 17,8 du), ambos em `colors.tab.inactive`; a ativa engrossa o traço (`iconStroke.base`), pinta o ícone de `colors.tab.activeIcon` e põe o rótulo em negrito e `colors.text.brand`. Pressionada, `opacity.tab`. Tocar na aba em que já se está não faz nada; o formulário de novo lembrete acende "Lembretes"; a tela de sucesso esconde a barra (`tabBarStyle: { display: 'none' }`). Papéis `tablist` e `tab`, `aria-current="page"` na ativa.
+- **Barra de abas** (`src/components/BarraDeAbas.tsx`, uma barra própria no lugar da padrão do React Navigation, ligada por `tabBar` em `Tabs` de `expo-router/js-tabs`): quatro abas iguais, Criar, Lembretes, Mapa e Configurações. Fundo `colors.tab.background` com a sombra `shadow.tabBar` para cima, `size.tabBar.top` de espaço em cima e, embaixo, no mínimo `size.tabBar.bottom` (a área segura do sistema o substitui quando é maior). Cada aba tem o ícone de `size.tabBar.icon` com traço `iconStroke.tab` e o rótulo em `textStyles.pico` (9 dp, `.tab` 17,8 du), ambos em `colors.tab.inactive`; a ativa engrossa o traço (`iconStroke.base`), pinta o ícone de `colors.tab.activeIcon` e põe o rótulo em negrito e `colors.text.brand`. Pressionada, `opacity.tab`. Tocar na aba em que já se está não faz nada; o formulário de novo lembrete é a aba Criar e o de edição acende "Lembretes"; a tela de sucesso esconde a barra (`tabBarStyle: { display: 'none' }`). Papéis `tablist` e `tab`, `aria-current="page"` na ativa.
 - **Cabeçalho:** fundo `colors.bg.page`, sem sombra, título `textStyles.heading` em `colors.text.primary`.
 - **Cabeçalho verde** (`src/components/GreenHeader.tsx`, na lista e nas configurações): degradê `gradients.cabecalhoVerde` (base a 168°, luz menta e sombra de pinheiro) com as curvas de nível por cima (imagem `assets/art/topo-lista.webp`, ver `assets/art/LEIA-ME.md`), altura mínima `size.header.height` e margem lateral `size.header.side`. O conteúdo começa em `size.header.contentTop`, ou abaixo da barra de status do aparelho (entalhe, ilha) mais `space.sm` quando ela é maior; o cabeçalho cresce o quanto o conteúdo desceu. O grão de 9% do original não se vê e não é reproduzido. A folha clara (`colors.bg.sheet`, cantos `radius.sheet`) sobe sobre ele a partir de `size.header.sheetTop`.
 - **Marca** (`src/components/AppBrand.tsx`): tile de `size.header.brandTile` com `gradients.marcaTile`, símbolo `locate-fixed` em `colors.brand.glyph`, nome em serifa negrito (`colors.text.onDarkWarm`; o original usa um peso a menos, que o app não carrega) e a frase "Sua rotina, mais leve." em `colors.text.onDarkFaint`.
@@ -685,7 +685,7 @@ No navegador o app vive numa coluna de celular centralizada (como o frame do app
 
 ### 11.10 Onboarding
 
-`src/components/Onboarding.tsx`, com duas rotas: `app/(app)/inicio.tsx` (aba Início, com a barra de abas; os dois botões levam a `/novo`) e `app/auth/bem-vindo.tsx` (primeira tela de quem ainda não entrou; os dois botões levam ao login, sem barra de abas, com a base respeitando a área segura). Foto de fundo `bg-onboarding.jpg` (`contentFit="cover"`; o fundo `colors.onboarding.bg` só aparece enquanto ela carrega), e por cima um único fluxo vertical:
+`src/components/Onboarding.tsx`, numa única rota, `app/auth/bem-vindo.tsx` (primeira tela de quem ainda não entrou; os dois botões levam ao login, sem barra de abas, com a base respeitando a área segura). Depois de entrar o app não a mostra mais: não há aba nem rota para ela em `app/(app)/`. Foto de fundo `bg-onboarding.jpg` (`contentFit="cover"`; o fundo `colors.onboarding.bg` só aparece enquanto ela carrega), e por cima um único fluxo vertical:
 
 - **Topo:** `AppBrand variant="onboarding"` (nome em sans negrito de `size.onboarding.brandName`, com "Ai" em `colors.text.brandAccent`) e o `GlassPill` "Pular" (`size.onboarding.skipWidth` por `skipHeight`, seta `chevron-right`).
 - **Cena** (largura da coluna; altura `layout.onboardingSceneRatio` da largura, no máximo 32% da altura da janela): o pino 3D (`hero-pino.png`), o letreiro manuscrito (`hero-script.png`, com texto alternativo) e dois balões de vidro (`colors.glass.balloon` com contorno `balloonRing`) **inclinados −14° e 14°**, como na captura; o esquerdo passa atrás do pino. O CSS do app web desenha os balões retos e mais acima; a imagem vence.
@@ -1308,9 +1308,10 @@ O teste `valores-soltos.test.ts` mantém uma lista de arquivos com valores visua
 | 21/09/2026 | O selo "Ativo" do cartão de resumo só aparece com o lembrete ativo | O original o mostrava sempre, mesmo pausado, o que seria dizer uma coisa falsa |
 | 21/09/2026 | "Compartilhar" envia **texto** (folha do sistema no celular; folha do navegador ou cópia na web) e responde com "Copiado" ou "Indisponível" no lugar do rótulo | O original gera uma imagem JPEG do cartão na web e não avisa nada; a imagem exige captura de tela nativa e fica como tarefa própria. Sem aviso, copiar não pareceria fazer nada |
 | 21/09/2026 | O sombreado do visto é um segundo traço deslocado e mais grosso; as ondas esperam a vez em repouso; o desfoque do botão de fechar não é reproduzido | O SVG nativo não tem `feDropShadow`; o `both` do CSS mostra o primeiro quadro antes do atraso; o desfoque some sobre a foto suave. Nenhum dos três foi comparado em aparelho |
-| 21/09/2026 | O "voltar" das abas segue o histórico (`backBehavior="history"`) | O padrão volta sempre à primeira aba: Salvar na edição caía em Início e o acesso direto a `editar` parecia ter para onde voltar |
+| 21/09/2026 | O "voltar" das abas segue o histórico (`backBehavior="history"`) | O padrão volta sempre à primeira aba: Salvar na edição caía nela (na época Início, hoje Criar) e o acesso direto a `editar` parecia ter para onde voltar |
 | 21/09/2026 | **Depois de entrar (ou criar a conta) o app abre no formulário de novo lembrete**, não em Início (`initialRouteName="novo"` nas abas) | Pedido do João: "sempre depois de logar deve ir para a página do novo lembrete". O `Stack.Protected` da raiz cai na rota inicial do grupo `(app)`, então a decisão mora no layout das abas e ninguém navega à mão. Só vale para o ato de entrar: abrir o app já entrado por um endereço (`/`, `/editar`) segue o endereço |
 | 21/09/2026 | **A faixa do topo do Safari (relógio, sinal, bateria) é o verde da marca** (`theme-color` e `theme_color` em `colors.bg.stage`), não mais o creme | Pedido do João: a "tarja branca" em cima da abertura. É a metatag do site que pinta essa faixa na web; `BarraDeStatus` só controla a cor do texto no iOS e no Android. Não foi visto no aparelho: se o Safari do iOS ignorar a metatag, o próximo passo é o fundo do `html` e do `body` |
+| 21/09/2026 | **A primeira aba da barra é "Criar" (o formulário de novo lembrete), no lugar de "Início"; a abertura ("Lembre de tudo!") sai do app de quem já entrou** | Pedido do João: depois de entrar não se volta à página 1, e a barra de baixo leva a criar. **Revoga** a linha de 21/09 que deixava "Novo" fora da barra e o Início como aba, e diverge das imagens de referência por decisão dele. A rota `inicio` deixa de existir e o `Onboarding` fica só em `app/auth/bem-vindo.tsx`. O aviso do mapa vazio passa a dizer "na aba Criar" |
 | 21/09/2026 | **O anel de foco só aparece no foco de teclado** (`focoDeTeclado`, aplicado pelo `Toque`) | Clicar ou tocar numa aba da barra deixava um contorno verde grudado nela: o react-native-web marca o botão como focado em qualquer foco. O navegador sabe a diferença (`:focus-visible`) e o teclado continua com o anel |
 | 21/09/2026 | **Campo de texto das telas de conta refeito** (`TextField`): caixa de 46 com o anel cinza por dentro em vez de borda, olho para mostrar e esconder a senha, ícone de alerta na mensagem de erro; rótulo e mensagem sobem de 11 para o piso de 12 | É o campo das imagens `02` e `05`; a mensagem de erro com ícone e o anel vermelho dão o segundo sinal além da cor |
 | 21/09/2026 | **Folha "Minha conta"** (`ContaSheet`) abre pelo botão de conta da lista e do formulário, no lugar do desvio para Configurações; ícone das linhas centrado no círculo | É o que a imagem `05` mostra. O glifo no alto do círculo na captura é um efeito de CSS que o próprio original não pretendia (a imagem `11` o centraliza) |
@@ -1349,7 +1350,7 @@ O teste `valores-soltos.test.ts` mantém uma lista de arquivos com valores visua
 
 - **Corte óptico do Source Serif 4:** os pacotes trazem um corte por peso. Comparar os títulos grandes com as referências (o app web fixa `opsz` por estilo); se destoarem, gerar instâncias estáticas com o corte de título.
 - **Peso das fontes na web:** cada arquivo `.ttf` tem 110 KB (Nunito Sans) e 322 KB (Source Serif 4). Um subconjunto latino em `woff2` reduziria, se o carregamento incomodar.
-- **Portar as telas e folhas de `referencias/`** (tabela da seção 2.3), na ordem da tarefa `visual-original-no-expo`. A barra de abas passa a ser Início, Lembretes, Mapa e Configurações.
+- **Portar as telas e folhas de `referencias/`** (tabela da seção 2.3), na ordem da tarefa `visual-original-no-expo`. A barra de abas é Criar, Lembretes, Mapa e Configurações.
 - **Tokens a criar** junto com cada tela: interruptor de cartão, vidro, botão de perigo, folha, avisos, texto sobre verde e os três degradês (lista e configurações, formulário, contas). Valores exatos em `referencias/MEDICOES.md`.
 - **Leitura com VoiceOver e TalkBack** e **navegação por teclado** na web: verificar em aparelho real.
 - **Modo escuro:** fora de escopo até haver referência.

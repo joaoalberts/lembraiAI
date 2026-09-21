@@ -61,7 +61,7 @@ export default function MapaScreen() {
 
         {markers.length === 0 && (
           <View style={styles.hint}>
-            <Text style={styles.hintText}>Nenhum lembrete por local. Crie um em Novo → Por local.</Text>
+            <Text style={styles.hintText}>Nenhum lembrete por local. Crie um na aba Criar → Por local.</Text>
           </View>
         )}
 

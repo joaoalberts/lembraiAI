@@ -12,7 +12,6 @@ import AppLayout from '../../app/(app)/_layout';
 const tela = (nome: string) => () => <Text>{nome}</Text>;
 const telas = {
   '(app)/_layout': AppLayout,
-  '(app)/inicio': tela('inicio'),
   '(app)/index': tela('lista'),
   '(app)/novo': tela('novo'),
   '(app)/editar': tela('editar'),
@@ -40,12 +39,12 @@ describe('Navegação: o voltar das telas de formulário', () => {
     expect(app.getPathname()).toBe('/');
   });
 
-  it('quem veio da tela inicial para o formulário novo volta para a tela inicial', async () => {
-    const app = await abrir('/inicio');
+  it('quem veio de outra aba para o formulário novo volta para ela', async () => {
+    const app = await abrir('/mapa');
     await ir('/novo');
     expect(app.getPathname()).toBe('/novo');
     await voltar();
-    expect(app.getPathname()).toBe('/inicio');
+    expect(app.getPathname()).toBe('/mapa');
   });
 
   it('entrando direto pelo endereço não há para onde voltar (aí o formulário manda para a lista)', async () => {
@@ -110,13 +109,28 @@ describe('Navegação: depois de entrar', () => {
     expect(app.getPathname()).toBe('/novo');
   });
 
-  it('a barra de abas continua completa: dá para ir à abertura e à lista a partir do novo lembrete', async () => {
+  it('a barra de abas continua completa: dá para ir ao mapa e à lista a partir do novo lembrete', async () => {
     const app = await abrirComGuard('/auth/login');
     await act(async () => { entrarNoApp(); });
-    await ir('/inicio');
-    expect(app.getPathname()).toBe('/inicio');
+    await ir('/mapa');
+    expect(app.getPathname()).toBe('/mapa');
     await ir('/');
     expect(app.getPathname()).toBe('/');
+  });
+
+  it('o destino de depois de entrar é explícito no layout das abas: não depende da ordem em que as abas foram declaradas', () => {
+    const layout = fs.readFileSync(path.join(__dirname, '../../app/(app)/_layout.tsx'), 'utf8');
+    expect(layout).toContain('initialRouteName="novo"');
+  });
+
+  it('a abertura ("Lembre de tudo!") é só de quem ainda não entrou: nenhuma tela do app a usa e não existe a rota inicio', () => {
+    const pasta = path.join(__dirname, '../../app/(app)');
+    const arquivos = fs.readdirSync(pasta);
+    expect(arquivos).not.toContain('inicio.tsx');
+    expect(fs.readFileSync(path.join(pasta, '_layout.tsx'), 'utf8')).not.toContain('name="inicio"');
+    for (const arquivo of arquivos.filter((f) => /\.tsx?$/.test(f))) {
+      expect({ arquivo, usaAAbertura: /Onboarding/.test(fs.readFileSync(path.join(pasta, arquivo), 'utf8')) }).toEqual({ arquivo, usaAAbertura: false });
+    }
   });
 
   it('quem abre o app já entrado, pelo endereço da lista, continua na lista (só o ato de entrar leva ao novo)', async () => {

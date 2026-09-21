@@ -29,7 +29,7 @@ export const GIRO_NA_LISTA: Partial<Record<IconKey, number>> = {
 
 /** Abas da barra inferior: o mesmo ícone ativo e inativo (muda o traço e a cor). */
 export const TAB_ICON = {
-  inicio: 'house',
+  criar: 'plus',
   lembretes: 'list',
   mapa: 'map-pin',
   config: 'settings',

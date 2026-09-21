@@ -6,5 +6,5 @@ import { Onboarding } from '../../src/components/Onboarding';
  * login antes; aqui o login vem direto e a pessoa cai no formulário de novo lembrete ao entrar: `initialRouteName` das abas).
  */
 export default function BemVindoScreen() {
-  return <Onboarding standalone onSkip={() => router.push('/auth/login')} onStart={() => router.push('/auth/login')} />;
+  return <Onboarding onSkip={() => router.push('/auth/login')} onStart={() => router.push('/auth/login')} />;
 }

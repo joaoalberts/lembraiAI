@@ -9,14 +9,14 @@ import { Icon, type IconeNome } from './Icon';
 import { Toque } from './Toque';
 /** As quatro abas, na ordem da barra. `rota` é o nome do arquivo em `app/(app)`. */
 export const ABAS: { rota: string; rotulo: string; icone: IconeNome }[] = [
-  { rota: 'inicio', rotulo: 'Início', icone: TAB_ICON.inicio },
+  { rota: 'novo', rotulo: 'Criar', icone: TAB_ICON.criar },
   { rota: 'index', rotulo: 'Lembretes', icone: TAB_ICON.lembretes },
   { rota: 'mapa', rotulo: 'Mapa', icone: TAB_ICON.mapa },
   { rota: 'config', rotulo: 'Configurações', icone: TAB_ICON.config },
 ];
 
-/** Telas que não são aba mas pertencem a uma: o formulário de novo lembrete e o de edição ficam sob "Lembretes", como no app web. */
-const ABA_DA_TELA: Record<string, string> = { novo: 'index', editar: 'index' };
+/** Telas que não são aba mas pertencem a uma: o formulário de edição fica sob "Lembretes". */
+const ABA_DA_TELA: Record<string, string> = { editar: 'index' };
 
 /** Qual aba fica acesa para a tela em foco; `null` quando a tela não pertence a nenhuma. */
 export function abaAtiva(nomeDaRota: string): string | null {

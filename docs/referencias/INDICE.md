@@ -13,7 +13,7 @@ Cópia **integral e idêntica, byte a byte** (SHA-256 conferido arquivo por arqu
 
 | Arquivo | Dimensões | Bytes | O que mostra |
 |---|---|---|---|
-| [`01-onboarding.png`](01-onboarding.png) | 851×1848 | 1.840.341 | Onboarding "Lembre de tudo!" (rota `/`. aba Início). Arte de referência original: sem perfil de cor e com 1 px = 1 du. |
+| [`01-onboarding.png`](01-onboarding.png) | 851×1848 | 1.840.341 | Onboarding "Lembre de tudo!" (rota `/`. aba Início **no app web**; no Expo ela só existe para quem ainda não entrou, ver `DESIGN_SYSTEM.md` 2.3). Arte de referência original: sem perfil de cor e com 1 px = 1 du. |
 | [`02-entrar.png`](02-entrar.png) | 818×1484 | 551.222 | Entrar (login) sobre o fundo de curvas de nível: cartão creme. campos. "Lembrar-me". "Esqueci minha senha" e o painel de vidro "Criar conta". |
 | [`03-recorte-degrade-do-formulario.png`](03-recorte-degrade-do-formulario.png) | 48×140 | 9.430 | Recorte de 48×140 do canto superior esquerdo do cabeçalho do Novo lembrete: amostra do degradê menta e o início do botão voltar. |
 | [`04-novo-lembrete-por-data-e-horario.png`](04-novo-lembrete-por-data-e-horario.png) | 860×1654 | 321.488 | Novo lembrete no modo "Por data e horário" (padrão). com Local desligado e a barra de abas. |

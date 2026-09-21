@@ -45,7 +45,6 @@ const clara = (nome: string) => () => <Text>{nome}</Text>;
 const telas = {
   _layout: Raiz,
   '(app)/_layout': AppLayout,
-  '(app)/inicio': escura('inicio'),
   '(app)/index': escura('lista'),
   '(app)/novo': clara('novo'),
   '(app)/editar': clara('editar'),
@@ -82,7 +81,7 @@ describe('Barra de status com a navegação de verdade (as abas ficam montadas)'
     expect(emVigor()).toBe('light');
     await ir({ pathname: '/sucesso', params: { id: 'a1' } });
     expect(emVigor()).toBe('dark');
-    await ir('/inicio');
+    await ir('/');
     expect(emVigor()).toBe('light');
   });
 
