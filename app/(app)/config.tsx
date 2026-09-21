@@ -1,5 +1,5 @@
 import { router } from 'expo-router';
-import { useEffect, useState } from 'react';
+import { useEffect, useSyncExternalStore, useState } from 'react';
 import { ScrollView, StyleSheet, Text, View } from 'react-native';
 import { AppBrand } from '../../src/components/AppBrand';
 import { Banner } from '../../src/components/Banner';
@@ -11,6 +11,7 @@ import { colors, motion, size, space, textStyles } from '../../src/design/tokens
 import { confirmar } from '../../src/lib/confirm';
 import { formatDistance } from '../../src/lib/geo';
 import { quandoFoi } from '../../src/lib/quando';
+import { installStore, isInstalled, isIOS, promptInstall } from '../../src/lib/pwa';
 import { useAuth } from '../../src/state/auth';
 import { useGeo } from '../../src/state/geo';
 import { useGeofences } from '../../src/state/geofences';
@@ -30,9 +31,21 @@ export default function ConfigScreen() {
   const [erroExcluir, setErroExcluir] = useState('');
   // o "há N s" acompanha o relógio: a tela se atualiza sozinha
   const [agora, setAgora] = useState(() => Date.now());
+  const instalavel = useSyncExternalStore(installStore.subscribe, installStore.get);
+  const [instalado, setInstalado] = useState(() => {
+    if (typeof window === 'undefined' || typeof window.matchMedia !== 'function') return false;
+    try { return isInstalled(); } catch { return false; }
+  });
+
   useEffect(() => {
     const relogio = setInterval(() => setAgora(Date.now()), motion.duration.relogio);
     return () => clearInterval(relogio);
+  }, []);
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    const timer = setInterval(() => setInstalado(isInstalled()), 15_000);
+    return () => clearInterval(timer);
   }, []);
 
   const excluir = async () => {
@@ -48,6 +61,10 @@ export default function ConfigScreen() {
     setExcluindo(false);
     // sucesso: a sessão some e o layout raiz leva à tela de entrar
     if (erro) setErroExcluir(erro);
+  };
+
+  const instalar = async () => {
+    if (await promptInstall()) setInstalado(true);
   };
 
   return (
@@ -93,6 +110,21 @@ export default function ConfigScreen() {
             ) : null}
             {supported ? <DadoDoCartao rotulo="Avisos por horário agendados" valor={String(scheduledCount)} /> : null}
           </CartaoDeConfig>
+
+          {typeof window !== 'undefined' ? (
+            <CartaoDeConfig
+              icon={isIOS() ? 'share-2' : 'download'}
+              titulo="Instalar o app"
+              subtitulo={instalado ? 'Instalado na tela de início.' : 'Melhora as notificações e abre em tela cheia.'}
+              acao={!instalado && instalavel ? <Button compact variant="secondary" label="Instalar" onPress={() => void instalar()} /> : undefined}
+            >
+              {!instalado && !instalavel && isIOS() ? (
+                <Banner variant="info" icon="info">
+                  No iPhone: toque em Compartilhar e depois em "Adicionar à Tela de Início". No iOS, as notificações só funcionam com o app instalado assim.
+                </Banner>
+              ) : null}
+            </CartaoDeConfig>
+          ) : null}
 
           <CartaoDeConfig titulo="Até onde vai o monitoramento">
             <View style={styles.dados}>
