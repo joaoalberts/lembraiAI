@@ -39,6 +39,7 @@ git commit -m "feat(design): resumo curto, no imperativo"
 | `ponto-de-recuperacao/02-design-system-aplicado` | tokens, documento, contraste testado e todos os componentes e telas migrados |
 | `ponto-de-recuperacao/03-antes-do-visual-original` | igual ao 02, antes de fontes, imagens, efeitos e telas do original |
 | `ponto-de-recuperacao/04-visual-original` | depois das 15 telas das referências portadas, com o Design System em dia; ainda sem conferência em aparelho |
+| `ponto-de-recuperacao/05-verificado-e-corrigido` | depois da verificação independente (78 mutações, 21 sobreviventes tratadas) e da conferência no emulador Android (5 defeitos nativos corrigidos); 68 suítes e 1007 testes; iOS e aparelho físico ainda por conferir |
 
 ## Como voltar sem perder nada
 
