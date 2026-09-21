@@ -45,6 +45,13 @@ export function AuthLayout({ title, subtitle, children, keyboardShouldPersistTap
         <Image source={CURVAS_DE_NIVEL} contentFit="fill" accessible={false} style={StyleSheet.absoluteFill} />
       </View>
 
+      {/* Antes da rolagem na árvore: a ordem do Tab na web segue a da tela (o voltar é o primeiro); o zIndex o mantém por cima dela */}
+      {voltar ? (
+        <View testID="auth-voltar" style={[styles.voltar, { top: size.auth.voltarTop + descido }]}>
+          <GlassButton icon="chevron-left" label="Voltar" tamanho="voltar" onPress={voltar} />
+        </View>
+      ) : null}
+
       <ScrollView testID="auth-rolagem" keyboardShouldPersistTaps={keyboardShouldPersistTaps} contentContainerStyle={[styles.conteudo, { paddingTop: size.auth.top + descido }]}>
         <View style={styles.marca} accessible accessibilityLabel="LembreiAi">
           <View testID="auth-marca-tile" style={[styles.tile, fundoEmDegrade(gradients.marcaTile)]}>
@@ -82,12 +89,6 @@ export function AuthLayout({ title, subtitle, children, keyboardShouldPersistTap
           </View>
         </View>
       </ScrollView>
-
-      {voltar ? (
-        <View testID="auth-voltar" style={[styles.voltar, { top: size.auth.voltarTop + descido }]}>
-          <GlassButton icon="chevron-left" label="Voltar" tamanho="voltar" onPress={voltar} />
-        </View>
-      ) : null}
     </View>
   );
 }
@@ -98,7 +99,7 @@ const styles = StyleSheet.create({
   decoracao: { pointerEvents: 'none' },
   curvas: { position: 'absolute', top: 0, left: 0, right: 0, height: size.header.height },
   conteudo: { flexGrow: 1, paddingHorizontal: size.auth.side, paddingBottom: size.auth.bottom },
-  voltar: { position: 'absolute', left: size.auth.side },
+  voltar: { position: 'absolute', left: size.auth.side, zIndex: 1 },
   marca: { flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: size.auth.marcaGap, marginBottom: size.auth.marcaBottom },
   tile: { width: size.auth.marcaTile, height: size.auth.marcaTile, borderRadius: size.auth.marcaRadius, alignItems: 'center', justifyContent: 'center' },
   nome: { fontFamily: fontFamily.serif, fontSize: fontSize.contaMarca, color: colors.text.onDarkWarm },

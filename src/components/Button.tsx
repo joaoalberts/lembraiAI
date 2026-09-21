@@ -65,7 +65,6 @@ export function Button({ label, onPress, variant = 'primary', disabled = false, 
       onPress={onPress}
       disabled={disabled}
       accessibilityRole="button"
-      accessibilityState={{ disabled }}
       style={(estado: EstadoDeToque) => estiloDoBotao(variant, estado, disabled, style, compact, hero)}
     >
       {icon ? <Icon name={icon} size={size.icon.xs} color={VISUAL[variant].rotulo} stroke={iconStroke.action} /> : null}

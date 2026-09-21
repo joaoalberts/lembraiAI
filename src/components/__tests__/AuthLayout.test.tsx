@@ -9,6 +9,21 @@ const ESCONDIDO = { includeHiddenElements: true } as const;
 const abrir = (ui: React.ReactElement, insets?: { top?: number; bottom?: number }) => render(comAreaSegura(ui, insets));
 const estilo = (id: string) => StyleSheet.flatten(screen.getByTestId(id, ESCONDIDO).props.style) as Record<string, unknown>;
 
+/** Os filhos do elemento que contém o de testID dado (a ordem na árvore é a ordem do Tab na web). */
+function irmaosDe(testID: string): { props?: { testID?: string } }[] {
+  type No = { props?: { testID?: string }; children?: unknown[] | null };
+  const achar = (no: unknown): No[] | null => {
+    if (!no || typeof no !== 'object') return null;
+    const n = no as No;
+    const filhos = (n.children ?? []).filter((f): f is No => typeof f === 'object' && f !== null);
+    if (filhos.some((f) => f.props?.testID === testID)) return filhos;
+    for (const f of filhos) { const r = achar(f); if (r) return r; }
+    return null;
+  };
+  const arvore = screen.toJSON();
+  return (Array.isArray(arvore) ? arvore.map(achar).find(Boolean) : achar(arvore)) ?? [];
+}
+
 describe('AuthLayout (base das telas de conta)', () => {
   it('cartão creme flutuante com o título em serifa (cabeçalho para o leitor de tela) e o subtítulo em cinza', async () => {
     await abrir(<AuthLayout title="Entrar" subtitle="Acesse seus lembretes por hora e por lugar."><Text>corpo</Text></AuthLayout>);
@@ -59,6 +74,15 @@ describe('AuthLayout: voltar e rodapé', () => {
     expect(voltar).toHaveBeenCalledTimes(1);
     await rerender(comAreaSegura(<AuthLayout title="Entrar"><Text>corpo</Text></AuthLayout>));
     expect(screen.queryByRole('button', { name: 'Voltar' })).toBeNull();
+  });
+
+  it('o botão de voltar vem antes do conteúdo na árvore (a ordem do Tab na web começa por ele, como a ordem visual) e o zIndex o mantém por cima', async () => {
+    await abrir(<AuthLayout title="Entrar" voltar={jest.fn()}><Text>corpo</Text></AuthLayout>);
+    const irmaos = irmaosDe('auth-voltar');
+    const ids = irmaos.map((n) => n.props?.testID);
+    expect(ids.indexOf('auth-voltar')).toBeGreaterThanOrEqual(0);
+    expect(ids.indexOf('auth-voltar')).toBeLessThan(ids.indexOf('auth-rolagem'));
+    expect(screen.getByTestId('auth-voltar')).toHaveStyle({ position: 'absolute', zIndex: 1 });
   });
 
   it('com pergunta o rodapé é uma barra de vidro com a pastilha de ação ("Ainda não tem conta?" / "Criar conta")', async () => {

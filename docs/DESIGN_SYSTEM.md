@@ -577,7 +577,7 @@ Componente: `src/components/Button.tsx`.
 | Desabilitado | `opacity.disabled`, sem brilho, sem resposta ao toque | igual | igual |
 | Em andamento | rótulo no gerúndio ("Entrando…") e desabilitado; sem spinner dentro do botão | igual | igual |
 
-Regras: uma ação primária por tela. Ação destrutiva sempre pede confirmação (`confirmar`, em `src/lib/confirm.ts`). O botão tem `accessibilityRole="button"` e `accessibilityState={{ disabled }}`.
+Regras: uma ação primária por tela. Ação destrutiva sempre pede confirmação (`confirmar`, em `src/lib/confirm.ts`). O botão tem `accessibilityRole="button"` e a prop `disabled`, que o React Native converte no estado do leitor de tela (e o react-native-web, em `aria-disabled`).
 
 - **Excluir sólido e cancelar** (`variant="destructive"` e `"frost"`): só dentro da confirmação de uma ação sem volta. `destructive` usa `colors.action.danger` (ponteiro `dangerHover`, pressionado `dangerPressed`) com texto `colors.text.onAction`; `frost` usa `colors.action.frost` (`frostHover`, `frostPressed`) com texto `colors.text.primary`.
 - **Compacto** (`compact`, com `icon` opcional): altura `size.buttonCompact`, padding `space.lg`, rótulo `fontSize.micro` em negrito e sem o brilho `shadow.cta`; o ícone (`size.icon.xs`, traço `iconStroke.action`) vai à esquerda, na cor do rótulo, a `space.sm`. É o "Novo lembrete" do cabeçalho verde.
@@ -598,7 +598,7 @@ Componente: `src/components/TextField.tsx` (campo das telas de conta e da folha 
 | Desabilitado | fundo `colors.bg.disabled`, texto `colors.text.secondary` |
 | Dica | `textStyles.micro` em `colors.text.secondary`; some quando há erro |
 
-- **Senha:** com `secureTextEntry` o campo começa escondido e ganha o botão do olho (`size.campo.eye` de largura, ícone `eye` ou `eye-off` de `size.campo.eyeIcon`, `colors.icon.muted` e `colors.icon.default` com o ponteiro em cima). O botão se chama "Mostrar senha" ou "Ocultar senha" e não entra na ordem de tab (`focusable={false}`).
+- **Senha:** com `secureTextEntry` o campo começa escondido e ganha o botão do olho (`size.campo.eye` de largura, ícone `eye` ou `eye-off` de `size.campo.eyeIcon`, `colors.icon.muted` e `colors.icon.default` com o ponteiro em cima). O botão se chama "Mostrar senha" ou "Ocultar senha" e não entra na ordem de tab (`focusable={false}` no celular e `tabIndex={-1}` na web: o `Pressable` do react-native-web só lê o `tabIndex`).
 - **Rótulo sempre visível.** Placeholder é exemplo ("seu@email.com"), não rótulo.
 - **Teclado certo:** o `TextField` já escolhe `keyboardType`, `autoCapitalize` e `autoComplete` para e-mail, senha e números.
 - **Erro em português, dizendo o que fazer.** Mensagem curta, sem código técnico.
@@ -1206,8 +1206,8 @@ Cada par é testado em `src/design/__tests__/acessibilidade.test.ts`. Par novo e
 - **Texto normal, no mínimo 4,5:1; texto grande** (24 px, ou 18,7 px em negrito) **e componentes de interface, no mínimo 3:1.**
 - **Exceção conhecida: o laranja da marca.** Branco sobre `colors.action.primary` dá 3,24:1: só passa como texto grande ou componente. O laranja foi aprovado nas referências, então fica; mitiga-se com rótulo 16/700 em botão de 52 de altura. Se a marca precisar cumprir AA, troque `colors.action.primary` por `colors.action.primaryAA` (4,7:1).
 - **Exceção conhecida: borda de campo suave** (1,2:1) das referências. O foco (7:1) e o rótulo sempre visível compensam.
-- **Alvos de toque de no mínimo 44** (`size.touch`). Controle visualmente menor usa `hitSlop` de `size.hitSlop`.
-- **Todo controle tem papel e nome:** `accessibilityRole`, `accessibilityLabel` e `accessibilityState` (`selected`, `disabled`).
+- **Alvos de toque de no mínimo 44** (`size.touch`). Controle visualmente menor usa `hitSlop` de `size.hitSlop`. **Vale no celular:** o react-native-web 0.21 não implementa `hitSlop`, então na web o alvo é o tamanho visual (ver as pendências).
+- **Todo controle tem papel e nome:** `accessibilityRole`, `accessibilityLabel` e o estado em props `aria-*` (`aria-checked`, `aria-selected`; `disabled` pela prop do `Pressable`). **Não use `accessibilityState`:** o react-native-web 0.21 não o repassa ao DOM e o estado some para quem usa leitor de tela na web (`src/__tests__/acessibilidade-web.test.ts` barra). O papel do voltar de `AuthLayout` vem antes do conteúdo na árvore, para o Tab começar por ele.
 - **Foco visível** no teclado (web) em todo controle: o mesmo anel sólido de `borderWidth.focus` em `colors.border.focus`, afastado `space.hair` (`src/design/foco.ts`), em botão, chip, opção do segmentado, lixeira do cartão e fechar da folha. O campo de texto desenha o foco só pela borda e pelo halo `shadow.focus`, sem o contorno do navegador.
 - **Não depender só da cor:** erro tem texto, categoria tem ícone, interruptor tem posição.
 - **Texto redimensionável:** não travar `allowFontScaling`; layouts quebram linha em vez de cortar.
@@ -1281,6 +1281,7 @@ O teste `valores-soltos.test.ts` mantém uma lista de arquivos com valores visua
 | 21/09/2026 | **Dica da tela de sucesso sem quebra de linha forçada**, com largura máxima do texto (`size.sucesso.dica.textMax`) | O `\n` do original só cabe nos 430 px da captura: no Android de 411 dp sobrava "esquecer" sozinho numa linha. A largura máxima mantém a quebra da imagem em tela larga e deixa quebrar sozinho em tela estreita |
 | 21/09/2026 | **Cartões de modo do formulário com a largura do original** (pesos 418 e 353, `layout.modeCardWeight`) e folga do texto até o selo | No original os dois cartões são caixas de larguras diferentes (a captura `04` mostra ~210 e ~178 dp); com `flex: 1` o título do primeiro encostava no selo no Android de 411 dp |
 | 21/09/2026 | **A folha inferior acompanha o teclado** (`useAlturaDoTeclado`): sobe até ficar acima dele e encolhe para caber no espaço que sobra | No Android de tela cheia o teclado cobria os campos de "Alterar senha" (medido no emulador: o teclado ocupa 336 dp e a janela não é redimensionada). O iOS foi escrito pela documentação do React Native e **não foi verificado** (sem Xcode neste Mac) |
+| 21/09/2026 | **Estado dos controles em props `aria-*`** (nada de `accessibilityState`), olho da senha com `tabIndex={-1}` e o voltar das telas de conta antes do conteúdo na árvore | O react-native-web 0.21 não repassa `accessibilityState` ao DOM (o estado de caixinha, interruptor, aba e opção sumia na web), o `Pressable` dele só lê `tabIndex` (o olho era parada do Tab) e o "Voltar", montado depois da rolagem, era o último do Tab. Conferido no DOM (Playwright); um teste de fontes barra a volta do padrão |
 
 ## 19. Pendências
 
@@ -1290,4 +1291,5 @@ O teste `valores-soltos.test.ts` mantém uma lista de arquivos com valores visua
 - **Tokens a criar** junto com cada tela: interruptor de cartão, vidro, botão de perigo, folha, avisos, texto sobre verde e os três degradês (lista e configurações, formulário, contas). Valores exatos em `referencias/MEDICOES.md`.
 - **Leitura com VoiceOver e TalkBack** e **navegação por teclado** na web: verificar em aparelho real.
 - **Modo escuro:** fora de escopo até haver referência.
+- **Alvo de toque na web:** `hitSlop` não existe no react-native-web 0.21, então "Lembrar-me" (21 px de altura), "Esqueci minha senha" (16 px) e o link "Criar outro lembrete" ficam com o tamanho visual quando o app roda no navegador (no celular chegam a 44). Solução se importar: folga por `padding` com margem negativa nesses controles.
 - **Layout de tablet nativo:** não desenhado (só existe referência de celular).

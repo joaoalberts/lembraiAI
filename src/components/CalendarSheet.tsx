@@ -62,7 +62,7 @@ function Corpo({ value, onSelect, onClose }: Omit<CalendarSheetProps, 'visible'>
                   onPress={() => escolher(d.iso)}
                   accessibilityRole="button"
                   accessibilityLabel={formatDate(d.iso)}
-                  accessibilityState={{ selected: escolhido }}
+                  aria-selected={escolhido}
                   style={(estado: EstadoDeToque) => estiloDoDia(estado, escolhido, eHoje)}
                 >
                   <Text style={[styles.numero, !d.doMes ? styles.foraDoMes : null, escolhido ? styles.numeroEscolhido : null]}>{d.dia}</Text>

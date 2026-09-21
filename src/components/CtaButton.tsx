@@ -22,7 +22,6 @@ export function CtaButton({ label, onPress, disabled = false }: CtaButtonProps) 
       disabled={disabled}
       accessibilityRole="button"
       accessibilityLabel={label}
-      accessibilityState={{ disabled }}
       style={(estado: EstadoDeToque) => [estiloDoBotao('primary', estado, disabled), styles.botao]}
     >
       <Text style={styles.rotulo}>{label}</Text>

@@ -75,6 +75,7 @@ export function TextField({
           <Pressable
             onPress={() => setMostrar((v) => !v)}
             focusable={false}
+            tabIndex={-1} // o react-native-web só lê o tabIndex: sem ele o olho vira uma parada do Tab
             accessibilityRole="button"
             accessibilityLabel={mostrar ? 'Ocultar senha' : 'Mostrar senha'}
             style={styles.olho}

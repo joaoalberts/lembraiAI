@@ -53,7 +53,7 @@ export function Toggle({ value, onValueChange, disabled = false, accessibilityLa
       hitSlop={{ top: folga.vertical, bottom: folga.vertical, left: folga.horizontal, right: folga.horizontal }}
       accessibilityRole="switch"
       accessibilityLabel={accessibilityLabel}
-      accessibilityState={{ checked: value, disabled }}
+      aria-checked={value}
       style={(estado: EstadoDeToque) => [styles.trilho, { width: m.width, height: m.height }, estado.focused ? anelDeFoco : null, disabled ? styles.desabilitado : null]}
     >
       {/* o trilho ligado entra por cima do desligado, com a opacidade animada (a cor não anima no driver nativo) */}

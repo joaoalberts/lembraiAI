@@ -57,7 +57,7 @@ export function BarraDeAbas({ state, descriptors, navigation }: BottomTabBarProp
             onPress={() => tocar(aba.rota)}
             accessibilityRole="tab"
             accessibilityLabel={aba.rotulo}
-            accessibilityState={{ selected: acesa }}
+            aria-selected={acesa}
             aria-current={acesa ? 'page' : undefined}
             style={(estado: EstadoDeToque) => estiloDaAba(estado)}
           >

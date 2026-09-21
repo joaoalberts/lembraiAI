@@ -45,7 +45,6 @@ export function SelectField({ icon, label, value, onPress, disabled = false, acc
       disabled={disabled}
       accessibilityRole="button"
       accessibilityLabel={accessibilityLabel}
-      accessibilityState={{ disabled }}
       style={(estado: EstadoDeToque) => estiloDoSeletor(estado, disabled, duasLinhas)}
     >
       {leading ? <Icon name={leading} size={size.icon.md} color={colors.icon.default} stroke={iconStroke.base} /> : null}

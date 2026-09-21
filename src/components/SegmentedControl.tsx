@@ -31,7 +31,7 @@ export function SegmentedControl<T extends string>({ options, value, onChange, d
             onPress={() => onChange(o.key)}
             disabled={disabled}
             accessibilityRole="button"
-            accessibilityState={{ selected: selecionado, disabled }}
+            aria-selected={selecionado}
             style={(estado: EstadoDeToque) => estiloDoSegmento(selecionado, estado)}
           >
             <Text style={[styles.rotulo, selecionado ? styles.rotuloSelecionado : null]}>{o.label}</Text>

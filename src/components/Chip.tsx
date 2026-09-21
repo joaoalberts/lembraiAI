@@ -27,7 +27,7 @@ export function Chip({ label, selected, onPress, count, disabled = false, style 
       hitSlop={size.hitSlop}
       accessibilityRole="button"
       accessibilityLabel={count === undefined ? label : `${label}: ${count}`}
-      accessibilityState={{ selected, disabled }}
+      aria-selected={selected}
       style={(estado: EstadoDeToque) => estiloDoChip(selected, estado, disabled, style)}
     >
       <Text numberOfLines={1} style={[styles.rotulo, selected ? styles.rotuloLigado : null]}>{label}</Text>

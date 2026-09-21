@@ -34,7 +34,7 @@ export function OptionCard({ icon, title, description, selected, onPress, style 
       onPress={onPress}
       accessibilityRole="radio"
       accessibilityLabel={title}
-      accessibilityState={{ selected, checked: selected }}
+      aria-checked={selected}
       style={(estado: EstadoDeToque) => estiloDoCartaoDeModo(selected, estado, style)}
     >
       <View style={styles.circulo} accessibilityElementsHidden importantForAccessibility="no-hide-descendants">

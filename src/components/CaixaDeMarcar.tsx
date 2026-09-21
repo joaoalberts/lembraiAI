@@ -28,7 +28,7 @@ export function CaixaDeMarcar({ label, value, onValueChange, disabled = false }:
       hitSlop={{ top: (size.touch - size.auth.check) / 2, bottom: (size.touch - size.auth.check) / 2 }}
       accessibilityRole="checkbox"
       accessibilityLabel={label}
-      accessibilityState={{ checked: value, disabled }}
+      aria-checked={value}
       style={(estado: EstadoDeToque) => estiloDaCaixa(estado)}
     >
       <View testID="caixa" style={[styles.caixa, value ? styles.marcada : styles.desmarcada]}>

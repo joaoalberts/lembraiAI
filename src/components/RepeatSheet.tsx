@@ -36,7 +36,7 @@ export function RepeatSheet({ visible, value, onSelect, onClose }: RepeatSheetPr
               onPress={() => { onSelect(o.key); onClose(); }}
               accessibilityRole="radio"
               accessibilityLabel={o.label}
-              accessibilityState={{ selected: escolhida, checked: escolhida }}
+              aria-checked={escolhida}
               style={(estado: EstadoDeToque) => estiloDaLinhaDeEscolha(estado, escolhida, i === 0)}
             >
               <View style={styles.textos}>
