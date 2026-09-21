@@ -4,7 +4,7 @@ import { router, useIsFocused, useLocalSearchParams } from 'expo-router';
 import { AccessibilityInfo, StyleSheet } from 'react-native';
 import SucessoScreen from '../../app/(app)/sucesso';
 import type { Reminder } from '../data/reminders';
-import { motion, size } from '../design/tokens';
+import { fontSize, lineHeight, motion, size } from '../design/tokens';
 import { compartilhar } from '../lib/compartilhar';
 import { useReminders } from '../state/reminders';
 import { comAreaSegura } from '../test-utils/area-segura';
@@ -33,6 +33,17 @@ beforeEach(() => {
   jest.clearAllMocks();
   // sem animação: o quadro final do herói já chega pronto
   jest.spyOn(AccessibilityInfo, 'isReduceMotionEnabled').mockResolvedValue(true);
+});
+
+describe('tela de sucesso: tamanhos do texto', () => {
+  it('título em serifa de 60,5 du do original, subtítulo de 29 du (especiais, fora da escala comum)', async () => {
+    await abrir();
+    const estilo = (el: any) => { const s = StyleSheet.flatten(el.props.style); return typeof s === 'object' ? s : {}; };
+    const titulo = screen.getByRole('header', { name: /Lembrete criado/ });
+    expect(estilo(titulo)).toMatchObject({ fontSize: fontSize.sucessoTitulo, lineHeight: lineHeight.sucessoTitulo });
+    expect(String(estilo(titulo).fontFamily)).toContain('Serif');
+    expect(screen.getByText(/Você será avisado/)).toHaveStyle({ fontSize: fontSize.sucessoSubtitulo });
+  });
 });
 
 describe('tela de sucesso', () => {
