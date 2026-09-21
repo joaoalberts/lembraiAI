@@ -28,10 +28,10 @@ describe('topoDoConteudo', () => {
 });
 
 describe('GreenHeader: barra de status', () => {
-  it('o fundo é verde-escuro: o texto da barra de status (relógio, bateria) é claro', async () => {
+  it('a barra de status acompanha a cor do fundo do app: o texto (relógio, bateria) é sempre escuro', async () => {
     jest.mocked(StatusBar).mockClear();
     await render(comAreaSegura(<GreenHeader><Text>conteúdo</Text></GreenHeader>));
-    expect(jest.mocked(StatusBar).mock.calls.map(([props]) => props)).toEqual([{ style: 'light' }]);
+    expect(jest.mocked(StatusBar).mock.calls.map(([props]) => props)).toEqual([{ style: 'dark' }]);
   });
 });
 

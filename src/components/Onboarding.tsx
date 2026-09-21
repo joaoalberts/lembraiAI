@@ -90,8 +90,8 @@ export function Onboarding({ onSkip, onStart, standalone = false }: OnboardingPr
 
   return (
     <View testID="onboarding" style={styles.tela}>
-      {/* a foto de fundo é escura sob a barra de status: relógio e bateria em claro */}
-      <BarraDeStatus sobre="escuro" />
+      {/* a barra de status acompanha a cor do fundo do app: texto sempre escuro */}
+      <BarraDeStatus sobre="claro" />
       <Image source={FUNDO} contentFit="cover" accessible={false} style={StyleSheet.absoluteFill} />
       <View style={[styles.fluxo, { paddingTop: top, paddingBottom: standalone ? bottom : 0 }]}>
         <View style={folga(PESOS.topo)} />

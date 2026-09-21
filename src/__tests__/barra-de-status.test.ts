@@ -10,9 +10,9 @@ describe('barra de status (relógio e bateria) legível em toda tela', () => {
     expect(raiz).toContain('<BarraDeStatusPadrao />');
   });
 
-  it('as telas de fundo escuro declaram texto claro pelo BarraDeStatus (o cabeçalho verde, as contas e o onboarding)', () => {
+  it('todas as telas declaram texto escuro pelo BarraDeStatus (a barra acompanha a cor do fundo do app)', () => {
     for (const arquivo of ['src/components/GreenHeader.tsx', 'src/components/AuthLayout.tsx', 'src/components/Onboarding.tsx']) {
-      expect({ arquivo, declara: ler(arquivo).includes('<BarraDeStatus sobre="escuro" />') }).toEqual({ arquivo, declara: true });
+      expect({ arquivo, declara: ler(arquivo).includes('<BarraDeStatus sobre="claro" />') }).toEqual({ arquivo, declara: true });
     }
   });
 

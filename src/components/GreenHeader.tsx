@@ -37,8 +37,8 @@ export function GreenHeader({ children }: GreenHeaderProps) {
   const topo = topoDoConteudo(top);
   return (
     <View testID="cabecalho-verde" style={[styles.cabecalho, { minHeight: size.header.height + (topo - size.header.contentTop), paddingTop: topo }]}>
-      {/* o verde-escuro passa por baixo da barra de status: relógio e bateria em claro */}
-      <BarraDeStatus sobre="escuro" />
+      {/* a barra de status acompanha a cor do fundo do app: texto sempre escuro */}
+      <BarraDeStatus sobre="claro" />
       <View testID="cabecalho-degrade" style={[StyleSheet.absoluteFill, styles.decoracao, fundoEmDegrade(gradients.cabecalhoVerde)]} />
       {/* decorativa: escondida do leitor de tela */}
       <View style={[styles.curvas, styles.decoracao]}>
