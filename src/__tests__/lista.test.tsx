@@ -10,6 +10,7 @@ import { useReminders } from '../state/reminders';
 jest.mock('expo-router', () => ({ router: { navigate: jest.fn() } }));
 jest.mock('../state/reminders', () => ({ useReminders: jest.fn() }));
 jest.mock('../state/geofences', () => ({ useGeofences: jest.fn() }));
+jest.mock('../state/auth', () => ({ useAuth: () => ({ user: { email: 'joao.teste@exemplo.com' }, nome: '', sair: jest.fn(), trocarSenha: jest.fn() }) }));
 
 // Segunda-feira, 21/09/2026
 const HOJE = new Date(2026, 8, 21, 10, 0, 0);
@@ -52,12 +53,14 @@ describe('Lista: cabeçalho', () => {
     expect(screen.getByText('LembreiAi')).toBeTruthy();
   });
 
-  it('"Novo lembrete" abre o formulário e a conta leva às configurações', async () => {
+  it('"Novo lembrete" abre o formulário e a conta abre a folha "Minha conta" (sem sair da lista)', async () => {
     await abrir();
     await fireEvent.press(screen.getByRole('button', { name: 'Novo lembrete' }));
     expect(router.navigate).toHaveBeenCalledWith('/novo');
     await fireEvent.press(screen.getByRole('button', { name: 'Minha conta' }));
-    expect(router.navigate).toHaveBeenCalledWith('/config');
+    expect(screen.getByRole('button', { name: /^Alterar senha/ })).toBeTruthy();
+    expect(screen.getByRole('button', { name: /^Sair/ })).toBeTruthy();
+    expect(router.navigate).not.toHaveBeenCalledWith('/config');
   });
 });
 

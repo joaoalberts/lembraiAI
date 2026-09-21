@@ -6,6 +6,7 @@ import { Banner } from '../../src/components/Banner';
 import { Button } from '../../src/components/Button';
 import { Chip } from '../../src/components/Chip';
 import { ConfirmSheet } from '../../src/components/ConfirmSheet';
+import { ContaSheet } from '../../src/components/ContaSheet';
 import { GlassButton } from '../../src/components/GlassButton';
 import { GreenHeader } from '../../src/components/GreenHeader';
 import { ReminderCard } from '../../src/components/ReminderCard';
@@ -26,6 +27,7 @@ export default function LembretesScreen() {
   const [filtro, setFiltro] = useState<FiltroDaLista>('todos');
   const [menu, setMenu] = useState<Reminder | null>(null);
   const [aExcluir, setAExcluir] = useState<Reminder | null>(null);
+  const [contaAberta, setContaAberta] = useState(false);
 
   const contagens = useMemo(() => contagensDosFiltros(reminders, busca), [reminders, busca]);
   const grupos = useMemo(() => agruparPorSecao(lembretesVisiveis(reminders, busca, filtro)), [reminders, busca, filtro]);
@@ -63,7 +65,7 @@ export default function LembretesScreen() {
           )}
           <View style={styles.botoes}>
             <GlassButton icon={buscando ? 'x' : 'search'} label={buscando ? 'Fechar busca' : 'Buscar'} onPress={alternarBusca} />
-            <GlassButton icon="user-round" label="Minha conta" onPress={() => router.navigate('/config')} />
+            <GlassButton icon="user-round" label="Minha conta" onPress={() => setContaAberta(true)} />
           </View>
         </View>
         <View style={styles.titulos}>
@@ -141,6 +143,7 @@ export default function LembretesScreen() {
       </View>
 
       <ReminderMenu reminder={menu} onClose={() => setMenu(null)} onEdit={editar} onDelete={pedirExclusao} />
+      <ContaSheet visible={contaAberta} onClose={() => setContaAberta(false)} />
       <ConfirmSheet
         visible={aExcluir !== null}
         title="Excluir lembrete?"

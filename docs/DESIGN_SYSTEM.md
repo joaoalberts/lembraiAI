@@ -44,7 +44,7 @@ Cada tela e cada folha do app tem uma imagem em `referencias/`. O estado do Expo
 | [`02`](referencias/02-entrar.png) | Entrar | Existe; falta o fundo de curvas de nível, o cartão creme flutuante, o painel de vidro "Criar conta" e o olho da senha |
 | [`03`](referencias/03-recorte-degrade-do-formulario.png) | Recorte do degradê do formulário | Amostra de cor (usada nas medições) |
 | [`04`](referencias/04-novo-lembrete-por-data-e-horario.png) | Novo lembrete, por data e horário | Feito (`FormularioDeLembrete`); ver 11.11 |
-| [`05`](referencias/05-folha-minha-conta.png) | Folha "Minha conta" | Não existe (Sair fica em Configurações) |
+| [`05`](referencias/05-folha-minha-conta.png) | Folha "Minha conta" | Feito (`ContaSheet`, na lista e no formulário); ver 11.13 |
 | [`06`](referencias/06-novo-lembrete-por-local.png) | Novo lembrete, por local | Feito (busca de endereço, mapa Leaflet e raio); ver 11.11 |
 | [`07`](referencias/07-lista-meus-lembretes.png) | Meus lembretes | Feito (11.9); o menu "⋯" tem Editar e Excluir |
 | [`08`](referencias/08-configuracoes.png) | Configurações | Existe com estrutura mais simples; faltam cabeçalho verde, cartões com ícone e "Até onde vai o monitoramento" |
@@ -613,7 +613,7 @@ Três variantes, sempre com texto (a cor não é o único sinal):
 | `success` | `colors.feedback.successBg` | `colors.text.success` | "Senha redefinida. Entre com a nova senha." |
 | `info` | `colors.feedback.infoBg` e faixa `colors.feedback.infoBar` | `colors.text.primary` | "Você está dentro do raio de 1 lembrete", local definido |
 
-Raio `radius.sm`, padding `space.md`, texto `textStyles.body`. O de erro tem `accessibilityRole="alert"`, para o leitor de tela anunciá-lo.
+Raio `radius.sm`, padding `space.md`, texto `textStyles.body`. O de erro tem `accessibilityRole="alert"`, para o leitor de tela anunciá-lo. Com a prop `icon` o aviso leva um ícone antes do texto, na cor dele (`triangle-alert` no erro, `circle-check` no sucesso): o segundo sinal além da cor, usado na folha "Minha conta" (11.13).
 
 ### 11.4 Chip
 
@@ -626,6 +626,7 @@ Componente `src/components/Sheet.tsx`. Véu `colors.overlay` (verde-escuro a 46%
 - **Entrada:** o véu aparece em `motion.duration.scrim` (ease-out) e a folha sobe de baixo em `motion.duration.sheet`, com a curva `motion.curve`. Com "reduzir movimento" (`src/lib/movimento.ts`) ela já entra pronta. Não há animação de saída (some na hora) nem arrastar para fechar, como no app web.
 - **Fechar:** toque no véu, botão voltar do Android, Esc na web e o gesto de escape do leitor de tela (iOS).
 - **Acessibilidade:** papel `dialog`, modal, título como nome e como cabeçalho; o resto da tela sai da árvore de acessibilidade enquanto a folha está aberta.
+- **Linha de lista da folha** (`src/components/LinhaDeMenu.tsx`, usada pelo menu do lembrete e pela folha "Minha conta"): círculo com o ícone (`size.menu.circle`), título em negrito e, se houver, uma linha de apoio em `textStyles.micro` e `colors.text.secondary`. A ação sem volta (Excluir, Sair) usa `colors.feedback.dangerCircle` e `colors.text.danger`. Ícone e círculo ficam centrados: na captura `05` o glifo aparece no alto do círculo por um efeito de CSS do original, e a `11` o mostra no meio.
 - **Menu do lembrete** (`src/components/ReminderMenu.tsx`, aberto pelas reticências do cartão): título do lembrete, data e hora como subtítulo, e uma lista branca de cantos `radius.lg` com contorno `colors.border.field`. Cada linha (`size.menu.*`) tem um círculo com o ícone (menta `colors.bg.iconCircle` no Editar; rosado `colors.feedback.dangerCircle` na lixeira) e o rótulo em negrito; Excluir usa `colors.text.danger`. Ponteiro em cima e pressionado trocam o fundo (`colors.control.rowHover` e `rowPressed`; rosados no Excluir). A linha Editar só aparece quando quem abre sabe editar.
 - **Confirmação** (`src/components/ConfirmSheet.tsx`, no lugar do `Alert` do sistema, que muda de cara em cada plataforma): "Excluir lembrete?", a mensagem "“título” será removido e você não receberá mais esse aviso." e dois botões empilhados a `space.sm`: `destructive` (vermelho sólido `colors.action.danger`, texto branco) e `frost` ("Cancelar", `colors.action.frost`, texto escuro). Confirmar só confirma; Cancelar, o véu e o Esc só fecham. Sem aviso de "desfazer".
 
@@ -719,6 +720,14 @@ Linha do tempo do herói (segundos desde a chegada; `useMovimentoReduzido`, seç
 | Faíscas | 0,62 a 0,73 | 1,87 a 1,98 | cada uma dura 1,25 s: sai do centro, chega a 0,85 do tamanho e some |
 | Brilho do selo | 1,15 | 2,05 | faixa inclinada -18° cruza o selo da esquerda para a direita |
 | Pontos | 1,1 e 1,3 | 1,7 e 1,9 | aparecem; depois pulsam para sempre (1 a 0,35 de opacidade, ciclo de 2,8 s, a partir de 1,7 s e 2,6 s) |
+
+### 11.13 Folha "Minha conta"
+
+A folha da imagem `05` (`src/components/ContaSheet.tsx`), aberta pelo botão redondo de conta do cabeçalho da lista e do formulário de lembrete. É uma `Sheet` (11.5) com três etapas na mesma folha, e quando fecha, de qualquer jeito, volta ao menu e esquece o que foi digitado:
+
+- **Menu:** o título é o nome do perfil (ou "Minha conta") e o subtítulo o e-mail. Numa lista branca (`LinhaDeMenu`), **Alterar senha** ("Pede a senha atual antes de trocar.", ícone `key-round`) e **Sair** ("Encerra a sessão neste aparelho.", em vermelho, ícone `log-out`). Sair só encerra a sessão e fecha a folha; quem leva à tela de entrada é a proteção de rotas do layout raiz.
+- **Alterar senha:** "Confirme a senha atual e escolha a nova." Três `TextField` de senha (Senha atual, Nova senha com a dica "Pelo menos 8 caracteres, com letras e números.", Confirmar nova senha). Ao salvar, valida na ordem e mostra todos os avisos de uma vez, cada um no seu campo ("Informe sua senha atual.", a regra de `validarSenha` e "Repita a senha." ou "As senhas não são iguais."); digitar num campo apaga só o aviso dele. Com tudo certo chama `trocarSenha` (que confere a atual com um login); se o servidor recusar ("Senha atual incorreta.", sessão expirada, senha fraca, falta de rede), o aviso `error` com ícone aparece no topo e os campos ficam como estão. Enquanto salva, o botão diz "Salvando…", não aceita outro toque e os campos travam. "Voltar" volta ao menu e apaga o aviso do servidor.
+- **Senha alterada:** título "Senha alterada", subtítulo "Use a nova senha da próxima vez que entrar.", o aviso `success` com ícone ("Pronto, sua senha foi trocada.") e o botão escuro "Fechar".
 
 ## 12. Imagens e ilustrações
 
@@ -1164,6 +1173,7 @@ O teste `valores-soltos.test.ts` mantém uma lista de arquivos com valores visua
 | 21/09/2026 | O sombreado do visto é um segundo traço deslocado e mais grosso; as ondas esperam a vez em repouso; o desfoque do botão de fechar não é reproduzido | O SVG nativo não tem `feDropShadow`; o `both` do CSS mostra o primeiro quadro antes do atraso; o desfoque some sobre a foto suave. Nenhum dos três foi comparado em aparelho |
 | 21/09/2026 | O "voltar" das abas segue o histórico (`backBehavior="history"`) | O padrão volta sempre à primeira aba: Salvar na edição caía em Início e o acesso direto a `editar` parecia ter para onde voltar |
 | 21/09/2026 | **Campo de texto das telas de conta refeito** (`TextField`): caixa de 46 com o anel cinza por dentro em vez de borda, olho para mostrar e esconder a senha, ícone de alerta na mensagem de erro; rótulo e mensagem sobem de 11 para o piso de 12 | É o campo das imagens `02` e `05`; a mensagem de erro com ícone e o anel vermelho dão o segundo sinal além da cor |
+| 21/09/2026 | **Folha "Minha conta"** (`ContaSheet`) abre pelo botão de conta da lista e do formulário, no lugar do desvio para Configurações; ícone das linhas centrado no círculo | É o que a imagem `05` mostra. O glifo no alto do círculo na captura é um efeito de CSS que o próprio original não pretendia (a imagem `11` o centraliza) |
 
 ## 19. Pendências
 

@@ -13,6 +13,7 @@ import { FormularioDeLembrete } from '../FormularioDeLembrete';
 jest.mock('expo-router', () => ({ router: { back: jest.fn(), navigate: jest.fn(), replace: jest.fn(), canGoBack: jest.fn() } }));
 jest.mock('../../state/reminders', () => ({ useReminders: jest.fn() }));
 jest.mock('../../state/geo', () => ({ useGeo: jest.fn() }));
+jest.mock('../../state/auth', () => ({ useAuth: () => ({ user: { email: 'joao.teste@exemplo.com' }, nome: '', sair: jest.fn(), trocarSenha: jest.fn() }) }));
 jest.mock('../../lib/geocodificar', () => ({
   MINIMO_DE_LETRAS: 3,
   buscarLugares: jest.fn(async () => [{ nome: 'Supermercado Frangolândia', detalhe: 'Fortaleza', lat: -3.7566, lng: -38.4891 }]),
@@ -145,7 +146,7 @@ describe('Formulário: criar por data e horário', () => {
     expect(screen.getByRole('button', { name: 'Criar lembrete' })).toBeEnabled();
   });
 
-  it('"Voltar" volta para a tela anterior, ou para a lista se não há anterior; a conta leva às configurações', async () => {
+  it('"Voltar" volta para a tela anterior, ou para a lista se não há anterior; a conta abre a folha "Minha conta"', async () => {
     await abrir();
     await fireEvent.press(screen.getByRole('button', { name: 'Voltar' }));
     expect(router.back).toHaveBeenCalledTimes(1);
@@ -153,7 +154,8 @@ describe('Formulário: criar por data e horário', () => {
     await fireEvent.press(screen.getByRole('button', { name: 'Voltar' }));
     expect(router.navigate).toHaveBeenCalledWith('/');
     await fireEvent.press(screen.getByRole('button', { name: 'Minha conta' }));
-    expect(router.navigate).toHaveBeenCalledWith('/config');
+    expect(screen.getByRole('button', { name: /^Alterar senha/ })).toBeTruthy();
+    expect(router.navigate).not.toHaveBeenCalledWith('/config');
   });
 
   it('o bloco de títulos não intercepta toque, e isso vai no estilo: a prop `pointerEvents` é obsoleta na web e avisa no console', async () => {

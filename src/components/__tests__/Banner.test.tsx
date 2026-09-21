@@ -1,6 +1,6 @@
 import '@testing-library/react-native/matchers';
 import { render, screen } from '@testing-library/react-native';
-import { borderWidth, colors, radius, space } from '../../design/tokens';
+import { borderWidth, colors, radius, size, space } from '../../design/tokens';
 import { Banner } from '../Banner';
 
 const aviso = () => screen.getByTestId('banner');
@@ -29,5 +29,18 @@ describe('Banner', () => {
   it('aceita estilo de quem usa (ex.: margem)', async () => {
     await render(<Banner variant="error" style={{ marginBottom: space.lg }}>Erro</Banner>);
     expect(aviso()).toHaveStyle({ marginBottom: space.lg });
+  });
+
+  it('com ícone: desenha o ícone antes do texto, na cor do texto (o segundo sinal além da cor)', async () => {
+    await render(<Banner variant="error" icon="triangle-alert">Senha atual incorreta.</Banner>);
+    const desenho = JSON.stringify(screen.getByTestId('icone-triangle-alert', { includeHiddenElements: true }).children);
+    expect(desenho).toContain(colors.text.danger);
+    expect(desenho).toContain(`"width":${size.icon.xs}`);
+    expect(screen.getByText('Senha atual incorreta.')).toHaveStyle({ flex: 1 });
+  });
+
+  it('sem ícone não sobra elemento a mais', async () => {
+    await render(<Banner variant="success">Pronto.</Banner>);
+    expect(screen.queryByTestId(/^icone-/, { includeHiddenElements: true })).toBeNull();
   });
 });

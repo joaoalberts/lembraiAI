@@ -7,6 +7,7 @@ import { useReminders } from '../state/reminders';
 
 jest.mock('expo-router', () => ({ useIsFocused: jest.fn(), router: { back: jest.fn(), navigate: jest.fn(), replace: jest.fn(), canGoBack: jest.fn(() => true) } }));
 jest.mock('../state/reminders', () => ({ useReminders: jest.fn() }));
+jest.mock('../state/auth', () => ({ useAuth: () => ({ user: { email: 'joao.teste@exemplo.com' }, nome: '', sair: jest.fn(), trocarSenha: jest.fn() }) }));
 jest.mock('../state/geo', () => ({ useGeo: () => ({ position: null, getCurrentPosition: jest.fn() }) }));
 jest.mock('../components/MapaDeEscolha', () => ({ MapaDeEscolha: () => null }));
 

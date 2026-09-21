@@ -14,6 +14,7 @@ import { useReminders } from '../state/reminders';
 import { Banner } from './Banner';
 import { CabecalhoClaro } from './CabecalhoClaro';
 import { CalendarSheet } from './CalendarSheet';
+import { ContaSheet } from './ContaSheet';
 import { CtaButton } from './CtaButton';
 import { FormCard } from './FormCard';
 import { FormInput } from './FormInput';
@@ -55,7 +56,7 @@ export function FormularioDeLembrete({ lembrete }: FormularioProps) {
   const { position, getCurrentPosition } = useGeo();
   const { top } = useSafeAreaInsets();
   const [estado, setEstado] = useState<EstadoDoFormulario>(() => estadoInicial(lembrete));
-  const [folha, setFolha] = useState<'data' | 'horario' | 'repetir' | null>(null);
+  const [folha, setFolha] = useState<'data' | 'horario' | 'repetir' | 'conta' | null>(null);
   const [erroDaDescricao, setErroDaDescricao] = useState<string | null>(null);
   const [avisoDoLocal, setAvisoDoLocal] = useState<string | null>(null);
   const [erroAoSalvar, setErroAoSalvar] = useState<string | null>(null);
@@ -134,7 +135,7 @@ export function FormularioDeLembrete({ lembrete }: FormularioProps) {
             <Text accessibilityRole="header" style={styles.titulo}>{editando ? 'Editar lembrete' : 'Novo lembrete'}</Text>
             <Text style={styles.subtitulo}>Na hora certa. No lugar certo.</Text>
           </View>
-          <BotaoRedondo icon="user-round" label="Minha conta" onPress={() => router.navigate('/config')} />
+          <BotaoRedondo icon="user-round" label="Minha conta" onPress={() => setFolha('conta')} />
         </View>
 
         {erroAoSalvar !== null && <Banner variant="error">{erroAoSalvar}</Banner>}
@@ -238,6 +239,7 @@ export function FormularioDeLembrete({ lembrete }: FormularioProps) {
 
       <RepeatSheet visible={folha === 'repetir'} value={estado.repeat} onSelect={(repeat) => mudar({ repeat })} onClose={() => setFolha(null)} />
       <TimeSheet visible={folha === 'horario'} value={estado.time} onChange={(time) => mudar({ time })} onClose={() => setFolha(null)} />
+      <ContaSheet visible={folha === 'conta'} onClose={() => setFolha(null)} />
       <CalendarSheet visible={folha === 'data'} value={estado.dateISO} onSelect={(dateISO) => mudar({ dateISO })} onClose={() => setFolha(null)} />
     </KeyboardAvoidingView>
   );
