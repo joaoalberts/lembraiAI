@@ -41,12 +41,13 @@ const Divisor = () => <View style={styles.divisor} />;
 
 /**
  * Resumo do lembrete na tela de sucesso (imagem 09): a categoria, o título e o selo "Ativo", depois Data e Horário, o Local
- * (com raio e miniatura, só nos lembretes por local) e a repetição. O horário aparece também no lembrete por local: mostra o
+ * (com raio e miniatura, só nos lembretes por local; sem nome de lugar diz "Local escolhido", como a lista) e a repetição. O horário aparece também no lembrete por local: mostra o
  * que está gravado. O selo só aparece com o lembrete ativo (o original o mostrava sempre, mesmo pausado).
  * Padrão: docs/DESIGN_SYSTEM.md, seção 11.12.
  */
 export function CartaoDeResumo({ lembrete }: { lembrete: Reminder }) {
-  const comLocal = Boolean(lembrete.place);
+  // O tipo decide, não o nome: o serviço de endereços pode não devolver um nome e o lembrete por local continua tendo ponto e raio (a lista faz igual)
+  const comLocal = lembrete.kind === 'local';
   return (
     <View testID="resumo" style={styles.cartao}>
       <View style={styles.cabecalho}>
@@ -76,7 +77,7 @@ export function CartaoDeResumo({ lembrete }: { lembrete: Reminder }) {
             <CirculoDoDado icon="map-pin" />
             <View style={styles.textoDoLocal}>
               <Text style={styles.rotulo}>Local</Text>
-              <Text numberOfLines={1} style={styles.endereco}>{lembrete.place}</Text>
+              <Text numberOfLines={1} style={styles.endereco}>{lembrete.place || 'Local escolhido'}</Text>
               {lembrete.radius ? <Text style={styles.raio}>Raio de {lembrete.radius} metros</Text> : null}
             </View>
             <Image testID="resumo-miniatura" source={MINIATURA} contentFit="cover" accessible={false} style={styles.miniatura} />

@@ -119,6 +119,26 @@ describe('CartaoDeResumo', () => {
     expect(screen.getByText('Toda semana')).toBeTruthy();
   });
 
+  it('por local sem nome de lugar (o serviço de endereços não respondeu) ainda mostra o bloco do local, com "Local escolhido" e o raio, como a lista', async () => {
+    await render(<CartaoDeResumo lembrete={{ ...porLocal, place: undefined }} />);
+    expect(screen.getByTestId('resumo-local')).toBeTruthy();
+    expect(screen.getByText('Local escolhido')).toBeTruthy();
+    expect(screen.getByText('Raio de 150 metros')).toBeTruthy();
+    expect(screen.getByTestId('resumo-miniatura')).toBeTruthy();
+  });
+
+  it('por local sem raio não escreve "Raio de undefined metros"', async () => {
+    await render(<CartaoDeResumo lembrete={{ ...porLocal, radius: undefined }} />);
+    expect(screen.getByText('Smart Fit – Iguatemi')).toBeTruthy();
+    expect(screen.queryByText(/Raio de/)).toBeNull();
+  });
+
+  it('por horário nunca mostra o bloco do local, mesmo que sobre um nome de lugar no lembrete', async () => {
+    await render(<CartaoDeResumo lembrete={{ ...porHorario, place: 'Smart Fit – Iguatemi' }} />);
+    expect(screen.queryByTestId('resumo-local')).toBeNull();
+    expect(screen.queryByText('Smart Fit – Iguatemi')).toBeNull();
+  });
+
   it('o endereço cabe numa linha (com reticências) e o título nunca é cortado', async () => {
     const longo = { ...porLocal, title: 'Levar o carro para revisar e aproveitar para trocar o óleo, os filtros e o pneu de trás' };
     await render(<CartaoDeResumo lembrete={longo} />);
