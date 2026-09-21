@@ -121,8 +121,16 @@ createServer(async (req, res) => {
       return enviar(res, 201, umObjeto ? nova : [nova]);
     }
     if (req.method === 'PATCH') {
-      linhas = linhas.map((l) => (l.id === idDoFiltro(url) ? { ...l, ...json } : l));
-      return enviar(res, 204);
+      const id = idDoFiltro(url);
+      linhas = linhas.map((l) => (l.id === id ? { ...l, ...json } : l));
+      // como o PostgREST: sem `Prefer: return=representation` (ex.: o interruptor) a resposta é 204; com ele (`.select()`) vem a linha alterada,
+      // e o `.single()` sem exatamente uma linha (id que não existe, ou que a política de acesso escondeu) recebe 406/PGRST116
+      if (!(req.headers.prefer ?? '').includes('return=representation')) return enviar(res, 204);
+      const alteradas = linhas.filter((l) => l.id === id);
+      if (umObjeto && alteradas.length !== 1) {
+        return enviar(res, 406, { code: 'PGRST116', details: `The result contains ${alteradas.length} rows`, hint: null, message: 'Cannot coerce the result to a single JSON object' });
+      }
+      return enviar(res, 200, umObjeto ? alteradas[0] : alteradas);
     }
     if (req.method === 'DELETE') {
       linhas = linhas.filter((l) => l.id !== idDoFiltro(url));
