@@ -399,40 +399,41 @@ Os fundos em degradê do original (cabeçalho verde, telas de conta e cabeçalho
 
 ## 8. Ícones
 
-- **Família:** Ionicons em contorno (`@expo/vector-icons`), a mesma das abas. O app web usa Lucide; o Ionicons é a opção gratuita e multiplataforma do Expo com o mesmo traço. Preenchido só para o item ativo da aba.
+- **Família:** Lucide (`lucide-react-native`, licença ISC, gratuita), a mesma do app web e das capturas de referência, desenhada em SVG (`react-native-svg`, a versão fixada pelo SDK 57). Componente `src/components/Icon.tsx`; cada ícone entra por caminho próprio (`lucide-react-native/icons/<nome>`) para o pacote inteiro, com quase 4 mil ícones, não ir para o app.
+- **Traço:** `iconStroke.*` (1,8 a 3,4, no desenho de 24 por 24; o traço visível é o valor vezes o tamanho dividido por 24). Contorno sempre; a aba ativa só engrossa o traço e muda a cor.
 - **Tamanhos:** `size.icon.sm` (ao lado de texto pequeno), `size.icon.md` (ações), `size.icon.lg` (abas). Cor: `colors.icon.default`, ou o glifo da categoria (`colors.category.*.ink`).
 - **Emoji não é ícone**: muda de aparência em cada sistema e não aceita cor.
-- Ícone que é botão leva `accessibilityLabel`; ícone decorativo fica escondido do leitor de tela.
-- Os nomes são conferidos contra a fonte por `src/design/__tests__/icones.test.ts`.
+- Ícone que é botão leva `accessibilityLabel` no botão; o `Icon` já sai escondido do leitor de tela.
+- Os nomes são conferidos contra o pacote e contra o registro por `src/design/__tests__/icones.test.tsx`. Halter e avião giram (45° e −45°) só no cartão da lista, porque o Lucide os desenha na diagonal.
 
 <!-- tokens:icones-categorias:inicio -->
-| Ícone do lembrete | Ionicons |
-|---|---|
-| `cart` | `cart-outline` |
-| `dumbbell` | `barbell-outline` |
-| `pill` | `medical-outline` |
-| `users` | `people-outline` |
-| `plane` | `airplane-outline` |
-| `pin` | `location-outline` |
-| `bell` | `notifications-outline` |
-| `briefcase` | `briefcase-outline` |
-| `house` | `home-outline` |
-| `card` | `card-outline` |
+| Ícone do lembrete | Lucide | Giro na lista |
+|---|---|---|
+| `cart` | `shopping-cart` | — |
+| `dumbbell` | `dumbbell` | 45° |
+| `pill` | `pill` | — |
+| `users` | `users` | — |
+| `plane` | `plane` | -45° |
+| `pin` | `map-pin` | — |
+| `bell` | `bell` | — |
+| `briefcase` | `briefcase` | — |
+| `house` | `house` | — |
+| `card` | `credit-card` | — |
 <!-- tokens:icones-categorias:fim -->
 
 <!-- tokens:icones-interface:inicio -->
-| Uso | Ionicons |
+| Uso | Lucide |
 |---|---|
-| Aba lembretes (ativa · inativa) | `list` · `list-outline` |
-| Aba novo (ativa · inativa) | `add-circle` · `add-circle-outline` |
-| Aba mapa (ativa · inativa) | `map` · `map-outline` |
-| Aba config (ativa · inativa) | `settings` · `settings-outline` |
-| fechar | `close` |
-| excluir | `trash-outline` |
-| aqui | `location` |
-| definido | `checkmark-circle` |
-| vazio | `notifications-outline` |
-| email | `mail-outline` |
+| Aba inicio | `house` |
+| Aba lembretes | `list` |
+| Aba mapa | `map-pin` |
+| Aba config | `settings` |
+| fechar | `x` |
+| excluir | `trash` |
+| aqui | `map-pin` |
+| definido | `circle-check` |
+| vazio | `bell` |
+| email | `mail` |
 <!-- tokens:icones-interface:fim -->
 
 ## 9. Botões e seus estados
@@ -743,6 +744,7 @@ O teste `valores-soltos.test.ts` mantém uma lista de arquivos com valores visua
 | 21/09/2026 | **As 15 imagens de `referencias/` são a fonte de verdade visual** (cópia integral e conferida por SHA-256 das capturas do João). A paleta foi medida contra elas: 21 de 29 pontos batem com os tokens (ΔE ≤ 1,5); 4 valores existem só no app web e 4 são fundos em degradê (`referencias/MEDICOES.md`) | O João entregou todas as imagens do app e pediu o Design System "em cima" delas. Converter o perfil de cor da tela para sRGB evitou comparar o laranja cru `#EB603C` das capturas com o token `#FE532A` |
 | 21/09/2026 | **Escala:** tamanhos fixos em dp derivados das imagens (`dp = du × 430 / 851`), layout flexível na largura, texto nunca abaixo de 12; a coluna da web volta a 430. **Ainda não aplicada:** entra com cada tela | As capturas são de uma coluna de 430 px. Fixo e com piso de 12 mantém a leitura e o tamanho de fonte do sistema; o app web escalava tudo pela largura e chegava a 9 |
 | 21/09/2026 | **Tokens da folha, da barra de abas e do palco:** `radius.sheet` 19, `size.sheet.*` (alça de 49 por 4), `shadow.sheet`/`tabBar`/`column`, véu `colors.overlay` verde-escuro a 46%, `colors.bg.stage` verde `#0D2A1B` (era areia), `layout.columnMax` 430 (era 560), tempos e curva das folhas (`motion.duration.scrim/sheet`, `motion.curve.*`) | Valores do CSS do app web (`../lembreiAI`, versão do disco). A conferência lado a lado com as capturas acontece quando cada folha e a barra de abas entram nas telas, nos próximos commits |
+| 21/09/2026 | **Ícones: Lucide no lugar de Ionicons** (`lucide-react-native` com `react-native-svg`, ambos gratuitos), traço por papel em `iconStroke.*` | As capturas e o app web desenham com Lucide; o Ionicons tem outro traço e outras formas (calendário, relógio, pino, lâmpada). O `react-native-svg` é o que o SDK 57 fixa (15.15.4). Pacote em `moduleNameMapper` no Jest (só publica `.mjs`) |
 
 ## 19. Pendências
 

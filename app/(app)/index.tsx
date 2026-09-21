@@ -1,10 +1,9 @@
-import type { ComponentProps } from 'react';
 import { useMemo } from 'react';
-import Ionicons from '@expo/vector-icons/Ionicons';
 import { ActivityIndicator, RefreshControl, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { router } from 'expo-router';
 import { Banner } from '../../src/components/Banner';
 import { Button } from '../../src/components/Button';
+import { Icon } from '../../src/components/Icon';
 import { ReminderCard } from '../../src/components/ReminderCard';
 import { SECTIONS } from '../../src/data/reminders';
 import { UI_ICON } from '../../src/design/icons';
@@ -14,7 +13,6 @@ import { sectionOf } from '../../src/lib/format';
 import { useGeofences } from '../../src/state/geofences';
 import { useReminders } from '../../src/state/reminders';
 
-type IoniconName = ComponentProps<typeof Ionicons>['name'];
 
 export default function LembretesScreen() {
   const { reminders, carregando, erro, recarregar, toggle, remove } = useReminders();
@@ -63,7 +61,7 @@ export default function LembretesScreen() {
         <View style={styles.empty}>
           {/* o ícone é decorativo: o título já diz o que fazer */}
           <View style={styles.emptyCircle} accessibilityElementsHidden importantForAccessibility="no-hide-descendants">
-            <Ionicons name={UI_ICON.vazio as IoniconName} size={size.icon.xl} color={colors.icon.default} />
+            <Icon name={UI_ICON.vazio} size={size.icon.xl} color={colors.icon.default} />
           </View>
           <Text style={styles.emptyTitle}>Nenhum lembrete</Text>
           <Text style={styles.emptySubtitle}>Crie seu primeiro lembrete para começar</Text>

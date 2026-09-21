@@ -1,9 +1,8 @@
 import '@testing-library/react-native/matchers';
-import Ionicons from '@expo/vector-icons/Ionicons';
 import { fireEvent, render, screen } from '@testing-library/react-native';
 import type { Reminder } from '../../data/reminders';
 import { ICON_NAME, UI_ICON } from '../../design/icons';
-import { borderWidth, colors, opacity, radius, shadow, size } from '../../design/tokens';
+import { borderWidth, colors, iconStroke, opacity, radius, shadow, size } from '../../design/tokens';
 import { ReminderCard } from '../ReminderCard';
 
 const porHorario: Reminder = {
@@ -15,8 +14,21 @@ const porLocal: Reminder = {
   place: 'Mercado da esquina', lat: -3.75, lng: -38.48, radius: 300, dateISO: '2026-09-20', time: '09:00', repeat: 'never', active: true,
 };
 
-/** O Ionicons desenha o ícone como um caractere da fonte: acha-se pelo glifo do nome (o círculo do ícone fica escondido do leitor de tela de propósito). */
-const icone = (nome: string) => screen.queryByText(String.fromCharCode(Number(Ionicons.glyphMap[nome as keyof typeof Ionicons.glyphMap])), { includeHiddenElements: true });
+/** O `Icon` marca o próprio desenho com `icone-<nome>` (o círculo do ícone fica escondido do leitor de tela de propósito). */
+const icone = (nome: string) => screen.queryByTestId(`icone-${nome}`, { includeHiddenElements: true });
+
+interface No { props?: Record<string, unknown>; children?: unknown }
+/** O desenho (SVG) do ícone como texto, para conferir tamanho, cor e traço sem depender de como o pacote monta os elementos. */
+function desenhoDoIcone(nome: string): string {
+  const achar = (no: unknown): No | undefined => {
+    if (!no || typeof no !== 'object') return undefined;
+    const n = no as No;
+    if (n.props?.testID === `icone-${nome}`) return n;
+    for (const filho of ([] as unknown[]).concat(n.children ?? [])) { const achado = achar(filho); if (achado) return achado; }
+    return undefined;
+  };
+  return JSON.stringify(achar(screen.toJSON()) ?? null);
+}
 
 describe('ReminderCard', () => {
   it('por horário: mostra título, data, hora e repetição', async () => {
@@ -64,7 +76,10 @@ describe('ReminderCard', () => {
   it('círculo do ícone na cor da categoria, com o ícone de contorno dela e o glifo escuro (nunca emoji)', async () => {
     await render(<ReminderCard reminder={porLocal} onToggle={jest.fn()} onDelete={jest.fn()} />);
     expect(screen.getByTestId('reminder-icon', { includeHiddenElements: true })).toHaveStyle({ backgroundColor: colors.category.green.bg, width: size.iconCircle, height: size.iconCircle });
-    expect(icone(ICON_NAME.cart)).toHaveStyle({ color: colors.category.green.ink, fontSize: size.icon.md });
+    const desenho = desenhoDoIcone(ICON_NAME.cart);
+    expect(desenho).toContain(colors.category.green.ink);
+    expect(desenho).toContain(`"width":${size.icon.md}`);
+    expect(desenho).toContain(`"strokeWidth":${iconStroke.glyph}`);
     expect(screen.queryByText('🛒')).toBeNull();
   });
 

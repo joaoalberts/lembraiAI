@@ -1,8 +1,7 @@
-import type { ComponentProps } from 'react';
 import { useEffect, useMemo, useState } from 'react';
-import Ionicons from '@expo/vector-icons/Ionicons';
 import { Modal, Pressable, StyleSheet, Text, View } from 'react-native';
 import { CATEGORY_COLORS } from '../../src/data/reminders';
+import { Icon } from '../../src/components/Icon';
 import { RemindersMap } from '../../src/components/RemindersMap';
 import type { MapMarker } from '../../src/components/map-types';
 import { anelDeFoco, type EstadoDeToque } from '../../src/design/foco';
@@ -12,8 +11,6 @@ import { distance, formatDistance, type LatLng } from '../../src/lib/geo';
 import { useGeo } from '../../src/state/geo';
 import { useGeofences } from '../../src/state/geofences';
 import { useReminders } from '../../src/state/reminders';
-
-type IoniconName = ComponentProps<typeof Ionicons>['name'];
 
 export default function MapaScreen() {
   const { reminders } = useReminders();
@@ -67,7 +64,7 @@ export default function MapaScreen() {
               accessibilityRole="button"
               accessibilityLabel="Fechar"
             >
-              <Ionicons name={UI_ICON.fechar as IoniconName} size={size.icon.md} color={colors.icon.default} />
+              <Icon name={UI_ICON.fechar} size={size.icon.md} color={colors.icon.default} />
             </Pressable>
             {selecionado && (
               <>

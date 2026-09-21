@@ -313,6 +313,20 @@ export const size = {
   sheet: { paddingTop: du(22), paddingHorizontal: du(40), paddingBottom: du(70), handleWidth: du(96), handleHeight: du(8), handleGap: du(28) },
 } as const;
 
+/**
+ * Espessura do traço dos ícones (Lucide), nas unidades do desenho de 24 por 24: o traço visível é este valor vezes o
+ * tamanho do ícone dividido por 24. Valores do app web, um por papel.
+ */
+export const iconStroke = {
+  tab: 1.8,
+  base: 2,
+  glyph: 1.9,
+  ui: 2.2,
+  action: 2.4,
+  dots: 2.6,
+  check: 3.4,
+} as const;
+
 export const opacity = {
   disabled: 0.45,
   inactive: 0.55,

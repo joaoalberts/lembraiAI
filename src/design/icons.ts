@@ -1,38 +1,46 @@
 /**
- * Ícones do app: Ionicons em contorno (`@expo/vector-icons`), a mesma família das abas. O app web usa Lucide; o Ionicons é a
- * opção grátis e multiplataforma do Expo com o mesmo traço. Nomes conferidos contra a fonte em `__tests__/icones.test.ts`.
- * Este arquivo só tem texto (roda em scripts); o componente faz o cast para o tipo do Ionicons.
+ * Ícones do app: Lucide (`lucide-react-native`), a mesma família do app web e das capturas de referência. Cada nome aqui é o
+ * do arquivo do ícone no pacote (`lucide-react-native/icons/<nome>`); `src/components/Icon.tsx` registra os componentes e
+ * `__tests__/icones.test.ts` confere que todo nome existe no pacote e no registro.
+ * Este arquivo só tem texto (roda em scripts). A espessura do traço vem de `iconStroke` (tokens.ts).
  */
+import type { IconeNome } from '../components/Icon';
 import type { IconKey } from '../data/reminders';
 
 /** Ícone de cada lembrete, escolhido pela descrição (lib/categorize.ts). */
-export const ICON_NAME: Record<IconKey, string> = {
-  cart: 'cart-outline',
-  dumbbell: 'barbell-outline',
-  pill: 'medical-outline',
-  users: 'people-outline',
-  plane: 'airplane-outline',
-  pin: 'location-outline',
-  bell: 'notifications-outline',
-  briefcase: 'briefcase-outline',
-  house: 'home-outline',
-  card: 'card-outline',
+export const ICON_NAME: Record<IconKey, IconeNome> = {
+  cart: 'shopping-cart',
+  dumbbell: 'dumbbell',
+  pill: 'pill',
+  users: 'users',
+  plane: 'plane',
+  pin: 'map-pin',
+  bell: 'bell',
+  briefcase: 'briefcase',
+  house: 'house',
+  card: 'credit-card',
 };
 
-/** Abas: [ativa (preenchido), inativa (contorno)]. */
-export const TAB_ICON = {
-  lembretes: ['list', 'list-outline'],
-  novo: ['add-circle', 'add-circle-outline'],
-  mapa: ['map', 'map-outline'],
-  config: ['settings', 'settings-outline'],
-} as const;
+/** Glifos que o Lucide desenha na diagonal e a lista de lembretes usa em pé: giro em graus (só no cartão da lista). */
+export const GIRO_NA_LISTA: Partial<Record<IconKey, number>> = {
+  dumbbell: 45,
+  plane: -45,
+};
 
-/** Ícones de interface fora das categorias. */
+/** Abas da barra inferior: o mesmo ícone ativo e inativo (muda o traço e a cor). */
+export const TAB_ICON = {
+  inicio: 'house',
+  lembretes: 'list',
+  mapa: 'map-pin',
+  config: 'settings',
+} as const satisfies Record<string, IconeNome>;
+
+/** Ícones de interface que se repetem em mais de uma tela. */
 export const UI_ICON = {
-  fechar: 'close',
-  excluir: 'trash-outline',
-  aqui: 'location',
-  definido: 'checkmark-circle',
-  vazio: 'notifications-outline',
-  email: 'mail-outline',
-} as const;
+  fechar: 'x',
+  excluir: 'trash',
+  aqui: 'map-pin',
+  definido: 'circle-check',
+  vazio: 'bell',
+  email: 'mail',
+} as const satisfies Record<string, IconeNome>;

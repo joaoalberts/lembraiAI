@@ -1,14 +1,11 @@
-import type { ComponentProps } from 'react';
-import Ionicons from '@expo/vector-icons/Ionicons';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { CATEGORY_COLORS, repeatLabel, type Reminder } from '../data/reminders';
 import { anelDeFoco, type EstadoDeToque } from '../design/foco';
-import { ICON_NAME, UI_ICON } from '../design/icons';
-import { borderWidth, colors, fontFamily, opacity, radius, shadow, size, space, textStyles } from '../design/tokens';
+import { GIRO_NA_LISTA, ICON_NAME, UI_ICON } from '../design/icons';
+import { borderWidth, colors, fontFamily, iconStroke, opacity, radius, shadow, size, space, textStyles } from '../design/tokens';
 import { formatDate } from '../lib/format';
+import { Icon } from './Icon';
 import { Toggle } from './Toggle';
-
-type IoniconName = ComponentProps<typeof Ionicons>['name'];
 
 interface ReminderCardProps {
   reminder: Reminder;
@@ -37,14 +34,14 @@ export function ReminderCard({ reminder: r, nearby = false, onToggle, onDelete }
         accessibilityElementsHidden
         importantForAccessibility="no-hide-descendants"
       >
-        <Ionicons name={ICON_NAME[r.icon] as IoniconName} size={size.icon.md} color={cor.ink} />
+        <Icon name={ICON_NAME[r.icon]} size={size.icon.md} color={cor.ink} stroke={iconStroke.glyph} giro={GIRO_NA_LISTA[r.icon]} />
       </View>
       <View style={styles.content}>
         <Text style={styles.title} numberOfLines={2}>{r.title}</Text>
         <Text style={styles.meta} numberOfLines={2}>{meta}</Text>
         {nearby && (
           <View style={styles.nearbyRow}>
-            <Ionicons name={UI_ICON.aqui as IoniconName} size={size.icon.sm} color={colors.text.accent} />
+            <Icon name={UI_ICON.aqui} size={size.icon.sm} color={colors.text.accent} />
             <Text style={styles.nearbyTag}>Você está aqui</Text>
           </View>
         )}
@@ -58,7 +55,7 @@ export function ReminderCard({ reminder: r, nearby = false, onToggle, onDelete }
           accessibilityRole="button"
           accessibilityLabel={`Excluir lembrete ${r.title}`}
         >
-          <Ionicons name={UI_ICON.excluir as IoniconName} size={size.icon.md} color={colors.icon.muted} />
+          <Icon name={UI_ICON.excluir} size={size.icon.md} color={colors.icon.muted} />
         </Pressable>
       </View>
     </View>

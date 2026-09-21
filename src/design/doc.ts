@@ -4,8 +4,9 @@
  * `<!-- tokens:ID:inicio -->` e `<!-- tokens:ID:fim -->`. Todo token novo precisa de uma descrição em DESCRICOES.
  */
 import { PARES_DE_CONTRASTE, razaoDoPar } from './a11y';
-import { ICON_NAME, TAB_ICON, UI_ICON } from './icons';
-import { borderWidth, colors, fontFamily, fontSize, gradients, layout, lineHeight, motion, opacity, palette, radius, shadow, size, space, textStyles } from './tokens';
+import type { IconKey } from '../data/reminders';
+import { GIRO_NA_LISTA, ICON_NAME, TAB_ICON, UI_ICON } from './icons';
+import { borderWidth, colors, fontFamily, fontSize, gradients, iconStroke, layout, lineHeight, motion, opacity, palette, radius, shadow, size, space, textStyles } from './tokens';
 
 type Folha = { caminho: string; valor: string | number };
 
@@ -14,7 +15,7 @@ const achatar = (objeto: object, prefixo: string): Folha[] =>
     valor !== null && typeof valor === 'object' ? achatar(valor, `${prefixo}.${chave}`) : [{ caminho: `${prefixo}.${chave}`, valor: valor as string | number }],
   );
 
-const GRUPOS = { palette, colors, fontSize, lineHeight, fontFamily, space, radius, borderWidth, size, opacity, shadow, gradients, motion, layout };
+const GRUPOS = { palette, colors, fontSize, lineHeight, fontFamily, space, radius, borderWidth, size, iconStroke, opacity, shadow, gradients, motion, layout };
 
 /** Todo token existente, como "colors.text.primary". Os estilos de texto contam como um token cada (`textStyles.body`). */
 export const CAMINHOS_DE_TOKEN: string[] = [
@@ -256,6 +257,13 @@ const DESCRICOES: Record<string, string> = {
   'motion.curve.x2': 'Curva de entrada das folhas: cubic-bezier(x1, y1, x2, y2)',
   'motion.curve.y2': 'Curva de entrada das folhas: cubic-bezier(x1, y1, x2, y2)',
   'motion.pressedScale': 'Escala do botão pressionado',
+  'iconStroke.tab': 'Ícone da aba inativa',
+  'iconStroke.base': 'Ícone comum e da aba ativa',
+  'iconStroke.glyph': 'Glifo da categoria do lembrete e lâmpada da dica',
+  'iconStroke.ui': 'Ícone de interface (busca, conta, lupa, calendário do cartão)',
+  'iconStroke.action': 'Ícone de ação (fechar, mais, seta, chevron)',
+  'iconStroke.dots': 'Reticências "mais opções" do cartão',
+  'iconStroke.check': 'Marca de seleção (visto) nas opções e nas linhas escolhidas',
   'layout.columnMax': 'Largura máxima da coluna do app na web (a das capturas de referência); no celular a coluna é a tela toda',
   'layout.readingMax': 'Largura máxima de texto corrido (política de privacidade)',
   'layout.sheetMaxHeight': 'Altura máxima de uma folha inferior, como fração da tela',
@@ -348,13 +356,13 @@ export function blocosGerados(): Record<string, string> {
     ),
     movimento: tabela(['Token', 'Valor', 'Uso'], linhasSimples('motion', motion)),
 
-    'icones-categorias': tabela(['Ícone do lembrete', 'Ionicons'], Object.entries(ICON_NAME).map(([chave, nome]) => [cod(chave), cod(nome)])),
+    'icones-categorias': tabela(
+      ['Ícone do lembrete', 'Lucide', 'Giro na lista'],
+      Object.entries(ICON_NAME).map(([chave, nome]) => [cod(chave), cod(nome), GIRO_NA_LISTA[chave as IconKey] !== undefined ? `${GIRO_NA_LISTA[chave as IconKey]}°` : '—']),
+    ),
     'icones-interface': tabela(
-      ['Uso', 'Ionicons'],
-      [
-        ...Object.entries(TAB_ICON).map(([aba, [ativa, inativa]]) => [`Aba ${aba} (ativa · inativa)`, `${cod(ativa)} · ${cod(inativa)}`]),
-        ...Object.entries(UI_ICON).map(([uso, nome]) => [uso, cod(nome)]),
-      ],
+      ['Uso', 'Lucide'],
+      [...Object.entries(TAB_ICON).map(([aba, nome]) => [`Aba ${aba}`, cod(nome)]), ...Object.entries(UI_ICON).map(([uso, nome]) => [uso, cod(nome)])],
     ),
   };
 }

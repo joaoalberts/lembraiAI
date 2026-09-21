@@ -1,11 +1,10 @@
-import type { ComponentProps } from 'react';
 import { useState } from 'react';
-import Ionicons from '@expo/vector-icons/Ionicons';
 import { ActivityIndicator, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { router } from 'expo-router';
 import { Banner } from '../../src/components/Banner';
 import { Button } from '../../src/components/Button';
 import { Chip } from '../../src/components/Chip';
+import { Icon } from '../../src/components/Icon';
 import { SegmentedControl } from '../../src/components/SegmentedControl';
 import { TextField } from '../../src/components/TextField';
 import { DEFAULT_RADIUS, RADIUS_OPTIONS, REPEAT_OPTIONS, type RepeatKey } from '../../src/data/reminders';
@@ -16,7 +15,6 @@ import { todayISO, toDate } from '../../src/lib/format';
 import { useGeo } from '../../src/state/geo';
 import { useReminders } from '../../src/state/reminders';
 
-type IoniconName = ComponentProps<typeof Ionicons>['name'];
 type Kind = 'time' | 'local';
 interface Coord { lat: number; lng: number; accuracy: number | null }
 
@@ -110,7 +108,7 @@ export default function NovoLembreteScreen() {
           {coord ? (
             <View style={styles.coordCard}>
               <View style={styles.coordTitleRow}>
-                <Ionicons name={UI_ICON.definido as IoniconName} size={size.icon.md} color={colors.text.accent} />
+                <Icon name={UI_ICON.definido} size={size.icon.md} color={colors.text.accent} />
                 <Text style={styles.coordTitle}>Local definido</Text>
               </View>
               <Text style={styles.coordText}>

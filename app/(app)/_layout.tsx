@@ -1,19 +1,16 @@
-import type { ComponentProps } from 'react';
 import type { ColorValue } from 'react-native';
-import Ionicons from '@expo/vector-icons/Ionicons';
 import { Tabs } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { Icon, type IconeNome } from '../../src/components/Icon';
 import { TAB_ICON } from '../../src/design/icons';
-import { colors, fontFamily, fontSize, size, textStyles } from '../../src/design/tokens';
+import { colors, fontFamily, fontSize, iconStroke, size, textStyles } from '../../src/design/tokens';
 
-type IconName = ComponentProps<typeof Ionicons>['name'];
-
-/** Aba ativa com o ícone preenchido e inativa em contorno (docs/DESIGN_SYSTEM.md, seção 11.6). */
-const aba = (title: string, headerTitle: string, [ativo, inativo]: readonly [string, string]) => ({
+/** Aba: o mesmo ícone nas duas situações; a ativa leva o traço mais grosso (docs/DESIGN_SYSTEM.md, seção 11.6). */
+const aba = (title: string, headerTitle: string, icone: IconeNome) => ({
   title,
   headerTitle,
-  tabBarIcon: ({ color, size, focused }: { color: ColorValue; size: number; focused: boolean }) => (
-    <Ionicons name={(focused ? ativo : inativo) as IconName} size={size} color={color} />
+  tabBarIcon: ({ color, size: lado, focused }: { color: ColorValue; size: number; focused: boolean }) => (
+    <Icon name={icone} size={lado} color={String(color)} stroke={focused ? iconStroke.base : iconStroke.tab} />
   ),
 });
 
@@ -40,7 +37,7 @@ export default function AppLayout() {
       }}
     >
       <Tabs.Screen name="index" options={aba('Lembretes', 'Meus Lembretes', TAB_ICON.lembretes)} />
-      <Tabs.Screen name="novo" options={aba('Novo', 'Novo Lembrete', TAB_ICON.novo)} />
+      <Tabs.Screen name="novo" options={aba('Novo', 'Novo Lembrete', 'plus')} />
       <Tabs.Screen name="mapa" options={aba('Mapa', 'Mapa', TAB_ICON.mapa)} />
       <Tabs.Screen name="config" options={aba('Config', 'Configurações', TAB_ICON.config)} />
     </Tabs>
