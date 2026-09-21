@@ -6,6 +6,10 @@ import { radius } from '../../design/tokens';
 import { SucessoHeroi, folgaDoBrilho } from '../SucessoHeroi';
 import { Subida } from '../Subida';
 
+// Estes testes simulam segundos de quadros de dezenas de valores animados: sozinhos levam até 1,6 s, mas com a máquina ocupada
+// (várias suítes juntas) passavam dos 5 s padrão e falhavam sem haver defeito.
+jest.setTimeout(30000);
+
 const ESCONDIDO = { includeHiddenElements: true } as const;
 const el = (id: string) => screen.getByTestId(id, ESCONDIDO);
 const estilo = (id: string) => StyleSheet.flatten(el(id).props.style) as { opacity: number; transform: Record<string, unknown>[] };
