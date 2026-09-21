@@ -2,7 +2,7 @@ import '@testing-library/react-native/matchers';
 import { fireEvent, render, screen } from '@testing-library/react-native';
 import { StyleSheet, Text } from 'react-native';
 import { anelDeFoco } from '../../design/foco';
-import { borderWidth, colors, fontFamily, opacity, radius, shadow, size } from '../../design/tokens';
+import { borderWidth, colors, fontFamily, opacity, radius, shadow, size, space } from '../../design/tokens';
 import { FormCard } from '../FormCard';
 import { FormInput } from '../FormInput';
 import { OptionCard, estiloDoCartaoDeModo } from '../OptionCard';
@@ -74,6 +74,17 @@ describe('OptionCard', () => {
     expect(screen.getByRole('radio', { name: 'Por data e horário' })).not.toBeChecked();
     expect(screen.getByTestId('opcao-anel')).toHaveStyle({ borderColor: colors.border.strong, borderWidth: borderWidth.hairline, width: size.form.optionRadio });
     expect(screen.queryByTestId('opcao-selo')).toBeNull();
+  });
+
+  it('o texto nunca corre por baixo do selo: a folga da direita cobre o selo (largura e distância da borda) e ainda deixa um respiro', async () => {
+    await render(cartao(true));
+    expect(screen.getByRole('radio', { name: 'Por data e horário' })).toHaveStyle({ paddingRight: space.sm + size.form.optionBadge + space.xs });
+    expect(screen.getByTestId('opcao-selo')).toHaveStyle({ right: space.sm });
+  });
+
+  it('aceita um estilo de fora, que vale sobre o do cartão (o formulário dá larguras diferentes aos dois)', async () => {
+    await render(<OptionCard icon="calendar-days" title="Por data e horário" description="Lembre em um dia e hora." selected onPress={jest.fn()} style={{ flex: 7 }} />);
+    expect(screen.getByRole('radio', { name: 'Por data e horário' })).toHaveStyle({ flex: 7 });
   });
 
   it('o toque chama onPress; o ícone fica num círculo menta escondido do leitor de tela', async () => {

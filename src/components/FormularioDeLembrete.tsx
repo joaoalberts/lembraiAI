@@ -5,7 +5,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { REPEAT_OPTIONS, repeatLabel, type Reminder } from '../data/reminders';
 import { fundoEmDegrade } from '../design/efeitos';
 import { anelDeFoco, type EstadoDeToque } from '../design/foco';
-import { colors, fontFamily, gradients, iconStroke, motion, opacity, radius, shadow, size, space, textStyles } from '../design/tokens';
+import { colors, fontFamily, gradients, iconStroke, layout, motion, opacity, radius, shadow, size, space, textStyles } from '../design/tokens';
 import { formatDate } from '../lib/format';
 import { RAIO, TITULO_MAXIMO, estadoInicial, rascunhoDe, validar, type EstadoDoFormulario, type Modo } from '../lib/formulario';
 import { nomeDoPonto, type Lugar } from '../lib/geocodificar';
@@ -162,8 +162,8 @@ export function FormularioDeLembrete({ lembrete }: FormularioProps) {
         </FormCard>
 
         <View accessibilityRole="radiogroup" accessibilityLabel="Tipo de lembrete" style={styles.modos}>
-          <OptionCard icon="calendar-days" title="Por data e horário" description="Lembre em um dia e hora." selected={!local} onPress={() => escolherModo('time')} />
-          <OptionCard icon="map-pin" title="Por local" description="Lembre ao chegar." selected={local} onPress={() => escolherModo('local')} />
+          <OptionCard icon="calendar-days" title="Por data e horário" description="Lembre em um dia e hora." selected={!local} onPress={() => escolherModo('time')} style={styles.modoDeHora} />
+          <OptionCard icon="map-pin" title="Por local" description="Lembre ao chegar." selected={local} onPress={() => escolherModo('local')} style={styles.modoDeLocal} />
         </View>
 
         <FormCard style={styles.cartaoDeQuando}>
@@ -276,6 +276,9 @@ const styles = StyleSheet.create({
   dica: { ...textStyles.micro, color: colors.text.secondary },
   erro: { fontFamily: fontFamily.medium, color: colors.text.danger },
   modos: { flexDirection: 'row', gap: space.sm },
+  // larguras do original: o cartão da data e horário é mais largo que o do local
+  modoDeHora: { flex: layout.modeCardWeight.time },
+  modoDeLocal: { flex: layout.modeCardWeight.place },
   cartaoDeQuando: { gap: space.md },
   linha: { flexDirection: 'row', gap: space.sm },
   coluna: { flex: 3, gap: space.sm },

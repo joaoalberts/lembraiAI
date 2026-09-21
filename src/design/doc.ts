@@ -475,6 +475,8 @@ const DESCRICOES: Record<string, string> = {
   'layout.columnMax': 'Largura máxima da coluna do app na web (a das capturas de referência); no celular a coluna é a tela toda',
   'layout.readingMax': 'Largura máxima de texto corrido (política de privacidade)',
   'layout.sheetMaxHeight': 'Altura máxima de uma folha inferior, como fração da tela',
+  'layout.modeCardWeight.time': 'Formulário: peso da largura do cartão "Por data e horário" (caixa de 418 du no original)',
+  'layout.modeCardWeight.place': 'Formulário: peso da largura do cartão "Por local" (caixa de 353 du no original)',
   'size.toggle.*.width': 'Interruptor (cartão · formulário): largura do trilho',
   'size.toggle.*.height': 'Interruptor (cartão · formulário): altura do trilho',
   'size.toggle.*.thumb': 'Interruptor (cartão · formulário): diâmetro da bolinha',

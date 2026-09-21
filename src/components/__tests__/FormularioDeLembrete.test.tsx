@@ -2,7 +2,7 @@ import '@testing-library/react-native/matchers';
 import { act, fireEvent, render, screen } from '@testing-library/react-native';
 import { router } from 'expo-router';
 import { StyleSheet } from 'react-native';
-import { colors, fontFamily } from '../../design/tokens';
+import { colors, fontFamily, layout } from '../../design/tokens';
 import type { Reminder } from '../../data/reminders';
 import { nomeDoPonto } from '../../lib/geocodificar';
 import { comAreaSegura } from '../../test-utils/area-segura';
@@ -68,6 +68,13 @@ describe('Formulário: criar por data e horário', () => {
     expect(screen.getByRole('radio', { name: 'Por local' })).not.toBeChecked();
     expect(screen.getByRole('button', { name: 'Criar lembrete' })).toBeTruthy();
     expect(screen.queryByLabelText('Endereço do lembrete')).toBeNull(); // o mapa só aparece com o local ligado
+  });
+
+  it('os cartões de modo dividem a linha na proporção das caixas do original: o da data e horário é mais largo que o do local', async () => {
+    await abrir();
+    expect(screen.getByRole('radio', { name: 'Por data e horário' })).toHaveStyle({ flex: layout.modeCardWeight.time });
+    expect(screen.getByRole('radio', { name: 'Por local' })).toHaveStyle({ flex: layout.modeCardWeight.place });
+    expect(layout.modeCardWeight.time).toBeGreaterThan(layout.modeCardWeight.place);
   });
 
   it('cria com a descrição aparada e leva à tela de sucesso com o id do novo lembrete', async () => {

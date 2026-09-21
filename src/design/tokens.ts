@@ -765,6 +765,11 @@ export const layout = {
   readingMax: 720,
   /** Altura máxima de uma folha inferior, como fração da tela (82% no original). */
   sheetMaxHeight: 0.82,
+  /**
+   * Pesos das larguras dos dois cartões de modo do formulário: no original são caixas de 418 e 353 du de largura, então o da
+   * data e horário é o mais largo. Peso e não medida fixa para o par continuar proporcional em tela mais estreita.
+   */
+  modeCardWeight: { time: 418, place: 353 },
   /** Números visíveis de cada roda do horário (o do meio é o escolhido). */
   wheelRows: 5,
   /** Altura da cena do Onboarding (pino e balões) como fração da largura: 505 por 851 na arte. */
