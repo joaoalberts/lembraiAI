@@ -1,0 +1,80 @@
+import type { ReactNode } from 'react';
+import { ActivityIndicator, Platform, StyleSheet, View } from 'react-native';
+import { Stack, useSegments } from 'expo-router';
+import Head from 'expo-router/head';
+import { AuthProvider, useAuth } from '../src/state/auth';
+import { GeoProvider } from '../src/state/geo';
+import { GeofencesProvider } from '../src/state/geofences';
+import { NotificationsProvider } from '../src/state/notifications';
+import { ReminderScheduler } from '../src/state/reminder-scheduler';
+import { RemindersProvider } from '../src/state/reminders';
+
+const ROTAS_PUBLICAS = ['privacidade', 'excluir-conta'];
+
+/** Na web o app fica numa coluna de celular centralizada (como o frame do app original); no iOS/Android ocupa a tela. */
+function Shell({ children }: { children: ReactNode }) {
+  if (Platform.OS !== 'web') return <>{children}</>;
+  return (
+    <View style={styles.page}>
+      <View style={styles.column}>{children}</View>
+    </View>
+  );
+}
+
+function RootLayoutNav() {
+  const { session, recuperando } = useAuth();
+  // Recuperando a senha já existe sessão, mas a pessoa ainda não entrou: fica nas telas de conta até definir a senha
+  const autenticado = !!session && !recuperando;
+  // Rotas públicas não dependem da sessão: liberadas já na renderização estática, para a política de privacidade
+  // e a página de exclusão de conta chegarem como HTML pronto (revisores das lojas e buscadores não rodam o JavaScript)
+  const rotaPublica = ROTAS_PUBLICAS.includes((useSegments() as string[])[0]);
+
+  // `undefined` = ainda lendo a sessão guardada; um indicador evita a tela vazia (e o piscar do login)
+  if (session === undefined && !rotaPublica) {
+    return (
+      <View style={styles.loading}>
+        <ActivityIndicator size="large" color="#FE532A" />
+      </View>
+    );
+  }
+
+  return (
+    <Stack screenOptions={{ headerShown: false }}>
+      <Stack.Protected guard={autenticado}>
+        <Stack.Screen name="(app)" />
+      </Stack.Protected>
+      <Stack.Protected guard={!autenticado}>
+        <Stack.Screen name="auth" />
+      </Stack.Protected>
+    </Stack>
+  );
+}
+
+export default function RootLayout() {
+  return (
+    <AuthProvider>
+      <NotificationsProvider>
+        <GeoProvider>
+          <RemindersProvider>
+            <GeofencesProvider>
+              <Shell>
+                {/* o React Navigation apaga o <title> de +html.tsx na web; sem isto a aba fica sem nome */}
+                <Head>
+                  <title>LembreiAi — lembretes por hora e lugar</title>
+                </Head>
+                <ReminderScheduler />
+                <RootLayoutNav />
+              </Shell>
+            </GeofencesProvider>
+          </RemindersProvider>
+        </GeoProvider>
+      </NotificationsProvider>
+    </AuthProvider>
+  );
+}
+
+const styles = StyleSheet.create({
+  page: { flex: 1, alignItems: 'center', backgroundColor: '#E8E4DC' },
+  column: { flex: 1, width: '100%', maxWidth: 560, backgroundColor: '#F5F2ED' },
+  loading: { flex: 1, alignItems: 'center', justifyContent: 'center', backgroundColor: '#F5F2ED' },
+});
