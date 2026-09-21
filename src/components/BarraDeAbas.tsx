@@ -74,6 +74,6 @@ export function BarraDeAbas({ state, descriptors, navigation }: BottomTabBarProp
 const styles = StyleSheet.create({
   barra: { flexDirection: 'row', paddingTop: size.tabBar.top, backgroundColor: colors.tab.background, boxShadow: shadow.tabBar },
   aba: { flex: 1, minHeight: size.tabBar.item, alignItems: 'center', gap: size.tabBar.gap, borderRadius: radius.md },
-  rotulo: { ...textStyles.micro, color: colors.tab.inactive },
+  rotulo: { ...textStyles.pico, color: colors.tab.inactive },
   rotuloAtivo: { fontFamily: fontFamily.bold, color: colors.text.brand },
 });

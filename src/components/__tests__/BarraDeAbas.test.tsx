@@ -3,7 +3,7 @@ import { fireEvent, render, screen } from '@testing-library/react-native';
 import type { BottomTabBarProps } from 'expo-router/js-tabs';
 import { StyleSheet } from 'react-native';
 import { anelDeFoco } from '../../design/foco';
-import { colors, fontFamily, iconStroke, opacity, shadow, size } from '../../design/tokens';
+import { colors, fontFamily, fontSize, iconStroke, lineHeight, opacity, shadow, size } from '../../design/tokens';
 import { comAreaSegura } from '../../test-utils/area-segura';
 import { ABAS, BarraDeAbas, abaAtiva, estiloDaAba } from '../BarraDeAbas';
 
@@ -42,6 +42,13 @@ describe('abaAtiva', () => {
 });
 
 describe('BarraDeAbas', () => {
+  it('o rótulo da aba tem o tamanho do original (`.tab`, 17,8 du = 9 dp)', async () => {
+    await abrir('index');
+    for (const nome of ['Início', 'Lembretes', 'Mapa', 'Configurações']) {
+      expect(screen.getByText(nome)).toHaveStyle({ fontSize: fontSize.pico, lineHeight: lineHeight.pico });
+    }
+  });
+
   it('mostra as quatro abas na ordem Início, Lembretes, Mapa, Configurações', async () => {
     await abrir('index');
     expect(screen.getAllByRole('tab').map((t) => t.props.accessibilityLabel)).toEqual(['Início', 'Lembretes', 'Mapa', 'Configurações']);

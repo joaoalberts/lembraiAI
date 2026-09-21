@@ -2,13 +2,19 @@ import '@testing-library/react-native/matchers';
 import { fireEvent, render, screen } from '@testing-library/react-native';
 import { StyleSheet } from 'react-native';
 import { anelDeFoco } from '../../design/foco';
-import { colors, fontFamily, opacity, radius, size } from '../../design/tokens';
+import { colors, fontFamily, fontSize, opacity, radius, size } from '../../design/tokens';
 import { Chip, estiloDoChip } from '../Chip';
 
 import { alvoDeToque } from '../../test-utils/toque';
 const chip = () => screen.getByRole('button');
 
 describe('Chip', () => {
+  it('rótulo e contagem têm o tamanho do original (`.chip`, 17,9 du = 9 dp)', async () => {
+    await render(<Chip label="Hoje" count={3} selected={false} onPress={jest.fn()} />);
+    expect(screen.getByText('Hoje')).toHaveStyle({ fontSize: fontSize.pico });
+    expect(screen.getByText('3')).toHaveStyle({ fontSize: fontSize.pico });
+  });
+
   it('selecionado: fundo escuro, rótulo branco em negrito e estado selecionado para o leitor de tela', async () => {
     await render(<Chip label="Toda semana" selected onPress={jest.fn()} />);
     expect(chip()).toHaveStyle({ backgroundColor: colors.control.chipOn, borderRadius: radius.pill, minHeight: size.chip });

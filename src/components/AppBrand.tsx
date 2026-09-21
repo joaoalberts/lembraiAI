@@ -25,7 +25,7 @@ export function AppBrand({ variant = 'lista' }: AppBrandProps) {
         ) : (
           <Text style={styles.nome}>LembreiAi</Text>
         )}
-        <Text style={styles.frase}>Sua rotina, mais leve.</Text>
+        <Text style={abertura ? styles.fraseDaAbertura : styles.frase}>Sua rotina, mais leve.</Text>
       </View>
     </View>
   );
@@ -37,5 +37,7 @@ const styles = StyleSheet.create({
   nome: { ...textStyles.caption, fontFamily: fontFamily.serif, color: colors.text.onDarkWarm },
   nomeDaAbertura: { fontFamily: fontFamily.bold, fontSize: size.onboarding.brandName, lineHeight: size.onboarding.brandName + space.xs, color: colors.text.onDarkWarm },
   acento: { color: colors.text.brandAccent },
-  frase: { ...textStyles.micro, color: colors.text.onDarkFaint, marginTop: space.hair },
+  // 17,4 du (9 dp) nas listas e 21,3 du (11 dp) na abertura, como no original
+  frase: { ...textStyles.pico, color: colors.text.onDarkFaint, marginTop: space.hair },
+  fraseDaAbertura: { ...textStyles.mini, color: colors.text.onDarkFaint, marginTop: space.hair },
 });

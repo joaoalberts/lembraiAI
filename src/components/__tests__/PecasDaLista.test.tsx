@@ -2,12 +2,17 @@ import '@testing-library/react-native/matchers';
 import { render, screen } from '@testing-library/react-native';
 import { StyleSheet } from 'react-native';
 import type { Category } from '../../data/reminders';
-import { colors, fontFamily, radius, size } from '../../design/tokens';
+import { colors, fontFamily, fontSize, radius, size } from '../../design/tokens';
 import { RadiusIcon } from '../RadiusIcon';
 import { Tag } from '../Tag';
 import { TipCard } from '../TipCard';
 
 describe('Tag', () => {
+  it('o texto da etiqueta tem o tamanho do original (`.tag`, 16,8 du = 8,5 dp, no piso de 9)', async () => {
+    await render(<Tag kind="time" category="green" />);
+    expect(screen.getByText('Por horário')).toHaveStyle({ fontSize: fontSize.pico });
+  });
+
   it('"Por horário" e "Por local", cada um com o texto certo', async () => {
     const { rerender } = await render(<Tag kind="time" category="green" />);
     expect(screen.getByText('Por horário')).toBeTruthy();
@@ -27,7 +32,7 @@ describe('Tag', () => {
   it('pílula baixa, do tamanho do conteúdo, com texto em negrito', async () => {
     await render(<Tag kind="time" category="green" />);
     expect(screen.getByTestId('tag')).toHaveStyle({ borderRadius: radius.pill, minHeight: size.tag.height, alignSelf: 'flex-start' });
-    expect(StyleSheet.flatten(screen.getByText('Por horário').props.style)).toMatchObject({ fontFamily: fontFamily.bold, fontSize: 12 });
+    expect(StyleSheet.flatten(screen.getByText('Por horário').props.style)).toMatchObject({ fontFamily: fontFamily.bold, fontSize: fontSize.pico });
   });
 });
 

@@ -33,5 +33,5 @@ const styles = StyleSheet.create({
     gap: size.tag.gap,
     borderRadius: radius.pill,
   },
-  texto: { ...textStyles.micro, fontFamily: fontFamily.bold },
+  texto: { ...textStyles.pico, fontFamily: fontFamily.bold },
 });

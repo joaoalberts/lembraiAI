@@ -1,8 +1,10 @@
 import '@testing-library/react-native/matchers';
 import { act, fireEvent, render, screen } from '@testing-library/react-native';
 import { router } from 'expo-router';
+import { StyleSheet } from 'react-native';
 import LembretesScreen from '../../app/(app)/index';
 import type { Reminder } from '../data/reminders';
+import { fontSize } from '../design/tokens';
 import { comAreaSegura } from '../test-utils/area-segura';
 import { useGeofences } from '../state/geofences';
 import { useReminders } from '../state/reminders';
@@ -83,6 +85,13 @@ describe('Lista: chips e seções', () => {
     expect(screen.getAllByText('Seg, 21 de set de 2026')).toHaveLength(2); // a data da seção e a do cartão de hoje
     expect(screen.getAllByText('Ter, 22 de set de 2026')).toHaveLength(2);
     expect(screen.getAllByTestId('reminder-card')).toHaveLength(4);
+  });
+
+  it('a data da seção tem o tamanho do original (`.head span`, 22,7 du = 11 dp)', async () => {
+    await abrir();
+    const hoje = screen.getByRole('header', { name: 'Hoje' });
+    const data = (hoje.parent?.children ?? []).find((c) => typeof c !== 'string' && c !== hoje) as { props: { style?: unknown } } | undefined;
+    expect(StyleSheet.flatten(data?.props.style as never)).toMatchObject({ fontSize: fontSize.mini });
   });
 
   it('o filtro Hoje mostra só o de hoje, marca o chip e não mexe nas contagens', async () => {

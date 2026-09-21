@@ -51,7 +51,7 @@ const styles = StyleSheet.create({
   desligado: { backgroundColor: colors.control.chipOff, borderColor: colors.border.chip },
   pressionado: { opacity: opacity.pressed },
   desabilitado: { opacity: opacity.disabled },
-  rotulo: { ...textStyles.micro, fontFamily: fontFamily.bold, color: colors.text.chip, flexShrink: 1 },
-  contagem: { ...textStyles.micro, fontFamily: fontFamily.semibold, color: colors.text.chipCount },
+  rotulo: { ...textStyles.pico, fontFamily: fontFamily.bold, color: colors.text.chip, flexShrink: 1 },
+  contagem: { ...textStyles.pico, fontFamily: fontFamily.semibold, color: colors.text.chipCount },
   rotuloLigado: { color: colors.text.onDark },
 });

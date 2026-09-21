@@ -3,7 +3,7 @@ import { fireEvent, render, screen } from '@testing-library/react-native';
 import { StyleSheet } from 'react-native';
 import type { Reminder } from '../../data/reminders';
 import { GIRO_NA_LISTA, ICON_NAME, UI_ICON } from '../../design/icons';
-import { borderWidth, colors, fontFamily, iconStroke, opacity, radius, shadow, size } from '../../design/tokens';
+import { borderWidth, colors, fontFamily, fontSize, iconStroke, opacity, radius, shadow, size } from '../../design/tokens';
 import { ReminderCard } from '../ReminderCard';
 
 import { alvoDeToque } from '../../test-utils/toque';
@@ -35,6 +35,26 @@ function desenhoDoIcone(nome: string): string {
   };
   return JSON.stringify(achar(screen.toJSON()) ?? null);
 }
+
+describe('ReminderCard: tamanhos do texto (o original, em du: `.title` 23,3, `.place` 18, `.meta` 18,6, `.hour` 22,5)', () => {
+  it('título de 12 (23,3 du), data e lugar de 9 (18 a 18,6 du) e a hora de 11 (22,5 du)', async () => {
+    await render(cartao(porHorario));
+    expect(screen.getByText('Tomar remédio')).toHaveStyle({ fontFamily: fontFamily.serif, fontSize: fontSize.micro });
+    expect(screen.getByText('Dom, 20 de set de 2026')).toHaveStyle({ fontSize: fontSize.pico });
+    expect(screen.getByText('09:00')).toHaveStyle({ fontSize: fontSize.mini });
+  });
+
+  it('por local: o endereço e o raio também de 9', async () => {
+    await render(cartao(porLocal));
+    expect(screen.getByText('Mercado da esquina')).toHaveStyle({ fontSize: fontSize.pico });
+    expect(screen.getByText('Raio de 300 metros')).toHaveStyle({ fontSize: fontSize.pico });
+  });
+
+  it('"Você está aqui" (só do app, sem par no original) acompanha as linhas de 9 em volta', async () => {
+    await render(cartao(porLocal, { nearby: true }));
+    expect(screen.getByText('Você está aqui')).toHaveStyle({ fontSize: fontSize.pico });
+  });
+});
 
 describe('ReminderCard: conteúdo', () => {
   it('por horário: título, data com o calendário, etiqueta "Por horário" e a hora', async () => {

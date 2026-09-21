@@ -2,7 +2,7 @@ import '@testing-library/react-native/matchers';
 import { fireEvent, render, screen } from '@testing-library/react-native';
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text } from 'react-native';
-import { colors, gradients, iconStroke, radius, size, space } from '../../design/tokens';
+import { colors, fontSize, gradients, iconStroke, radius, size, space } from '../../design/tokens';
 import { comAreaSegura } from '../../test-utils/area-segura';
 import { AppBrand } from '../AppBrand';
 import { GlassButton, estiloDoVidro } from '../GlassButton';
@@ -57,6 +57,13 @@ describe('GreenHeader', () => {
 });
 
 describe('AppBrand', () => {
+  it('a frase tem o tamanho do original: 17,4 du (9 dp) nas listas e 21,3 du (11 dp) na abertura', async () => {
+    const { rerender } = await render(<AppBrand />);
+    expect(screen.getByText('Sua rotina, mais leve.')).toHaveStyle({ fontSize: fontSize.pico });
+    await rerender(<AppBrand variant="onboarding" />);
+    expect(screen.getByText('Sua rotina, mais leve.')).toHaveStyle({ fontSize: fontSize.mini });
+  });
+
   it('mostra o nome e a frase da marca, e o leitor de tela lê os dois juntos', async () => {
     await render(<AppBrand />);
     expect(screen.getByText('LembreiAi')).toBeTruthy();

@@ -179,7 +179,7 @@ const styles = StyleSheet.create({
   primeiraSecao: { marginBottom: size.list.firstHeadGap - size.list.headGap },
   secaoSeguinte: { marginTop: size.list.sectionGap },
   secao: { ...textStyles.heading, color: colors.text.primary },
-  dataDaSecao: { ...textStyles.micro, color: colors.text.secondary },
+  dataDaSecao: { ...textStyles.mini, color: colors.text.secondary },
   cartoes: { gap: size.list.cardGap, marginTop: size.list.headGap },
   dica: { marginTop: size.list.tipGap },
   vazio: { alignItems: 'center', gap: space.sm, paddingTop: size.list.emptyTop, paddingHorizontal: space.xl },
