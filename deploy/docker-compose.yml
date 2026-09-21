@@ -1,0 +1,125 @@
+# Backend do LembreiAi: Postgres + GoTrue (login) + PostgREST (API), compatíveis com o supabase-js do app.
+# É o pedaço do Supabase que o app realmente usa (Auth + REST + RLS), sem Kong, Studio, Realtime, Storage etc.:
+# cabe numa VPS pequena (medido: ~135 MB de RAM em repouso com os 6 contêineres) e tem pouca superfície de ataque.
+#
+# O banco NÃO publica porta nenhuma. Quem fala com a internet é o proxy de um dos overlays:
+#   docker-compose.traefik.yml  -> a VPS já tem Traefik nas portas 80/443 (o caso da Hostinger com template Docker)
+#   docker-compose.caddy.yml    -> as portas 80/443 estão livres (Caddy emite o HTTPS sozinho)
+# Segredos ficam no .env (gerado por scripts/gen-env.sh, fora do git).
+name: lembreiai
+
+x-logging: &logging
+  driver: json-file
+  options: { max-size: "10m", max-file: "3" }
+
+services:
+  db:
+    image: public.ecr.aws/supabase/postgres:17.6.1.167
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: postgres
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?rode scripts/gen-env.sh}
+      JWT_SECRET: ${JWT_SECRET:?rode scripts/gen-env.sh}
+      JWT_EXP: "3600"
+    volumes:
+      - db-data:/var/lib/postgresql/data
+      - db-config:/etc/postgresql-custom
+      - ./init/roles.sql:/docker-entrypoint-initdb.d/init-scripts/99-roles.sql:ro
+      - ./init/jwt.sql:/docker-entrypoint-initdb.d/init-scripts/99-jwt.sql:ro
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "postgres", "-h", "localhost"]
+      interval: 5s
+      timeout: 5s
+      retries: 30
+    networks: [backend]
+    logging: *logging
+
+  auth:
+    image: public.ecr.aws/supabase/gotrue:v2.196.0
+    restart: unless-stopped
+    depends_on:
+      db: { condition: service_healthy }
+    environment:
+      GOTRUE_API_HOST: 0.0.0.0
+      GOTRUE_API_PORT: "9999"
+      API_EXTERNAL_URL: ${SITE_URL:?}
+      GOTRUE_SITE_URL: ${SITE_URL:?}
+      GOTRUE_URI_ALLOW_LIST: ${URI_ALLOW_LIST:-}
+      GOTRUE_DB_DRIVER: postgres
+      GOTRUE_DB_DATABASE_URL: postgres://supabase_auth_admin:${POSTGRES_PASSWORD}@db:5432/postgres
+      GOTRUE_DISABLE_SIGNUP: "false"
+      GOTRUE_JWT_ADMIN_ROLES: service_role
+      GOTRUE_JWT_AUD: authenticated
+      GOTRUE_JWT_DEFAULT_GROUP_NAME: authenticated
+      GOTRUE_JWT_EXP: "3600"
+      GOTRUE_JWT_SECRET: ${JWT_SECRET}
+      GOTRUE_EXTERNAL_EMAIL_ENABLED: "true"
+      GOTRUE_EXTERNAL_ANONYMOUS_USERS_ENABLED: "false"
+      # mesmas regras do app (src/lib/validacao.ts): 8+ caracteres, com letra e número
+      GOTRUE_PASSWORD_MIN_LENGTH: "8"
+      GOTRUE_PASSWORD_REQUIRED_CHARACTERS: "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ:0123456789"
+      GOTRUE_SECURITY_REFRESH_TOKEN_ROTATION_ENABLED: "true"
+      GOTRUE_SECURITY_REFRESH_TOKEN_REUSE_INTERVAL: "10"
+      # e-mail: sem SMTP, o cadastro entra direto (autoconfirmação) e a recuperação de senha por e-mail fica indisponível
+      GOTRUE_MAILER_AUTOCONFIRM: ${MAILER_AUTOCONFIRM:-true}
+      GOTRUE_SMTP_HOST: ${SMTP_HOST:-}
+      GOTRUE_SMTP_PORT: ${SMTP_PORT:-587}
+      GOTRUE_SMTP_USER: ${SMTP_USER:-}
+      GOTRUE_SMTP_PASS: ${SMTP_PASS:-}
+      GOTRUE_SMTP_ADMIN_EMAIL: ${SMTP_ADMIN_EMAIL:-}
+      GOTRUE_SMTP_SENDER_NAME: ${SMTP_SENDER_NAME:-LembreiAi}
+      GOTRUE_RATE_LIMIT_EMAIL_SENT: ${RATE_LIMIT_EMAIL_SENT:-30}
+      GOTRUE_MAILER_OTP_LENGTH: "6"
+      GOTRUE_MAILER_OTP_EXP: "3600"
+      GOTRUE_MAILER_URLPATHS_RECOVERY: /auth/v1/verify
+      GOTRUE_MAILER_URLPATHS_CONFIRMATION: /auth/v1/verify
+      GOTRUE_MAILER_TEMPLATES_RECOVERY: http://templates/recovery.html
+      GOTRUE_MAILER_SUBJECTS_RECOVERY: Redefinir sua senha no LembreiAi
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:9999/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+    networks: [backend]
+    logging: *logging
+
+  rest:
+    image: public.ecr.aws/supabase/postgrest:v16.2
+    restart: unless-stopped
+    depends_on:
+      db: { condition: service_healthy }
+    environment:
+      PGRST_DB_URI: postgres://authenticator:${POSTGRES_PASSWORD}@db:5432/postgres
+      PGRST_DB_SCHEMAS: public
+      PGRST_DB_ANON_ROLE: anon
+      PGRST_JWT_SECRET: ${JWT_SECRET}
+      PGRST_DB_USE_LEGACY_GUCS: "false"
+      PGRST_DB_MAX_ROWS: "1000"
+    networks: [backend]
+    logging: *logging
+
+  # serve o modelo do e-mail de recuperação para o GoTrue (ele lê o modelo por HTTP)
+  templates:
+    image: nginx:1.27-alpine
+    restart: unless-stopped
+    volumes:
+      - ./templates:/usr/share/nginx/html:ro
+    networks: [backend]
+    logging: *logging
+
+  # o site (build web do Expo) e o APK do Android
+  web:
+    image: nginx:1.27-alpine
+    restart: unless-stopped
+    volumes:
+      - ./site:/usr/share/nginx/html:ro
+      - ./nginx-web.conf:/etc/nginx/conf.d/default.conf:ro
+    networks: [backend]
+    logging: *logging
+
+networks:
+  backend: {}
+
+volumes:
+  db-data: {}
+  db-config: {}

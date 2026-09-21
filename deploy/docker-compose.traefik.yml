@@ -1,0 +1,49 @@
+# Overlay para VPS que JÁ tem Traefik nas portas 80/443 (comum nos modelos Docker da Hostinger).
+# Não mexe no Traefik: só registra os três serviços nele por rótulos. Ajuste no .env (descubra com `docker inspect` no contêiner do Traefik):
+#   TRAEFIK_NETWORK      rede Docker que o Traefik usa                 (ex.: traefik_default)
+#   TRAEFIK_ENTRYPOINT   entrypoint HTTPS                                (ex.: websecure)
+#   TRAEFIK_CERTRESOLVER resolvedor de certificados Let's Encrypt        (ex.: mytlschallenge)
+#   docker compose -f docker-compose.yml -f docker-compose.traefik.yml --env-file .env up -d
+services:
+  auth:
+    labels:
+      - traefik.enable=true
+      - traefik.docker.network=${TRAEFIK_NETWORK:?}
+      - traefik.http.routers.lembreiai-auth.rule=Host(`${PUBLIC_HOST:?}`) && PathPrefix(`/auth/v1`)
+      - traefik.http.routers.lembreiai-auth.entrypoints=${TRAEFIK_ENTRYPOINT:-websecure}
+      - traefik.http.routers.lembreiai-auth.tls=true
+      - traefik.http.routers.lembreiai-auth.tls.certresolver=${TRAEFIK_CERTRESOLVER:?}
+      - traefik.http.routers.lembreiai-auth.middlewares=lembreiai-auth-strip
+      - traefik.http.middlewares.lembreiai-auth-strip.stripprefix.prefixes=/auth/v1
+      - traefik.http.services.lembreiai-auth.loadbalancer.server.port=9999
+    networks: [backend, traefik]
+
+  rest:
+    labels:
+      - traefik.enable=true
+      - traefik.docker.network=${TRAEFIK_NETWORK:?}
+      - traefik.http.routers.lembreiai-rest.rule=Host(`${PUBLIC_HOST:?}`) && PathPrefix(`/rest/v1`)
+      - traefik.http.routers.lembreiai-rest.entrypoints=${TRAEFIK_ENTRYPOINT:-websecure}
+      - traefik.http.routers.lembreiai-rest.tls=true
+      - traefik.http.routers.lembreiai-rest.tls.certresolver=${TRAEFIK_CERTRESOLVER:?}
+      - traefik.http.routers.lembreiai-rest.middlewares=lembreiai-rest-strip
+      - traefik.http.middlewares.lembreiai-rest-strip.stripprefix.prefixes=/rest/v1
+      - traefik.http.services.lembreiai-rest.loadbalancer.server.port=3000
+    networks: [backend, traefik]
+
+  web:
+    labels:
+      - traefik.enable=true
+      - traefik.docker.network=${TRAEFIK_NETWORK:?}
+      - traefik.http.routers.lembreiai-web.rule=Host(`${PUBLIC_HOST:?}`)
+      - traefik.http.routers.lembreiai-web.priority=1
+      - traefik.http.routers.lembreiai-web.entrypoints=${TRAEFIK_ENTRYPOINT:-websecure}
+      - traefik.http.routers.lembreiai-web.tls=true
+      - traefik.http.routers.lembreiai-web.tls.certresolver=${TRAEFIK_CERTRESOLVER:?}
+      - traefik.http.services.lembreiai-web.loadbalancer.server.port=80
+    networks: [backend, traefik]
+
+networks:
+  traefik:
+    name: ${TRAEFIK_NETWORK:?}
+    external: true

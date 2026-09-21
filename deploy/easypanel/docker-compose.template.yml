@@ -1,0 +1,173 @@
+# Compose do LembreiAi para o EASYPANEL (serviço "Compose" com origem "Inline").
+# Não edite o arquivo gerado (dist/docker-compose.easypanel.yml): edite este modelo e os arquivos-fonte e rode `node scripts/build-easypanel.mjs`.
+#
+# Diferenças para docker-compose.yml + overlays:
+#  - sem `ports`, `container_name` e `networks` (o Easypanel avisa que conflitam com outros serviços): o domínio é configurado no painel
+#    e aponta para o serviço `gateway`, porta 80. O Traefik do painel termina o HTTPS.
+#  - sem arquivos ao lado do compose (a origem "Inline" só guarda o YAML): os arquivos de configuração vão embutidos em `configs.content`.
+#  - o serviço `migrate` aplica o banco sozinho a cada deploy (o que scripts/migrate.sh faz nos outros modos).
+# Variáveis (aba Ambiente do Easypanel): POSTGRES_PASSWORD, JWT_SECRET, ANON_KEY, SITE_URL e, opcionalmente, MAILER_AUTOCONFIRM e SMTP_*.
+x-logging: &logging
+  driver: json-file
+  options: { max-size: "10m", max-file: "3" }
+
+services:
+  db:
+    image: public.ecr.aws/supabase/postgres:17.6.1.167
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: postgres
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?defina POSTGRES_PASSWORD (aba Ambiente)}
+      JWT_SECRET: ${JWT_SECRET:?defina JWT_SECRET (aba Ambiente)}
+      JWT_EXP: "3600"
+    volumes:
+      - db-data:/var/lib/postgresql/data
+      - db-config:/etc/postgresql-custom
+    configs:
+      - source: init_roles
+        target: /docker-entrypoint-initdb.d/init-scripts/99-roles.sql
+      - source: init_jwt
+        target: /docker-entrypoint-initdb.d/init-scripts/99-jwt.sql
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "postgres", "-h", "localhost"]
+      interval: 5s
+      timeout: 5s
+      retries: 30
+    logging: *logging
+
+  auth:
+    image: public.ecr.aws/supabase/gotrue:v2.196.0
+    restart: unless-stopped
+    depends_on:
+      db: { condition: service_healthy }
+    environment:
+      GOTRUE_API_HOST: 0.0.0.0
+      GOTRUE_API_PORT: "9999"
+      API_EXTERNAL_URL: ${SITE_URL:?defina SITE_URL (https://seu-host)}
+      GOTRUE_SITE_URL: ${SITE_URL}
+      GOTRUE_URI_ALLOW_LIST: ${URI_ALLOW_LIST:-}
+      GOTRUE_DB_DRIVER: postgres
+      GOTRUE_DB_DATABASE_URL: postgres://supabase_auth_admin:${POSTGRES_PASSWORD}@db:5432/postgres
+      GOTRUE_DISABLE_SIGNUP: "false"
+      GOTRUE_JWT_ADMIN_ROLES: service_role
+      GOTRUE_JWT_AUD: authenticated
+      GOTRUE_JWT_DEFAULT_GROUP_NAME: authenticated
+      GOTRUE_JWT_EXP: "3600"
+      GOTRUE_JWT_SECRET: ${JWT_SECRET}
+      GOTRUE_EXTERNAL_EMAIL_ENABLED: "true"
+      GOTRUE_EXTERNAL_ANONYMOUS_USERS_ENABLED: "false"
+      # mesmas regras do app (src/lib/validacao.ts): 8+ caracteres, com letra e número
+      GOTRUE_PASSWORD_MIN_LENGTH: "8"
+      GOTRUE_PASSWORD_REQUIRED_CHARACTERS: "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ:0123456789"
+      GOTRUE_SECURITY_REFRESH_TOKEN_ROTATION_ENABLED: "true"
+      GOTRUE_SECURITY_REFRESH_TOKEN_REUSE_INTERVAL: "10"
+      # e-mail: sem SMTP, o cadastro entra direto (autoconfirmação) e a recuperação de senha por e-mail fica indisponível
+      GOTRUE_MAILER_AUTOCONFIRM: ${MAILER_AUTOCONFIRM:-true}
+      GOTRUE_SMTP_HOST: ${SMTP_HOST:-}
+      GOTRUE_SMTP_PORT: ${SMTP_PORT:-587}
+      GOTRUE_SMTP_USER: ${SMTP_USER:-}
+      GOTRUE_SMTP_PASS: ${SMTP_PASS:-}
+      GOTRUE_SMTP_ADMIN_EMAIL: ${SMTP_ADMIN_EMAIL:-}
+      GOTRUE_SMTP_SENDER_NAME: ${SMTP_SENDER_NAME:-LembreiAi}
+      GOTRUE_RATE_LIMIT_EMAIL_SENT: ${RATE_LIMIT_EMAIL_SENT:-30}
+      GOTRUE_MAILER_OTP_LENGTH: "6"
+      GOTRUE_MAILER_OTP_EXP: "3600"
+      GOTRUE_MAILER_URLPATHS_RECOVERY: /auth/v1/verify
+      GOTRUE_MAILER_URLPATHS_CONFIRMATION: /auth/v1/verify
+      GOTRUE_MAILER_TEMPLATES_RECOVERY: http://templates/recovery.html
+      GOTRUE_MAILER_SUBJECTS_RECOVERY: Redefinir sua senha no LembreiAi
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:9999/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+    logging: *logging
+
+  rest:
+    image: public.ecr.aws/supabase/postgrest:v16.2
+    restart: unless-stopped
+    depends_on:
+      db: { condition: service_healthy }
+    environment:
+      PGRST_DB_URI: postgres://authenticator:${POSTGRES_PASSWORD}@db:5432/postgres
+      PGRST_DB_SCHEMAS: public
+      PGRST_DB_ANON_ROLE: anon
+      PGRST_JWT_SECRET: ${JWT_SECRET}
+      PGRST_DB_USE_LEGACY_GUCS: "false"
+      PGRST_DB_MAX_ROWS: "1000"
+    logging: *logging
+
+  # serve o modelo do e-mail de recuperação para o GoTrue (ele lê o modelo por HTTP)
+  templates:
+    image: nginx:1.27-alpine
+    restart: unless-stopped
+    configs:
+      - source: recovery_html
+        target: /usr/share/nginx/html/recovery.html
+    logging: *logging
+
+  # o site (build web do Expo) e o APK do Android: os arquivos ficam no volume site-data (scripts/publish-site.sh)
+  web:
+    image: nginx:1.27-alpine
+    restart: unless-stopped
+    volumes:
+      - site-data:/usr/share/nginx/html:ro
+    configs:
+      - source: nginx_web
+        target: /etc/nginx/conf.d/default.conf
+    logging: *logging
+
+  # ÚNICO serviço que o domínio do Easypanel aponta (porta 80): separa /auth/v1, /rest/v1 e o site
+  gateway:
+    image: caddy:2.10-alpine
+    restart: unless-stopped
+    depends_on: [auth, rest, web]
+    configs:
+      - source: caddyfile
+        target: /etc/caddy/Caddyfile
+    logging: *logging
+
+  # aplica o banco a cada deploy e termina (idempotente: registra o que já rodou em ops.app_migrations)
+  migrate:
+    image: public.ecr.aws/supabase/postgres:17.6.1.167
+    restart: "no"
+    depends_on:
+      db: { condition: service_healthy }
+      auth: { condition: service_healthy }
+    environment:
+      PGHOST: db
+      PGUSER: postgres
+      PGDATABASE: postgres
+      PGPASSWORD: ${POSTGRES_PASSWORD}
+    entrypoint: ["sh", "/scripts/migrate.sh"]
+    configs:
+      - source: migrate_script
+        target: /scripts/migrate.sh
+      @@MOUNTS_MIGRATIONS@@
+    logging: *logging
+
+configs:
+  init_roles:
+    content: |
+      @@INCLUDE init/roles.sql@@
+  init_jwt:
+    content: |
+      @@INCLUDE init/jwt.sql@@
+  recovery_html:
+    content: |
+      @@INCLUDE templates/recovery.html@@
+  nginx_web:
+    content: |
+      @@INCLUDE nginx-web.conf@@
+  caddyfile:
+    content: |
+      @@INCLUDE easypanel/Caddyfile@@
+  migrate_script:
+    content: |
+      @@INCLUDE easypanel/migrate.sh@@
+  @@CONFIGS_MIGRATIONS@@
+
+volumes:
+  db-data: {}
+  db-config: {}
+  site-data: {}

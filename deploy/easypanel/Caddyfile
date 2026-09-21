@@ -1,0 +1,29 @@
+# Porta de entrada INTERNA do stack no Easypanel: o Traefik do painel termina o HTTPS e entrega HTTP puro aqui.
+# O supabase-js do app chama <URL>/auth/v1/* (login) e <URL>/rest/v1/* (dados); o resto é o site.
+{
+	auto_https off
+	servers {
+		# o painel (Traefik) fica numa rede privada do Docker: confie no X-Forwarded-For dele para o GoTrue ver o IP real
+		trusted_proxies static private_ranges
+	}
+}
+
+:80 {
+	encode zstd gzip
+
+	header {
+		X-Content-Type-Options nosniff
+		Referrer-Policy strict-origin-when-cross-origin
+		-Server
+	}
+
+	handle_path /auth/v1/* {
+		reverse_proxy auth:9999
+	}
+	handle_path /rest/v1/* {
+		reverse_proxy rest:3000
+	}
+	handle {
+		reverse_proxy web:80
+	}
+}
