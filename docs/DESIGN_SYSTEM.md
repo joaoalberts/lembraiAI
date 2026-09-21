@@ -43,18 +43,18 @@ Cada tela e cada folha do app tem uma imagem em `referencias/`. O estado do Expo
 | [`01`](referencias/01-onboarding.png) | Onboarding | Feito (`Onboarding`, aba Início e primeira tela do visitante); ver 11.10 |
 | [`02`](referencias/02-entrar.png) | Entrar | Existe; falta o fundo de curvas de nível, o cartão creme flutuante, o painel de vidro "Criar conta" e o olho da senha |
 | [`03`](referencias/03-recorte-degrade-do-formulario.png) | Recorte do degradê do formulário | Amostra de cor (usada nas medições) |
-| [`04`](referencias/04-novo-lembrete-por-data-e-horario.png) | Novo lembrete, por data e horário | Existe como formulário simples de campos de texto; faltam cabeçalho em degradê, voltar e conta, cartões de modo, seletores de data e horário e a folha Repetir |
+| [`04`](referencias/04-novo-lembrete-por-data-e-horario.png) | Novo lembrete, por data e horário | Feito (`FormularioDeLembrete`); ver 11.11 |
 | [`05`](referencias/05-folha-minha-conta.png) | Folha "Minha conta" | Não existe (Sair fica em Configurações) |
-| [`06`](referencias/06-novo-lembrete-por-local.png) | Novo lembrete, por local | Sem busca nem mapa no formulário (o mapa é uma aba à parte) |
-| [`07`](referencias/07-lista-meus-lembretes.png) | Meus lembretes | Feito (11.9); o menu "⋯" só tem Excluir até o formulário saber editar |
+| [`06`](referencias/06-novo-lembrete-por-local.png) | Novo lembrete, por local | Feito (busca de endereço, mapa Leaflet e raio); ver 11.11 |
+| [`07`](referencias/07-lista-meus-lembretes.png) | Meus lembretes | Feito (11.9); o menu "⋯" tem Editar e Excluir |
 | [`08`](referencias/08-configuracoes.png) | Configurações | Existe com estrutura mais simples; faltam cabeçalho verde, cartões com ícone e "Até onde vai o monitoramento" |
-| [`09`](referencias/09-sucesso-lembrete-criado.png) | Lembrete criado | Não existe |
-| [`10`](referencias/10-confirmar-exclusao.png) | Confirmar exclusão | Feito na lista (`ConfirmSheet`); volta na tela de sucesso |
-| [`11`](referencias/11-folha-menu-do-lembrete.png) | Menu do lembrete | Feito (`ReminderMenu`); a linha Editar entra com o formulário |
-| [`12`](referencias/12-seletor-de-data.png) | Seletor de data | É o popup do navegador, não um desenho: o Expo precisa de um calendário próprio (decisão pendente) |
-| [`13`](referencias/13-folha-horario.png) | Folha Horário | Não existe (campo de texto HH:MM) |
-| [`14`](referencias/14-folha-repetir.png) | Folha Repetir | Não existe (chips de repetição) |
-| [`15`](referencias/15-novo-lembrete-por-local-repetindo.png) | Novo lembrete, por local, repetindo | Igual à `06`, com Repetir em destaque verde |
+| [`09`](referencias/09-sucesso-lembrete-criado.png) | Lembrete criado | Feito (`SucessoHeroi`, `CartaoDeResumo`); ver 11.12 |
+| [`10`](referencias/10-confirmar-exclusao.png) | Confirmar exclusão | Feito (`ConfirmSheet`), na lista e na tela de sucesso |
+| [`11`](referencias/11-folha-menu-do-lembrete.png) | Menu do lembrete | Feito (`ReminderMenu`, com Editar e Excluir) |
+| [`12`](referencias/12-seletor-de-data.png) | Seletor de data | Calendário próprio (`CalendarSheet`, 11.11): o original usa o popup do navegador, que não existe no celular |
+| [`13`](referencias/13-folha-horario.png) | Folha Horário | Feito (`TimeSheet`, duas rodas); ver 11.11 |
+| [`14`](referencias/14-folha-repetir.png) | Folha Repetir | Feito (`RepeatSheet`); ver 11.11 |
+| [`15`](referencias/15-novo-lembrete-por-local-repetindo.png) | Novo lembrete, por local, repetindo | Feito (é a `06` com Repetir em destaque); ver 11.11 |
 
 ## 3. Paleta de cores
 
@@ -683,6 +683,38 @@ As folhas do formulário (`Sheet`, seção 11.5):
 - **Horário** (`TimeSheet`, imagem `13`): duas rodas (horas de 00 a 23 e minutos de 00 a 59) de cinco números visíveis (`layout.wheelRows`), com a faixa da escolha (`colors.feedback.successBg`, contorno `colors.border.selectedBand`) atrás do número do meio, que é maior e em negrito (`fontSize.wheelOn`); os outros esmaecem para o fundo da folha (`gradients.rodaDeHorario`) e usam `colors.text.secondary` (o cinza claro da imagem não chega a 4,5:1). O número vira escolhido depois de `120` ms parado; a hora vai para o campo sem fechar a folha, os minutos fecham sozinha depois de `800` ms se ninguém mexer mais. "Pronto" (`colors.text.accent`, no canto) e o véu fecham a qualquer hora. Cada roda tem papel `adjustable`, com os gestos de aumentar e diminuir.
 - **Data** (`CalendarSheet`): o app web usa o popup do navegador (imagem `12`), que não existe no celular; o app tem calendário próprio, de seis semanas de domingo a sábado (`src/lib/calendario.ts`), com as setas para trocar de mês, o dia escolhido em `colors.control.chipOn`, o de hoje com contorno e o atalho "Hoje". Dias do mês vizinho em `colors.text.placeholder`. Escolher um dia aplica e fecha.
 
+### 11.12 Tela de sucesso do lembrete
+
+A tela da imagem `09` (rota `sucesso?id=…`, `app/(app)/sucesso.tsx`): aparece depois de criar um lembrete e lê o lembrete pelo `id`. Fica sobre a foto de folhagem `assets/art/bg-success.jpg` (`contentFit="cover"`, presa ao topo, parada; a coluna rola por cima) num canvas de `size.sucesso.canvas` de altura (1848 du): em tela mais baixa rola, e o link "Criar outro lembrete" só aparece rolando, como nas capturas. **Não é uma aba**: a barra de abas fica escondida (`tabBarStyle: { display: 'none' }`), então a tela sempre tem saída (Fechar, "Ver todos os lembretes" e, sem lembrete, um botão para a lista). Só monta com a aba em foco: as abas ficam montadas e o herói tem um pulso infinito que não deve rodar escondido; chegar de novo repete a animação. Em aparelho com entalhe tudo desce o que a barra de status passar da distância do botão de fechar (`size.sucesso.fecharTop`). As posições vêm dos vãos `size.sucesso.*` (diferença entre as posições medidas) e não de coordenadas soltas.
+
+De cima para baixo:
+
+- **Herói** (`SucessoHeroi`; geometria, cores, curvas e tempos em `src/design/heroi.ts`): o selo verde de cantos redondos (`HEROI.selo`, degradê e brilho em SVG) com o visto que se desenha, um brilho menta atrás, um anel fino, um disco com halo, duas ondas que crescem, 14 faíscas (nove círculos e cinco estrelas, em menta, branco, verde-floresta e laranja), um brilho diagonal que cruza o selo e dois pontos que cintilam para sempre. É decorativo (escondido do leitor de tela) e não recebe toque. A tabela abaixo é a linha do tempo.
+- **Fechar**: `GlassButton` com `tamanho="fechar"` (`size.sucesso.fechar`, X de `size.sucesso.fecharIcon` com traço `iconStroke.action`), no canto direito. Leva à lista. O desfoque do fundo do original não é reproduzido (ver seção 9).
+- **Título e subtítulo**: "Lembrete criado / com sucesso!" em serifa (`fontSize.sucessoTitulo` com `lineHeight.sucessoTitulo`, fora de `textStyles`: altura de linha 1,03, aceitável porque as duas linhas fixas não têm descendentes, como o título do Onboarding) e "Você será avisado na hora certa. / Pode ficar tranquilo." em `textStyles.sucessoSubtitulo` na cor `colors.text.secondary`. Entram subindo (`Subida`, 22 du). Cada um tem uma caixa de altura fixa (`size.sucesso.tituloBox`, `size.sucesso.subtituloBox`): o que vem embaixo não muda de lugar com a fonte.
+- **Cartão de resumo** (`CartaoDeResumo`): `colors.bg.card`, raio `radius.sheet`, só o anel branco por dentro (`shadow.cartaoDoSucesso`). Cabeçalho: círculo `colors.sucesso.categoria` com o ícone da categoria em pé (o haltere e o avião não giram como na lista), o título em `textStyles.heading` (largura máxima `size.sucesso.resumo.tituloMax`, quebra em quantas linhas precisar, nunca é cortado) e o selo "Ativo" (`colors.feedback.successBg`, anel `colors.sucesso.seloAnel`, ponto `colors.status.active`; só aparece com o lembrete ativo). Depois Data e Horário lado a lado (o Horário também aparece no lembrete por local: mostra o que está gravado), um divisor `colors.border.divider`, e, **só por local**, a linha do Local (endereço numa linha com reticências, "Raio de N metros" e a miniatura `thumb-sucesso.jpg`, que é a mesma imagem para qualquer lugar, como no original) com outro divisor; por fim Repetir. Cada dado tem um círculo (`colors.sucesso.dado`, anel `colors.sucesso.dadoAnel`); o nome vai em `colors.text.placeholder` e o valor em `colors.text.primary`. O cartão fica dentro de uma reserva de altura (`size.sucesso.resumo.slot`, a da variante com local): as ações ficam no mesmo lugar com e sem local.
+- **Ações** (`BotaoDeAcao`, três em partes iguais): fundo `colors.action.frost` (ponteiro em cima `frostHover`, pressionado `frostPressed` e `motion.pressedScale`), raio `size.sucesso.acao.radius`, ícone `colors.icon.onFrost`, rótulo `textStyles.micro` em `fontFamily.medium` e `colors.text.onFrost`. **Editar** abre `editar?id=`; salvando, volta ao sucesso, que continua dizendo "criado" (como no original). **Excluir** abre a folha de confirmação da lista (`ConfirmSheet`, imagem `10`); confirmar exclui e leva à lista, e a tela não mostra nada entre uma coisa e outra (senão piscaria "não existe mais"). **Compartilhar** envia o texto do lembrete (`src/lib/compartilhar.ts`); quando só deu para copiar, o rótulo vira "Copiado", e sem como copiar, "Indisponível", por `motion.duration.aviso`, e volta (o rótulo é uma região viva para o leitor de tela).
+- **Dica inteligente** (`DicaInteligente`): cartão claro com o mesmo anel branco, círculo `colors.sucesso.dica` com a lâmpada e a seta. É um botão que abre o formulário novo (a dica é sobre lembretes recorrentes); ponteiro em cima clareia para `colors.bg.field`, pressionado encolhe. Não é o `TipCard` verde da lista, que só informa.
+- **"Ver todos os lembretes"**: `Button` `secondary` (verde-floresta) com a seta, `size.sucesso.cta` de altura. **"Criar outro lembrete"** (`LinkButton`): texto cinza sem fundo, esmaece com `opacity.link` ao ser pressionado, com a área de toque completada até 44.
+- **Sem lembrete**: enquanto a lista chega (página recarregada) mostra o indicador de carga; se o lembrete não existe mais, "Esse lembrete não existe mais." e um botão para a lista.
+
+Linha do tempo do herói (segundos desde a chegada; `useMovimentoReduzido`, seção 13: com "reduzir movimento" fica o quadro final, sem ondas, faíscas nem brilho que passa, com o visto inteiro e os pontos parados; enquanto o sistema não responde, nada é desenhado):
+
+| Camada | Começa | Termina | O que faz |
+|---|---|---|---|
+| Brilho | 0 | 1,0 | aparece e cresce de 0,7 a 1 |
+| Disco | 0,05 | 0,95 | aparece e cresce de 0,55 a 1 |
+| Selo | 0,10 | 0,85 | "estouro": aparece até 0,55 s, cresce de 0,35 a 1,09 e assenta em 1, girando de -10° a 2° a 0° |
+| Anel | 0,12 | 1,12 | aparece e cresce de 0,55 a 1 |
+| Visto | 0,55 | 1,10 | traço se desenha (só esse roda no JS: o SVG não anima no driver nativo) |
+| Título | 0,6 | 1,4 | sobe 22 du e aparece |
+| Onda 1 | 0,6 | 2,2 | cresce de 0,7 a 2,15 enquanto some (antes da vez fica parada em 0,7, como o `both` do CSS) |
+| Subtítulo | 0,8 | 1,6 | igual ao título |
+| Onda 2 | 0,98 | 2,58 | igual à onda 1 |
+| Faíscas | 0,62 a 0,73 | 1,87 a 1,98 | cada uma dura 1,25 s: sai do centro, chega a 0,85 do tamanho e some |
+| Brilho do selo | 1,15 | 2,05 | faixa inclinada -18° cruza o selo da esquerda para a direita |
+| Pontos | 1,1 e 1,3 | 1,7 e 1,9 | aparecem; depois pulsam para sempre (1 a 0,35 de opacidade, ciclo de 2,8 s, a partir de 1,7 s e 2,6 s) |
+
 ## 12. Imagens e ilustrações
 
 - **A interface é código, nunca imagem de tela.** Texto, botões e cartões nunca viram PNG.
@@ -694,7 +726,7 @@ As folhas do formulário (`Sheet`, seção 11.5):
 
 ## 13. Animações e transições
 
-Filosofia: o mínimo. O feedback de toque é instantâneo (troca de cor e escala `motion.pressedScale`, sem animar); a navegação usa o padrão de cada plataforma; a folha do mapa entra em `slide`.
+Filosofia: o mínimo. O feedback de toque é instantâneo (troca de cor e escala `motion.pressedScale`, sem animar); a navegação usa o padrão de cada plataforma; a folha do mapa entra em `slide`. A exceção é a tela de sucesso, com a única animação longa do app (o herói, 2,6 s mais o pulso dos dois pontos, seção 11.12). Toda animação passa por `useMovimentoReduzido` e, com "reduzir movimento", chega pronta.
 
 <!-- tokens:movimento:inicio -->
 | Token | Valor | Uso |
@@ -705,6 +737,7 @@ Filosofia: o mínimo. O feedback de toque é instantâneo (troca de cor e escala
 | `motion.duration.scrim` | `180` | Entrada do véu atrás de uma folha (ms) |
 | `motion.duration.sheet` | `260` | Subida de uma folha inferior (ms) |
 | `motion.duration.toggle` | `180` | Troca de estado do interruptor (ms) |
+| `motion.duration.aviso` | `2000` | Quanto tempo um aviso curto ("Copiado") fica no lugar do rótulo do botão (ms) |
 | `motion.ease.x1` | `0.25` | Curva `ease` do CSS: cubic-bezier(x1, y1, x2, y2) |
 | `motion.ease.y1` | `0.1` | Curva `ease` do CSS: cubic-bezier(x1, y1, x2, y2) |
 | `motion.ease.x2` | `0.25` | Curva `ease` do CSS: cubic-bezier(x1, y1, x2, y2) |
@@ -723,6 +756,7 @@ Filosofia: o mínimo. O feedback de toque é instantâneo (troca de cor e escala
 | `opacity.disabled` | `0.45` | Controle desabilitado |
 | `opacity.inactive` | `0.55` | Cartão de lembrete pausado |
 | `opacity.pressed` | `0.85` | Toque em elementos que não trocam de cor |
+| `opacity.link` | `0.6` | Link de texto pressionado ("Criar outro lembrete") |
 <!-- tokens:opacidade:fim -->
 
 - Toda animação nova respeita "reduzir movimento" (`AccessibilityInfo.isReduceMotionEnabled()`). Hoje só existem as do sistema.
@@ -838,7 +872,7 @@ Filosofia: o mínimo. O feedback de toque é instantâneo (troca de cor e escala
 | `size.sucesso.espaco.acoes` | `15` | Sucesso: vão entre o cartão de resumo (reserva) e as ações |
 | `size.sucesso.espaco.dica` | `17` | Sucesso: vão entre as ações e a dica |
 | `size.sucesso.espaco.cta` | `21` | Sucesso: vão entre a dica e o botão escuro |
-| `size.sucesso.espaco.link` | `15` | Sucesso: vão entre o botão escuro e o link |
+| `size.sucesso.espaco.link` | `20` | Sucesso: vão entre o botão escuro e o link |
 | `size.sucesso.espaco.fim` | `78` | Sucesso: folga no fim da rolagem, abaixo do link |
 | `size.suggestions.maxHeight` | `212` | Sugestões de endereço: altura máxima da lista (o resto rola) |
 | `size.suggestions.padding` | `3` | Sugestões de endereço: recuo da lista |
@@ -1109,6 +1143,13 @@ O teste `valores-soltos.test.ts` mantém uma lista de arquivos com valores visua
 | 21/09/2026 | **Etiqueta do cartão com texto escurecido** (`colors.category.*.tagInk`); a lista, o cabeçalho verde, a marca, o botão de vidro e a busca entram como no original, com o texto no piso de 12 | Na imagem o texto da etiqueta azul dá 2,7:1 e o rosa 2,4:1 sobre o fundo da etiqueta; o `fg` escurecido só até 4,5:1 mantém a cor e cumpre o teste. O original usa texto de 9 a 10 dp nas etiquetas, nos chips e nas datas, abaixo do piso do Design System: sobe para 12 e os cartões ficam um pouco mais altos que na imagem |
 | 21/09/2026 | **Barra de abas própria** (`BarraDeAbas`) com Início, Lembretes, Mapa e Configurações; "Novo" sai da barra; `Tabs` vem de `expo-router/js-tabs` | O padrão do React Navigation não reproduz a barra das imagens (abas iguais, traço que engrossa, sombra para cima, base da área segura) e não deixa o formulário acender "Lembretes". Em `expo-router` 57 o `Tabs` da raiz do pacote está marcado como obsoleto em favor de `expo-router/js-tabs` |
 | 21/09/2026 | **Formulário de novo lembrete e de edição no mesmo componente** (`FormularioDeLembrete`; rotas `novo` e `editar?id=`), com descrição e ponto de local obrigatórios, raio de 50 a 550 m e a localização só a pedido | O original aceita descrição vazia (grava um exemplo) e "por local" sem ponto (grava Fortaleza): serve para demonstração, não para uma pessoa real; a tabela aceita 10 a 5000 m e as capturas mostram o controle de 0 a 550, e abaixo de 50 m o aviso por geofence não é confiável (o piso de 200 m de precisão já é decisão do usuário) |
+| 21/09/2026 | **Tela de sucesso** (imagem `09`): herói animado em SVG e `Animated` (dados em `src/design/heroi.ts`), cartão de resumo, três ações, dica e botão escuro; a rota não é uma aba e esconde a barra de abas | É o que a imagem mostra; a animação do original é parte do que o João chamou de "efeitos" que vieram errados |
+| 21/09/2026 | Na tela de sucesso os textos de 10 e 11 dp do original sobem ao piso de 12 dp; rótulos cinza (`#84848A`) e subtítulo (`#767880`) usam `colors.text.placeholder` e `colors.text.secondary` | O piso do app é 12; os dois cinzas do original dão menos de 4,5:1 nos fundos da tela |
+| 21/09/2026 | O título da tela de sucesso fica fora de `textStyles` (altura de linha 1,03) | É a altura do original e as duas linhas fixas não têm descendentes; o teste de tipografia exige 1,2 dentro de `textStyles` |
+| 21/09/2026 | O selo "Ativo" do cartão de resumo só aparece com o lembrete ativo | O original o mostrava sempre, mesmo pausado, o que seria dizer uma coisa falsa |
+| 21/09/2026 | "Compartilhar" envia **texto** (folha do sistema no celular; folha do navegador ou cópia na web) e responde com "Copiado" ou "Indisponível" no lugar do rótulo | O original gera uma imagem JPEG do cartão na web e não avisa nada; a imagem exige captura de tela nativa e fica como tarefa própria. Sem aviso, copiar não pareceria fazer nada |
+| 21/09/2026 | O sombreado do visto é um segundo traço deslocado e mais grosso; as ondas esperam a vez em repouso; o desfoque do botão de fechar não é reproduzido | O SVG nativo não tem `feDropShadow`; o `both` do CSS mostra o primeiro quadro antes do atraso; o desfoque some sobre a foto suave. Nenhum dos três foi comparado em aparelho |
+| 21/09/2026 | O "voltar" das abas segue o histórico (`backBehavior="history"`) | O padrão volta sempre à primeira aba: Salvar na edição caía em Início e o acesso direto a `editar` parecia ter para onde voltar |
 
 ## 19. Pendências
 
@@ -1116,7 +1157,6 @@ O teste `valores-soltos.test.ts` mantém uma lista de arquivos com valores visua
 - **Peso das fontes na web:** cada arquivo `.ttf` tem 110 KB (Nunito Sans) e 322 KB (Source Serif 4). Um subconjunto latino em `woff2` reduziria, se o carregamento incomodar.
 - **Portar as telas e folhas de `referencias/`** (tabela da seção 2.3), na ordem da tarefa `visual-original-no-expo`. A barra de abas passa a ser Início, Lembretes, Mapa e Configurações.
 - **Tokens a criar** junto com cada tela: interruptor de cartão, vidro, botão de perigo, folha, avisos, texto sobre verde e os três degradês (lista e configurações, formulário, contas). Valores exatos em `referencias/MEDICOES.md`.
-- **Calendário próprio:** o original usa o popup do navegador; o app nativo precisa de um seletor de data desenhado no padrão das folhas `13` e `14`.
 - **Leitura com VoiceOver e TalkBack** e **navegação por teclado** na web: verificar em aparelho real.
 - **Modo escuro:** fora de escopo até haver referência.
 - **Layout de tablet nativo:** não desenhado (só existe referência de celular).

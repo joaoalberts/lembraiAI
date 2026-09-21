@@ -1,6 +1,6 @@
 import { act } from '@testing-library/react-native';
 import { router } from 'expo-router';
-import { renderRouter } from 'expo-router/testing-library';
+import { renderRouter, screen } from 'expo-router/testing-library';
 import { Text } from 'react-native';
 import AppLayout from '../../app/(app)/_layout';
 
@@ -13,6 +13,7 @@ const telas = {
   '(app)/index': tela('lista'),
   '(app)/novo': tela('novo'),
   '(app)/editar': tela('editar'),
+  '(app)/sucesso': tela('sucesso'),
   '(app)/mapa': tela('mapa'),
   '(app)/config': tela('config'),
 };
@@ -47,5 +48,26 @@ describe('Navegação: o voltar das telas de formulário', () => {
   it('entrando direto pelo endereço não há para onde voltar (aí o formulário manda para a lista)', async () => {
     await abrir('/editar');
     expect(router.canGoBack()).toBe(false);
+  });
+
+  it('Editar a partir do sucesso e voltar traz o sucesso de volta (e não a primeira aba)', async () => {
+    const app = await abrir('/');
+    await ir({ pathname: '/sucesso', params: { id: 'a1' } });
+    await ir({ pathname: '/editar', params: { id: 'a1' } });
+    expect(app.getPathname()).toBe('/editar');
+    await voltar();
+    expect(app.getPathname()).toBe('/sucesso');
+  });
+});
+
+describe('Navegação: a tela de sucesso', () => {
+  it('não é uma aba: esconde a barra de abas, que volta quando se sai dela', async () => {
+    const app = await abrir('/');
+    expect(screen.getByTestId('barra-de-abas')).toBeTruthy();
+    await ir({ pathname: '/sucesso', params: { id: 'a1' } });
+    expect(app.getPathname()).toBe('/sucesso');
+    expect(screen.queryByTestId('barra-de-abas')).toBeNull();
+    await ir('/');
+    expect(screen.getByTestId('barra-de-abas')).toBeTruthy();
   });
 });

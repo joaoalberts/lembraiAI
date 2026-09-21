@@ -3,10 +3,11 @@ import { fireEvent, render, screen } from '@testing-library/react-native';
 import { StyleSheet } from 'react-native';
 import type { Reminder } from '../../data/reminders';
 import { anelDeFoco } from '../../design/foco';
-import { colors, fontFamily, motion, radius, shadow, size } from '../../design/tokens';
+import { colors, fontFamily, motion, opacity, radius, shadow, size } from '../../design/tokens';
 import { BotaoDeAcao, estiloDaAcao } from '../BotaoDeAcao';
 import { CartaoDeResumo } from '../CartaoDeResumo';
 import { DicaInteligente, estiloDaDica } from '../DicaInteligente';
+import { LinkButton, corDoLink, estiloDoLink } from '../LinkButton';
 
 const ESCONDIDO = { includeHiddenElements: true } as const;
 const plano = (estilo: unknown) => StyleSheet.flatten(estilo as never) as Record<string, unknown>;
@@ -152,5 +153,30 @@ describe('CartaoDeResumo', () => {
     expect(screen.getByText('Data')).toHaveStyle({ color: colors.text.placeholder });
     expect(screen.getByText('Seg, 21 de set de 2026')).toHaveStyle({ color: colors.text.primary, fontFamily: fontFamily.medium });
     expect(screen.getByText('Raio de 150 metros')).toHaveStyle({ color: colors.text.secondary });
+  });
+});
+
+describe('LinkButton', () => {
+  it('é um botão sem fundo, com o texto em cinza de apoio e centrado, e chama onPress', async () => {
+    const onPress = jest.fn();
+    await render(<LinkButton label="Criar outro lembrete" onPress={onPress} />);
+    await fireEvent.press(screen.getByRole('button', { name: 'Criar outro lembrete' }));
+    expect(onPress).toHaveBeenCalledTimes(1);
+    expect(screen.getByText('Criar outro lembrete')).toHaveStyle({ color: colors.text.secondary, fontFamily: fontFamily.medium, textAlign: 'center' });
+    expect(screen.getByRole('button', { name: 'Criar outro lembrete' })).toHaveStyle({ minHeight: size.sucesso.link, alignItems: 'center' });
+  });
+
+  it('a faixa é baixa, então a área de toque é completada até 44 em cima e embaixo', async () => {
+    await render(<LinkButton label="Criar outro lembrete" onPress={jest.fn()} />);
+    const { top, bottom } = screen.getByRole('button', { name: 'Criar outro lembrete' }).props.hitSlop as { top: number; bottom: number };
+    expect(size.sucesso.link + top + bottom).toBeGreaterThanOrEqual(size.touch);
+  });
+
+  it('estados: ponteiro em cima escurece o texto, pressionado esmaece o link todo, foco de teclado põe o anel', () => {
+    expect(corDoLink({ pressed: false })).toBe(colors.text.secondary);
+    expect(corDoLink({ pressed: false, hovered: true })).toBe(colors.text.primary);
+    expect(plano(estiloDoLink({ pressed: true }))).toMatchObject({ opacity: opacity.link });
+    expect(plano(estiloDoLink({ pressed: false }))).not.toHaveProperty('opacity');
+    expect(plano(estiloDoLink({ pressed: false, focused: true }))).toMatchObject(anelDeFoco);
   });
 });

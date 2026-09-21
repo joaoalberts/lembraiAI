@@ -481,7 +481,7 @@ export const size = {
     cta: du(109),
     ctaSide: du(38),
     link: du(32),
-    espaco: { acoes: du(30), dica: du(34), cta: du(41), link: du(30), fim: du(154) },
+    espaco: { acoes: du(30), dica: du(34), cta: du(41), link: du(40), fim: du(154) },
   },
   /** Sugestões da busca de endereço: altura máxima da lista, recuo das linhas e vão até o campo. */
   suggestions: { maxHeight: du(420), padding: du(6), gap: du(8) },
@@ -585,6 +585,8 @@ export const opacity = {
   disabled: 0.45,
   inactive: 0.55,
   pressed: 0.85,
+  /** Link de texto enquanto é pressionado. */
+  link: 0.6,
 } as const;
 
 /** `boxShadow` em texto CSS: aceito pelo React Native (New Architecture, SDK 57) e pela web. */
@@ -648,7 +650,7 @@ export const gradients = {
 } as const;
 
 export const motion = {
-  duration: { fast: 120, base: 200, slow: 300, scrim: 180, sheet: 260, toggle: 180 },
+  duration: { fast: 120, base: 200, slow: 300, scrim: 180, sheet: 260, toggle: 180, aviso: 2000 },
   /** `ease` do CSS (cubic-bezier(.25, .1, .25, 1)): troca de estado dos interruptores e dos botões. */
   ease: { x1: 0.25, y1: 0.1, x2: 0.25, y2: 1 },
   /** Curva de entrada das folhas: cubic-bezier(.2, .8, .2, 1) do original. */

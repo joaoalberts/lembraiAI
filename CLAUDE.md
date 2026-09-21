@@ -37,6 +37,7 @@ Um commit por mudança, `npm run typecheck && npm test` antes, tag `ponto-de-rec
 - **Modelo e linhas:** `src/lib/reminder-rows.ts` (`toRow`/`fromRow`) e `src/lib/categorize.ts` (cópia do web). Regras de senha/e-mail e tradução de erros do Supabase: `src/lib/validacao.ts` (port do web).
 - **Geofence:** `src/lib/geofence.ts`. Histerese e piso de precisão de 200 m são decisões do usuário, não "otimizar".
 - **Editar e compartilhar (decisão do João, 21/09: entram funcionando):** `update(id, rascunho)` em `src/state/reminders.tsx` (avisos e geofences se refazem sozinhos, porque dependem só da lista) e `src/lib/compartilhar.ts` (folha do sistema no celular; folha do navegador ou cópia na web). O calendário do seletor de data é próprio (`src/lib/calendario.ts`): o original usa o popup do navegador. A busca de endereço é `src/lib/geocodificar.ts` (Nominatim: gratuito, sem chave; uso leve, um pedido por vez).
+- **Tela de sucesso** (`app/(app)/sucesso.tsx`, imagem 09; Design System 11.12): herói animado em `src/components/SucessoHeroi.tsx` com os dados em `src/design/heroi.ts`; "Compartilhar" envia **texto** (o original gera uma imagem JPEG: fica como tarefa própria) e responde "Copiado"/"Indisponível" no lugar do rótulo. A rota não é aba e esconde a barra de abas.
 
 ## Armadilhas
 
@@ -44,6 +45,7 @@ Um commit por mudança, `npm run typecheck && npm test` antes, tag `ponto-de-rec
 - Rota nova? As rotas tipadas só são regeneradas por `expo start` (o `export` não). Sem isso o `tsc` recusa `router.push('/rota-nova')`: suba o dev server uma vez.
 - **Abas ficam montadas** (`app/(app)/`): a aba em segundo plano continua na árvore (na web, visível e só `aria-hidden`). Dois formulários montados juntos duplicariam campos e ids, então `novo` e `editar` só renderizam o formulário com `useIsFocused()` (`src/__tests__/novo.test.tsx`, `editar.test.tsx`).
 - **Voltar nas abas:** o padrão do `Tabs` (`backBehavior: 'firstRoute'`) leva sempre à primeira aba e faz `router.canGoBack()` mentir num acesso direto por endereço. O layout usa `backBehavior="history"`; sem isso o Salvar da edição caía em Início e o "sem histórico → lista" do formulário nunca valia (`src/__tests__/navegacao.test.tsx`).
+- **`Animated` + SVG na web:** o RN Web injeta `collapsable={false}` em todo componente animado; a `View` ignora, mas um `Path` do `react-native-svg` a repassa ao `<path>` e o React reclama no console. Envolva o `Path` num componente que descarte a prop antes de `Animated.createAnimatedComponent` (ver `SucessoHeroi.tsx`; `SucessoHeroiSvg.test.tsx` cobre). Não existe mais `StyleSheet.absoluteFillObject` no RN 0.86: use `StyleSheet.absoluteFill` numa lista de estilos.
 - Proteção de rotas: `Stack.Protected` em `app/_layout.tsx`, com `autenticado = !!session && !recuperando`. **Nunca** navegar à mão após login/logout.
   Páginas públicas estáticas (política de privacidade, exclusão de conta) entram em `ROTAS_PUBLICAS` para saírem como HTML pronto.
 - **Recuperação de senha** = código de 6 números do e-mail (`verifyOtp` com e-mail + token). O link do e-mail usa o Site URL do Supabase e abre o app web. Entre validar o código e definir a senha já
