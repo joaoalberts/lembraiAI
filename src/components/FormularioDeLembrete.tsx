@@ -286,8 +286,8 @@ const styles = StyleSheet.create({
   cartaoDaDescricao: { flexDirection: 'row', gap: space.md, alignItems: 'flex-start' },
   circulo: { width: size.form.circle, height: size.form.circle, borderRadius: radius.pill, backgroundColor: colors.bg.iconCircle, alignItems: 'center', justifyContent: 'center' },
   campoDaDescricao: { flex: 1, gap: space.xs },
-  rotulo: { ...textStyles.micro, fontFamily: fontFamily.bold, color: colors.text.primary },
-  dica: { ...textStyles.micro, color: colors.text.secondary },
+  rotulo: { ...textStyles.mini, fontFamily: fontFamily.bold, color: colors.text.primary }, // 22-23 du (11 dp)
+  dica: { ...textStyles.pico, color: colors.text.secondary }, // 18-20 du (9-10 dp)
   erro: { fontFamily: fontFamily.medium, color: colors.text.danger },
   modos: { flexDirection: 'row', gap: space.sm },
   // larguras do original: o cartão da data e horário é mais largo que o do local
