@@ -19,10 +19,14 @@ describe('cores de marca fora do código batem com os tokens', () => {
     expect(opcoes('expo-notifications').color).toBe(colors.action.primary);
   });
 
-  it('o manifesto do PWA usa o fundo de página', () => {
+  it('o manifesto do PWA usa o fundo de página na abertura e o verde da marca na faixa do topo', () => {
     const manifesto = json('public/manifest.webmanifest');
     expect(manifesto.background_color).toBe(colors.bg.page);
-    expect(manifesto.theme_color).toBe(colors.bg.page);
+    expect(manifesto.theme_color).toBe(colors.bg.stage);
+  });
+
+  it('a faixa do topo do Safari (metatag theme-color) é o verde da marca, a mesma do manifesto (o creme aparecia como tarja branca)', () => {
+    expect(ler('app/+html.tsx')).toContain('<meta name="theme-color" content={colors.bg.stage} />');
   });
 
   it('o favicon usa as cores do ícone do app', () => {
