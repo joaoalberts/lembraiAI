@@ -9,6 +9,7 @@ import { colors, fontFamily, gradients, iconStroke, layout, motion, opacity, rad
 import { formatDate } from '../lib/format';
 import { RAIO, TITULO_MAXIMO, estadoInicial, rascunhoDe, validar, type EstadoDoFormulario, type Modo } from '../lib/formulario';
 import { nomeDoPonto, type Lugar } from '../lib/geocodificar';
+import { useAlturaDoTeclado } from '../lib/teclado';
 import { useGeo } from '../state/geo';
 import { useReminders } from '../state/reminders';
 import { Banner } from './Banner';
@@ -55,6 +56,10 @@ export function FormularioDeLembrete({ lembrete }: FormularioProps) {
   const { create, update } = useReminders();
   const { position, getCurrentPosition } = useGeo();
   const { top } = useSafeAreaInsets();
+  const teclado = useAlturaDoTeclado();
+  const rolagem = useRef<ScrollView>(null);
+  const yDoLocal = useRef(0);
+  const [buscando, setBuscando] = useState(false);
   const [estado, setEstado] = useState<EstadoDoFormulario>(() => estadoInicial(lembrete));
   const [folha, setFolha] = useState<'data' | 'horario' | 'repetir' | 'conta' | null>(null);
   const [erroDaDescricao, setErroDaDescricao] = useState<string | null>(null);
@@ -109,6 +114,13 @@ export function FormularioDeLembrete({ lembrete }: FormularioProps) {
     setEnquadrar((n) => n + 1);
   };
 
+  // A lista de sugestões nasce debaixo do campo de busca, justamente onde o teclado fica: com a busca em foco e o teclado aberto
+  // o formulário rola até o cartão do Local ficar no alto da área visível (abaixo da barra de status)
+  useEffect(() => {
+    if (!buscando || teclado === 0) return;
+    rolagem.current?.scrollTo({ y: Math.max(0, yDoLocal.current - top - space.md), animated: true });
+  }, [buscando, teclado, top]);
+
   const salvar = async () => {
     const problema = validar(estado);
     setErroDaDescricao(problema?.campo === 'title' ? problema.mensagem : null);
@@ -126,7 +138,7 @@ export function FormularioDeLembrete({ lembrete }: FormularioProps) {
 
   return (
     <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : undefined} style={styles.tela}>
-      <ScrollView style={styles.rolagem} contentContainerStyle={[styles.conteudo, { paddingTop: size.form.navTop + descido }]} keyboardShouldPersistTaps="handled">
+      <ScrollView ref={rolagem} style={styles.rolagem} contentContainerStyle={[styles.conteudo, { paddingTop: size.form.navTop + descido }]} keyboardShouldPersistTaps="handled">
         <CabecalhoClaro extra={descido} />
 
         <View style={styles.navegacao}>
@@ -194,7 +206,7 @@ export function FormularioDeLembrete({ lembrete }: FormularioProps) {
           />
         </FormCard>
 
-        <FormCard style={styles.cartaoDoLocal}>
+        <FormCard style={styles.cartaoDoLocal} testID="cartao-do-local" onLayout={(e) => { yDoLocal.current = e.nativeEvent.layout.y; }}>
           <View style={styles.cabecalhoDoLocal}>
             <View style={styles.circuloDoLocal} accessibilityElementsHidden importantForAccessibility="no-hide-descendants">
               <PinSolid width={size.icon.sm - space.xs} height={size.icon.md - space.hair} fill={colors.icon.default} />
@@ -207,7 +219,7 @@ export function FormularioDeLembrete({ lembrete }: FormularioProps) {
 
           {local && (
             <View style={styles.local}>
-              <PlaceSearch value={estado.place} onChangeText={(place) => mudar({ place })} onPick={escolherLugar} />
+              <PlaceSearch value={estado.place} onChangeText={(place) => mudar({ place })} onPick={escolherLugar} aoFocar={() => setBuscando(true)} aoSair={() => setBuscando(false)} />
               <View style={styles.mapa}>
                 <MapaDeEscolha
                   escolha={estado.coord ? { ...estado.coord, raio: estado.radius } : null}

@@ -1,8 +1,8 @@
 import '@testing-library/react-native/matchers';
 import { act, fireEvent, render, screen } from '@testing-library/react-native';
 import { router } from 'expo-router';
-import { StyleSheet } from 'react-native';
-import { colors, fontFamily, layout } from '../../design/tokens';
+import { Keyboard, ScrollView, StyleSheet } from 'react-native';
+import { colors, fontFamily, layout, space } from '../../design/tokens';
 import type { Reminder } from '../../data/reminders';
 import { nomeDoPonto } from '../../lib/geocodificar';
 import { comAreaSegura } from '../../test-utils/area-segura';
@@ -343,3 +343,71 @@ describe('Formulário: editar', () => {
     expect(router.back).not.toHaveBeenCalled();
   });
 });
+
+describe('Formulário: a busca de endereço com o teclado aberto', () => {
+  /** O sistema avisa a altura do teclado pelos eventos do `Keyboard` (no iOS, "Will"); o teste os "digita". */
+  const ouvintes = new Map<string, (e: unknown) => void>();
+  const abrirTeclado = (altura = 336) => act(async () => { ouvintes.get('keyboardWillShow')?.({ endCoordinates: { screenX: 0, screenY: 0, width: 390, height: altura } }); });
+  const rolar = () => jest.mocked(ScrollView.prototype.scrollTo);
+  const TOPO = 47; // a barra de status do aparelho
+
+  beforeEach(() => {
+    ouvintes.clear();
+    jest.spyOn(Keyboard, 'addListener').mockImplementation(((evento: string, ouvinte: (e: unknown) => void) => { ouvintes.set(evento, ouvinte); return { remove: jest.fn() }; }) as never);
+  });
+  afterEach(() => { jest.restoreAllMocks(); });
+
+  /** Abre o formulário por local, com o cartão do Local medido a `yDoCartao` do topo do conteúdo. */
+  const prepararLocal = async (yDoCartao: number) => {
+    await render(comAreaSegura(<FormularioDeLembrete />, { top: TOPO }));
+    await fireEvent.press(screen.getByRole('radio', { name: 'Por local' }));
+    await fireEvent(screen.getByTestId('cartao-do-local'), 'layout', { nativeEvent: { layout: { x: 0, y: yDoCartao, width: 390, height: 500 } } });
+  };
+  const focarNaBusca = () => fireEvent(screen.getByLabelText('Endereço do lembrete'), 'focus');
+
+  it('com o foco na busca e o teclado aberto rola até o cartão do Local ficar no alto da área visível: a lista de sugestões nasce debaixo do campo, onde o teclado fica', async () => {
+    await prepararLocal(900);
+    await focarNaBusca();
+    await abrirTeclado();
+    expect(rolar()).toHaveBeenLastCalledWith({ y: 900 - TOPO - space.md, animated: true });
+  });
+
+  it('se o teclado já estava aberto (digitando a descrição) e a pessoa toca na busca, também rola', async () => {
+    await prepararLocal(900);
+    await abrirTeclado();
+    expect(rolar()).not.toHaveBeenCalled();
+    await focarNaBusca();
+    expect(rolar()).toHaveBeenLastCalledWith({ y: 900 - TOPO - space.md, animated: true });
+  });
+
+  it('sem teclado aberto (a busca só ganhou o foco) não rola', async () => {
+    await prepararLocal(900);
+    await focarNaBusca();
+    expect(rolar()).not.toHaveBeenCalled();
+  });
+
+  it('com o teclado aberto mas o foco na descrição, não rola até o Local', async () => {
+    await prepararLocal(900);
+    await fireEvent(screen.getByLabelText('Descrição'), 'focus');
+    await abrirTeclado();
+    expect(rolar()).not.toHaveBeenCalled();
+  });
+
+  it('ao sair da busca deixa de rolar, mesmo que o teclado mude de altura', async () => {
+    await prepararLocal(900);
+    await focarNaBusca();
+    await abrirTeclado(300);
+    expect(rolar()).toHaveBeenCalledTimes(1);
+    await fireEvent(screen.getByLabelText('Endereço do lembrete'), 'blur');
+    await abrirTeclado(336);
+    expect(rolar()).toHaveBeenCalledTimes(1);
+  });
+
+  it('a posição nunca fica negativa (cartão perto do topo)', async () => {
+    await prepararLocal(20);
+    await focarNaBusca();
+    await abrirTeclado();
+    expect(rolar()).toHaveBeenLastCalledWith({ y: 0, animated: true });
+  });
+});
+

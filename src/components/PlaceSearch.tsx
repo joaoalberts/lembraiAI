@@ -15,6 +15,9 @@ interface PlaceSearchProps {
   /** Cada letra digitada. Só a digitação da pessoa dispara a busca: preencher o campo por fora (o mapa) não. */
   onChangeText: (texto: string) => void;
   onPick: (lugar: Lugar) => void;
+  /** A pessoa entrou no campo e saiu dele (o formulário rola até aqui com o teclado aberto). */
+  aoFocar?: () => void;
+  aoSair?: () => void;
   /** Só para os testes. */
   buscar?: typeof buscarLugares;
 }
@@ -24,7 +27,7 @@ interface PlaceSearchProps {
  * Só busca com 3 letras ou mais, 650 ms depois da última, e cancela o pedido anterior. Sem resultado não mostra nada;
  * com falha diz "Não foi possível buscar agora." Padrão: docs/DESIGN_SYSTEM.md, seção 11.11.
  */
-export function PlaceSearch({ value, onChangeText, onPick, buscar = buscarLugares }: PlaceSearchProps) {
+export function PlaceSearch({ value, onChangeText, onPick, aoFocar, aoSair, buscar = buscarLugares }: PlaceSearchProps) {
   const [itens, setItens] = useState<Lugar[]>([]);
   const [falhou, setFalhou] = useState(false);
   const [ocupado, setOcupado] = useState(false);
@@ -76,8 +79,8 @@ export function PlaceSearch({ value, onChangeText, onPick, buscar = buscarLugare
         <TextInput
           value={value}
           onChangeText={aoDigitar}
-          onFocus={() => { clearTimeout(fecha.current); if (itens.length > 0 || falhou) setAberta(true); }}
-          onBlur={() => { fecha.current = setTimeout(() => setAberta(false), ESPERA_PARA_FECHAR); }}
+          onFocus={() => { clearTimeout(fecha.current); if (itens.length > 0 || falhou) setAberta(true); aoFocar?.(); }}
+          onBlur={() => { fecha.current = setTimeout(() => setAberta(false), ESPERA_PARA_FECHAR); aoSair?.(); }}
           placeholder="Buscar endereço, lugar ou toque no mapa"
           placeholderTextColor={colors.text.placeholder}
           accessibilityLabel="Endereço do lembrete"
