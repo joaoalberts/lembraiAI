@@ -364,7 +364,10 @@ Use `...textStyles.estilo` e só troque cor (`colors.text.*`) ou família (`font
 | `textStyles.label` | 14 | 20 | `NunitoSans_600SemiBold` | Rótulo de campo e de linha |
 | `textStyles.button` | 16 | 20 | `NunitoSans_700Bold` | Rótulo de botão |
 | `textStyles.caption` | 13 | 18 | `NunitoSans_400Regular` | Dica, metadado e mensagem de campo |
-| `textStyles.micro` | 12 | 16 | `NunitoSans_400Regular` | Legenda mínima |
+| `textStyles.pico` | 9 | 12 | `NunitoSans_400Regular` | Rótulo da aba, chip, etiqueta e meta do cartão (9 dp, como no original) |
+| `textStyles.nano` | 10 | 14 | `NunitoSans_400Regular` | Rótulo do resumo, nota e etiqueta de campo (10 dp, como no original) |
+| `textStyles.mini` | 11 | 15 | `NunitoSans_400Regular` | Ajuda, aviso e ação pequena (11 dp, como no original) |
+| `textStyles.micro` | 12 | 16 | `NunitoSans_400Regular` | Legenda de 12 dp |
 | `textStyles.sucessoSubtitulo` | 15 | 21 | `NunitoSans_400Regular` | Subtítulo da tela de sucesso, em duas linhas |
 <!-- tokens:tipografia-estilos:fim -->
 
@@ -373,7 +376,10 @@ Use `...textStyles.estilo` e só troque cor (`colors.text.*`) ou família (`font
 <!-- tokens:tipografia-escala:inicio -->
 | Token | Valor | Uso |
 |---|---|---|
-| `fontSize.micro` | `12` | Tags e legendas: o piso de legibilidade do app |
+| `fontSize.pico` | `9` | Rótulos das abas, chips, etiquetas e meta do cartão (9 dp: o menor texto do original) |
+| `fontSize.nano` | `10` | Etiquetas de campo, rótulos do resumo e notas (10 dp, como no original) |
+| `fontSize.mini` | `11` | Ajudas, avisos e ações pequenas (11 dp, como no original) |
+| `fontSize.micro` | `12` | Legendas e rótulos de 12 dp |
 | `fontSize.caption` | `13` | Dicas, metadados e mensagens de campo |
 | `fontSize.body` | `14` | Texto corrente e rótulos |
 | `fontSize.bodyLg` | `16` | Texto de leitura, campos e botões |
@@ -388,6 +394,9 @@ Use `...textStyles.estilo` e só troque cor (`colors.text.*`) ou família (`font
 | `fontSize.sucessoSubtitulo` | `15` | Subtítulo da tela de sucesso (29 du no original) |
 | `fontSize.contaTitulo` | `23` | Título do cartão das telas de conta (46 du no original) |
 | `fontSize.contaMarca` | `16` | Nome da marca no alto das telas de conta (32 du no original) |
+| `lineHeight.pico` | `12` | Altura de linha do tamanho de mesmo nome |
+| `lineHeight.nano` | `14` | Altura de linha do tamanho de mesmo nome |
+| `lineHeight.mini` | `15` | Altura de linha do tamanho de mesmo nome |
 | `lineHeight.micro` | `16` | Altura de linha do tamanho de mesmo nome |
 | `lineHeight.caption` | `18` | Altura de linha do tamanho de mesmo nome |
 | `lineHeight.body` | `20` | Altura de linha do tamanho de mesmo nome |
@@ -407,7 +416,7 @@ Use `...textStyles.estilo` e só troque cor (`colors.text.*`) ou família (`font
 
 ### 4.4 Regras
 
-- **Piso de 12.** O app web escalava tudo pela largura da tela e chegou a 6 px, ilegível. Aqui o tamanho é fixo e respeita o tamanho de fonte do sistema (não desligue `allowFontScaling`).
+- **Piso de 9 (decisão do João, 21/09).** O app segue o original nos textos pequenos, até 9 dp: `fontSize.pico` (9), `nano` (10) e `mini` (11), com o `micro` (12) acima. O que o original tem abaixo disso (o painel do mapa, a 6 dp: o app web escalava tudo pela largura da tela e chegou a 6 px, ilegível) sobe para 9. O piso anterior era 12, recomendado e não aceito. O tamanho é fixo e respeita o tamanho de fonte do sistema (não desligue `allowFontScaling`).
 - **Altura de linha de pelo menos 1,2 vez o tamanho**, para não cortar acentos.
 - **Quatro pesos de sans (400, 500, 600 e 700) e um de serifa (700).** Título de tela em serifa; botão em sans 700; corpo em 400. Peso novo é arquivo novo em `src/design/fonts.ts`, token novo e teste.
 - **Sem caixa alta contínua** e sem sublinhado, salvo em link.
@@ -1325,6 +1334,8 @@ O teste `valores-soltos.test.ts` mantém uma lista de arquivos com valores visua
 | 21/09/2026 | **A pergunta da barra de vidro das contas ocupa o espaço que sobra** (`flex: 1`, em vez de só `flexShrink: 1`) | Visto no emulador Android (API 36, 411 dp): no cadastro "Já tem conta?" saía "Já tem". A caixa do texto tinha 192 px e o texto tem cerca de 189,5 (Nunito Sans a 12 dp), então devia caber, mas o Android quebrava a última palavra e a escondia (a caixa só tem uma linha). Com o texto ocupando o espaço da linha a quebra não acontece; o visual é o mesmo (texto à esquerda, pastilha à direita) |
 
 | 21/09/2026 | **"Voltar" das contas e "Fechar" do sucesso com o respiro abaixo da barra de status, para o alvo de toque completo** (`respiroDoToque`: 4 e 3; a tela desce essa diferença) | Decisão do João ("alvo completo"). Medido no emulador Android: o sistema fica com todo toque dentro da barra de status, e os dois botões encostavam nela, então perdiam a folga de cima e ficavam com 44 × 40. Custo: as telas de conta descem 4 dp no celular e o sucesso 3 dp nos aparelhos de barra alta, em relação à imagem; na web nada muda |
+
+| 21/09/2026 | **Piso de tamanho de texto de 12 para 9 dp** (`fontSize.pico` 9, `nano` 10 e `mini` 11 abaixo do `micro` 12); cada tela adota os degraus nos commits seguintes | Decisão do João ("seguir o original, até 9 dp"): recomendei manter o piso de 12 e ele preferiu a fidelidade às imagens, que têm textos de 9 a 11 dp nas abas, nos chips, nas etiquetas, nas notas e nos rótulos do resumo. Só o painel do mapa (6 dp no original) sobe para 9. Revoga as linhas "texto no piso de 12" deste registro |
 
 ## 19. Pendências
 

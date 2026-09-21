@@ -72,8 +72,13 @@ describe('espaçamento e formas', () => {
 });
 
 describe('tipografia', () => {
-  it('nenhum texto tem menos de 12 (piso de legibilidade; o app web chegou a 6 px e ficou ilegível)', () => {
-    expect(Math.min(...Object.values(fontSize))).toBeGreaterThanOrEqual(12);
+  it('nenhum texto tem menos de 9 (piso do João, 21/09: seguir o original até 9 dp; o app web chegou a 6 px e ficou ilegível)', () => {
+    expect(Math.min(...Object.values(fontSize))).toBeGreaterThanOrEqual(9);
+  });
+
+  it('os textos pequenos do original têm degraus de 9, 10 e 11 abaixo do 12', () => {
+    expect([fontSize.pico, fontSize.nano, fontSize.mini, fontSize.micro]).toEqual([9, 10, 11, 12]);
+    expect([textStyles.pico.fontSize, textStyles.nano.fontSize, textStyles.mini.fontSize]).toEqual([9, 10, 11]);
   });
 
   it('a altura de linha nunca é menor que 1,2 vezes o tamanho, senão acentos e descendentes se cortam', () => {

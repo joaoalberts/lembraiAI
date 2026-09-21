@@ -307,6 +307,13 @@ export const colors = {
 } as const;
 
 export const fontSize = {
+  /**
+   * Os textos pequenos do original (`dp = du × 430 / 851`), que o app já subiu para 12. Decisão do João (21/09): seguir o original até 9 dp.
+   * 9 = rótulos das abas, chips, etiquetas e a meta do cartão; 10 = etiquetas de campo e notas; 11 = ajudas, avisos e ações.
+   */
+  pico: 9,
+  nano: 10,
+  mini: 11,
   micro: 12,
   caption: 13,
   body: 14,
@@ -329,6 +336,9 @@ export const fontSize = {
 } as const;
 
 export const lineHeight = {
+  pico: 12,
+  nano: 14,
+  mini: 15,
   micro: 16,
   caption: 18,
   body: 20,
@@ -379,6 +389,9 @@ export const textStyles = {
   label: { fontFamily: fontFamily.semibold, fontSize: fontSize.body, lineHeight: lineHeight.body },
   button: { fontFamily: fontFamily.bold, fontSize: fontSize.bodyLg, lineHeight: lineHeight.body },
   caption: { fontFamily: fontFamily.regular, fontSize: fontSize.caption, lineHeight: lineHeight.caption },
+  pico: { fontFamily: fontFamily.regular, fontSize: fontSize.pico, lineHeight: lineHeight.pico },
+  nano: { fontFamily: fontFamily.regular, fontSize: fontSize.nano, lineHeight: lineHeight.nano },
+  mini: { fontFamily: fontFamily.regular, fontSize: fontSize.mini, lineHeight: lineHeight.mini },
   micro: { fontFamily: fontFamily.regular, fontSize: fontSize.micro, lineHeight: lineHeight.micro },
   sucessoSubtitulo: { fontFamily: fontFamily.regular, fontSize: fontSize.sucessoSubtitulo, lineHeight: lineHeight.sucessoSubtitulo },
 } as const;

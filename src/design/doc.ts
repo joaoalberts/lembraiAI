@@ -248,7 +248,10 @@ const DESCRICOES: Record<string, string> = {
   'gradients.cabecalhoClaro': 'Cabeçalho claro do formulário de novo lembrete',
   'gradients.esmaecerParaPagina': 'Esmaecimento atrás do botão fixo do formulário',
 
-  'fontSize.micro': 'Tags e legendas: o piso de legibilidade do app',
+  'fontSize.pico': 'Rótulos das abas, chips, etiquetas e meta do cartão (9 dp: o menor texto do original)',
+  'fontSize.nano': 'Etiquetas de campo, rótulos do resumo e notas (10 dp, como no original)',
+  'fontSize.mini': 'Ajudas, avisos e ações pequenas (11 dp, como no original)',
+  'fontSize.micro': 'Legendas e rótulos de 12 dp',
   'fontSize.caption': 'Dicas, metadados e mensagens de campo',
   'fontSize.body': 'Texto corrente e rótulos',
   'fontSize.bodyLg': 'Texto de leitura, campos e botões',
@@ -270,7 +273,10 @@ const DESCRICOES: Record<string, string> = {
   'textStyles.label': 'Rótulo de campo e de linha',
   'textStyles.button': 'Rótulo de botão',
   'textStyles.caption': 'Dica, metadado e mensagem de campo',
-  'textStyles.micro': 'Legenda mínima',
+  'textStyles.pico': 'Rótulo da aba, chip, etiqueta e meta do cartão (9 dp, como no original)',
+  'textStyles.nano': 'Rótulo do resumo, nota e etiqueta de campo (10 dp, como no original)',
+  'textStyles.mini': 'Ajuda, aviso e ação pequena (11 dp, como no original)',
+  'textStyles.micro': 'Legenda de 12 dp',
 
   'space.hair': 'Ajuste fino, como título e metadado do cartão',
   'space.xs': 'Espaço mínimo entre textos',
