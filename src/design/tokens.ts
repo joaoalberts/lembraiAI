@@ -490,6 +490,27 @@ export const size = {
    * rótulo e a caixa, distância do campo de cima, o botão do olho da senha e o ícone dele, e a mensagem de erro ou ajuda.
    */
   campo: { height: du(92), padding: du(26), gap: du(10), top: du(26), eye: du(76), eyeIcon: du(32), mensagemGap: du(8), mensagemIcon: du(24) },
+  /**
+   * Configurações (imagem 08; medidas do app web em du): a rolagem (recuos e vão entre cartões) e os cartões (recuo, vão interno,
+   * cabeçalho com o círculo do ícone), as linhas de dados e a lista de limites.
+   */
+  config: {
+    scrollTop: du(30),
+    scrollSide: du(37),
+    scrollBottom: du(40),
+    cardsGap: du(22),
+    cardV: du(28),
+    cardH: du(30),
+    cardGap: du(20),
+    headGap: du(24),
+    circle: du(86),
+    icon: du(40),
+    textGap: du(5),
+    rowsGap: du(12),
+    rowGap: du(20),
+    listIndent: du(26),
+    listGap: du(10),
+  },
   /** Sugestões da busca de endereço: altura máxima da lista, recuo das linhas e vão até o campo. */
   suggestions: { maxHeight: du(420), padding: du(6), gap: du(8) },
   /** Lista "Meus lembretes": chips, cabeçalhos de seção e vãos entre cartões e seções (medidas do app web em du). */
@@ -660,7 +681,7 @@ export const gradients = {
 } as const;
 
 export const motion = {
-  duration: { fast: 120, base: 200, slow: 300, scrim: 180, sheet: 260, toggle: 180, aviso: 2000 },
+  duration: { fast: 120, base: 200, slow: 300, scrim: 180, sheet: 260, toggle: 180, aviso: 2000, relogio: 15000 },
   /** `ease` do CSS (cubic-bezier(.25, .1, .25, 1)): troca de estado dos interruptores e dos botões. */
   ease: { x1: 0.25, y1: 0.1, x2: 0.25, y2: 1 },
   /** Curva de entrada das folhas: cubic-bezier(.2, .8, .2, 1) do original. */

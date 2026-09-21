@@ -8,7 +8,7 @@ import { Chip } from '../../src/components/Chip';
 import { ConfirmSheet } from '../../src/components/ConfirmSheet';
 import { ContaSheet } from '../../src/components/ContaSheet';
 import { GlassButton } from '../../src/components/GlassButton';
-import { GreenHeader } from '../../src/components/GreenHeader';
+import { GreenHeader, folhaSobreOCabecalho } from '../../src/components/GreenHeader';
 import { ReminderCard } from '../../src/components/ReminderCard';
 import { ReminderMenu } from '../../src/components/ReminderMenu';
 import { SearchField } from '../../src/components/SearchField';
@@ -166,7 +166,7 @@ const styles = StyleSheet.create({
   titulo: { ...textStyles.display, color: colors.text.onDarkWarm },
   subtitulo: { ...textStyles.body, color: colors.text.onHeader },
   // a folha clara sobe sobre a parte de baixo do cabeçalho
-  folha: { flex: 1, marginTop: -(size.header.height - size.header.sheetTop), borderTopLeftRadius: radius.sheet, borderTopRightRadius: radius.sheet, overflow: 'hidden', backgroundColor: colors.bg.sheet },
+  folha: folhaSobreOCabecalho,
   chipsRolagem: { flexGrow: 0, paddingTop: size.list.chipsTop },
   chips: { flexGrow: 1, gap: size.list.chipsGap, paddingHorizontal: size.header.side },
   chip: { flexGrow: 1 },

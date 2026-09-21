@@ -25,7 +25,7 @@ export default function AppLayout() {
       <Tabs.Screen name="editar" options={{ title: 'Editar lembrete', headerShown: false }} />
       <Tabs.Screen name="sucesso" options={{ title: 'Lembrete criado', headerShown: false, tabBarStyle: { display: 'none' } }} />
       <Tabs.Screen name="mapa" options={{ title: 'Mapa', headerTitle: 'Mapa' }} />
-      <Tabs.Screen name="config" options={{ title: 'Configurações', headerTitle: 'Configurações' }} />
+      <Tabs.Screen name="config" options={{ title: 'Configurações', headerShown: false }} />
     </Tabs>
   );
 }

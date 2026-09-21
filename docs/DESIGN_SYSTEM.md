@@ -47,7 +47,7 @@ Cada tela e cada folha do app tem uma imagem em `referencias/`. O estado do Expo
 | [`05`](referencias/05-folha-minha-conta.png) | Folha "Minha conta" | Feito (`ContaSheet`, na lista e no formulário); ver 11.13 |
 | [`06`](referencias/06-novo-lembrete-por-local.png) | Novo lembrete, por local | Feito (busca de endereço, mapa Leaflet e raio); ver 11.11 |
 | [`07`](referencias/07-lista-meus-lembretes.png) | Meus lembretes | Feito (11.9); o menu "⋯" tem Editar e Excluir |
-| [`08`](referencias/08-configuracoes.png) | Configurações | Existe com estrutura mais simples; faltam cabeçalho verde, cartões com ícone e "Até onde vai o monitoramento" |
+| [`08`](referencias/08-configuracoes.png) | Configurações | Feito (`CartaoDeConfig`, cabeçalho verde); ver 11.14; sem o cartão "Instalar o app" (é do app web instalável) |
 | [`09`](referencias/09-sucesso-lembrete-criado.png) | Lembrete criado | Feito (`SucessoHeroi`, `CartaoDeResumo`); ver 11.12 |
 | [`10`](referencias/10-confirmar-exclusao.png) | Confirmar exclusão | Feito (`ConfirmSheet`), na lista e na tela de sucesso |
 | [`11`](referencias/11-folha-menu-do-lembrete.png) | Menu do lembrete | Feito (`ReminderMenu`, com Editar e Excluir) |
@@ -729,6 +729,20 @@ A folha da imagem `05` (`src/components/ContaSheet.tsx`), aberta pelo botão red
 - **Alterar senha:** "Confirme a senha atual e escolha a nova." Três `TextField` de senha (Senha atual, Nova senha com a dica "Pelo menos 8 caracteres, com letras e números.", Confirmar nova senha). Ao salvar, valida na ordem e mostra todos os avisos de uma vez, cada um no seu campo ("Informe sua senha atual.", a regra de `validarSenha` e "Repita a senha." ou "As senhas não são iguais."); digitar num campo apaga só o aviso dele. Com tudo certo chama `trocarSenha` (que confere a atual com um login); se o servidor recusar ("Senha atual incorreta.", sessão expirada, senha fraca, falta de rede), o aviso `error` com ícone aparece no topo e os campos ficam como estão. Enquanto salva, o botão diz "Salvando…", não aceita outro toque e os campos travam. "Voltar" volta ao menu e apaga o aviso do servidor.
 - **Senha alterada:** título "Senha alterada", subtítulo "Use a nova senha da próxima vez que entrar.", o aviso `success` com ícone ("Pronto, sua senha foi trocada.") e o botão escuro "Fechar".
 
+### 11.14 Configurações
+
+A tela da imagem `08` (`app/(app)/config.tsx`, aba Configurações): o cabeçalho verde da lista (`GreenHeader`, com a marca, "Configurações" em `textStyles.display` e "Permissões e monitoramento." em `colors.text.onHeader`) e, por cima dele, a folha clara de cantos altos (`folhaSobreOCabecalho`, a mesma da lista) com os cartões, um por assunto, a `size.config.cardsGap` uns dos outros. Não usa o cabeçalho do React Navigation.
+
+O cartão (`CartaoDeConfig`, em `src/components/CartaoDeConfig.tsx`): `colors.bg.card`, raio `radius.form`, `shadow.formCard`, recuo `size.config.cardV` por `size.config.cardH`. Cabeçalho com o círculo do ícone (`size.config.circle`, `colors.bg.iconCircle`), o ícone em cinza `colors.icon.muted` (como na captura), o título em negrito (é um cabeçalho para o leitor de tela), o subtítulo em `colors.text.secondary` e, à direita, a ação: o botão escuro compacto (`Button` `compact` `secondary`) ou o interruptor (`Toggle` `form`). Abaixo, avisos (`Banner` com ícone) e linhas de dados (`DadoDoCartao`: nome em cinza e valor em negrito à direita). O cartão de excluir conta é o único de perigo (`colors.feedback.dangerWash`, contorno `colors.border.dangerSoft`, título vermelho).
+
+Os cartões, na ordem:
+
+- **Conta:** o nome do perfil (ou "Minha conta"), o e-mail e o botão **Sair** (trava enquanto a conta está sendo excluída).
+- **Lembretes por local:** o interruptor "Monitorar lembretes por local" liga e desliga a vigia. Aviso vermelho se a localização deu erro. Linhas: Permissão de localização ("permitida" ou "não permitida"), Lembretes monitorados, Dentro do raio agora e Mais próximo ("título · N m") só monitorando, Última posição ("há 30s", "há 2 min" ou "nunca", atualizada a cada `motion.duration.relogio`; "—" desligado) e Precisão do sinal ("± N m"; "—" desligado). Aviso informativo "Último aviso: título (há 5 min)." quando houve chegada.
+- **Notificações:** "Estado: permitida." ou "não permitida." (com o aviso vermelho de como liberar) e quantos avisos por horário estão agendados; na web, "Não estão disponíveis na versão web." e nada mais.
+- **Até onde vai o monitoramento:** três itens, com o começo em negrito: app aberto, aberto e minimizado, fechado.
+- **Últimas chegadas** (só com chegadas; até cinco, com a hora e o lugar), **Política de privacidade** (botão "Abrir") e **Excluir conta** (confirmação, "Excluindo..." e o erro do servidor): o que as lojas exigem e o original web não tem.
+
 ## 12. Imagens e ilustrações
 
 - **A interface é código, nunca imagem de tela.** Texto, botões e cartões nunca viram PNG.
@@ -752,6 +766,7 @@ Filosofia: o mínimo. O feedback de toque é instantâneo (troca de cor e escala
 | `motion.duration.sheet` | `260` | Subida de uma folha inferior (ms) |
 | `motion.duration.toggle` | `180` | Troca de estado do interruptor (ms) |
 | `motion.duration.aviso` | `2000` | Quanto tempo um aviso curto ("Copiado") fica no lugar do rótulo do botão (ms) |
+| `motion.duration.relogio` | `15000` | De quanto em quanto tempo as Configurações atualizam o "há N s" da última posição (ms) |
 | `motion.ease.x1` | `0.25` | Curva `ease` do CSS: cubic-bezier(x1, y1, x2, y2) |
 | `motion.ease.y1` | `0.1` | Curva `ease` do CSS: cubic-bezier(x1, y1, x2, y2) |
 | `motion.ease.x2` | `0.25` | Curva `ease` do CSS: cubic-bezier(x1, y1, x2, y2) |
@@ -896,6 +911,21 @@ Filosofia: o mínimo. O feedback de toque é instantâneo (troca de cor e escala
 | `size.campo.eyeIcon` | `16` | Campo de senha: ícone do olho |
 | `size.campo.mensagemGap` | `4` | Campo de texto: vão entre o ícone e o texto da mensagem de erro |
 | `size.campo.mensagemIcon` | `12` | Campo de texto: ícone de alerta da mensagem de erro |
+| `size.config.scrollTop` | `15` | Configurações: distância do primeiro cartão até o topo da folha clara |
+| `size.config.scrollSide` | `19` | Configurações: recuo dos cartões até as bordas da tela |
+| `size.config.scrollBottom` | `20` | Configurações: folga no fim da rolagem, abaixo do último cartão |
+| `size.config.cardsGap` | `11` | Configurações: vão entre os cartões |
+| `size.config.cardV` | `14` | Configurações: recuo de cima e de baixo dentro do cartão |
+| `size.config.cardH` | `15` | Configurações: recuo dos lados dentro do cartão |
+| `size.config.cardGap` | `10` | Configurações: vão entre o cabeçalho do cartão, os avisos e as linhas |
+| `size.config.headGap` | `12` | Configurações: vão entre o círculo, o texto e a ação do cabeçalho do cartão |
+| `size.config.circle` | `43` | Configurações: círculo do ícone do cartão |
+| `size.config.icon` | `20` | Configurações: ícone dentro do círculo do cartão |
+| `size.config.textGap` | `3` | Configurações: vão entre o título e o subtítulo do cartão |
+| `size.config.rowsGap` | `6` | Configurações: vão entre as linhas de dados |
+| `size.config.rowGap` | `10` | Configurações: vão entre o nome e o valor de uma linha de dados |
+| `size.config.listIndent` | `13` | Configurações: recuo dos marcadores da lista de limites |
+| `size.config.listGap` | `5` | Configurações: vão entre os itens da lista de limites |
 | `size.suggestions.maxHeight` | `212` | Sugestões de endereço: altura máxima da lista (o resto rola) |
 | `size.suggestions.padding` | `3` | Sugestões de endereço: recuo da lista |
 | `size.suggestions.gap` | `4` | Sugestões de endereço: vão entre o campo e a lista |
@@ -1176,6 +1206,7 @@ O teste `valores-soltos.test.ts` mantém uma lista de arquivos com valores visua
 | 21/09/2026 | **Campo de texto das telas de conta refeito** (`TextField`): caixa de 46 com o anel cinza por dentro em vez de borda, olho para mostrar e esconder a senha, ícone de alerta na mensagem de erro; rótulo e mensagem sobem de 11 para o piso de 12 | É o campo das imagens `02` e `05`; a mensagem de erro com ícone e o anel vermelho dão o segundo sinal além da cor |
 | 21/09/2026 | **Folha "Minha conta"** (`ContaSheet`) abre pelo botão de conta da lista e do formulário, no lugar do desvio para Configurações; ícone das linhas centrado no círculo | É o que a imagem `05` mostra. O glifo no alto do círculo na captura é um efeito de CSS que o próprio original não pretendia (a imagem `11` o centraliza) |
 | 21/09/2026 | O aviso de erro (`Banner` `error`) passa de `#FFE6E6`/`#C62828` para `#FDF0EE`/`#8E2418` (`colors.feedback.errorBg` e `errorInk`), em todas as telas | É o vermelho do aviso de erro do original nas telas de conta e nas configurações; o par dá mais contraste que o anterior e está na tabela testada |
+| 21/09/2026 | **Configurações** no visual da imagem `08`, com a lógica do app (permissão, monitoramento, notificações, chegadas, excluir conta); sem o cartão "Instalar o app"; "Permitir" das notificações também não existe (o estado só sabe se está permitida); os limites do monitoramento foram reescritos para o app (a frase do original manda "usar um app nativo") | O original é um app web instalável; no Expo o estado real é "permitida" ou "não", sem "ainda não pedida", e o que a tela afirma tem de ser verdade nas duas plataformas |
 
 ## 19. Pendências
 

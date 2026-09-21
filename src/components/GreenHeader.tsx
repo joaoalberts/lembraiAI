@@ -3,7 +3,7 @@ import { Image } from 'expo-image';
 import { StyleSheet, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { fundoEmDegrade } from '../design/efeitos';
-import { gradients, size, space } from '../design/tokens';
+import { colors, gradients, radius, size, space } from '../design/tokens';
 
 const CURVAS_DE_NIVEL = require('../../assets/art/topo-lista.webp');
 
@@ -11,6 +11,16 @@ const CURVAS_DE_NIVEL = require('../../assets/art/topo-lista.webp');
 export function topoDoConteudo(insetSuperior: number): number {
   return Math.max(size.header.contentTop, insetSuperior + space.sm);
 }
+
+/** A folha clara de cantos altos que sobe sobre a parte de baixo do cabeçalho verde (lista e configurações). */
+export const folhaSobreOCabecalho = {
+  flex: 1,
+  marginTop: -(size.header.height - size.header.sheetTop),
+  borderTopLeftRadius: radius.sheet,
+  borderTopRightRadius: radius.sheet,
+  overflow: 'hidden',
+  backgroundColor: colors.bg.sheet,
+} as const;
 
 interface GreenHeaderProps {
   children: ReactNode;
