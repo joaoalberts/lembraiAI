@@ -11,6 +11,7 @@ const IGNORADOS = [/^src\/design\//, /^src\/test-utils\//, /__tests__\//, /\.tes
  * daqui (o teste "já migrou" abaixo cobra isso). Vazia = nenhum valor visual solto no app.
  */
 const PENDENTES: string[] = [
+  'src/lib/compartilhar-imagem.ts', // canvas de compartilhamento: rgba com transparência para sombra e borda (difícil de tokenizar)
 ];
 
 function listar(pasta: string): string[] {

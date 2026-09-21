@@ -1,6 +1,7 @@
 import { Platform, Share } from 'react-native';
 import { repeatLabel, type Reminder } from '../data/reminders';
 import { formatDate } from './format';
+import { gerarImagemNaWeb } from './compartilhar-imagem';
 
 export type ResultadoDoCompartilhar = 'compartilhado' | 'copiado' | 'cancelado' | 'indisponivel';
 
@@ -18,6 +19,19 @@ export async function compartilharNaWeb(
   r: Reminder,
   nav: Pick<Navigator, 'share' | 'clipboard'> | undefined = typeof navigator === 'undefined' ? undefined : navigator,
 ): Promise<ResultadoDoCompartilhar> {
+  // Tenta compartilhar a imagem primeiro
+  const imagem = await gerarImagemNaWeb(r);
+  if (imagem && nav?.share) {
+    try {
+      await nav.share({ files: [imagem], title: r.title });
+      return 'compartilhado';
+    } catch (e) {
+      if ((e as Error).name === 'AbortError') return 'cancelado';
+      // Falha ao compartilhar a imagem: tenta o texto como fallback
+    }
+  }
+
+  // Fallback: compartilha o texto
   const texto = textoDoLembrete(r);
   if (nav?.share) {
     try {
