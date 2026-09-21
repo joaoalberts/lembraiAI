@@ -36,7 +36,7 @@
 
 ### 2.3 As telas de referência
 
-Cada tela e cada folha do app tem uma imagem em `referencias/`. O estado do Expo é o de 21/09/2026, conferido por captura de tela e leitura do código. A barra de abas das imagens é **Início, Lembretes, Mapa e Configurações** (o Início abre o onboarding, a rota `/` do app web); "Novo lembrete" abre pelo botão laranja da lista. O Expo hoje tem Início, Lembretes, Novo, Mapa e Config (a barra de abas ainda não foi refeita).
+Cada tela e cada folha do app tem uma imagem em `referencias/`. O estado do Expo é o de 21/09/2026, conferido por captura de tela e leitura do código. A barra de abas das imagens é **Início, Lembretes, Mapa e Configurações** (o Início abre o onboarding, a rota `/` do app web); "Novo lembrete" abre pelo botão laranja da lista. O Expo tem as quatro abas (Início, Lembretes, Mapa, Configurações); "Novo" deixou de ser aba e abre pelo botão laranja da lista.
 
 | Imagem | Tela | Estado no Expo |
 |---|---|---|
@@ -148,6 +148,7 @@ Use `palette.*` só para definir papéis em `colors`. As telas usam os papéis (
 | `palette.dangerTint` | `#FBE7E4` | Círculo do ícone de excluir e linha de excluir pressionada |
 | `palette.dangerRowHover` | `#FDF3F1` | Linha de excluir com o ponteiro em cima (web) |
 | `palette.tabInactive` | `#777C8A` | Rótulo e ícone da aba inativa (medido nas capturas) |
+| `palette.tabActiveIcon` | `#134B36` | Ícone da aba ativa |
 | `palette.homeIndicator` | `#B7B3AE` | Traço "home" do iOS sob a barra de abas |
 | `palette.tabBarBg` | `#F8F8F4` | Fundo da barra de abas |
 <!-- tokens:cores-primitivas:fim -->
@@ -243,6 +244,7 @@ Use `palette.*` só para definir papéis em `colors`. As telas usam os papéis (
 | `colors.status.active` | `#029554` | `palette.statusGreen` | Ponto do selo "Ativo" |
 | `colors.tab.background` | `#F8F8F4` | `palette.tabBarBg` | Fundo da barra de abas |
 | `colors.tab.inactive` | `#777C8A` | `palette.tabInactive` | Rótulo e ícone da aba inativa |
+| `colors.tab.activeIcon` | `#134B36` | `palette.tabActiveIcon` | Ícone da aba ativa |
 | `colors.tab.indicator` | `#B7B3AE` | `palette.homeIndicator` | Traço "home" do iOS sob a barra de abas |
 | `colors.glass.fill` | `rgba(255, 255, 255, 0.05)` | — | Véu do botão de vidro sobre o verde escuro |
 | `colors.glass.fillHover` | `rgba(255, 255, 255, 0.1)` | — | Botão de vidro com o ponteiro em cima (web) |
@@ -578,7 +580,7 @@ Componente `src/components/Sheet.tsx`. Véu `colors.overlay` (verde-escuro a 46%
 
 ### 11.6 Abas e cabeçalho
 
-- **Barra de abas:** fundo `colors.bg.card`, filete superior `colors.border.divider`, altura `size.tabBar` mais a área segura do sistema. Ativa: `colors.text.brand` com o ícone preenchido; inativa: `colors.icon.muted` com o ícone em contorno. Rótulo em `fontSize.micro` e `fontWeight.medium`, sem altura de linha própria (com ela o React Navigation cortava o pé do texto na web).
+- **Barra de abas** (`src/components/BarraDeAbas.tsx`, uma barra própria no lugar da padrão do React Navigation, ligada por `tabBar` em `Tabs` de `expo-router/js-tabs`): quatro abas iguais, Início, Lembretes, Mapa e Configurações. Fundo `colors.tab.background` com a sombra `shadow.tabBar` para cima, `size.tabBar.top` de espaço em cima e, embaixo, no mínimo `size.tabBar.bottom` (a área segura do sistema o substitui quando é maior). Cada aba tem o ícone de `size.tabBar.icon` com traço `iconStroke.tab` e o rótulo em `textStyles.micro`, ambos em `colors.tab.inactive`; a ativa engrossa o traço (`iconStroke.base`), pinta o ícone de `colors.tab.activeIcon` e põe o rótulo em negrito e `colors.text.brand`. Pressionada, `opacity.tab`. Tocar na aba em que já se está não faz nada; o formulário de novo lembrete acende "Lembretes"; a tela de sucesso esconde a barra (`tabBarStyle: { display: 'none' }`). Papéis `tablist` e `tab`, `aria-current="page"` na ativa.
 - **Cabeçalho:** fundo `colors.bg.page`, sem sombra, título `textStyles.heading` em `colors.text.primary`.
 - **Cabeçalho verde** (`src/components/GreenHeader.tsx`, na lista e nas configurações): degradê `gradients.cabecalhoVerde` (base a 168°, luz menta e sombra de pinheiro) com as curvas de nível por cima (imagem `assets/art/topo-lista.webp`, ver `assets/art/LEIA-ME.md`), altura mínima `size.header.height` e margem lateral `size.header.side`. O conteúdo começa em `size.header.contentTop`, ou abaixo da barra de status do aparelho (entalhe, ilha) mais `space.sm` quando ela é maior; o cabeçalho cresce o quanto o conteúdo desceu. O grão de 9% do original não se vê e não é reproduzido. A folha clara (`colors.bg.sheet`, cantos `radius.sheet`) sobe sobre ele a partir de `size.header.sheetTop`.
 - **Marca** (`src/components/AppBrand.tsx`): tile de `size.header.brandTile` com `gradients.marcaTile`, símbolo `locate-fixed` em `colors.brand.glyph`, nome em serifa negrito (`colors.text.onDarkWarm`; o original usa um peso a menos, que o app não carrega) e a frase "Sua rotina, mais leve." em `colors.text.onDarkFaint`.
@@ -649,6 +651,7 @@ Filosofia: o mínimo. O feedback de toque é instantâneo (troca de cor e escala
 <!-- tokens:opacidade:inicio -->
 | Token | Valor | Uso |
 |---|---|---|
+| `opacity.tab` | `0.6` | Aba da barra de abas pressionada |
 | `opacity.disabled` | `0.45` | Controle desabilitado |
 | `opacity.inactive` | `0.55` | Cartão de lembrete pausado |
 | `opacity.pressed` | `0.85` | Toque em elementos que não trocam de cor |
@@ -669,7 +672,11 @@ Filosofia: o mínimo. O feedback de toque é instantâneo (troca de cor e escala
 |---|---|---|
 | `size.touch` | `44` | Área mínima de toque (44, o padrão do iOS) |
 | `size.button` | `52` | Altura dos botões |
-| `size.tabBar` | `56` | Altura útil da barra de abas (a área segura do sistema é somada por cima) |
+| `size.tabBar.top` | `15` | Barra de abas: espaço acima das abas |
+| `size.tabBar.item` | `51` | Barra de abas: altura de cada aba (ícone, vão e rótulo) |
+| `size.tabBar.bottom` | `25` | Barra de abas: espaço mínimo embaixo (a área segura do sistema o substitui quando é maior) |
+| `size.tabBar.gap` | `6` | Barra de abas: vão entre o ícone e o rótulo |
+| `size.tabBar.icon` | `21` | Barra de abas: lado do ícone |
 | `size.iconCircle` | `44` | Círculo do ícone de categoria |
 | `size.emptyCircle` | `88` | Círculo do ícone do estado vazio |
 | `size.chip` | `34` | Altura visível do chip (a área de toque chega a 44 com `size.hitSlop`) |
@@ -928,6 +935,7 @@ O teste `valores-soltos.test.ts` mantém uma lista de arquivos com valores visua
 | 21/09/2026 | **Ícones: Lucide no lugar de Ionicons** (`lucide-react-native` com `react-native-svg`, ambos gratuitos), traço por papel em `iconStroke.*` | As capturas e o app web desenham com Lucide; o Ionicons tem outro traço e outras formas (calendário, relógio, pino, lâmpada). O `react-native-svg` é o que o SDK 57 fixa (15.15.4). Pacote em `moduleNameMapper` no Jest (só publica `.mjs`) |
 | 21/09/2026 | **Interruptor próprio** (`Toggle` com duas variantes) no lugar do `Switch` do sistema; verde do cartão `#2EA275` em vez do `#30AB7B` da imagem | O `Switch` do sistema não tem o tamanho nem a cor das imagens (35 por 21 e 43 por 26). O `#30AB7B` medido dá 2,76:1 com o cartão e 2,80:1 com a bolinha, abaixo dos 3:1 do WCAG 1.4.11 que o teste de contraste exige; escurecer 5% resolve (3,05:1 e 3,10:1) e a diferença não se vê. Voltar ao valor da imagem é trocar `palette.toggleCardOn` |
 | 21/09/2026 | **Etiqueta do cartão com texto escurecido** (`colors.category.*.tagInk`); a lista, o cabeçalho verde, a marca, o botão de vidro e a busca entram como no original, com o texto no piso de 12 | Na imagem o texto da etiqueta azul dá 2,7:1 e o rosa 2,4:1 sobre o fundo da etiqueta; o `fg` escurecido só até 4,5:1 mantém a cor e cumpre o teste. O original usa texto de 9 a 10 dp nas etiquetas, nos chips e nas datas, abaixo do piso do Design System: sobe para 12 e os cartões ficam um pouco mais altos que na imagem |
+| 21/09/2026 | **Barra de abas própria** (`BarraDeAbas`) com Início, Lembretes, Mapa e Configurações; "Novo" sai da barra; `Tabs` vem de `expo-router/js-tabs` | O padrão do React Navigation não reproduz a barra das imagens (abas iguais, traço que engrossa, sombra para cima, base da área segura) e não deixa o formulário acender "Lembretes". Em `expo-router` 57 o `Tabs` da raiz do pacote está marcado como obsoleto em favor de `expo-router/js-tabs` |
 
 ## 19. Pendências
 

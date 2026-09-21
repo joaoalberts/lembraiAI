@@ -103,6 +103,7 @@ export const palette = {
   dangerTint: '#FBE7E4',
   dangerRowHover: '#FDF3F1',
   tabInactive: '#777C8A',
+  tabActiveIcon: '#134B36',
   homeIndicator: '#B7B3AE',
   tabBarBg: '#F8F8F4',
 } as const;
@@ -209,7 +210,7 @@ export const colors = {
   /** Selo "Ativo" do lembrete. */
   status: { active: palette.statusGreen },
   /** Barra de abas: rótulo e ícone da aba inativa, e o traço "home" do iOS por baixo. */
-  tab: { background: palette.tabBarBg, inactive: palette.tabInactive, indicator: palette.homeIndicator },
+  tab: { background: palette.tabBarBg, inactive: palette.tabInactive, activeIcon: palette.tabActiveIcon, indicator: palette.homeIndicator },
   /** Vidro sobre o verde escuro dos cabeçalhos: um véu branco quase transparente com borda (o desfoque não aparece sobre um verde quase liso). */
   glass: {
     fill: 'rgba(255, 255, 255, 0.05)',
@@ -351,7 +352,8 @@ export const borderWidth = {
 export const size = {
   touch: 44,
   button: 52,
-  tabBar: 56,
+  /** Barra de abas (medidas do app web em du): espaço acima das abas, altura de cada aba, o mínimo embaixo (a área segura do sistema o substitui quando é maior), vão entre ícone e rótulo e o ícone. */
+  tabBar: { top: du(30), item: du(100), bottom: du(50), gap: du(12), icon: du(42) },
   iconCircle: 44,
   emptyCircle: 88,
   chip: du(68),
@@ -438,6 +440,8 @@ export const iconStroke = {
 } as const;
 
 export const opacity = {
+  /** Aba da barra de abas enquanto é pressionada. */
+  tab: 0.6,
   disabled: 0.45,
   inactive: 0.55,
   pressed: 0.85,
