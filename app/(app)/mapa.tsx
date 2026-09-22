@@ -2,12 +2,11 @@ import { useEffect, useMemo, useState } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { AppBrand } from '../../src/components/AppBrand';
 import { CATEGORY_COLORS } from '../../src/data/reminders';
-import { MapHeader } from '../../src/components/MapHeader';
+import { GreenHeader, folhaSobreOCabecalho } from '../../src/components/GreenHeader';
 import { RemindersMap } from '../../src/components/RemindersMap';
 import { Sheet } from '../../src/components/Sheet';
 import type { MapMarker } from '../../src/components/map-types';
 import { colors, radius, shadow, size, space, textStyles } from '../../src/design/tokens';
-import { folhaSobreOCabecalho } from '../../src/components/GreenHeader';
 import { distance, formatDistance, type LatLng } from '../../src/lib/geo';
 import { useGeo } from '../../src/state/geo';
 import { useGeofences } from '../../src/state/geofences';
@@ -47,14 +46,14 @@ export default function MapaScreen() {
 
   return (
     <View style={styles.container}>
-      <MapHeader>
+      <GreenHeader>
         <View style={styles.topo}>
           <AppBrand />
         </View>
         <View style={styles.titulos}>
           <Text accessibilityRole="header" style={styles.titulo}>Mapa</Text>
         </View>
-      </MapHeader>
+      </GreenHeader>
 
       <View style={styles.folha}>
         <RemindersMap center={center} markers={markers} onMarkerPress={setSelecionado} />

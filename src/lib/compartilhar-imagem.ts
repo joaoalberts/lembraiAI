@@ -175,3 +175,32 @@ function escapeHtml(text: string): string {
   };
   return text.replace(/[&<>"']/g, (char) => map[char]);
 }
+
+/** Celular: captura a view do cartão com react-native-view-shot e compartilha com expo-sharing. */
+export async function compartilharNoExpo(
+  r: Reminder,
+  viewRef: { current: any },
+): Promise<'compartilhado' | 'cancelado' | 'indisponivel'> {
+  try {
+    // Importar aqui para não quebrar na web
+    const ViewShot = (await import('react-native-view-shot')).default;
+    const Sharing = await import('expo-sharing');
+
+    if (!viewRef.current) return 'indisponivel';
+
+    const uri = await ViewShot.captureRef(viewRef, {
+      format: 'jpg',
+      quality: 0.94,
+      fileName: nomeDoArquivoDeImagem(r),
+    });
+
+    const compartilhavel = await Sharing.isAvailableAsync();
+    if (!compartilhavel) return 'indisponivel';
+
+    await Sharing.shareAsync(uri, { mimeType: 'image/jpeg' });
+    return 'compartilhado';
+  } catch (e) {
+    if ((e as Error).message?.includes('abort')) return 'cancelado';
+    return 'indisponivel';
+  }
+}

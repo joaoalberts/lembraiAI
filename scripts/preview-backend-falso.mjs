@@ -100,7 +100,14 @@ createServer(async (req, res) => {
   if (p === '/__session') return enviar(res, 200, sessao());
 
   // GoTrue
-  if (p === '/auth/v1/user') return enviar(res, 200, USUARIO);
+  if (p === '/auth/v1/user') {
+    if (req.method === 'GET') return enviar(res, 200, USUARIO);
+    if (req.method === 'PUT') {
+      // updateUser: a senha é ignorada no backend falso, só retorna sucesso
+      return enviar(res, 200, USUARIO);
+    }
+    return enviar(res, 405, { message: 'method not allowed' });
+  }
   if (p === '/auth/v1/token') return enviar(res, 200, sessao());
   if (p === '/auth/v1/logout') return enviar(res, 204);
   if (p.startsWith('/auth/v1/')) return enviar(res, 200, {});

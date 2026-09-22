@@ -5,16 +5,24 @@ import { AccessibilityInfo, StyleSheet } from 'react-native';
 import SucessoScreen from '../../app/(app)/sucesso';
 import type { Reminder } from '../data/reminders';
 import { fontSize, lineHeight, motion, size } from '../design/tokens';
-import { compartilhar } from '../lib/compartilhar';
+import { compartilhar, compartilharNoCelularComImagem } from '../lib/compartilhar';
 import { useReminders } from '../state/reminders';
 import { comAreaSegura } from '../test-utils/area-segura';
 
 jest.mock('expo-router', () => ({ router: { navigate: jest.fn() }, useLocalSearchParams: jest.fn(), useIsFocused: jest.fn() }));
 jest.mock('../state/reminders', () => ({ useReminders: jest.fn() }));
-jest.mock('../lib/compartilhar', () => ({ compartilhar: jest.fn() }));
+jest.mock('../lib/compartilhar', () => ({ compartilhar: jest.fn(), compartilharNoCelularComImagem: jest.fn() }));
 
 const lembrete: Reminder = { id: 'a1', title: 'Comprar água no mercado', category: 'green', icon: 'cart', kind: 'time', dateISO: '2026-09-21', time: '09:00', repeat: 'never', active: true };
 const remove = jest.fn();
+
+// Sincronizar mocks de compartilhamento: quando um é configurado, o outro recebe o mesmo valor
+const setupCompartilharMock = () => {
+  const mockCompartilhar = jest.mocked(compartilhar);
+  const mockCompartilharComImagem = jest.mocked(compartilharNoCelularComImagem);
+  // Fazer compartilharNoCelularComImagem replicar o comportamento de compartilhar (ignorando a ref)
+  mockCompartilharComImagem.mockImplementation(async (r) => mockCompartilhar(r));
+};
 
 interface Estado { reminders: Reminder[]; carregando: boolean }
 /** `id = null` é "sem id no endereço" (`undefined` ativaria o valor padrão). */
@@ -33,6 +41,7 @@ beforeEach(() => {
   jest.clearAllMocks();
   // sem animação: o quadro final do herói já chega pronto
   jest.spyOn(AccessibilityInfo, 'isReduceMotionEnabled').mockResolvedValue(true);
+  setupCompartilharMock();
 });
 
 describe('tela de sucesso: tamanhos do texto', () => {
@@ -51,7 +60,7 @@ describe('tela de sucesso', () => {
     await abrir();
     expect(screen.getByRole('header', { name: 'Lembrete criado\ncom sucesso!' })).toBeTruthy();
     expect(screen.getByText('Você será avisado na hora certa.\nPode ficar tranquilo.')).toBeTruthy();
-    expect(screen.getByTestId('resumo')).toBeTruthy();
+    expect(screen.getAllByTestId('resumo')[0]).toBeTruthy();
     expect(screen.getByText('Comprar água no mercado')).toBeTruthy();
     for (const nome of ['Editar', 'Excluir', 'Compartilhar', 'Ver todos os lembretes', 'Criar outro lembrete', 'Fechar']) expect(screen.getByRole('button', { name: nome })).toBeTruthy();
     expect(screen.getByTestId('dica-inteligente')).toBeTruthy();
@@ -106,7 +115,7 @@ describe('tela de sucesso: excluir', () => {
     await fireEvent.press(screen.getByRole('button', { name: 'Cancelar' }));
     expect(screen.queryByText('Excluir lembrete?')).toBeNull();
     expect(remove).not.toHaveBeenCalled();
-    expect(screen.getByTestId('resumo')).toBeTruthy();
+    expect(screen.getAllByTestId('resumo')[0]).toBeTruthy();
   });
 
   it('confirmar exclui o lembrete e vai para a lista', async () => {
@@ -206,7 +215,7 @@ describe('tela de sucesso: sem lembrete, fora de foco e área segura', () => {
     const { rerender } = await abrir({ reminders: [lembrete], carregando: false }, 'a1', false);
     semNada();
     await rerender(montar({ reminders: [lembrete], carregando: false }, 'a1', true));
-    expect(screen.getByTestId('resumo')).toBeTruthy();
+    expect(screen.getAllByTestId('resumo')[0]).toBeTruthy();
   });
 
   it('num aparelho com entalhe o herói e o botão de fechar descem até o alvo de toque inteiro caber abaixo da barra de status', async () => {

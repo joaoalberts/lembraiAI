@@ -1,7 +1,7 @@
 import { Image } from 'expo-image';
 import { router, useIsFocused, useLocalSearchParams } from 'expo-router';
-import { useEffect, useState } from 'react';
-import { ActivityIndicator, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { useEffect, useRef, useState } from 'react';
+import { ActivityIndicator, Platform, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { BotaoDeAcao } from '../../src/components/BotaoDeAcao';
 import { Button } from '../../src/components/Button';
@@ -16,7 +16,7 @@ import { respiroDoToque } from '../../src/components/Toque';
 import { telaDeJanelaInteira } from '../../src/design/efeitos';
 import { HEROI } from '../../src/design/heroi';
 import { colors, fontSize, lineHeight, motion, size, space, textStyles, fontFamily } from '../../src/design/tokens';
-import { compartilhar } from '../../src/lib/compartilhar';
+import { compartilhar, compartilharNoCelularComImagem } from '../../src/lib/compartilhar';
 import { useReminders } from '../../src/state/reminders';
 
 const FUNDO = require('../../assets/art/bg-success.jpg');
@@ -39,6 +39,7 @@ function Sucesso() {
   const [excluindo, setExcluindo] = useState(false);
   const [saiu, setSaiu] = useState(false);
   const [retorno, setRetorno] = useState<Retorno | null>(null);
+  const cartaoRef = useRef<View>(null);
   const lembrete = reminders.find((r) => r.id === id);
 
   // a resposta do "Compartilhar" (copiou, não deu) ocupa o lugar do rótulo por um instante
@@ -76,8 +77,11 @@ function Sucesso() {
     irParaLista();
   };
   const compartilharLembrete = async () => {
+    if (!lembrete) return;
     try {
-      const resultado = await compartilhar(lembrete);
+      const resultado = Platform.OS !== 'web'
+        ? await compartilharNoCelularComImagem(lembrete, cartaoRef)
+        : await compartilhar(lembrete);
       if (resultado === 'copiado' || resultado === 'indisponivel') setRetorno(resultado);
     } catch {
       setRetorno('indisponivel');
@@ -132,12 +136,18 @@ function Sucesso() {
 
       <ConfirmSheet
         visible={excluindo}
-        title="Excluir lembrete?"
-        message={`“${lembrete.title}” será removido e você não receberá mais esse aviso.`}
-        confirmLabel="Excluir lembrete"
+        title={'Excluir lembrete?'}
+        message={`”${lembrete.title}” será removido e você não receberá mais esse aviso.`}
+        confirmLabel={'Excluir lembrete'}
         onConfirm={confirmarExclusao}
         onCancel={() => setExcluindo(false)}
       />
+
+      {Platform.OS !== 'web' && (
+        <View ref={cartaoRef} style={styles.cartaoHidden} testID="cartao-hidden" pointerEvents="none">
+          <CartaoDeResumo lembrete={lembrete} />
+        </View>
+      )}
     </View>
   );
 }
@@ -161,4 +171,5 @@ const styles = StyleSheet.create({
   link: { marginTop: size.sucesso.espaco.link },
   aviso: { flex: 1, alignItems: 'center', justifyContent: 'center', gap: space.lg, padding: space.xl, backgroundColor: colors.bg.page },
   avisoTexto: { ...textStyles.bodyLg, color: colors.text.secondary, textAlign: 'center' },
+  cartaoHidden: { position: 'absolute', opacity: 0, width: space.xs, height: space.xs, overflow: 'hidden' },
 });

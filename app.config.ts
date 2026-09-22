@@ -23,6 +23,7 @@ export default ({ config }: ConfigContext): ExpoConfig => {
     plugins: [
       ...(config.plugins ?? []),
       ['react-native-maps', { androidGoogleMapsApiKey: androidMapsKey }],
+      'expo-sharing',
       './plugins/withReleaseSigning',
     ],
   };

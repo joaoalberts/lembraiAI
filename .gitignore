@@ -49,6 +49,13 @@ coverage/
 *.log
 .idea/
 
+# Metadados de sessão Claude Code (local ao usuário)
+.claude/
+
+# Cache de ferramentas (Playwright, Babel, etc)
+.playwright-mcp/
+.babel-cache/
+
 # typescript
 *.tsbuildinfo
 

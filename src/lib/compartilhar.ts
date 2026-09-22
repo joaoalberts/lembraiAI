@@ -1,7 +1,7 @@
 import { Platform, Share } from 'react-native';
 import { repeatLabel, type Reminder } from '../data/reminders';
 import { formatDate } from './format';
-import { gerarImagemNaWeb } from './compartilhar-imagem';
+import { gerarImagemNaWeb, compartilharNoExpo } from './compartilhar-imagem';
 
 export type ResultadoDoCompartilhar = 'compartilhado' | 'copiado' | 'cancelado' | 'indisponivel';
 
@@ -61,3 +61,17 @@ export async function compartilharNoCelular(r: Reminder): Promise<ResultadoDoCom
 
 export const compartilhar = (r: Reminder): Promise<ResultadoDoCompartilhar> =>
   Platform.OS === 'web' ? compartilharNaWeb(r) : compartilharNoCelular(r);
+
+/** iOS e Android: tenta compartilhar a imagem do cartão; fallback para texto se falhar. */
+export async function compartilharNoCelularComImagem(
+  r: Reminder,
+  cartaoRef: { current: any },
+): Promise<ResultadoDoCompartilhar> {
+  // Tenta compartilhar a imagem primeiro
+  const imagemResultado = await compartilharNoExpo(r, cartaoRef);
+  if (imagemResultado === 'compartilhado') return 'compartilhado';
+  if (imagemResultado === 'cancelado') return 'cancelado';
+
+  // Fallback: compartilha o texto se a imagem falhar
+  return compartilharNoCelular(r);
+}
