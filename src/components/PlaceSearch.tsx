@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { ActivityIndicator, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native';
 import { anelDeFoco, semAnelDoNavegador, type EstadoDeToque } from '../design/foco';
 import { colors, fontFamily, iconStroke, radius, shadow, size, space, textStyles } from '../design/tokens';
+import type { LatLng } from '../lib/geo';
 import { MINIMO_DE_LETRAS, buscarLugares, type Lugar } from '../lib/geocodificar';
 import { Icon } from './Icon';
 
@@ -16,6 +17,8 @@ interface PlaceSearchProps {
   /** Cada letra digitada. Só a digitação da pessoa dispara a busca: preencher o campo por fora (o mapa) não. */
   onChangeText: (texto: string) => void;
   onPick: (lugar: Lugar) => void;
+  /** Onde a pessoa está ou olha no mapa: quando o texto não diz a cidade, a busca dá preferência ao que está perto. */
+  perto?: LatLng | null;
   /** A pessoa entrou no campo e saiu dele (o formulário rola até aqui com o teclado aberto). */
   aoFocar?: () => void;
   aoSair?: () => void;
@@ -26,12 +29,14 @@ interface PlaceSearchProps {
 }
 
 /**
- * Busca de endereço do formulário: campo com lupa e uma lista de até cinco sugestões (Nominatim, gratuito e sem chave).
- * Só busca com 3 letras ou mais, 650 ms depois da última, e cancela o pedido anterior. Sem resultado não mostra nada;
- * com falha diz "Não foi possível buscar agora." Padrão: docs/DESIGN_SYSTEM.md, seção 11.11.
+ * Busca de endereço do formulário: campo com lupa e uma lista de até cinco sugestões (rua, número, bairro, cidade, estado, CEP ou
+ * nome de lugar, em todo o Brasil; serviços gratuitos e sem chave, ver `lib/geocodificar.ts`). Só busca com 3 letras ou mais, 650 ms
+ * depois da última, e cancela o pedido anterior. Sem resultado diz "Nenhum endereço encontrado."; com falha, "Não foi possível
+ * buscar agora."; o resultado que não é o ponto exato da porta avisa "Posição aproximada". Padrão: docs/DESIGN_SYSTEM.md, seção 11.11.
  */
-export function PlaceSearch({ value, onChangeText, onPick, aoFocar, aoSair, aoMudarSugestoes, buscar = buscarLugares }: PlaceSearchProps) {
+export function PlaceSearch({ value, onChangeText, onPick, perto, aoFocar, aoSair, aoMudarSugestoes, buscar = buscarLugares }: PlaceSearchProps) {
   const [itens, setItens] = useState<Lugar[]>([]);
+  const [semResultado, setSemResultado] = useState(false);
   const [falhou, setFalhou] = useState(false);
   const [ocupado, setOcupado] = useState(false);
   const [aberta, setAberta] = useState(false);
@@ -42,7 +47,7 @@ export function PlaceSearch({ value, onChangeText, onPick, aoFocar, aoSair, aoMu
   useEffect(() => () => { clearTimeout(espera.current); clearTimeout(fecha.current); pedido.current?.abort(); }, []);
   useEffect(() => { aoMudarSugestoes?.(aberta); }, [aberta]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  const zerar = () => { setItens([]); setFalhou(false); setAberta(false); setOcupado(false); };
+  const zerar = () => { setItens([]); setFalhou(false); setSemResultado(false); setAberta(false); setOcupado(false); };
 
   const aoDigitar = (texto: string) => {
     onChangeText(texto);
@@ -54,14 +59,16 @@ export function PlaceSearch({ value, onChangeText, onPick, aoFocar, aoSair, aoMu
       pedido.current = controle;
       setOcupado(true);
       try {
-        const lugares = await buscar(texto, { sinal: controle.signal });
+        const lugares = await buscar(texto, { sinal: controle.signal, perto: perto ?? null });
         if (controle.signal.aborted) return;
         setItens(lugares);
         setFalhou(false);
-        setAberta(lugares.length > 0);
+        setSemResultado(lugares.length === 0);
+        setAberta(true);
       } catch {
         if (controle.signal.aborted) return;
         setItens([]);
+        setSemResultado(false);
         setFalhou(true);
         setAberta(true);
       } finally {
@@ -83,7 +90,7 @@ export function PlaceSearch({ value, onChangeText, onPick, aoFocar, aoSair, aoMu
         <TextInput
           value={value}
           onChangeText={aoDigitar}
-          onFocus={() => { clearTimeout(fecha.current); if (itens.length > 0 || falhou) setAberta(true); aoFocar?.(); }}
+          onFocus={() => { clearTimeout(fecha.current); if (itens.length > 0 || falhou || semResultado) setAberta(true); aoFocar?.(); }}
           onBlur={() => { fecha.current = setTimeout(() => setAberta(false), ESPERA_PARA_FECHAR); aoSair?.(); }}
           placeholder="Buscar endereço, lugar ou toque no mapa"
           placeholderTextColor={colors.text.placeholder}
@@ -100,19 +107,22 @@ export function PlaceSearch({ value, onChangeText, onPick, aoFocar, aoSair, aoMu
           <ScrollView keyboardShouldPersistTaps="handled" style={styles.rolagem}>
             {falhou ? (
               <Text accessibilityRole="alert" style={styles.erro}>Não foi possível buscar agora.</Text>
+            ) : semResultado ? (
+              <Text accessibilityLiveRegion="polite" style={styles.erro}>Nenhum endereço encontrado. Confira o nome da rua ou toque no mapa.</Text>
             ) : (
               itens.map((lugar) => (
                 <Toque
                   key={`${lugar.lat},${lugar.lng}`}
                   onPress={() => escolher(lugar)}
                   accessibilityRole="button"
-                  accessibilityLabel={lugar.detalhe ? `${lugar.nome}, ${lugar.detalhe}` : lugar.nome}
+                  accessibilityLabel={`${lugar.detalhe ? `${lugar.nome}, ${lugar.detalhe}` : lugar.nome}${lugar.aproximado ? ', posição aproximada' : ''}`}
                   style={(estado: EstadoDeToque) => [styles.item, estado.hovered || estado.pressed ? { backgroundColor: colors.control.suggestionHover } : null, estado.focused ? anelDeFoco : null]}
                 >
                   <Icon name="map-pin" size={size.icon.sm} color={colors.icon.default} stroke={iconStroke.ui} />
                   <View style={styles.textos}>
                     <Text style={styles.nome}>{lugar.nome}</Text>
                     {lugar.detalhe ? <Text style={styles.detalhe}>{lugar.detalhe}</Text> : null}
+                    {lugar.aproximado ? <Text style={styles.aproximado}>Posição aproximada: confira o pino no mapa</Text> : null}
                   </View>
                 </Toque>
               ))
@@ -135,5 +145,6 @@ const styles = StyleSheet.create({
   textos: { flex: 1, gap: space.hair },
   nome: { ...textStyles.micro, fontFamily: fontFamily.bold, color: colors.text.primary },
   detalhe: { ...textStyles.micro, color: colors.text.secondary },
+  aproximado: { ...textStyles.micro, fontFamily: fontFamily.bold, color: colors.text.secondary },
   erro: { ...textStyles.micro, padding: space.md, color: colors.text.secondary },
 });

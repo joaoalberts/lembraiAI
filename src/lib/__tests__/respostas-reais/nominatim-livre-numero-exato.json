@@ -1,0 +1,142 @@
+[
+  {
+    "place_id": 13675661,
+    "licence": "Data © OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+    "osm_type": "way",
+    "osm_id": 184280442,
+    "lat": "-3.7420340",
+    "lon": "-38.5389571",
+    "category": "amenity",
+    "type": "university",
+    "place_rank": 30,
+    "importance": 0.00006818722819862695,
+    "addresstype": "amenity",
+    "name": "Reitoria da UFC",
+    "display_name": "Reitoria da UFC, 2853, Avenida da Universidade, Benfica, Fortaleza, Ceará, Região Nordeste, 60020-181, Brasil",
+    "address": {
+      "amenity": "Reitoria da UFC",
+      "house_number": "2853",
+      "road": "Avenida da Universidade",
+      "suburb": "Benfica",
+      "city": "Fortaleza",
+      "municipality": "Fortaleza",
+      "state": "Ceará",
+      "ISO3166-2-lvl4": "BR-CE",
+      "region": "Região Nordeste",
+      "postcode": "60020-181",
+      "country": "Brasil",
+      "country_code": "br"
+    },
+    "boundingbox": [
+      "-3.7428961",
+      "-3.7411610",
+      "-38.5399082",
+      "-38.5379682"
+    ]
+  },
+  {
+    "place_id": 13747636,
+    "licence": "Data © OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+    "osm_type": "way",
+    "osm_id": 1331302191,
+    "lat": "-3.7422313",
+    "lon": "-38.5384130",
+    "category": "amenity",
+    "type": "theatre",
+    "place_rank": 30,
+    "importance": 0.00006818722819862695,
+    "addresstype": "amenity",
+    "name": "Concha Acústica",
+    "display_name": "Concha Acústica, 2853, Avenida da Universidade, Benfica, Fortaleza, Ceará, Região Nordeste, 60020-181, Brasil",
+    "address": {
+      "amenity": "Concha Acústica",
+      "house_number": "2853",
+      "road": "Avenida da Universidade",
+      "suburb": "Benfica",
+      "city": "Fortaleza",
+      "municipality": "Fortaleza",
+      "state": "Ceará",
+      "ISO3166-2-lvl4": "BR-CE",
+      "region": "Região Nordeste",
+      "postcode": "60020-181",
+      "country": "Brasil",
+      "country_code": "br"
+    },
+    "boundingbox": [
+      "-3.7424720",
+      "-3.7418312",
+      "-38.5388068",
+      "-38.5380432"
+    ]
+  },
+  {
+    "place_id": 13732960,
+    "licence": "Data © OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+    "osm_type": "way",
+    "osm_id": 495274096,
+    "lat": "-3.7427006",
+    "lon": "-38.5389372",
+    "category": "amenity",
+    "type": "bank",
+    "place_rank": 30,
+    "importance": 0.00006818722819862695,
+    "addresstype": "amenity",
+    "name": "Banco do Brasil",
+    "display_name": "Banco do Brasil, 2853, Avenida da Universidade, Benfica, Fortaleza, Ceará, Região Nordeste, 60020-181, Brasil",
+    "address": {
+      "amenity": "Banco do Brasil",
+      "house_number": "2853",
+      "road": "Avenida da Universidade",
+      "suburb": "Benfica",
+      "city": "Fortaleza",
+      "municipality": "Fortaleza",
+      "state": "Ceará",
+      "ISO3166-2-lvl4": "BR-CE",
+      "region": "Região Nordeste",
+      "postcode": "60020-181",
+      "country": "Brasil",
+      "country_code": "br"
+    },
+    "boundingbox": [
+      "-3.7428652",
+      "-3.7425361",
+      "-38.5391006",
+      "-38.5387729"
+    ]
+  },
+  {
+    "place_id": 13698408,
+    "licence": "Data © OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+    "osm_type": "node",
+    "osm_id": 3833597263,
+    "lat": "-3.7414294",
+    "lon": "-38.5393982",
+    "category": "amenity",
+    "type": "bicycle_rental",
+    "place_rank": 30,
+    "importance": 0.00006818722819862695,
+    "addresstype": "amenity",
+    "name": "Reitoria UFC",
+    "display_name": "Reitoria UFC, 2853, Avenida da Universidade, Benfica, Fortaleza, Ceará, Região Nordeste, 60020-181, Brasil",
+    "address": {
+      "amenity": "Reitoria UFC",
+      "house_number": "2853",
+      "road": "Avenida da Universidade",
+      "suburb": "Benfica",
+      "city": "Fortaleza",
+      "municipality": "Fortaleza",
+      "state": "Ceará",
+      "ISO3166-2-lvl4": "BR-CE",
+      "region": "Região Nordeste",
+      "postcode": "60020-181",
+      "country": "Brasil",
+      "country_code": "br"
+    },
+    "boundingbox": [
+      "-3.7414794",
+      "-3.7413794",
+      "-38.5394482",
+      "-38.5393482"
+    ]
+  }
+]

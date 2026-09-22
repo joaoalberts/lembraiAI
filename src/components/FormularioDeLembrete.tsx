@@ -34,6 +34,7 @@ import { Toque } from './Toque';
 /** Espera depois de tocar ou arrastar o pino antes de perguntar ao serviço o nome do lugar. */
 const ESPERA_DO_NOME = 700;
 const AVISO_DO_RAIO = 'Você será avisado ao entrar no raio selecionado.';
+const AVISO_DA_POSICAO_APROXIMADA = 'Posição aproximada: o mapa não tem esse número. Toque no mapa ou arraste o pino para ajustar.';
 const SEM_LOCALIZACAO = 'Não consegui ler sua localização. Verifique a permissão nos ajustes do aparelho.';
 
 interface FormularioProps {
@@ -66,6 +67,7 @@ export function FormularioDeLembrete({ lembrete }: FormularioProps) {
   const [folha, setFolha] = useState<'data' | 'horario' | 'repetir' | 'conta' | null>(null);
   const [erroDaDescricao, setErroDaDescricao] = useState<string | null>(null);
   const [avisoDoLocal, setAvisoDoLocal] = useState<string | null>(null);
+  const [posicaoAproximada, setPosicaoAproximada] = useState(false);
   const [erroAoSalvar, setErroAoSalvar] = useState<string | null>(null);
   const [salvando, setSalvando] = useState(false);
   const [localizando, setLocalizando] = useState(false);
@@ -84,6 +86,7 @@ export function FormularioDeLembrete({ lembrete }: FormularioProps) {
   const escolherPonto = (lat: number, lng: number) => {
     mudar({ coord: { lat, lng } });
     setAvisoDoLocal(null);
+    setPosicaoAproximada(false);
     clearTimeout(nome.current);
     pedidoDoNome.current?.abort();
     nome.current = setTimeout(async () => {
@@ -101,8 +104,9 @@ export function FormularioDeLembrete({ lembrete }: FormularioProps) {
   const escolherLugar = (lugar: Lugar) => {
     clearTimeout(nome.current);
     pedidoDoNome.current?.abort();
-    mudar({ place: lugar.nome, coord: { lat: lugar.lat, lng: lugar.lng } });
+    mudar({ place: lugar.completo, coord: { lat: lugar.lat, lng: lugar.lng } });
     setAvisoDoLocal(null);
+    setPosicaoAproximada(lugar.aproximado === true);
     setEnquadrar((n) => n + 1);
   };
 
@@ -221,7 +225,7 @@ export function FormularioDeLembrete({ lembrete }: FormularioProps) {
 
           {local && (
             <View style={styles.local}>
-              <PlaceSearch value={estado.place} onChangeText={(place) => mudar({ place })} onPick={escolherLugar} aoFocar={() => setBuscando(true)} aoSair={() => setBuscando(false)} aoMudarSugestoes={setSugestoesAbertas} />
+              <PlaceSearch value={estado.place} onChangeText={(place) => mudar({ place })} onPick={escolherLugar} perto={estado.coord ?? position} aoFocar={() => setBuscando(true)} aoSair={() => setBuscando(false)} aoMudarSugestoes={setSugestoesAbertas} />
               {/* a lista de sugestões passa por cima do mapa; no Android o toque nela chegava também à WebView e trocava o ponto */}
               <View testID="mapa-do-formulario" style={[styles.mapa, sugestoesAbertas ? styles.semToque : null]}>
                 <MapaDeEscolha
@@ -239,6 +243,8 @@ export function FormularioDeLembrete({ lembrete }: FormularioProps) {
               <Slider value={Math.min(estado.radius, RAIO.max)} onChange={(radius) => mudar({ radius })} min={RAIO.min} max={RAIO.max} step={RAIO.passo} label="Raio de notificação em metros" valueText={`${estado.radius} metros`} />
               {avisoDoLocal !== null ? (
                 <Text accessibilityRole="alert" style={[styles.dica, styles.erro]}>{avisoDoLocal}</Text>
+              ) : posicaoAproximada ? (
+                <Text style={styles.dica}>{AVISO_DA_POSICAO_APROXIMADA}</Text>
               ) : (
                 <Text style={styles.dica}>{AVISO_DO_RAIO}</Text>
               )}

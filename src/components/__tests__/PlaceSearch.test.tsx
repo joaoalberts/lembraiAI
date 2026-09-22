@@ -4,8 +4,9 @@ import { colors, shadow, size } from '../../design/tokens';
 import type { Lugar } from '../../lib/geocodificar';
 import { ESPERA_DA_BUSCA, PlaceSearch } from '../PlaceSearch';
 
-const mercado: Lugar = { nome: 'Supermercado Frangolândia', detalhe: 'Avenida Washington Soares, Fortaleza', lat: -3.7566, lng: -38.4891 };
-const outro: Lugar = { nome: 'Praça Central', detalhe: '', lat: -3.7, lng: -38.5 };
+const mercado: Lugar = { nome: 'Supermercado Frangolândia', detalhe: 'Avenida Washington Soares, Fortaleza', completo: 'Supermercado Frangolândia, Avenida Washington Soares, Fortaleza', lat: -3.7566, lng: -38.4891 };
+const outro: Lugar = { nome: 'Praça Central', detalhe: '', completo: 'Praça Central', lat: -3.7, lng: -38.5 };
+const semONumero: Lugar = { nome: 'Rua Ana Bilhar', detalhe: 'Meireles, Fortaleza - CE', completo: 'Rua Ana Bilhar, Meireles, Fortaleza - CE', lat: -3.7295, lng: -38.4957, aproximado: true };
 
 beforeEach(() => { jest.useFakeTimers(); });
 afterEach(() => { jest.useRealTimers(); });
@@ -84,12 +85,40 @@ describe('PlaceSearch', () => {
     expect(within(item).queryAllByText('')).toHaveLength(0); // sem linha vazia embaixo
   });
 
-  it('sem resultado não mostra nada (nem a mensagem de erro)', async () => {
+  it('sem resultado diz que não achou e o que fazer (senão a pessoa acha que o app quebrou), sem a mensagem de erro', async () => {
     await abrir([]);
     await digitar('xyzxyz');
     await esperar(ESPERA_DA_BUSCA + 10);
-    expect(screen.queryByTestId('sugestoes')).toBeNull();
+    expect(screen.getByTestId('sugestoes')).toBeTruthy();
+    expect(screen.getByText('Nenhum endereço encontrado. Confira o nome da rua ou toque no mapa.')).toBeTruthy();
     expect(screen.queryByText('Não foi possível buscar agora.')).toBeNull();
+    expect(screen.queryByRole('alert')).toBeNull(); // não é falha: não interrompe o leitor de tela
+  });
+
+  it('a busca recebe a posição de referência (onde a pessoa está ou olha) e o sinal de cancelamento', async () => {
+    const buscar = jest.fn(async (_texto: string, _opcoes?: unknown) => [mercado]);
+    await render(<PlaceSearch value="" buscar={buscar as never} perto={{ lat: -3.73, lng: -38.52 }} onChangeText={jest.fn()} onPick={jest.fn()} />);
+    await digitar('mercado');
+    await esperar(ESPERA_DA_BUSCA + 10);
+    expect(buscar).toHaveBeenCalledWith('mercado', { sinal: expect.any(AbortSignal), perto: { lat: -3.73, lng: -38.52 } });
+  });
+
+  it('sem posição de referência a busca recebe null (não inventa uma)', async () => {
+    const buscar = jest.fn(async (_texto: string, _opcoes?: unknown) => [mercado]);
+    await render(<PlaceSearch value="" buscar={buscar as never} onChangeText={jest.fn()} onPick={jest.fn()} />);
+    await digitar('mercado');
+    await esperar(ESPERA_DA_BUSCA + 10);
+    expect(buscar).toHaveBeenCalledWith('mercado', { sinal: expect.any(AbortSignal), perto: null });
+  });
+
+  it('o resultado que não é o ponto exato da porta avisa "Posição aproximada", também para o leitor de tela', async () => {
+    await abrir([semONumero, mercado]);
+    await digitar('rua ana bilhar 1000');
+    await esperar(ESPERA_DA_BUSCA + 10);
+    const aproximado = screen.getByRole('button', { name: 'Rua Ana Bilhar, Meireles, Fortaleza - CE, posição aproximada' });
+    expect(within(aproximado).getByText('Posição aproximada: confira o pino no mapa')).toBeTruthy();
+    const exato = screen.getByRole('button', { name: 'Supermercado Frangolândia, Avenida Washington Soares, Fortaleza' });
+    expect(within(exato).queryByText(/aproximada/)).toBeNull();
   });
 
   it('se o serviço falhar, diz "Não foi possível buscar agora." na própria lista', async () => {
@@ -160,6 +189,18 @@ describe('PlaceSearch: aviso de lista aberta', () => {
     expect(aviso).toHaveBeenLastCalledWith(true);
     await fireEvent.press(screen.getByRole('button', { name: 'Supermercado Frangolândia, Avenida Washington Soares, Fortaleza' }));
     expect(aviso).toHaveBeenLastCalledWith(false);
+  });
+
+  it('a mensagem de "nenhum endereço" também é uma lista aberta, e volta ao focar o campo de novo', async () => {
+    const aviso = await abrirComAviso([]);
+    await digitar('xyzxyz');
+    await esperar(ESPERA_DA_BUSCA + 10);
+    expect(aviso).toHaveBeenLastCalledWith(true);
+    await fireEvent(screen.getByLabelText('Endereço do lembrete'), 'blur');
+    await esperar(250);
+    expect(aviso).toHaveBeenLastCalledWith(false);
+    await fireEvent(screen.getByLabelText('Endereço do lembrete'), 'focus');
+    expect(aviso).toHaveBeenLastCalledWith(true);
   });
 
   it('a mensagem de falha também é uma lista aberta (cobre o mapa do mesmo jeito)', async () => {

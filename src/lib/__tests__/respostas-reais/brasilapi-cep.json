@@ -1,0 +1,20 @@
+{
+  "cep": "60811905",
+  "state": "CE",
+  "city": "Fortaleza",
+  "neighborhood": "Edson Queiroz",
+  "street": "Avenida Washington Soares 1321",
+  "service": "open-cep",
+  "ibge": {
+    "city": "2304400",
+    "state": "23"
+  },
+  "timezoneName": "America/Fortaleza",
+  "location": {
+    "type": "Point",
+    "coordinates": {
+      "longitude": "-38.54306",
+      "latitude": "-3.71722"
+    }
+  }
+}

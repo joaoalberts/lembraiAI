@@ -1,0 +1,160 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_type": "W",
+        "osm_id": 905914261,
+        "osm_key": "tourism",
+        "osm_value": "guest_house",
+        "type": "house",
+        "housenumber": "507",
+        "name": "Hotel Brisa do Meireles",
+        "street": "Rua Ana Bilhar",
+        "district": "Meireles",
+        "city": "Fortaleza",
+        "state": "Ceará",
+        "country": "Brasil",
+        "postcode": "60160-110",
+        "countrycode": "BR",
+        "extent": [
+          -38.4956239,
+          -3.7291044,
+          -38.4953608,
+          -3.7295007
+        ]
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -38.4954766,
+          -3.729257
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_type": "W",
+        "osm_id": 389966540,
+        "osm_key": "highway",
+        "osm_value": "tertiary",
+        "type": "street",
+        "name": "Rua Ana Bilhar",
+        "district": "Meireles",
+        "city": "Fortaleza",
+        "state": "Ceará",
+        "country": "Brasil",
+        "postcode": "60160-110",
+        "countrycode": "BR",
+        "extent": [
+          -38.5000459,
+          -3.728069,
+          -38.4912879,
+          -3.7308976
+        ]
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -38.4956706,
+          -3.7294947
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_type": "W",
+        "osm_id": 824057783,
+        "osm_key": "highway",
+        "osm_value": "residential",
+        "type": "street",
+        "name": "Rua Ana Bilhar",
+        "district": "Meireles",
+        "city": "Fortaleza",
+        "state": "Ceará",
+        "country": "Brasil",
+        "postcode": "60160-110",
+        "countrycode": "BR",
+        "extent": [
+          -38.491226,
+          -3.7309179,
+          -38.4893235,
+          -3.7315515
+        ]
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -38.4902712,
+          -3.7312242
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_type": "W",
+        "osm_id": 1218097134,
+        "osm_key": "landuse",
+        "osm_value": "residential",
+        "type": "locality",
+        "housenumber": "602",
+        "name": "Edifício Ana Bilhar",
+        "street": "Rua Ana Bilhar",
+        "district": "Meireles",
+        "city": "Fortaleza",
+        "state": "Ceará",
+        "country": "Brasil",
+        "postcode": "60160-110",
+        "countrycode": "BR",
+        "extent": [
+          -38.4949731,
+          -3.7297987,
+          -38.4946799,
+          -3.7301397
+        ]
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -38.4948278,
+          -3.7299708
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_type": "W",
+        "osm_id": 699772533,
+        "osm_key": "landuse",
+        "osm_value": "construction",
+        "type": "other",
+        "housenumber": "1000",
+        "street": "Rua Canuto de Aguiar",
+        "district": "Meireles",
+        "city": "Fortaleza",
+        "state": "Ceará",
+        "country": "Brasil",
+        "postcode": "60160-120",
+        "countrycode": "BR",
+        "extent": [
+          -38.494159,
+          -3.731164,
+          -38.4935918,
+          -3.7317296
+        ]
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -38.4938746,
+          -3.7314563
+        ]
+      }
+    }
+  ]
+}

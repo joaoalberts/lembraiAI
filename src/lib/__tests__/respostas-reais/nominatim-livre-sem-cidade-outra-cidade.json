@@ -1,0 +1,67 @@
+[
+  {
+    "place_id": 8907529,
+    "licence": "Data © OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+    "osm_type": "way",
+    "osm_id": 38738786,
+    "lat": "-23.5712978",
+    "lon": "-46.6394094",
+    "category": "highway",
+    "type": "tertiary",
+    "place_rank": 26,
+    "importance": 0.05341195162890055,
+    "addresstype": "road",
+    "name": "Rua Doutor João Morais",
+    "display_name": "Rua Doutor João Morais, Liberdade, São Paulo, Região Sudeste, 01533-050, Brasil",
+    "address": {
+      "road": "Rua Doutor João Morais",
+      "suburb": "Liberdade",
+      "city_district": "Liberdade",
+      "city": "São Paulo",
+      "state": "São Paulo",
+      "ISO3166-2-lvl4": "BR-SP",
+      "region": "Região Sudeste",
+      "postcode": "01533-050",
+      "country": "Brasil",
+      "country_code": "br"
+    },
+    "boundingbox": [
+      "-23.5713113",
+      "-23.5712850",
+      "-46.6397311",
+      "-46.6390876"
+    ]
+  },
+  {
+    "place_id": 13786411,
+    "licence": "Data © OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+    "osm_type": "way",
+    "osm_id": 452472374,
+    "lat": "-3.7664689",
+    "lon": "-38.5584326",
+    "category": "highway",
+    "type": "residential",
+    "place_rank": 26,
+    "importance": 0.05340152056153197,
+    "addresstype": "road",
+    "name": "Rua Doutor João Morais",
+    "display_name": "Rua Doutor João Morais, Montese, Fortaleza, Ceará, Região Nordeste, 60425-630, Brasil",
+    "address": {
+      "road": "Rua Doutor João Morais",
+      "suburb": "Montese",
+      "municipality": "Fortaleza",
+      "state": "Ceará",
+      "ISO3166-2-lvl4": "BR-CE",
+      "region": "Região Nordeste",
+      "postcode": "60425-630",
+      "country": "Brasil",
+      "country_code": "br"
+    },
+    "boundingbox": [
+      "-3.7666595",
+      "-3.7662784",
+      "-38.5588962",
+      "-38.5579690"
+    ]
+  }
+]

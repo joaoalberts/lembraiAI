@@ -4,7 +4,7 @@ import { router } from 'expo-router';
 import { Keyboard, ScrollView, StyleSheet } from 'react-native';
 import { colors, fontFamily, layout, space } from '../../design/tokens';
 import type { Reminder } from '../../data/reminders';
-import { nomeDoPonto } from '../../lib/geocodificar';
+import { buscarLugares, nomeDoPonto } from '../../lib/geocodificar';
 import { comAreaSegura } from '../../test-utils/area-segura';
 import { useGeo } from '../../state/geo';
 import { useReminders } from '../../state/reminders';
@@ -16,7 +16,7 @@ jest.mock('../../state/geo', () => ({ useGeo: jest.fn() }));
 jest.mock('../../state/auth', () => ({ useAuth: () => ({ user: { email: 'joao.teste@exemplo.com' }, nome: '', sair: jest.fn(), trocarSenha: jest.fn() }) }));
 jest.mock('../../lib/geocodificar', () => ({
   MINIMO_DE_LETRAS: 3,
-  buscarLugares: jest.fn(async () => [{ nome: 'Supermercado Frangolândia', detalhe: 'Fortaleza', lat: -3.7566, lng: -38.4891 }]),
+  buscarLugares: jest.fn(async () => [{ nome: 'Supermercado Frangolândia', detalhe: 'Fortaleza', completo: 'Supermercado Frangolândia, Rua A, 10, Fortaleza - CE', lat: -3.7566, lng: -38.4891 }]),
   nomeDoPonto: jest.fn(async () => 'Avenida Washington Soares'),
 }));
 // o mapa é um componente DOM (Leaflet): nos testes vira botões que fazem o que a pessoa faria nele
@@ -251,9 +251,67 @@ describe('Formulário: por local', () => {
     await fireEvent.changeText(screen.getByLabelText('Endereço do lembrete'), 'mercado');
     await esperar(700);
     await fireEvent.press(screen.getByRole('button', { name: 'Supermercado Frangolândia, Fortaleza' }));
-    expect(screen.getByLabelText('Endereço do lembrete')).toHaveProp('value', 'Supermercado Frangolândia');
+    // o lembrete guarda o endereço inteiro (rua, número, bairro, cidade, estado, CEP), não só a primeira parte
+    expect(screen.getByLabelText('Endereço do lembrete')).toHaveProp('value', 'Supermercado Frangolândia, Rua A, 10, Fortaleza - CE');
     expect(JSON.parse(screen.getByTestId('mapa-estado').props.children)).toEqual({ escolha: { lat: -3.7566, lng: -38.4891, raio: 150 }, enquadrar: 1 });
     expect(nomeDoPonto).not.toHaveBeenCalled(); // o nome já veio da busca
+    await escrever('Comprar leite');
+    await salvar();
+    expect(acoes.create).toHaveBeenCalledWith(expect.objectContaining({ kind: 'local', place: 'Supermercado Frangolândia, Rua A, 10, Fortaleza - CE', lat: -3.7566, lng: -38.4891 }));
+  });
+
+  describe('a busca de endereço dá preferência ao que está perto', () => {
+    const buscarEEsperar = async (texto: string) => {
+      jest.mocked(buscarLugares).mockClear();
+      await fireEvent.changeText(screen.getByLabelText('Endereço do lembrete'), texto);
+      await esperar(700);
+      return (jest.mocked(buscarLugares).mock.calls.at(-1)?.[1] as { perto: unknown }).perto;
+    };
+
+    it('sem pino e sem saber onde a pessoa está, de lugar nenhum', async () => {
+      await abrir();
+      await ligarOLocal();
+      expect(await buscarEEsperar('mercado')).toBeNull();
+    });
+
+    it('sem pino, de onde a pessoa está', async () => {
+      jest.mocked(useGeo).mockReturnValue({ ...geo, position: { lat: -3.8, lng: -38.6, accuracy: 10, at: 1 } } as unknown as ReturnType<typeof useGeo>);
+      await abrir();
+      await ligarOLocal();
+      expect(await buscarEEsperar('padaria')).toEqual({ lat: -3.8, lng: -38.6, accuracy: 10, at: 1 });
+    });
+
+    it('com o pino já escolhido, do pino (vale mais que onde a pessoa está)', async () => {
+      jest.mocked(useGeo).mockReturnValue({ ...geo, position: { lat: -3.8, lng: -38.6, accuracy: 10, at: 1 } } as unknown as ReturnType<typeof useGeo>);
+      await abrir();
+      await ligarOLocal();
+      await tocarNoMapa();
+      expect(await buscarEEsperar('farmacia')).toEqual({ lat: -3.7, lng: -38.5 });
+    });
+  });
+
+  it('resultado aproximado (o mapa não tem o número) troca a dica do raio por "Posição aproximada", até a pessoa mexer no pino', async () => {
+    jest.mocked(buscarLugares).mockResolvedValueOnce([{ nome: 'Rua Ana Bilhar', detalhe: 'Meireles, Fortaleza - CE', completo: 'Rua Ana Bilhar, Meireles, Fortaleza - CE', lat: -3.7295, lng: -38.4957, aproximado: true }]);
+    await abrir();
+    await ligarOLocal();
+    await fireEvent.changeText(screen.getByLabelText('Endereço do lembrete'), 'rua ana bilhar 1000');
+    await esperar(700);
+    await fireEvent.press(screen.getByRole('button', { name: 'Rua Ana Bilhar, Meireles, Fortaleza - CE, posição aproximada' }));
+    expect(screen.getByText('Posição aproximada: o mapa não tem esse número. Toque no mapa ou arraste o pino para ajustar.')).toBeTruthy();
+    expect(screen.queryByText('Você será avisado ao entrar no raio selecionado.')).toBeNull();
+    await tocarNoMapa();
+    expect(screen.queryByText(/Posição aproximada/)).toBeNull();
+    expect(screen.getByText('Você será avisado ao entrar no raio selecionado.')).toBeTruthy();
+  });
+
+  it('resultado exato mantém a dica de sempre', async () => {
+    await abrir();
+    await ligarOLocal();
+    await fireEvent.changeText(screen.getByLabelText('Endereço do lembrete'), 'mercado');
+    await esperar(700);
+    await fireEvent.press(screen.getByRole('button', { name: 'Supermercado Frangolândia, Fortaleza' }));
+    expect(screen.getByText('Você será avisado ao entrar no raio selecionado.')).toBeTruthy();
+    expect(screen.queryByText(/Posição aproximada/)).toBeNull();
   });
 
   it('enquanto a lista de sugestões está aberta o mapa não recebe toque: no Android o toque na sugestão chegava também à WebView do mapa e trocava o ponto escolhido', async () => {

@@ -1,0 +1,155 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_type": "W",
+        "osm_id": 436565576,
+        "osm_key": "highway",
+        "osm_value": "primary",
+        "type": "street",
+        "name": "Avenida Santos Dumont",
+        "district": "Aldeota",
+        "city": "Fortaleza",
+        "state": "Ceará",
+        "country": "Brasil",
+        "postcode": "60150-140",
+        "countrycode": "BR",
+        "extent": [
+          -38.5063139,
+          -3.733645,
+          -38.5062506,
+          -3.7336662
+        ]
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -38.5062822,
+          -3.7336556
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_type": "W",
+        "osm_id": 1409584819,
+        "osm_key": "highway",
+        "osm_value": "primary",
+        "type": "street",
+        "name": "Avenida Santos Dumont",
+        "district": "Aldeota",
+        "city": "Fortaleza",
+        "state": "Ceará",
+        "country": "Brasil",
+        "postcode": "60125-035",
+        "countrycode": "BR",
+        "extent": [
+          -38.5032389,
+          -3.7346659,
+          -38.5022735,
+          -3.7350175
+        ]
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -38.5027779,
+          -3.7348798
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_type": "W",
+        "osm_id": 704953730,
+        "osm_key": "highway",
+        "osm_value": "primary",
+        "type": "street",
+        "name": "Avenida Santos Dumont",
+        "district": "Aldeota",
+        "city": "Fortaleza",
+        "state": "Ceará",
+        "country": "Brasil",
+        "postcode": "60150-280",
+        "countrycode": "BR",
+        "extent": [
+          -38.501289,
+          -3.7352773,
+          -38.4993464,
+          -3.7358978
+        ]
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -38.5003205,
+          -3.7355965
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_type": "W",
+        "osm_id": 910975864,
+        "osm_key": "highway",
+        "osm_value": "primary",
+        "type": "street",
+        "name": "Avenida Santos Dumont",
+        "district": "Aldeota",
+        "city": "Fortaleza",
+        "state": "Ceará",
+        "country": "Brasil",
+        "postcode": "60170-330",
+        "countrycode": "BR",
+        "extent": [
+          -38.4935063,
+          -3.7377975,
+          -38.493438,
+          -3.7378203
+        ]
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -38.4934721,
+          -3.7378089
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_type": "W",
+        "osm_id": 912551306,
+        "osm_key": "highway",
+        "osm_value": "primary",
+        "type": "street",
+        "name": "Avenida Santos Dumont",
+        "district": "Aldeota",
+        "city": "Fortaleza",
+        "state": "Ceará",
+        "country": "Brasil",
+        "postcode": "60175-172",
+        "countrycode": "BR",
+        "extent": [
+          -38.4889307,
+          -3.7392922,
+          -38.4876361,
+          -3.7397117
+        ]
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -38.4882834,
+          -3.7395019
+        ]
+      }
+    }
+  ]
+}

@@ -1,0 +1,127 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_type": "N",
+        "osm_id": 3833597263,
+        "osm_key": "amenity",
+        "osm_value": "bicycle_rental",
+        "type": "house",
+        "housenumber": "2853",
+        "name": "Reitoria UFC",
+        "street": "Avenida da Universidade",
+        "district": "Benfica",
+        "city": "Fortaleza",
+        "state": "Ceará",
+        "country": "Brasil",
+        "postcode": "60020-181",
+        "countrycode": "BR"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -38.5393982,
+          -3.7414294
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_type": "W",
+        "osm_id": 184280442,
+        "osm_key": "amenity",
+        "osm_value": "university",
+        "type": "house",
+        "housenumber": "2853",
+        "name": "Reitoria da UFC",
+        "street": "Avenida da Universidade",
+        "district": "Benfica",
+        "city": "Fortaleza",
+        "state": "Ceará",
+        "country": "Brasil",
+        "postcode": "60020-181",
+        "countrycode": "BR",
+        "extent": [
+          -38.5399082,
+          -3.741161,
+          -38.5379682,
+          -3.7428961
+        ]
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -38.5389571,
+          -3.742034
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_type": "W",
+        "osm_id": 495274096,
+        "osm_key": "amenity",
+        "osm_value": "bank",
+        "type": "house",
+        "housenumber": "2853",
+        "name": "Banco do Brasil",
+        "street": "Avenida da Universidade",
+        "district": "Benfica",
+        "city": "Fortaleza",
+        "state": "Ceará",
+        "country": "Brasil",
+        "postcode": "60020-181",
+        "countrycode": "BR",
+        "extent": [
+          -38.5391006,
+          -3.7425361,
+          -38.5387729,
+          -3.7428652
+        ]
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -38.5389372,
+          -3.7427006
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_type": "W",
+        "osm_id": 1331302191,
+        "osm_key": "amenity",
+        "osm_value": "theatre",
+        "type": "house",
+        "housenumber": "2853",
+        "name": "Concha Acústica",
+        "street": "Avenida da Universidade",
+        "district": "Benfica",
+        "city": "Fortaleza",
+        "state": "Ceará",
+        "country": "Brasil",
+        "postcode": "60020-181",
+        "countrycode": "BR",
+        "extent": [
+          -38.5388068,
+          -3.7418312,
+          -38.5380432,
+          -3.742472
+        ]
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -38.538413,
+          -3.7422313
+        ]
+      }
+    }
+  ]
+}
