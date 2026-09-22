@@ -5,49 +5,32 @@
 	header {
 		X-Content-Type-Options nosniff
 		Referrer-Policy strict-origin-when-cross-origin
+		Access-Control-Allow-Origin "*"
+		Access-Control-Allow-Methods "GET, POST, PUT, PATCH, DELETE, OPTIONS"
+		Access-Control-Allow-Headers "Content-Type, Authorization, apikey, X-Client-Info, X-Supabase-API-Version, x-retry-count, accept-profile, content-profile, prefer"
+		# os três últimos vêm do GoTrue: a regra global sobrescreveria a dele e o app deixaria de lê-los
+		Access-Control-Expose-Headers "Content-Range, X-Total-Count, Link, X-Supabase-Api-Version"
 		-Server
 	}
 
 	# Auth API
 	handle_path /auth/v1/* {
-		header {
-			Access-Control-Allow-Origin "*"
-			Access-Control-Allow-Methods "GET, POST, PUT, PATCH, DELETE, OPTIONS"
-			Access-Control-Allow-Headers "Content-Type, Authorization, apikey, X-Client-Info, X-Supabase-API-Version, x-retry-count, accept-profile, content-profile, prefer"
-		}
-
 		@options {
 			method OPTIONS
 		}
 		respond @options 204
 
-		reverse_proxy auth:9999 {
-			header_down -Access-Control-Allow-Origin
-			header_down -Access-Control-Allow-Methods
-			header_down -Access-Control-Allow-Headers
-		}
+		reverse_proxy auth:9999
 	}
 
 	# REST API
 	handle_path /rest/v1/* {
-		header {
-			Access-Control-Allow-Origin "*"
-			Access-Control-Allow-Methods "GET, POST, PUT, PATCH, DELETE, OPTIONS"
-			Access-Control-Allow-Headers "Content-Type, Authorization, apikey, X-Client-Info, X-Supabase-API-Version, x-retry-count, accept-profile, content-profile, prefer"
-			Access-Control-Expose-Headers "Content-Range"
-		}
-
 		@options {
 			method OPTIONS
 		}
 		respond @options 204
 
-		reverse_proxy rest:3000 {
-			header_down -Access-Control-Allow-Origin
-			header_down -Access-Control-Allow-Methods
-			header_down -Access-Control-Allow-Headers
-			header_down -Access-Control-Expose-Headers
-		}
+		reverse_proxy rest:3000
 	}
 
 	# Web UI
