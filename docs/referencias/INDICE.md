@@ -8,6 +8,7 @@ Cópia **integral e idêntica, byte a byte** (SHA-256 conferido arquivo por arqu
 - O perfil de cor embutido é o da tela ("Display"), **não** o sRGB. Converta para sRGB antes de comparar cores: o laranja `#FE532A` aparece cru como `#EB603C`. `scripts/amostrar-referencias.py` faz a conversão.
 - Imagem parada não mostra sombra em movimento, animação nem estado de toque: para isso valem os CSS do app web (`Aplicativos/lembreiAI/src`).
 - Não copie erro de renderização: o popup de data do navegador (`12`), o botão escondido atrás do mapa (`06` e `15`, página rolada) e o corte inferior das telas rolantes.
+- **Divergência deliberada, não conserte:** a `01-onboarding.png` mostra uma foto de parede verde desfocada por trás do pino e do título. O João pediu essa foto fora em 22/09/2026 (Design System, 18); no Expo a abertura tem fundo liso. O resto da `01` continua valendo.
 
 ## Índice (15 arquivos, 7.4 MB)
 

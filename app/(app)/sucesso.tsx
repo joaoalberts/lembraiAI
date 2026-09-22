@@ -137,14 +137,22 @@ function Sucesso() {
       <ConfirmSheet
         visible={excluindo}
         title={'Excluir lembrete?'}
-        message={`”${lembrete.title}” será removido e você não receberá mais esse aviso.`}
+        message={`“${lembrete.title}” será removido e você não receberá mais esse aviso.`}
         confirmLabel={'Excluir lembrete'}
         onConfirm={confirmarExclusao}
         onCancel={() => setExcluindo(false)}
       />
 
+      {/* cópia só para virar JPEG no compartilhamento: invisível, sem toque e fora do leitor de tela (senão o resumo é lido duas vezes) */}
       {Platform.OS !== 'web' && (
-        <View ref={cartaoRef} style={styles.cartaoHidden} testID="cartao-hidden" pointerEvents="none">
+        <View
+          ref={cartaoRef}
+          style={styles.cartaoHidden}
+          testID="cartao-hidden"
+          pointerEvents="none"
+          accessibilityElementsHidden
+          importantForAccessibility="no-hide-descendants"
+        >
           <CartaoDeResumo lembrete={lembrete} />
         </View>
       )}
