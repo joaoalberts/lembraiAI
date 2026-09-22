@@ -4,7 +4,7 @@ Imagens que as telas usam. Vieram do app web original (`Aplicativos/lembreiAI/pu
 
 | Arquivo | Bytes | Onde entra | Origem |
 |---|---|---|---|
-| `bg-onboarding.jpg` | 105.574 | **Sem uso desde 22/09/2026**: era o fundo do Onboarding; o João pediu a abertura sem o borrão (Design System, 18). Guardado caso ele volte atrás | app web |
+| `bg-onboarding.jpg` | 105.574 | Fundo do Onboarding (`docs/referencias/01`) | app web |
 | `hero-pino.png` | 445.564 | Pino 3D com relógio sobre o mapa, no Onboarding | app web |
 | `hero-script.png` | 21.855 | "Mais liberdade para o seu dia", manuscrito, no Onboarding | app web |
 | `bg-success.jpg` | 69.994 | Fundo de folhagem da tela de sucesso (`09`) | app web |
