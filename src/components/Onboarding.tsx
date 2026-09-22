@@ -11,7 +11,6 @@ import { BellSolid, LockIcon, PinSolid } from './Glifos';
 import { GlassPill } from './GlassButton';
 import { Icon, type IconeNome } from './Icon';
 
-const FUNDO = require('../../assets/art/bg-onboarding.jpg');
 const PINO_3D = require('../../assets/art/hero-pino.png');
 const LETREIRO = require('../../assets/art/hero-script.png');
 
@@ -90,8 +89,7 @@ export function Onboarding({ onSkip, onStart }: OnboardingProps) {
     <View testID="onboarding" style={styles.tela}>
       {/* fundo verde escuro: barra de status com texto claro */}
       <BarraDeStatus sobre="escuro" />
-      <Image source={FUNDO} contentFit="cover" accessible={false} style={StyleSheet.absoluteFill} />
-      <View style={[styles.fluxo, { paddingTop: top, paddingBottom: bottom }]}>
+      <View testID="onboarding-fluxo" style={[styles.fluxo, { paddingTop: top, paddingBottom: bottom }]}>
         <View style={folga(PESOS.topo)} />
         <View style={styles.topo}>
           <AppBrand variant="onboarding" />

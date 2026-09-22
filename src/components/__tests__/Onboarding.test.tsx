@@ -66,7 +66,15 @@ describe('Onboarding: conteúdo', () => {
     expect(screen.getByTestId('onboarding-balao-esquerdo')).toHaveStyle({ backgroundColor: colors.glass.balloon, borderColor: colors.glass.balloonRing, borderRadius: radius.lg });
   });
 
-  it('o letreiro manuscrito tem texto alternativo; as imagens de fundo e do pino são decorativas', async () => {
+  it('o fundo é a cor do token, sem foto por trás (decisão do João, 22/09: nada de vidro borrado na abertura)', async () => {
+    await abrir();
+    expect(screen.getByTestId('onboarding')).toHaveStyle({ backgroundColor: colors.onboarding.bg });
+    // o fluxo é o único filho: uma camada de imagem cobrindo a tela voltaria a aparecer aqui.
+    expect(screen.getByTestId('onboarding').children).toHaveLength(1);
+    expect(screen.getByTestId('onboarding').children[0]).toBe(screen.getByTestId('onboarding-fluxo'));
+  });
+
+  it('o letreiro manuscrito tem texto alternativo; a imagem do pino é decorativa', async () => {
     await abrir();
     expect(screen.getByLabelText('Mais liberdade para o seu dia')).toBeTruthy();
     expect(screen.getByTestId('onboarding-pino')).toHaveProp('accessible', false);
@@ -133,12 +141,12 @@ describe('Onboarding: encaixe na tela', () => {
 
   it('é a tela de quem ainda não entrou, sem barra de abas: a base respeita a área segura do sistema', async () => {
     await abrir({}, { top: 47, bottom: 34 });
-    expect(estilo(screen.getByTestId('onboarding').children[1] as never)).toMatchObject({ paddingTop: 47, paddingBottom: 34 });
+    expect(estilo(screen.getByTestId('onboarding-fluxo') as never)).toMatchObject({ paddingTop: 47, paddingBottom: 34 });
   });
 
   it('as folgas são elásticas e proporcionais: a de cima pesa 113 e a última 156', async () => {
     await abrir();
-    const fluxo = screen.getByTestId('onboarding').children[1] as { children: { props: { style?: unknown } }[] };
+    const fluxo = screen.getByTestId('onboarding-fluxo') as unknown as { children: { props: { style?: unknown } }[] };
     const pesos = fluxo.children.map((f) => estilo(f).flexGrow).filter((g) => typeof g === 'number');
     expect(pesos).toEqual([113, 107, 32, 47, 43, 56, 96, 156]);
     expect(fluxo.children.map((f) => estilo(f).flexShrink).filter((g) => g === 1)).toHaveLength(8);

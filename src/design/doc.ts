@@ -151,7 +151,7 @@ const DESCRICOES: Record<string, string> = {
   'colors.text.onDarkAccent': 'Destaque do título do Onboarding ("de tudo!")',
   'colors.text.brandAccent': 'Letras "Ai" do nome da marca no Onboarding',
   'colors.icon.onDarkMint': 'Ícones dos balões do Onboarding',
-  'colors.onboarding.bg': 'Fundo do Onboarding enquanto a foto carrega',
+  'colors.onboarding.bg': 'Fundo do Onboarding',
   'colors.onboarding.pagerOn': 'Ponto da página ativa do Onboarding',
   'colors.onboarding.pagerOff': 'Pontos das outras páginas do Onboarding',
   'colors.glass.balloon': 'Balão de vidro do Onboarding ("Na hora certa", "No lugar certo")',
