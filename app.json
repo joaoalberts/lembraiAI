@@ -53,7 +53,10 @@
           "locationWhenInUsePermission": "O LembreiAi usa sua localização para avisar quando você chega perto do lugar de um lembrete.",
           "locationAlwaysAndWhenInUsePermission": "O LembreiAi usa sua localização para avisar quando você chega perto do lugar de um lembrete.",
           "locationAlwaysPermission": "O LembreiAi usa sua localização para avisar quando você chega perto do lugar de um lembrete.",
-          "motionUsagePermission": false
+          "motionUsagePermission": false,
+          "isIosBackgroundLocationEnabled": true,
+          "isAndroidBackgroundLocationEnabled": true,
+          "isAndroidForegroundServiceEnabled": false
         }
       ],
       [

@@ -3,6 +3,7 @@ import { Platform } from 'react-native';
 import * as Notifications from 'expo-notifications';
 import { router } from 'expo-router';
 import type { Reminder } from '../data/reminders';
+import { CANAL_DE_AVISOS } from '../lib/aviso-do-sistema';
 import { corpoDoLembrete, orcamentoDeAvisos, planNotifications, type Plan } from '../lib/schedule';
 import { useAuth } from './auth';
 import type { NotificationsState, NotifyInput } from './notifications-tipos';
@@ -11,7 +12,7 @@ export type { NotificationsState, NotifyInput };
 
 /** O Expo não oferece notificações locais na web: lá o provedor fica inerte. */
 const supported = Platform.OS !== 'web';
-const CHANNEL_ID = 'lembretes';
+const CHANNEL_ID = CANAL_DE_AVISOS;
 
 if (supported) {
   Notifications.setNotificationHandler({

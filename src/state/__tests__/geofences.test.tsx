@@ -8,6 +8,7 @@ import { useNotifications } from '../notifications';
 import { useReminders } from '../reminders';
 
 jest.mock('@react-native-async-storage/async-storage', () => require('@react-native-async-storage/async-storage/jest/async-storage-mock'));
+jest.mock('../geofencing-nativo', () => ({ useSegundoPlano: () => ({ estado: 'indisponivel', permissao: 'desconhecida', pedirPermissao: jest.fn() }) }));
 jest.mock('../geo', () => ({ useGeo: jest.fn() }));
 jest.mock('../notifications', () => ({ useNotifications: jest.fn() }));
 jest.mock('../reminders', () => ({ useReminders: jest.fn() }));

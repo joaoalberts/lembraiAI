@@ -175,6 +175,20 @@ describe('avisos na web: o aviso do navegador', () => {
     expect(NotificationDeMentira).toHaveBeenCalledWith('Tomar remédio', expect.objectContaining({ body: 'Lembrete das 09:00' }));
   });
 
+  it('diz o estado exato da permissão do navegador: pendente, permitida, bloqueada ou inexistente', async () => {
+    await abrir([]);
+    expect(ultimo.permissaoDoNavegador).toBe('pendente');
+    configurarNavegador({ permissao: 'granted' });
+    await abrir([]);
+    expect(ultimo.permissaoDoNavegador).toBe('concedida');
+    configurarNavegador({ permissao: 'denied' });
+    await abrir([]);
+    expect(ultimo.permissaoDoNavegador).toBe('negada');
+    Object.defineProperty(globalThis, 'Notification', { configurable: true, value: undefined });
+    await abrir([]);
+    expect(ultimo.permissaoDoNavegador).toBe('indisponivel');
+  });
+
   it('pedir a permissão pergunta ao navegador e guarda a resposta', async () => {
     await abrir([]);
     expect(ultimo.permissionGranted).toBe(false);

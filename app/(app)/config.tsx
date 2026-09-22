@@ -25,8 +25,9 @@ import { useNotifications } from '../../src/state/notifications';
 export default function ConfigScreen() {
   const { user, nome, sair, excluirConta } = useAuth();
   const { monitoring, setMonitoring, permissionGranted: geoOk, position, error: geoError } = useGeo();
-  const { supported, permissionGranted: notifOk, scheduledCount } = useNotifications();
-  const { fences, insideIds, nearest, arrivals } = useGeofences();
+  const { supported, modo, permissionGranted: notifOk, scheduledCount, permissaoDoNavegador, requestPermission } = useNotifications();
+  const soComAppAberto = modo === 'so-com-o-app-aberto';
+  const { fences, insideIds, nearest, arrivals, segundoPlano } = useGeofences();
   const [excluindo, setExcluindo] = useState(false);
   const [erroExcluir, setErroExcluir] = useState('');
   // o "há N s" acompanha o relógio: a tela se atualiza sozinha
@@ -102,13 +103,53 @@ export default function ConfigScreen() {
               {monitoring && nearest ? <DadoDoCartao rotulo="Mais próximo" valor={`${nearest.fence.title} · ${formatDistance(nearest.meters)}`} /> : null}
             </View>
             {arrivals[0] ? <Banner variant="info" icon="info">{`Último aviso: ${arrivals[0].title} (${quandoFoi(arrivals[0].at, agora)}).`}</Banner> : null}
+            {segundoPlano.estado === 'ativo' ? (
+              <>
+                <Text style={styles.nota}>Com o app fechado: ativo. O sistema do aparelho avisa quando você chega.</Text>
+                <Text style={styles.nota}>O aviso costuma levar alguns minutos para chegar depois que você entra no raio, e o raio mínimo é de 100 m com o app fechado.</Text>
+              </>
+            ) : null}
+            {segundoPlano.estado === 'sem-permissao' && segundoPlano.permissao !== 'negada' ? (
+              <>
+                <Text style={styles.nota}>Para avisar com o app fechado, permita a localização "o tempo todo" (no iPhone, "Sempre").</Text>
+                <Button compact variant="secondary" label="Permitir localização o tempo todo" onPress={() => void segundoPlano.pedirPermissao()} />
+              </>
+            ) : null}
+            {segundoPlano.estado === 'sem-permissao' && segundoPlano.permissao === 'negada' ? (
+              <Text style={styles.nota}>A localização "o tempo todo" está bloqueada: libere nos ajustes do aparelho para o aviso funcionar com o app fechado.</Text>
+            ) : null}
+            {segundoPlano.estado === 'indisponivel' ? (
+              <Text style={styles.nota}>
+                {soComAppAberto
+                  ? 'Na web o aviso de chegada só funciona com o app aberto: o navegador não acompanha a localização com a aba fechada.'
+                  : 'No Expo Go o aviso com o app fechado não funciona: precisa do app instalado (build próprio).'}
+              </Text>
+            ) : null}
+            {segundoPlano.estado === 'erro' ? <Text style={styles.nota}>Não foi possível ativar o aviso com o app fechado. Tente reabrir o app.</Text> : null}
           </CartaoDeConfig>
 
-          <CartaoDeConfig icon="bell" titulo="Notificações" subtitulo={supported ? `Estado: ${notifOk ? 'permitida' : 'não permitida'}.` : 'Não estão disponíveis na versão web.'}>
-            {supported && !notifOk ? (
+          <CartaoDeConfig
+            icon="bell"
+            titulo="Notificações"
+            subtitulo={!supported ? 'Não estão disponíveis na versão web.' : soComAppAberto ? 'Avisos na tela enquanto o app está aberto.' : `Estado: ${notifOk ? 'permitida' : 'não permitida'}.`}
+          >
+            {supported && !soComAppAberto && !notifOk ? (
               <Banner variant="error" icon="triangle-alert">As notificações não estão permitidas. Para receber avisos, libere-as nos ajustes do aparelho.</Banner>
             ) : null}
-            {supported ? <DadoDoCartao rotulo="Avisos por horário agendados" valor={String(scheduledCount)} /> : null}
+            {soComAppAberto ? (
+              <>
+                <Banner variant="info" icon="info">No navegador os avisos só chegam com o app aberto: com a aba fechada nada é entregue.</Banner>
+                {permissaoDoNavegador === 'concedida' ? <Text style={styles.nota}>Avisos do navegador permitidos.</Text> : null}
+                {permissaoDoNavegador === 'negada' ? <Text style={styles.nota}>Os avisos do navegador estão bloqueados para este site: libere nas configurações do site.</Text> : null}
+                {permissaoDoNavegador === 'indisponivel' ? (
+                  <Text style={styles.nota}>Este navegador não mostra avisos do sistema (no iPhone só com o app instalado na tela de início). Os avisos aparecem na tela do app.</Text>
+                ) : null}
+                {permissaoDoNavegador === 'pendente' && requestPermission ? (
+                  <Button compact variant="secondary" label="Permitir avisos do navegador" onPress={() => void requestPermission()} />
+                ) : null}
+              </>
+            ) : null}
+            {supported ? <DadoDoCartao rotulo={soComAppAberto ? 'Avisos por horário nas próximas 24 h' : 'Avisos por horário agendados'} valor={String(scheduledCount)} /> : null}
           </CartaoDeConfig>
 
           {typeof window !== 'undefined' ? (
@@ -127,11 +168,18 @@ export default function ConfigScreen() {
           ) : null}
 
           <CartaoDeConfig titulo="Até onde vai o monitoramento">
-            <View style={styles.dados}>
-              <ItemDeLimite destaque="App aberto:">o aviso chega em segundos. É o único cenário garantido.</ItemDeLimite>
-              <ItemDeLimite destaque="App aberto e minimizado:">costuma continuar, mas o sistema pode encerrar o app a qualquer momento.</ItemDeLimite>
-              <ItemDeLimite destaque="App fechado:">o monitoramento de localização para. Os avisos por horário continuam chegando no celular.</ItemDeLimite>
-            </View>
+            {segundoPlano.estado === 'ativo' ? (
+              <View style={styles.dados}>
+                <ItemDeLimite destaque="App aberto:">o aviso chega em segundos.</ItemDeLimite>
+                <ItemDeLimite destaque="App minimizado ou fechado:">o sistema do aparelho avisa, em geral em poucos minutos (no Android, de 2 a 6). Se você forçar a parada do app, o sistema desfaz o monitoramento até você abri-lo de novo.</ItemDeLimite>
+              </View>
+            ) : (
+              <View style={styles.dados}>
+                <ItemDeLimite destaque="App aberto:">o aviso chega em segundos. É o único cenário garantido.</ItemDeLimite>
+                <ItemDeLimite destaque="App aberto e minimizado:">costuma continuar, mas o sistema pode encerrar o app a qualquer momento.</ItemDeLimite>
+                <ItemDeLimite destaque="App fechado:">o monitoramento de localização para. Os avisos por horário continuam chegando no celular.</ItemDeLimite>
+              </View>
+            )}
           </CartaoDeConfig>
 
           {arrivals.length > 0 ? (
@@ -173,4 +221,5 @@ const styles = StyleSheet.create({
   folha: folhaSobreOCabecalho,
   conteudo: { gap: size.config.cardsGap, paddingTop: size.config.scrollTop, paddingHorizontal: size.config.scrollSide, paddingBottom: size.config.scrollBottom },
   dados: { gap: size.config.rowsGap },
+  nota: { ...textStyles.body, color: colors.text.secondary },
 });

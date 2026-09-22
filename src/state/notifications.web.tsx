@@ -31,6 +31,12 @@ interface ApiDeAvisos {
   new (titulo: string, opcoes?: object): unknown;
 }
 const apiDeAvisos = (): ApiDeAvisos | undefined => (globalThis as { Notification?: ApiDeAvisos }).Notification;
+type PermissaoDoNavegador = NonNullable<NotificationsState['permissaoDoNavegador']>;
+function estadoDaPermissao(): PermissaoDoNavegador {
+  const N = apiDeAvisos();
+  if (!N) return 'indisponivel';
+  return N.permission === 'granted' ? 'concedida' : N.permission === 'denied' ? 'negada' : 'pendente';
+}
 const servico = () => (globalThis.navigator as { serviceWorker?: { getRegistration: () => Promise<{ showNotification: (t: string, o?: object) => Promise<void> } | undefined> } } | undefined)?.serviceWorker;
 
 function ler(): Guardado | null {
@@ -67,7 +73,7 @@ export function NotificationsProvider({ children }: { children: ReactNode }) {
   const { user } = useAuth();
   const userId = user?.id;
   const [avisosNaTela, setAvisosNaTela] = useState<Interno[]>([]);
-  const [permissionGranted, setPermissionGranted] = useState(() => apiDeAvisos()?.permission === 'granted');
+  const [permissaoDoNavegador, setPermissaoDoNavegador] = useState<PermissaoDoNavegador>(estadoDaPermissao);
   const [scheduledCount, setScheduledCount] = useState(0);
   const lembretes = useRef<Reminder[]>([]);
   const seq = useRef(0);
@@ -104,7 +110,7 @@ export function NotificationsProvider({ children }: { children: ReactNode }) {
     if (!N?.requestPermission) return false;
     try {
       const ok = (await N.requestPermission()) === 'granted';
-      setPermissionGranted(ok);
+      setPermissaoDoNavegador(estadoDaPermissao());
       return ok;
     } catch {
       return false;
@@ -143,8 +149,8 @@ export function NotificationsProvider({ children }: { children: ReactNode }) {
   }, [userId, notifyNow]);
 
   const value = useMemo<NotificationsState>(
-    () => ({ supported: true, modo: 'so-com-o-app-aberto', permissionGranted, scheduledCount, notifyNow, syncReminders, requestPermission, avisosNaTela, dispensarAviso }),
-    [permissionGranted, scheduledCount, notifyNow, syncReminders, requestPermission, avisosNaTela, dispensarAviso],
+    () => ({ supported: true, modo: 'so-com-o-app-aberto', permissionGranted: permissaoDoNavegador === 'concedida', permissaoDoNavegador, scheduledCount, notifyNow, syncReminders, requestPermission, avisosNaTela, dispensarAviso }),
+    [permissaoDoNavegador, scheduledCount, notifyNow, syncReminders, requestPermission, avisosNaTela, dispensarAviso],
   );
   return <Ctx.Provider value={value}>{children}</Ctx.Provider>;
 }

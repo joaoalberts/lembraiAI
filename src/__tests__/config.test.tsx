@@ -21,6 +21,8 @@ const AGORA = new Date(2026, 8, 21, 10, 0, 0).getTime();
 const sair = jest.fn();
 const excluirConta = jest.fn();
 const setMonitoring = jest.fn();
+const requestPermission = jest.fn();
+const pedirPermissaoDeSegundoPlano = jest.fn();
 
 interface Cenario {
   nome?: string;
@@ -34,16 +36,19 @@ interface Cenario {
   nearest?: { fence: { title: string }; meters: number } | null;
   arrivals?: { id: string; title: string; at: number; place?: string }[];
   notifSupported?: boolean;
+  notifModo?: 'sistema' | 'so-com-o-app-aberto';
+  segundoPlano?: { estado: string; permissao?: string };
+  permissaoDoNavegador?: 'concedida' | 'negada' | 'pendente' | 'indisponivel';
   notifOk?: boolean;
   scheduledCount?: number;
 }
 
 const abrir = (c: Cenario = {}) => {
-  const { nome = '', email = 'joao.teste@exemplo.com', monitoring = false, geoOk = true, position = null, geoError = null, fences = [], insideIds = [], nearest = null, arrivals = [], notifSupported = true, notifOk = true, scheduledCount = 0 } = c;
+  const { nome = '', email = 'joao.teste@exemplo.com', monitoring = false, geoOk = true, position = null, geoError = null, fences = [], insideIds = [], nearest = null, arrivals = [], notifSupported = true, segundoPlano = { estado: 'indisponivel' } as NonNullable<Cenario['segundoPlano']>, notifModo = 'sistema' as const, permissaoDoNavegador = undefined as Cenario['permissaoDoNavegador'], notifOk = true, scheduledCount = 0 } = c;
   jest.mocked(useAuth).mockReturnValue({ user: { email }, nome, sair, excluirConta } as unknown as ReturnType<typeof useAuth>);
   jest.mocked(useGeo).mockReturnValue({ monitoring, setMonitoring, permissionGranted: geoOk, position, error: geoError } as unknown as ReturnType<typeof useGeo>);
-  jest.mocked(useGeofences).mockReturnValue({ fences, insideIds, nearest, arrivals } as unknown as ReturnType<typeof useGeofences>);
-  jest.mocked(useNotifications).mockReturnValue({ supported: notifSupported, permissionGranted: notifOk, scheduledCount } as unknown as ReturnType<typeof useNotifications>);
+  jest.mocked(useGeofences).mockReturnValue({ fences, insideIds, nearest, arrivals, segundoPlano: { estado: segundoPlano.estado, permissao: segundoPlano.permissao ?? 'desconhecida', pedirPermissao: pedirPermissaoDeSegundoPlano } } as unknown as ReturnType<typeof useGeofences>);
+  jest.mocked(useNotifications).mockReturnValue({ supported: notifSupported, modo: notifModo, permissionGranted: notifOk, scheduledCount, permissaoDoNavegador, requestPermission } as unknown as ReturnType<typeof useNotifications>);
   return render(comAreaSegura(<ConfigScreen />));
 };
 
@@ -176,6 +181,85 @@ describe('Configurações: lembretes por local', () => {
   it('a última chegada vira um aviso informativo com o quanto faz', async () => {
     await abrir({ arrivals: [{ id: 'a', title: 'Mercado', at: AGORA - 5 * 60_000 }, { id: 'b', title: 'Academia', at: AGORA - 60 * 60_000 }] });
     expect(screen.getByText('Último aviso: Mercado (há 5 min).')).toBeTruthy();
+  });
+});
+
+describe('Configurações: o aviso de chegada com o app fechado (geofence do sistema)', () => {
+  it('ativo: diz que o sistema avisa mesmo com o app fechado, com o alcance real (minutos e raio mínimo)', async () => {
+    await abrir({ notifModo: 'sistema', segundoPlano: { estado: 'ativo', permissao: 'concedida' }, fences: [{ id: '1', title: 'Padaria' }] });
+    expect(screen.getByText('Com o app fechado: ativo. O sistema do aparelho avisa quando você chega.')).toBeTruthy();
+    expect(screen.getByText(/costuma levar alguns minutos/)).toBeTruthy();
+    expect(screen.getByText(/raio mínimo é de 100 m/)).toBeTruthy();
+    expect(screen.queryByText('App fechado:')).toBeNull(); // a linha antiga ("o monitoramento para") deixou de ser verdade
+  });
+
+  it('falta a permissão "o tempo todo": explica e oferece o botão que a pede', async () => {
+    await abrir({ notifModo: 'sistema', segundoPlano: { estado: 'sem-permissao', permissao: 'pendente' }, fences: [{ id: '1', title: 'Padaria' }] });
+    expect(screen.getByText('Para avisar com o app fechado, permita a localização "o tempo todo" (no iPhone, "Sempre").')).toBeTruthy();
+    await fireEvent.press(screen.getByRole('button', { name: 'Permitir localização o tempo todo' }));
+    expect(pedirPermissaoDeSegundoPlano).toHaveBeenCalledTimes(1);
+  });
+
+  it('permissão negada de vez: só os ajustes do aparelho resolvem, sem botão', async () => {
+    await abrir({ notifModo: 'sistema', segundoPlano: { estado: 'sem-permissao', permissao: 'negada' }, fences: [{ id: '1', title: 'Padaria' }] });
+    expect(screen.getByText('A localização "o tempo todo" está bloqueada: libere nos ajustes do aparelho para o aviso funcionar com o app fechado.')).toBeTruthy();
+    expect(screen.queryByRole('button', { name: 'Permitir localização o tempo todo' })).toBeNull();
+  });
+
+  it('no Expo Go (sem tarefa em segundo plano) diz que precisa do app instalado', async () => {
+    await abrir({ notifModo: 'sistema', segundoPlano: { estado: 'indisponivel' } });
+    expect(screen.getByText('No Expo Go o aviso com o app fechado não funciona: precisa do app instalado (build próprio).')).toBeTruthy();
+  });
+
+  it('na web o navegador não acompanha localização com a aba fechada, e diz', async () => {
+    await abrir({ notifModo: 'so-com-o-app-aberto', segundoPlano: { estado: 'indisponivel' } });
+    expect(screen.getByText('Na web o aviso de chegada só funciona com o app aberto: o navegador não acompanha a localização com a aba fechada.')).toBeTruthy();
+  });
+
+  it('erro ao ativar: diz que não conseguiu', async () => {
+    await abrir({ notifModo: 'sistema', segundoPlano: { estado: 'erro', permissao: 'concedida' }, fences: [{ id: '1', title: 'Padaria' }] });
+    expect(screen.getByText('Não foi possível ativar o aviso com o app fechado. Tente reabrir o app.')).toBeTruthy();
+  });
+
+  it('sem lembrete por local não há o que dizer sobre o app fechado', async () => {
+    await abrir({ notifModo: 'sistema', segundoPlano: { estado: 'sem-lugares', permissao: 'concedida' }, fences: [] });
+    expect(screen.queryByText(/Com o app fechado/)).toBeNull();
+  });
+});
+
+describe('Configurações: notificações na web (só com o app aberto)', () => {
+  const web = { notifSupported: true, notifModo: 'so-com-o-app-aberto' as const };
+
+  it('diz com franqueza que os avisos só chegam com o app aberto, em vez de "não disponível"', async () => {
+    await abrir({ ...web, notifOk: false, permissaoDoNavegador: 'pendente', scheduledCount: 2 });
+    expect(screen.getByText('Avisos na tela enquanto o app está aberto.')).toBeTruthy();
+    expect(screen.getByText('No navegador os avisos só chegam com o app aberto: com a aba fechada nada é entregue.')).toBeTruthy();
+    expect(screen.queryByText('Não estão disponíveis na versão web.')).toBeNull();
+    expect(screen.getByText('Avisos por horário nas próximas 24 h')).toBeTruthy();
+    expect(screen.queryByText(/libere-as nos ajustes do aparelho/)).toBeNull();
+  });
+
+  it('permissão pendente: oferece o botão que pede a permissão do navegador (ele exige um toque)', async () => {
+    await abrir({ ...web, notifOk: false, permissaoDoNavegador: 'pendente' });
+    await fireEvent.press(screen.getByRole('button', { name: 'Permitir avisos do navegador' }));
+    expect(requestPermission).toHaveBeenCalledTimes(1);
+  });
+
+  it('permitida: só confirma, sem botão', async () => {
+    await abrir({ ...web, notifOk: true, permissaoDoNavegador: 'concedida' });
+    expect(screen.getByText('Avisos do navegador permitidos.')).toBeTruthy();
+    expect(screen.queryByRole('button', { name: 'Permitir avisos do navegador' })).toBeNull();
+  });
+
+  it('bloqueada: diz onde liberar', async () => {
+    await abrir({ ...web, notifOk: false, permissaoDoNavegador: 'negada' });
+    expect(screen.getByText('Os avisos do navegador estão bloqueados para este site: libere nas configurações do site.')).toBeTruthy();
+    expect(screen.queryByRole('button', { name: 'Permitir avisos do navegador' })).toBeNull();
+  });
+
+  it('navegador sem a API (Safari do iPhone fora do app instalado): explica e diz que os avisos seguem na tela do app', async () => {
+    await abrir({ ...web, notifOk: false, permissaoDoNavegador: 'indisponivel' });
+    expect(screen.getByText('Este navegador não mostra avisos do sistema (no iPhone só com o app instalado na tela de início). Os avisos aparecem na tela do app.')).toBeTruthy();
   });
 });
 

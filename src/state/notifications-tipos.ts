@@ -28,6 +28,8 @@ export interface NotificationsState {
   notifyNow: (n: NotifyInput) => Promise<void>;
   /** Deixa os avisos idênticos à lista: no sistema cancela tudo e agenda de novo; na web atualiza o que o relógio confere. */
   syncReminders: (reminders: Reminder[]) => Promise<void>;
+  /** Só na web: como está a permissão dos avisos do navegador (`indisponivel`: o navegador nem tem a API, como o Safari do iPhone fora do app instalado). */
+  permissaoDoNavegador?: 'concedida' | 'negada' | 'pendente' | 'indisponivel';
   /** Só na web: pede a permissão dos avisos do navegador (o navegador exige um toque da pessoa). */
   requestPermission?: () => Promise<boolean>;
   /** Só na web: avisos que estão na tela agora, e como dispensar um. */

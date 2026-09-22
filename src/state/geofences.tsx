@@ -2,6 +2,7 @@ import { createContext, useContext, useEffect, useMemo, useRef, useState, type R
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { lembrarCercas, registrarEntrada, registrarSaida } from '../lib/chegadas';
 import { evaluate, fencesOf, type Fence } from '../lib/geofence';
+import { useSegundoPlano } from './geofencing-nativo';
 import { useGeo } from './geo';
 import { useNotifications } from './notifications';
 import { useReminders } from './reminders';
@@ -14,15 +15,18 @@ interface GeofencesState {
   insideIds: string[];
   nearest: { fence: Fence; meters: number } | null;
   arrivals: Arrival[];
+  /** O geofence do sistema, que avisa a chegada com o app fechado (só em build próprio no iOS e no Android). */
+  segundoPlano: ReturnType<typeof useSegundoPlano>;
 }
 
 const Ctx = createContext<GeofencesState | null>(null);
 
 export function GeofencesProvider({ children }: { children: ReactNode }) {
-  const { position } = useGeo();
+  const { position, watching } = useGeo();
   const { reminders, carregando } = useReminders();
   const { notifyNow } = useNotifications();
   const fences = useMemo(() => fencesOf(reminders), [reminders]);
+  const segundoPlano = useSegundoPlano({ ativo: watching, cercas: fences, perto: position });
   const fencesRef = useRef(fences);
   fencesRef.current = fences;
   const notifyRef = useRef(notifyNow);
@@ -67,8 +71,8 @@ export function GeofencesProvider({ children }: { children: ReactNode }) {
   }, [position]);
 
   const value = useMemo<GeofencesState>(
-    () => ({ fences, insideIds, nearest, arrivals }),
-    [fences, insideIds, nearest, arrivals],
+    () => ({ fences, insideIds, nearest, arrivals, segundoPlano }),
+    [fences, insideIds, nearest, arrivals, segundoPlano],
   );
   return <Ctx.Provider value={value}>{children}</Ctx.Provider>;
 }
