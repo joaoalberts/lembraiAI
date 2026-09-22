@@ -58,4 +58,4 @@ git revert <hash>                                                           # de
 
 ## O design original está em outro repositório
 
-O app web `../lembreiAI` é a especificação visual e tem repositório próprio (com GitHub). O estado mais novo dele fica no disco e pode estar sem commit: por isso a arte e as fontes que o app usa são **copiadas para cá** e versionadas aqui. Andamento: tarefa `visual-original-no-expo`, no quadro `Tarefas/` do workspace.
+O app web `lembreiAI` (a pasta acima desta, `..`) é a especificação visual e tem repositório próprio (com GitHub) — **este projeto vive dentro da pasta dele, mas continua sendo outro repositório Git**, não um submódulo: o `.gitignore` de lá ignora esta pasta. O estado mais novo dele fica no disco e pode estar sem commit: por isso a arte e as fontes que o app usa são **copiadas para cá** e versionadas aqui. Andamento: tarefa `visual-original-no-expo`, no quadro `Tarefas/` do workspace.

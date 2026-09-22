@@ -1,6 +1,6 @@
 # LembreiAi (Expo)
 
-Lembretes que avisam **na hora certa** ou **quando você chega ao lugar certo**. App em Expo (iOS, Android e web) que porta o [`../lembreiAI`](../lembreiAI) (a especificação), com backend próprio em [`deploy/`](deploy/README.md).
+Lembretes que avisam **na hora certa** ou **quando você chega ao lugar certo**. App em Expo (iOS, Android e web) que porta o [`lembreiAI`](..) (a pasta acima; a especificação), com backend próprio em [`deploy/`](deploy/README.md).
 
 **Estado (20/09/2026):** código e testes verdes; APK Android assinado testado em emulador; backend testado em Docker. **Falta implantar na VPS.** O andamento está em [`../../Tarefas/TAREFAS.md`](../../Tarefas/TAREFAS.md).
 

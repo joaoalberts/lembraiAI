@@ -98,7 +98,7 @@ O build de teste com servidor local usa `ALLOW_CLEARTEXT=1` **só** para o emula
 
 ## 6. Testar agora no celular (Expo Go) com o Supabase local
 
-1. Docker Desktop aberto e `cd ../lembreiAI && supabase start` (a pasta do app web fica ao lado desta).
+1. Docker Desktop aberto e `cd .. && supabase start` (a pasta do app web é a pasta acima desta).
 2. Em `lembreiai-expo/.env.local`, troque a URL pelo IP do Mac na rede (o celular não alcança `127.0.0.1`):
    `EXPO_PUBLIC_SUPABASE_URL="http://SEU-IP:54321"`. Descubra o IP com `ipconfig getifaddr en0`. A API local responde nesse IP (verificado).
 3. `npx expo start --clear` e escaneie o QR no Expo Go (celular e Mac na mesma rede Wi-Fi).
@@ -204,7 +204,7 @@ Dentro dos limites das lojas (conferido): Apple subtítulo 26/30, palavras-chave
 
 ## 12. Limitações conhecidas (não são bugs novos; decida se aceita)
 
-- **Aviso por local só com o app aberto** (mesma limitação documentada em `../lembreiAI/GEOFENCING.md`); com o app fechado não há geofencing. Background exigiria
+- **Aviso por local só com o app aberto** (mesma limitação documentada em `../GEOFENCING.md`); com o app fechado não há geofencing. Background exigiria
   localização em segundo plano (permissão e revisão bem mais duras nas duas lojas).
 - **Android, fabricantes**: alguns (Xiaomi, Samsung, Huawei) matam apps em segundo plano e podem atrasar/perder avisos; a pessoa precisa tirar o app da otimização de bateria. Só foi testado em emulador.
 - **iOS** aceita no máximo 64 notificações agendadas por app; lembretes repetitivos usam poucos gatilhos, mas muitos lembretes únicos futuros podem passar disso.
